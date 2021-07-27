@@ -6,7 +6,7 @@
   <link href="https://yanghaoi.github.io/atom.xml" rel="self"/>
   
   <link href="https://yanghaoi.github.io/"/>
-  <updated>2021-04-22T15:21:56.503Z</updated>
+  <updated>2021-07-27T11:46:46.261Z</updated>
   <id>https://yanghaoi.github.io/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>PHPStorm+PHPStudy调试配置</title>
+    <link href="https://yanghaoi.github.io/2021/07/27/phpstudy-phpstorm-de-dai-ma-diao-shi-pei-zhi/"/>
+    <id>https://yanghaoi.github.io/2021/07/27/phpstudy-phpstorm-de-dai-ma-diao-shi-pei-zhi/</id>
+    <published>2021-07-27T11:25:05.292Z</published>
+    <updated>2021-07-27T11:46:46.261Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;0x01-简述&quot;&gt;&lt;a href=&quot;#0x01-简述&quot; class=&quot;headerlink&quot; title=&quot;0x01 简述&quot;&gt;&lt;/a&gt;0x01</summary>
+        
+      
+    
+    
+    
+    <category term="代码审计" scheme="https://yanghaoi.github.io/categories/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/"/>
+    
+    
+    <category term="PHPStorm调试" scheme="https://yanghaoi.github.io/tags/PHPStorm%E8%B0%83%E8%AF%95/"/>
+    
+    <category term="PHP代码审计" scheme="https://yanghaoi.github.io/tags/PHP%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/"/>
+    
+  </entry>
   
   <entry>
     <title>Cobalt Strike插件之CVE-2020-0796提权脚本开发</title>

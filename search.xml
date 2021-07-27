@@ -4,6 +4,33 @@
   
     
     <entry>
+      <title>PHPStorm+PHPStudy调试配置</title>
+      <link href="/2021/07/27/phpstudy-phpstorm-de-dai-ma-diao-shi-pei-zhi/"/>
+      <url>/2021/07/27/phpstudy-phpstorm-de-dai-ma-diao-shi-pei-zhi/</url>
+      
+        <content type="html"><![CDATA[<h2 id="0x01-简述"><a href="#0x01-简述" class="headerlink" title="0x01 简述"></a>0x01 简述</h2><p>记录代码审计基础中调试环境的配置，主要使用PHPStudy作为服务器，PHPStorm作为开发调试工具，并配置远程调试和本地调试两种方案。远程调试的优点是不需要本地有PHP环境，缺点是需要修改文件时要同步文件修改到远程；本地调试比较方便快捷一些，但是有时候会遇到BlueTeam代码投毒，审计调试的时候主机被控制。这里对两种调试配置方法进行记录。</p><h2 id="0x02-远程调试配置"><a href="#0x02-远程调试配置" class="headerlink" title="0x02 远程调试配置"></a>0x02 远程调试配置</h2><p>使用PHPStudy + PHPStorm远程调试，不用在本地安装PHP环境，不用web服务器，代码执行都交给远程服务器，配置下列项目即可：<br>远程服务器，PHPSdtudy配置:</p><ol><li>开启FTP服务，目录设置为Web目录，用来同步PHPStorm对文件的修改</li><li>php配置开启Xdebug插件</li></ol><p>本地PHPStorm配置</p><ol><li>PHP远程调试</li><li>PHP Web页面</li></ol><h3 id="PHPSdtudy开启FTP"><a href="#PHPSdtudy开启FTP" class="headerlink" title="PHPSdtudy开启FTP"></a>PHPSdtudy开启FTP</h3><p>在FTP选项里配置好用户名和密码，根目录设置为WEB目录<br><img src="https://i.loli.net/2021/07/27/CLW2Zt856zkRpbH.png"></p><h3 id="PHP开启Xdebug"><a href="#PHP开启Xdebug" class="headerlink" title="PHP开启Xdebug"></a>PHP开启Xdebug</h3><p>在Phpstudy菜单软件管理-PHP-设置-扩展组件-Xdebug中设置，选择启用即可:<br><img src="https://i.loli.net/2021/07/27/Wd2yxL3AQvpH7lO.png"><br>查看配置文件：<br><img src="https://i.loli.net/2021/07/27/SnpyvB6g4Xj5rZU.png"><br>在WEB下新建个index.php，写入<code>&lt;?php phpinfo();?&gt;</code>,然后访问发现Xdebug已启用：<br><img src="https://i.loli.net/2021/07/27/TpH2PtfvSkUnl8o.png"><br>接下来把远程调试开启，需要PHPStorm主机的IP地址(我这里是192.168.200.32)，并开启远程调试：<br><img src="https://i.loli.net/2021/07/27/GQYDx2uEXKjt8hl.png"><br>然后重启nginx服务器，接下来就可以配置PHPStorm了。</p><h3 id="PHPStorm远程调试配置"><a href="#PHPStorm远程调试配置" class="headerlink" title="PHPStorm远程调试配置"></a>PHPStorm远程调试配置</h3><p>远程配置涉及到到代码文件的同步，Web页面的显示，远程调试接口的配置。<br><strong>PHP远程调试</strong><br>首先配置远程调试，这里配置其一是服务器Xdeug扩展，二是本地的文件怎么同步到远程。因为本地在文件中添加了语句，需要同步到远程服务器执行才能看到效果，在菜单:运行-编辑配置-PHP远程调试中:<br><img src="https://i.loli.net/2021/07/27/iWhKrUnZj4LIpO1.png"><br>接下来配置部署服务器，部署就是需要将本地文件上传到远程服务器，就是上传到FTP中：<br><img src="https://i.loli.net/2021/07/27/FOWSUtxLeRA7cwa.png"><br>到这里添加一个FTP服务的连接即可，根路径就是FTP的根路径：<br><img src="https://i.loli.net/2021/07/27/OMBDF42Q7GgVdAv.png"><br>然后在配置映射，即为本地要传到远程的路径：<br><img src="https://i.loli.net/2021/07/27/5zOj1GNBFAwQxSb.png"><br>配置好后点击验证，这一步已经配置好文件同步和远程调试功能了：<br><img src="https://i.loli.net/2021/07/27/ZAOsvQViPlwJyMg.png"><br>由于我们需要实时修改文件，所以在&lt;执行前&gt;这个选项中配置一下同步，选择将文件上传到远程主机，配置下要上传的路径即可：<br><img src="https://i.loli.net/2021/07/27/HEQ6A8JcxwBDYsV.png"></p><p><strong>PHP Web页面</strong><br>这里主要是为了在浏览器中显示执行效果，配置本地浏览器要访问远程URL，触发PHP执行，在菜单运行-编辑配置-PHPWeb页面添加：<br><img src="https://i.loli.net/2021/07/27/SaYoXVqCcUlbgn9.png"><br>配置好远程服务器(文件-设置-PHP-服务器):<br><img src="https://i.loli.net/2021/07/27/oiuvHpkYnAKRf2N.png"><br>配置完成后，可以尝试调试查看效果，选择调试，这里先试试Web页面的，选择了Web的配置，点击Run后，打开了浏览器，并成功命中断点，输出<code>$_SERVER</code>信息，这里的Run每次都会打开浏览器访问URL输出，所以打开窗口后刷新页面即可不用再点Run：<br><img src="https://i.loli.net/2021/07/27/rUveWN3PMyo5ucR.png"><br>打开了浏览器后，就可以选择远程调试的配置了，点击调试按钮：<br><img src="https://i.loli.net/2021/07/27/tZAwMuxzalgUQI6.png"><br>刷新刚才的浏览器页面，命中断点：<br><img src="https://i.loli.net/2021/07/27/wlT2YbmiSLjQI9f.png"><br>如果对文件进行了更新，需要再次点击Debug按钮,对传入参数进行调试:<br><img src="https://i.loli.net/2021/07/27/TwAmpSn96PjxBOW.png"><br>到这里远程调试的环境就配置好了。</p><h2 id="0x03-本地调试配置"><a href="#0x03-本地调试配置" class="headerlink" title="0x03 本地调试配置"></a>0x03 本地调试配置</h2><p>本地调试的效果是可以在PHPStorm中运行、调试脚本，也可以配合浏览器运行、调试，参考上面远程调试的配置，开启PHPstudy的Xdebug配置，然后配置好PHPStorm。</p><h3 id="PHPStorm调试配置"><a href="#PHPStorm调试配置" class="headerlink" title="PHPStorm调试配置"></a>PHPStorm调试配置</h3><p>这里的配置是为了在PHPStorm里运行脚本，在运行-编辑配置-PHP脚本中配置好项目入口文件，php解释器二进制文件的位置即可：<br><img src="https://i.loli.net/2021/07/27/R47yMHgfiXGkZtY.png"><br>执行和调试效果都会在PHPStorm中输出：<br><img src="https://i.loli.net/2021/07/27/5CkyU7NPgYa4jrL.png"></p><h3 id="浏览器插件调试"><a href="#浏览器插件调试" class="headerlink" title="浏览器插件调试"></a>浏览器插件调试</h3><p>在浏览器中使用Xdebug helper插件和 PHPStorm进行调试，这里要设置PHPStorm调试的监听端口，PHPStorm的服务器配置，Xdebug helper的Cookie。<br>1.PHPStorm中调试端口配置(文件-设置-调试)<br><img src="https://i.loli.net/2021/07/27/FYLzdEhJGbqcReD.png"><br>这里注意端口会被php-cgi占用，所以把phpstorm监听的端口改成了9100：<br><img src="https://i.loli.net/2021/07/27/zluYXmLJN2qBsh5.png"><br>相应的在php配置文件也进行了更新：<br><img src="https://i.loli.net/2021/07/27/Bv9K6m2PMxUoHzw.png"></p><p>2.PHPStorm服务器配置(文件-设置-服务器):<br>配置好本地服务器的路径即可<br><img src="https://i.loli.net/2021/07/27/Yu31fFp5mo8I7a6.png"></p><p>3.Xdebug helper插件配置<br>到谷歌商店下载Xdebug helper<br><img src="https://i.loli.net/2021/07/27/GMYcTst6iAvCqQE.png"><br>设置Xdebug helper的PhpStorm Cookie(插件显示在扩展栏上，右键选项):<br><img src="https://i.loli.net/2021/07/27/r3BtNYqCleHgK1i.png"><br>访问可以看到Cookie：<br><img src="https://i.loli.net/2021/07/27/153C8vfejSTIhzW.png"><br>在代码中设置设置断点，刷新浏览器即可看到调试效果：<br><img src="https://i.loli.net/2021/07/27/quBQUjZ1Lclpxgf.png"></p><h2 id="0x04-总结"><a href="#0x04-总结" class="headerlink" title="0x04 总结"></a>0x04 总结</h2><p>通过对PHP的调试配置，熟悉了PHPStorm和PHPStudy的配置，并成功实现了本地和远程两种调试的配置方法，一般来说在代码安全的情况下，选择本地调试方案比较方便。</p><script>        document.querySelectorAll('.github-emoji')          .forEach(el => {            if (!el.dataset.src) { return; }            const img = document.createElement('img');            img.style = 'display:none !important;';            img.src = el.dataset.src;            img.addEventListener('error', () => {              img.remove();              el.style.color = 'inherit';              el.style.backgroundImage = 'none';              el.style.background = 'none';            });            img.addEventListener('load', () => {              img.remove();            });            document.body.appendChild(img);          });      </script>]]></content>
+      
+      
+      <categories>
+          
+          <category> 代码审计 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> PHPStorm调试 </tag>
+            
+            <tag> PHP代码审计 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Cobalt Strike插件之CVE-2020-0796提权脚本开发</title>
       <link href="/2021/04/22/cobalt-strike-cha-jian-zhi-cve-2020-0796-ti-quan-jiao-ben-kai-fa/"/>
       <url>/2021/04/22/cobalt-strike-cha-jian-zhi-cve-2020-0796-ti-quan-jiao-ben-kai-fa/</url>
