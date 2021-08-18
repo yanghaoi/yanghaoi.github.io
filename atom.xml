@@ -6,7 +6,7 @@
   <link href="https://yanghaoi.github.io/atom.xml" rel="self"/>
   
   <link href="https://yanghaoi.github.io/"/>
-  <updated>2021-08-18T18:16:29.117Z</updated>
+  <updated>2021-08-18T18:17:36.210Z</updated>
   <id>https://yanghaoi.github.io/</id>
   
   <author>
@@ -17,11 +17,11 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>CobaltStrike流量隐藏与安全配置</title>
+    <title>CobaltStrike流量伪装与安全配置</title>
     <link href="https://yanghaoi.github.io/2021/08/19/cobaltstrike-liu-liang-yin-cang-yu-an-quan-pei-zhi/"/>
     <id>https://yanghaoi.github.io/2021/08/19/cobaltstrike-liu-liang-yin-cang-yu-an-quan-pei-zhi/</id>
     <published>2021-08-18T18:06:24.926Z</published>
-    <updated>2021-08-18T18:16:29.117Z</updated>
+    <updated>2021-08-18T18:17:36.210Z</updated>
     
     
       
@@ -34,10 +34,12 @@
     
     
     
-    <category term="分类" scheme="https://yanghaoi.github.io/categories/%E5%88%86%E7%B1%BB/"/>
+    <category term="安全工具" scheme="https://yanghaoi.github.io/categories/%E5%AE%89%E5%85%A8%E5%B7%A5%E5%85%B7/"/>
     
     
-    <category term="标签" scheme="https://yanghaoi.github.io/tags/%E6%A0%87%E7%AD%BE/"/>
+    <category term="CobaltStrike" scheme="https://yanghaoi.github.io/tags/CobaltStrike/"/>
+    
+    <category term="流量伪装" scheme="https://yanghaoi.github.io/tags/%E6%B5%81%E9%87%8F%E4%BC%AA%E8%A3%85/"/>
     
   </entry>
   

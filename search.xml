@@ -4,7 +4,7 @@
   
     
     <entry>
-      <title>CobaltStrike流量隐藏与安全配置</title>
+      <title>CobaltStrike流量伪装与安全配置</title>
       <link href="/2021/08/19/cobaltstrike-liu-liang-yin-cang-yu-an-quan-pei-zhi/"/>
       <url>/2021/08/19/cobaltstrike-liu-liang-yin-cang-yu-an-quan-pei-zhi/</url>
       
@@ -13,14 +13,16 @@
       
       <categories>
           
-          <category> 分类 </category>
+          <category> 安全工具 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> 标签 </tag>
+            <tag> CobaltStrike </tag>
+            
+            <tag> 流量伪装 </tag>
             
         </tags>
       
