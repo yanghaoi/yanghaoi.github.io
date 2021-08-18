@@ -446,7 +446,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    3.6k
+                    3.7k
                 </div>
                 
 
@@ -837,7 +837,7 @@ set trust_x_forwarded_for "true";
     init_by_lua_file <span class="token string">"./lua/waf/init.lua"</span><span class="token punctuation">;</span>
     access_by_lua_file <span class="token string">"./lua/waf/access.lua"</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>可以在config.lua中进行详细的配置:<br><img src="https://i.loli.net/2021/08/03/ovENWjJAMLgFTy3.png"><br>触发规则会进行拦截:<br><img src="https://i.loli.net/2021/08/03/XNhlgasn3ecwYbZ.png"><br>各种规则可以在rule-config中详细配置。</p>
-<h2 id="针对来源IP限制返回内容"><a href="#针对来源IP限制返回内容" class="headerlink" title="针对来源IP限制返回内容"></a>针对来源IP限制返回内容</h2><p>有时候请求不是走正常路径过来的，可以设置nginx只对CDN来源IP开放访问，其他地址拒绝：</p>
+<h2 id="针对来源IP限制返回内容"><a href="#针对来源IP限制返回内容" class="headerlink" title="针对来源IP限制返回内容"></a>针对来源IP限制返回内容</h2><p>有时候请求不是走正常路径过来的，可以设置nginx只对CDN来源IP开放访问，其他地址拒绝(这个会和获取真实IP那个冲突，获取真实IP可以写在location块里，就不要写在server里了)：</p>
 <pre class="line-numbers language-nginx"><code class="language-nginx"><span class="token keyword">http</span><span class="token punctuation">{</span>
  <span class="token comment" spellcheck="true">#通过if判断值，如果是是CDN的IP，$allow_ip = 0,否则就是default 1。</span>
     <span class="token keyword">geo</span> <span class="token variable">$allow_ip</span> <span class="token punctuation">{</span>
@@ -873,9 +873,9 @@ set trust_x_forwarded_for "true";
 <pre class="line-numbers language-bash"><code class="language-bash"><span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token variable">$host</span> <span class="token operator">!=</span> <span class="token string">"www.qq.com"</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
         <span class="token keyword">return</span> 400<span class="token punctuation">;</span>
 <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-<p>一、可以给IP配置一个自签名的证书，通过 <a target="_blank" rel="noopener" href="https://ip/">https://IP</a> 访问时返回的就是这个自签名的证书。<br>1.免费证书获取可以在csr.chinassl.net和Let’s Encrypt获取，以csr.chinassl.net为例：<br><img src="https://i.loli.net/2021/07/21/pEJN2s3IwTVPCB8.png"><br>然后下载得到CSR文件和KEY文件，然后上传CSR生成证书即可：<br><img src="https://i.loli.net/2021/07/21/eg9ADmYodHzXkOt.png"><br>获取后会得到.crt文件，在nginx中配置即可。</p>
-<p>使用openssl生成：</p>
-<pre class="line-numbers language-css"><code class="language-css">openssl req -x<span class="token number">509</span> -nodes -days <span class="token number">3650</span> -newkey <span class="token property">rsa</span><span class="token punctuation">:</span><span class="token number">2048</span> -keyout ssl<span class="token number">.</span>key -out https<span class="token number">.</span>crt<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>一、可以给IP配置一个自签名的证书，通过https访问IP时返回的就是这个自签名的证书<br>1.免费证书获取可以在csr.chinassl.net和Let’s Encrypt获取，以csr.chinassl.net为例：<br><img src="https://i.loli.net/2021/07/21/pEJN2s3IwTVPCB8.png"><br>然后下载得到CSR文件和KEY文件，然后上传CSR生成证书即可：<br><img src="https://i.loli.net/2021/07/21/eg9ADmYodHzXkOt.png"><br>获取后会得到.crt文件，在nginx中配置即可。</p>
+<p>当然了,还可以使用使用openssl（windows下载:<a target="_blank" rel="noopener" href="https://slproweb.com/products/Win32OpenSSL.html%EF%BC%89%E5%91%BD%E4%BB%A4%E7%94%9F%E6%88%90%E8%87%AA%E7%AD%BE%E5%90%8D%E7%9A%84%E8%AF%81%E4%B9%A6%EF%BC%9A">https://slproweb.com/products/Win32OpenSSL.html）命令生成自签名的证书：</a></p>
+<pre class="line-numbers language-cmd"><code class="language-cmd">openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -keyout ssl.key -out https.crt<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>2.nginx配置<br>server_name配置成任意，作为默认配置，没有匹配到server_name时就返回此处配置内容：</p>
 <pre class="line-numbers language-groovy"><code class="language-groovy">server <span class="token punctuation">{</span>
     listen <span class="token number">443</span> ssl<span class="token punctuation">;</span>
@@ -890,7 +890,7 @@ set trust_x_forwarded_for "true";
         <span class="token keyword">return</span> <span class="token number">404</span><span class="token punctuation">;</span>
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>二、不配置证书，使用CDN灵活模式<br>灵活模式是指客户端与CDN进行HTTPS通信，CDN与服务器HTTP通信，这样证书来源直接就是CDN的，nginx只需要在80端口配置即可：<br><img src="https://i.loli.net/2021/07/30/84bqCA6IvBWeOZY.png" alt="灵活模式"><br>边缘证书中设置始终使用HTTPS:<br><img src="https://i.loli.net/2021/07/30/8dlsYFL6ctDTxu4.png"><br>访问网站，查看证书：<br><img src="https://i.loli.net/2021/07/21/bJRVhYvtU1cqyB2.png"><br>这种方式确实灵活,不用配证书,可以将http的访问自动重写为https。还可以在边缘证书中设置一个随机加密(HTTP/2)，访问的时候是http,但是会使用加密：<br><img src="https://i.loli.net/2021/08/19/Ud7rW9RYjEJMDan.png"></p>
+<p>这样一来访问IP就使用这个自签名的证书，访问域名就使用域名的证书，不会造成IP和域名关联。<br>二、不配置证书，使用CDN灵活模式<br>灵活模式是指客户端与CDN进行HTTPS通信，CDN与服务器HTTP通信，这样证书来源直接就是CDN的，nginx只需要在80端口配置即可：<br><img src="https://i.loli.net/2021/07/30/84bqCA6IvBWeOZY.png" alt="灵活模式"><br>边缘证书中设置始终使用HTTPS:<br><img src="https://i.loli.net/2021/07/30/8dlsYFL6ctDTxu4.png"><br>访问网站，查看证书：<br><img src="https://i.loli.net/2021/07/21/bJRVhYvtU1cqyB2.png"><br>这种方式确实灵活,不用配证书,可以将http的访问自动重写为https。还可以在边缘证书中设置一个随机加密(HTTP/2)，访问的时候是http,但是会使用加密：<br><img src="https://i.loli.net/2021/08/19/Ud7rW9RYjEJMDan.png"></p>
 <h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a target="_blank" rel="noopener" href="https://github.com/unixhot/waf">https://github.com/unixhot/waf</a></p>
 <p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/Xy--1/p/14396744.html">https://www.cnblogs.com/Xy--1/p/14396744.html</a></p>
 <p><a target="_blank" rel="noopener" href="https://support.cloudflare.com/hc/zh-cn/articles/200170786-%E6%81%A2%E5%A4%8D%E5%8E%9F%E5%A7%8B%E8%AE%BF%E9%97%AE%E8%80%85-IP-%E4%BD%BF%E7%94%A8-mod-cloudflare-%E8%AE%B0%E5%BD%95%E8%AE%BF%E9%97%AE%E8%80%85-IP-%E5%9C%B0%E5%9D%80-">https://support.cloudflare.com/hc/zh-cn/articles/200170786-%E6%81%A2%E5%A4%8D%E5%8E%9F%E5%A7%8B%E8%AE%BF%E9%97%AE%E8%80%85-IP-%E4%BD%BF%E7%94%A8-mod-cloudflare-%E8%AE%B0%E5%BD%95%E8%AE%BF%E9%97%AE%E8%80%85-IP-%E5%9C%B0%E5%9D%80-</a></p>
