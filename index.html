@@ -357,8 +357,9 @@
 
 
 <script>
-  //  $('.bg-cover').css('background-image', 'url(https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/medias/banner/0.jpg)');
-    $('.bg-cover').css('background-image', 'url(https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/medias/5f5667d5160a154a677382f4.jpg)');
+    // 每天切换 banner 图.  Switch banner image every day.
+    var bannerUrl = "https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/medias/banner/" + new Date().getDay() + '.jpg';
+    $('.bg-cover').css('background-image', 'url(' + bannerUrl + ')');
 </script>
 
 
