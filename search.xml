@@ -13,7 +13,9 @@
       
       <categories>
           
-          <category> XXE </category>
+          <category> 代码审计 </category>
+          
+          <category> 基础漏洞 </category>
           
       </categories>
       
