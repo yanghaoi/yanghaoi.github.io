@@ -6,7 +6,7 @@
   <link href="https://yanghaoi.github.io/atom.xml" rel="self"/>
   
   <link href="https://yanghaoi.github.io/"/>
-  <updated>2021-10-07T16:53:53.406Z</updated>
+  <updated>2021-10-07T16:55:14.399Z</updated>
   <id>https://yanghaoi.github.io/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://yanghaoi.github.io/2021/10/08/xxe-lou-dong-ji-chu/"/>
     <id>https://yanghaoi.github.io/2021/10/08/xxe-lou-dong-ji-chu/</id>
     <published>2021-10-07T16:53:53.319Z</published>
-    <updated>2021-10-07T16:53:53.406Z</updated>
+    <updated>2021-10-07T16:55:14.399Z</updated>
     
     
       
@@ -37,7 +37,7 @@
     <category term="基础漏洞" scheme="https://yanghaoi.github.io/categories/%E5%9F%BA%E7%A1%80%E6%BC%8F%E6%B4%9E/"/>
     
     
-    <category term="XXE" scheme="https://yanghaoi.github.io/tags/XXE/"/>
+    <category term="XXE漏洞" scheme="https://yanghaoi.github.io/tags/XXE%E6%BC%8F%E6%B4%9E/"/>
     
   </entry>
   
@@ -46,7 +46,7 @@
     <link href="https://yanghaoi.github.io/2021/10/07/ssrf-lou-dong-ji-chu/"/>
     <id>https://yanghaoi.github.io/2021/10/07/ssrf-lou-dong-ji-chu/</id>
     <published>2021-10-06T17:16:12.129Z</published>
-    <updated>2021-10-07T12:54:58.765Z</updated>
+    <updated>2021-10-07T16:55:30.096Z</updated>
     
     
       
@@ -62,7 +62,7 @@
     <category term="基础漏洞" scheme="https://yanghaoi.github.io/categories/%E5%9F%BA%E7%A1%80%E6%BC%8F%E6%B4%9E/"/>
     
     
-    <category term="SSRF" scheme="https://yanghaoi.github.io/tags/SSRF/"/>
+    <category term="SSRF漏洞" scheme="https://yanghaoi.github.io/tags/SSRF%E6%BC%8F%E6%B4%9E/"/>
     
   </entry>
   

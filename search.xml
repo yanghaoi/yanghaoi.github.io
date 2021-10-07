@@ -20,7 +20,7 @@
       
         <tags>
             
-            <tag> XXE </tag>
+            <tag> XXE漏洞 </tag>
             
         </tags>
       
@@ -45,7 +45,7 @@
       
         <tags>
             
-            <tag> SSRF </tag>
+            <tag> SSRF漏洞 </tag>
             
         </tags>
       

@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://yanghaoi.github.io/2021/10/07/ssrf-lou-dong-ji-chu/</loc>
+    
+    <lastmod>2021-10-07</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://yanghaoi.github.io/2021/10/08/xxe-lou-dong-ji-chu/</loc>
     
     <lastmod>2021-10-07</lastmod>
@@ -10,13 +17,6 @@
   
   <url>
     <loc>https://yanghaoi.github.io/2020/08/22/cve-2020-2551-fu-xian/</loc>
-    
-    <lastmod>2021-10-07</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://yanghaoi.github.io/2021/10/07/ssrf-lou-dong-ji-chu/</loc>
     
     <lastmod>2021-10-07</lastmod>
     
@@ -221,14 +221,14 @@
   </url>
   
   <url>
-    <loc>https://yanghaoi.github.io/tags/XXE/</loc>
+    <loc>https://yanghaoi.github.io/tags/XXE%E6%BC%8F%E6%B4%9E/</loc>
     <lastmod>2021-10-07</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://yanghaoi.github.io/tags/SSRF/</loc>
+    <loc>https://yanghaoi.github.io/tags/SSRF%E6%BC%8F%E6%B4%9E/</loc>
     <lastmod>2021-10-07</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
