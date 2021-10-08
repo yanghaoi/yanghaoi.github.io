@@ -6,7 +6,7 @@
   <link href="https://yanghaoi.github.io/atom.xml" rel="self"/>
   
   <link href="https://yanghaoi.github.io/"/>
-  <updated>2021-10-08T13:42:29.470Z</updated>
+  <updated>2021-10-08T13:45:55.801Z</updated>
   <id>https://yanghaoi.github.io/</id>
   
   <author>
@@ -15,58 +15,6 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title>Webgoat靶场调试环境配置</title>
-    <link href="https://yanghaoi.github.io/2021/10/08/webgoat-ba-chang-diao-shi-huan-jing-pei-zhi/"/>
-    <id>https://yanghaoi.github.io/2021/10/08/webgoat-ba-chang-diao-shi-huan-jing-pei-zhi/</id>
-    <published>2021-10-08T05:00:27.348Z</published>
-    <updated>2021-10-08T13:42:29.470Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;h2 id=&quot;0x01-简介&quot;&gt;&lt;a href=&quot;#0x01-简介&quot; class=&quot;headerlink&quot; title=&quot;0x01 简介&quot;&gt;&lt;/a&gt;0x01 简介&lt;/h2&gt;&lt;p&gt;选择&lt;a</summary>
-        
-      
-    
-    
-    
-    <category term="靶场环境" scheme="https://yanghaoi.github.io/categories/%E9%9D%B6%E5%9C%BA%E7%8E%AF%E5%A2%83/"/>
-    
-    
-    <category term="Webgoat" scheme="https://yanghaoi.github.io/tags/Webgoat/"/>
-    
-    <category term="IDEA" scheme="https://yanghaoi.github.io/tags/IDEA/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>XXE漏洞基础</title>
-    <link href="https://yanghaoi.github.io/2021/10/08/xxe-lou-dong-ji-chu/"/>
-    <id>https://yanghaoi.github.io/2021/10/08/xxe-lou-dong-ji-chu/</id>
-    <published>2021-10-07T16:53:53.319Z</published>
-    <updated>2021-10-08T13:44:18.112Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;h2 id=&quot;0x01-前言&quot;&gt;&lt;a href=&quot;#0x01-前言&quot; class=&quot;headerlink&quot; title=&quot;0x01 前言&quot;&gt;&lt;/a&gt;0x01</summary>
-        
-      
-    
-    
-    
-    <category term="基础漏洞" scheme="https://yanghaoi.github.io/categories/%E5%9F%BA%E7%A1%80%E6%BC%8F%E6%B4%9E/"/>
-    
-    
-    <category term="XXE漏洞" scheme="https://yanghaoi.github.io/tags/XXE%E6%BC%8F%E6%B4%9E/"/>
-    
-  </entry>
   
   <entry>
     <title>SSRF漏洞基础</title>
@@ -90,6 +38,58 @@
     
     
     <category term="SSRF漏洞" scheme="https://yanghaoi.github.io/tags/SSRF%E6%BC%8F%E6%B4%9E/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>XXE漏洞基础</title>
+    <link href="https://yanghaoi.github.io/2021/10/06/xxe-lou-dong-ji-chu/"/>
+    <id>https://yanghaoi.github.io/2021/10/06/xxe-lou-dong-ji-chu/</id>
+    <published>2021-10-06T13:52:05.000Z</published>
+    <updated>2021-10-08T13:52:31.517Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;0x01-前言&quot;&gt;&lt;a href=&quot;#0x01-前言&quot; class=&quot;headerlink&quot; title=&quot;0x01 前言&quot;&gt;&lt;/a&gt;0x01</summary>
+        
+      
+    
+    
+    
+    <category term="基础漏洞" scheme="https://yanghaoi.github.io/categories/%E5%9F%BA%E7%A1%80%E6%BC%8F%E6%B4%9E/"/>
+    
+    
+    <category term="XXE漏洞" scheme="https://yanghaoi.github.io/tags/XXE%E6%BC%8F%E6%B4%9E/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Webgoat靶场调试环境配置</title>
+    <link href="https://yanghaoi.github.io/2021/10/05/webgoat-ba-chang-diao-shi-huan-jing-pei-zhi/"/>
+    <id>https://yanghaoi.github.io/2021/10/05/webgoat-ba-chang-diao-shi-huan-jing-pei-zhi/</id>
+    <published>2021-10-05T13:52:05.000Z</published>
+    <updated>2021-10-08T13:52:25.325Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;0x01-简介&quot;&gt;&lt;a href=&quot;#0x01-简介&quot; class=&quot;headerlink&quot; title=&quot;0x01 简介&quot;&gt;&lt;/a&gt;0x01 简介&lt;/h2&gt;&lt;p&gt;选择&lt;a</summary>
+        
+      
+    
+    
+    
+    <category term="靶场环境" scheme="https://yanghaoi.github.io/categories/%E9%9D%B6%E5%9C%BA%E7%8E%AF%E5%A2%83/"/>
+    
+    
+    <category term="Webgoat" scheme="https://yanghaoi.github.io/tags/Webgoat/"/>
+    
+    <category term="IDEA" scheme="https://yanghaoi.github.io/tags/IDEA/"/>
     
   </entry>
   

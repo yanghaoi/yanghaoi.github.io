@@ -432,7 +432,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2021-10-08
+                    2021-10-05
                 </div>
                 
 
@@ -446,7 +446,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    685
+                    663
                 </div>
                 
 
@@ -471,20 +471,20 @@
                 <h2 id="0x01-简介"><a href="#0x01-简介" class="headerlink" title="0x01 简介"></a>0x01 简介</h2><p>选择<a target="_blank" rel="noopener" href="https://www.jetbrains.com/idea/download/">IDEA</a>作为源码调试工具，<a target="_blank" rel="noopener" href="https://github.com/WebGoat/WebGoat">Webgoat</a>作为漏洞分析的靶场。将项目源码下载到本地，使用IDEA调试模式编译运行Webgoat。</p>
 <h2 id="0x02-IEAD汉化配置"><a href="#0x02-IEAD汉化配置" class="headerlink" title="0x02 IEAD汉化配置"></a>0x02 IEAD汉化配置</h2><p>在安装好IDEA后，可使用插件进行汉化，提高后续的调试效率。在File-Setting-Plugins中搜索Chinese插件安装：<br><img src="https://i.loli.net/2021/08/04/bWxUQuoqHgkiZvT.png"><br>加载插件进行使用：<br><img src="https://i.loli.net/2021/08/04/VNtxHrbmJDn6a8z.png"><br>安装完成后重启软件，界面汉化成功：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/0646248cf3c557b3aa777447f81b6e79.png"></p>
 <h2 id="0x03-WebGoat配置"><a href="#0x03-WebGoat配置" class="headerlink" title="0x03 WebGoat配置"></a>0x03 WebGoat配置</h2><p>配置源码WebGoat-develop，用IDEA2021.2来导入项目(2021.2选择文件夹打开，然后手动配置；2019.3.2中可以选择导入项目自动配置。)，mavn会自动下载依赖启动：<br><img src="https://i.loli.net/2021/08/04/gQJ9ojfDzOa21R5.png"><br>mavn仓库默认在海外，配置文件默认位置在<code>C:\Users\&lt;用户名&gt;\.m2wrapper\dists\</code>中，在setting.xml中配置国内阿里云加速仓库地址：</p>
-<pre class="line-numbers language-xml"><code class="language-xml">  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>mirrors</span><span class="token punctuation">&gt;</span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>mirror</span><span class="token punctuation">&gt;</span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>id</span><span class="token punctuation">&gt;</span></span>alimaven<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>id</span><span class="token punctuation">&gt;</span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>name</span><span class="token punctuation">&gt;</span></span>aliyun maven<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>name</span><span class="token punctuation">&gt;</span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>url</span><span class="token punctuation">&gt;</span></span>http://maven.aliyun.com/nexus/content/groups/public/<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>url</span><span class="token punctuation">&gt;</span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>mirrorOf</span><span class="token punctuation">&gt;</span></span>central<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>mirrorOf</span><span class="token punctuation">&gt;</span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>mirror</span><span class="token punctuation">&gt;</span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>mirror</span><span class="token punctuation">&gt;</span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>id</span><span class="token punctuation">&gt;</span></span>repo2<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>id</span><span class="token punctuation">&gt;</span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>name</span><span class="token punctuation">&gt;</span></span>repo2 maven<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>name</span><span class="token punctuation">&gt;</span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>url</span><span class="token punctuation">&gt;</span></span>http://repo2.maven.org/maven2<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>url</span><span class="token punctuation">&gt;</span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>mirrorOf</span><span class="token punctuation">&gt;</span></span>central<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>mirrorOf</span><span class="token punctuation">&gt;</span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>mirror</span><span class="token punctuation">&gt;</span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>mirrors</span><span class="token punctuation">&gt;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-xml"><code class="language-xml">  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>mirrors</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>mirror</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>id</span><span class="token punctuation">></span></span>alimaven<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>id</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>name</span><span class="token punctuation">></span></span>aliyun maven<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>name</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>url</span><span class="token punctuation">></span></span>http://maven.aliyun.com/nexus/content/groups/public/<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>url</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>mirrorOf</span><span class="token punctuation">></span></span>central<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>mirrorOf</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>mirror</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>mirror</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>id</span><span class="token punctuation">></span></span>repo2<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>id</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>name</span><span class="token punctuation">></span></span>repo2 maven<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>name</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>url</span><span class="token punctuation">></span></span>http://repo2.maven.org/maven2<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>url</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>mirrorOf</span><span class="token punctuation">></span></span>central<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>mirrorOf</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>mirror</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>mirrors</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p><img src="https://i.loli.net/2021/08/04/tYbVoEzBQlZa1Mx.png"></p>
 <h2 id="0x04-JDK和热重载配置"><a href="#0x04-JDK和热重载配置" class="headerlink" title="0x04 JDK和热重载配置"></a>0x04 JDK和热重载配置</h2><p>WebGoat需要使用JDK15来运行，在菜单”文件”-“项目结构”-“JDK”中配置版本为<a target="_blank" rel="noopener" href="http://jdk.java.net/15/">JDK15</a>:<br><img src="https://i.loli.net/2021/08/04/VnZADElt6gWNhCu.png"><br>然后在左上角🔨图标配置菜单里选择编辑项目配置,添加一个Spring Bot配置，名称为StartWebGoat，主类org.owasp.webgoat.StartWebGoat，这一步可能输入了主类会报错，提示找不到main函数，要等idea扫描一下类，然后就自己好了:<br><img src="https://i.loli.net/2021/08/04/rdx4onaIChsplJR.png"><br>同样配置webwolf(用来验证一些请求的服务，如SSRF之类的)，下面记得设置下更新操作,用来在代码中增加语句后热重载:<br><img src="https://i.loli.net/2021/08/04/zRCi1L4muDyWs2c.png"><br>点击调试按钮，访问本地8080，程序已经运行起来了:<br><img src="https://i.loli.net/2021/08/04/OQBXF76ckWJCLVH.png"><br>然后在<code>src/main/java/org/owasp/webgoat/users/UserService.java</code>中用户名检查断点，浏览器中登录，可以看到成功命中:<br><img src="https://i.loli.net/2021/08/05/Pmfyjs37RA9eVqO.png"><br>再试试热重载，加入一条打印语句，然后重载类:<br><img src="https://i.loli.net/2021/08/05/TSQNfmFGkIe5u2q.png"><br>已经输出了调试语句:<br><img src="https://i.loli.net/2021/08/05/8vltejyMwENUs7f.png"></p>
 <h2 id="0x04-Burp抓包配置"><a href="#0x04-Burp抓包配置" class="headerlink" title="0x04 Burp抓包配置"></a>0x04 Burp抓包配置</h2><p>Webgoat为了安全只会在本地127.0.0.1开启靶场服务，使用burp抓包的时，在Google中没法对127.0.0.1抓包。可以使用Firefox设置本地代理，在地址栏输入<code>about:config</code>，然后搜索<code>network.proxy.allow_hijacking_localhost</code>，设置为True：<br><img src="https://i.loli.net/2021/08/05/O8nuI1YxJLkUfTd.png"><br>然后就可以在Burp中拦截数据包了：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/4c0c8ade47a5d71de049e8d2809b9263.png"></p>
@@ -532,7 +532,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://yanghaoi.github.io/2021/10/08/webgoat-ba-chang-diao-shi-huan-jing-pei-zhi/">https://yanghaoi.github.io/2021/10/08/webgoat-ba-chang-diao-shi-huan-jing-pei-zhi/</a>
+                    <a href="https://yanghaoi.github.io/2021/10/05/webgoat-ba-chang-diao-shi-huan-jing-pei-zhi/">https://yanghaoi.github.io/2021/10/05/webgoat-ba-chang-diao-shi-huan-jing-pei-zhi/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -880,65 +880,11 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
-            <div class="article-badge left-badge text-color">
-                <i class="far fa-dot-circle"></i>&nbsp;本篇
-            </div>
-            <div class="card">
-                <a href="/2021/10/08/webgoat-ba-chang-diao-shi-huan-jing-pei-zhi/">
-                    <div class="card-image">
-                        
-                        <img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/8509b1add189e4272eea5a7df80740df.png" class="responsive-img" alt="Webgoat靶场调试环境配置">
-                        
-                        <span class="card-title">Webgoat靶场调试环境配置</span>
-                    </div>
-                </a>
-                <div class="card-content article-content">
-                    <div class="summary block-with-text">
-                        
-                            WebGoat是OWASP组织研制出的用于进行web漏洞实验的Java靶场程序，用来说明web应用中存在的安全漏洞。本文介绍在IDEA中进行源码编译和调试的环境配置方法。
-                        
-                    </div>
-                    <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-10-08
-                            </span>
-                        <span class="publish-author">
-                            
-                            <i class="fas fa-bookmark fa-fw icon-category"></i>
-                            
-                            <a href="/categories/%E9%9D%B6%E5%9C%BA%E7%8E%AF%E5%A2%83/" class="post-category">
-                                    靶场环境
-                                </a>
-                            
-                            
-                        </span>
-                    </div>
-                </div>
-
-                
-                <div class="card-action article-tags">
-                    
-                    <a href="/tags/Webgoat/">
-                        <span class="chip bg-color">Webgoat</span>
-                    </a>
-                    
-                    <a href="/tags/IDEA/">
-                        <span class="chip bg-color">IDEA</span>
-                    </a>
-                    
-                </div>
-                
-            </div>
-        </div>
-        
-        
         <div class="article col s12 m6" data-aos="fade-up">
-            <div class="article-badge right-badge text-color">
-                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
-            </div>
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2021/10/08/xxe-lou-dong-ji-chu/">
+                <a href="/2021/10/06/xxe-lou-dong-ji-chu/">
                     <div class="card-image">
                         
                         <img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/4907db938703ed027864cf2aa9f45060.png" class="responsive-img" alt="XXE漏洞基础">
@@ -953,9 +899,9 @@
                         
                     </div>
                     <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-10-08
-                            </span>
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2021-10-06
+                        </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -973,6 +919,58 @@
                     
                     <a href="/tags/XXE%E6%BC%8F%E6%B4%9E/">
                         <span class="chip bg-color">XXE漏洞</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2021/08/19/cobaltstrike-liu-liang-yin-cang-yu-an-quan-pei-zhi/">
+                    <div class="card-image">
+                        
+                        <img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_9/f0214927bd28ba7a980c3f49a35e65c6.png" class="responsive-img" alt="CobaltStrike流量伪装与安全配置">
+                        
+                        <span class="card-title">CobaltStrike流量伪装与安全配置</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            在个人实践中摸索实践中学习CobaltStrike的使用，针对CobaltStrike的流量隐藏进行了研究，主要涉及到Cloudflare的CDN配置、Nginx的反向代理以及profile的使用。分析解决在之前的实践过程中遇到的问题，弥补解决方案的不足点。
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-08-19
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E5%AE%89%E5%85%A8%E5%B7%A5%E5%85%B7/" class="post-category">
+                                    安全工具
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/CobaltStrike/">
+                        <span class="chip bg-color">CobaltStrike</span>
+                    </a>
+                    
+                    <a href="/tags/%E6%B5%81%E9%87%8F%E4%BC%AA%E8%A3%85/">
+                        <span class="chip bg-color">流量伪装</span>
                     </a>
                     
                 </div>
@@ -1158,7 +1156,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">22.4k</span>&nbsp;字
+                class="white-color">22.2k</span>&nbsp;字
             
             
             

