@@ -446,7 +446,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    663
+                    685
                 </div>
                 
 
@@ -471,20 +471,20 @@
                 <h2 id="0x01-简介"><a href="#0x01-简介" class="headerlink" title="0x01 简介"></a>0x01 简介</h2><p>选择<a target="_blank" rel="noopener" href="https://www.jetbrains.com/idea/download/">IDEA</a>作为源码调试工具，<a target="_blank" rel="noopener" href="https://github.com/WebGoat/WebGoat">Webgoat</a>作为漏洞分析的靶场。将项目源码下载到本地，使用IDEA调试模式编译运行Webgoat。</p>
 <h2 id="0x02-IEAD汉化配置"><a href="#0x02-IEAD汉化配置" class="headerlink" title="0x02 IEAD汉化配置"></a>0x02 IEAD汉化配置</h2><p>在安装好IDEA后，可使用插件进行汉化，提高后续的调试效率。在File-Setting-Plugins中搜索Chinese插件安装：<br><img src="https://i.loli.net/2021/08/04/bWxUQuoqHgkiZvT.png"><br>加载插件进行使用：<br><img src="https://i.loli.net/2021/08/04/VNtxHrbmJDn6a8z.png"><br>安装完成后重启软件，界面汉化成功：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/0646248cf3c557b3aa777447f81b6e79.png"></p>
 <h2 id="0x03-WebGoat配置"><a href="#0x03-WebGoat配置" class="headerlink" title="0x03 WebGoat配置"></a>0x03 WebGoat配置</h2><p>配置源码WebGoat-develop，用IDEA2021.2来导入项目(2021.2选择文件夹打开，然后手动配置；2019.3.2中可以选择导入项目自动配置。)，mavn会自动下载依赖启动：<br><img src="https://i.loli.net/2021/08/04/gQJ9ojfDzOa21R5.png"><br>mavn仓库默认在海外，配置文件默认位置在<code>C:\Users\&lt;用户名&gt;\.m2wrapper\dists\</code>中，在setting.xml中配置国内阿里云加速仓库地址：</p>
-<pre class="line-numbers language-xml"><code class="language-xml">  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>mirrors</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>mirror</span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>id</span><span class="token punctuation">></span></span>alimaven<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>id</span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>name</span><span class="token punctuation">></span></span>aliyun maven<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>name</span><span class="token punctuation">></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>url</span><span class="token punctuation">></span></span>http://maven.aliyun.com/nexus/content/groups/public/<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>url</span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>mirrorOf</span><span class="token punctuation">></span></span>central<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>mirrorOf</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>mirror</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>mirror</span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>id</span><span class="token punctuation">></span></span>repo2<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>id</span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>name</span><span class="token punctuation">></span></span>repo2 maven<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>name</span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>url</span><span class="token punctuation">></span></span>http://repo2.maven.org/maven2<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>url</span><span class="token punctuation">></span></span>
-        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>mirrorOf</span><span class="token punctuation">></span></span>central<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>mirrorOf</span><span class="token punctuation">></span></span>
-    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>mirror</span><span class="token punctuation">></span></span>
-  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>mirrors</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-xml"><code class="language-xml">  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>mirrors</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>mirror</span><span class="token punctuation">&gt;</span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>id</span><span class="token punctuation">&gt;</span></span>alimaven<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>id</span><span class="token punctuation">&gt;</span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>name</span><span class="token punctuation">&gt;</span></span>aliyun maven<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>name</span><span class="token punctuation">&gt;</span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>url</span><span class="token punctuation">&gt;</span></span>http://maven.aliyun.com/nexus/content/groups/public/<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>url</span><span class="token punctuation">&gt;</span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>mirrorOf</span><span class="token punctuation">&gt;</span></span>central<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>mirrorOf</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>mirror</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>mirror</span><span class="token punctuation">&gt;</span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>id</span><span class="token punctuation">&gt;</span></span>repo2<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>id</span><span class="token punctuation">&gt;</span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>name</span><span class="token punctuation">&gt;</span></span>repo2 maven<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>name</span><span class="token punctuation">&gt;</span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>url</span><span class="token punctuation">&gt;</span></span>http://repo2.maven.org/maven2<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>url</span><span class="token punctuation">&gt;</span></span>
+        <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>mirrorOf</span><span class="token punctuation">&gt;</span></span>central<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>mirrorOf</span><span class="token punctuation">&gt;</span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>mirror</span><span class="token punctuation">&gt;</span></span>
+  <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>mirrors</span><span class="token punctuation">&gt;</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p><img src="https://i.loli.net/2021/08/04/tYbVoEzBQlZa1Mx.png"></p>
 <h2 id="0x04-JDK和热重载配置"><a href="#0x04-JDK和热重载配置" class="headerlink" title="0x04 JDK和热重载配置"></a>0x04 JDK和热重载配置</h2><p>WebGoat需要使用JDK15来运行，在菜单”文件”-“项目结构”-“JDK”中配置版本为<a target="_blank" rel="noopener" href="http://jdk.java.net/15/">JDK15</a>:<br><img src="https://i.loli.net/2021/08/04/VnZADElt6gWNhCu.png"><br>然后在左上角🔨图标配置菜单里选择编辑项目配置,添加一个Spring Bot配置，名称为StartWebGoat，主类org.owasp.webgoat.StartWebGoat，这一步可能输入了主类会报错，提示找不到main函数，要等idea扫描一下类，然后就自己好了:<br><img src="https://i.loli.net/2021/08/04/rdx4onaIChsplJR.png"><br>同样配置webwolf(用来验证一些请求的服务，如SSRF之类的)，下面记得设置下更新操作,用来在代码中增加语句后热重载:<br><img src="https://i.loli.net/2021/08/04/zRCi1L4muDyWs2c.png"><br>点击调试按钮，访问本地8080，程序已经运行起来了:<br><img src="https://i.loli.net/2021/08/04/OQBXF76ckWJCLVH.png"><br>然后在<code>src/main/java/org/owasp/webgoat/users/UserService.java</code>中用户名检查断点，浏览器中登录，可以看到成功命中:<br><img src="https://i.loli.net/2021/08/05/Pmfyjs37RA9eVqO.png"><br>再试试热重载，加入一条打印语句，然后重载类:<br><img src="https://i.loli.net/2021/08/05/TSQNfmFGkIe5u2q.png"><br>已经输出了调试语句:<br><img src="https://i.loli.net/2021/08/05/8vltejyMwENUs7f.png"></p>
 <h2 id="0x04-Burp抓包配置"><a href="#0x04-Burp抓包配置" class="headerlink" title="0x04 Burp抓包配置"></a>0x04 Burp抓包配置</h2><p>Webgoat为了安全只会在本地127.0.0.1开启靶场服务，使用burp抓包的时，在Google中没法对127.0.0.1抓包。可以使用Firefox设置本地代理，在地址栏输入<code>about:config</code>，然后搜索<code>network.proxy.allow_hijacking_localhost</code>，设置为True：<br><img src="https://i.loli.net/2021/08/05/O8nuI1YxJLkUfTd.png"><br>然后就可以在Burp中拦截数据包了：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/4c0c8ade47a5d71de049e8d2809b9263.png"></p>
@@ -896,7 +896,7 @@
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            WebGoat是OWASP组织研制出的用于进行web漏洞实验的Java靶场程序,用来说明web应用中存在的安全漏洞，Webgoat使用maven开发，可以通过在IDEA中配置maven环境从源码编译Webgoat，可以很方便的进行调试，本文介绍一些环境配置的方法。
+                            WebGoat是OWASP组织研制出的用于进行web漏洞实验的Java靶场程序，用来说明web应用中存在的安全漏洞。本文介绍在IDEA中进行源码编译和调试的环境配置方法。
                         
                     </div>
                     <div class="publish-info">
@@ -949,7 +949,7 @@
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            通过Webgoat靶场来学习XXE漏洞基础，从代码层面分析漏洞产生原因，整理漏洞的利用方式。
+                            通过Webgoat靶场来学习XXE漏洞基础，从XML语法基础、漏洞利用、到代码层面分析漏洞产生原因，最后整理漏洞的利用方式。
                         
                     </div>
                     <div class="publish-info">
@@ -1158,7 +1158,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">22k</span>&nbsp;字
+                class="white-color">22.4k</span>&nbsp;字
             
             
             
