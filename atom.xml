@@ -6,7 +6,7 @@
   <link href="https://yanghaoi.github.io/atom.xml" rel="self"/>
   
   <link href="https://yanghaoi.github.io/"/>
-  <updated>2021-10-09T10:56:39.578Z</updated>
+  <updated>2021-10-15T18:35:19.565Z</updated>
   <id>https://yanghaoi.github.io/</id>
   
   <author>
@@ -21,15 +21,14 @@
     <link href="https://yanghaoi.github.io/2021/10/09/redis-lou-dong-li-yong/"/>
     <id>https://yanghaoi.github.io/2021/10/09/redis-lou-dong-li-yong/</id>
     <published>2021-10-09T10:56:39.491Z</published>
-    <updated>2021-10-09T10:56:39.578Z</updated>
+    <updated>2021-10-15T18:35:19.565Z</updated>
     
     
       
       
         
         
-    <summary type="html">&lt;h1 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h1&gt;&lt;p&gt;记录Redis在Linux和Windwos下获取权限的方式。&lt;/p&gt;
-&lt;h2 id=&quot;环境搭建&quot;&gt;&lt;a href=&quot;#环境搭建&quot;</summary>
+    <summary type="html">&lt;h2 id=&quot;0x01-简介&quot;&gt;&lt;a href=&quot;#0x01-简介&quot; class=&quot;headerlink&quot; title=&quot;0x01 简介&quot;&gt;&lt;/a&gt;0x01 简介&lt;/h2&gt;&lt;p&gt;Redis</summary>
         
       
     
@@ -38,7 +37,7 @@
     <category term="漏洞利用" scheme="https://yanghaoi.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8/"/>
     
     
-    <category term="Redis-Getshell" scheme="https://yanghaoi.github.io/tags/Redis-Getshell/"/>
+    <category term="Redis漏洞利用" scheme="https://yanghaoi.github.io/tags/Redis%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8/"/>
     
   </entry>
   
@@ -47,7 +46,7 @@
     <link href="https://yanghaoi.github.io/2021/10/07/ssrf-lou-dong-ji-chu/"/>
     <id>https://yanghaoi.github.io/2021/10/07/ssrf-lou-dong-ji-chu/</id>
     <published>2021-10-06T17:16:12.129Z</published>
-    <updated>2021-10-09T10:36:32.912Z</updated>
+    <updated>2021-10-17T15:14:12.661Z</updated>
     
     
       
@@ -72,7 +71,7 @@
     <link href="https://yanghaoi.github.io/2021/10/06/xxe-lou-dong-ji-chu/"/>
     <id>https://yanghaoi.github.io/2021/10/06/xxe-lou-dong-ji-chu/</id>
     <published>2021-10-06T13:52:05.000Z</published>
-    <updated>2021-10-08T13:52:31.517Z</updated>
+    <updated>2021-10-15T11:03:28.054Z</updated>
     
     
       
