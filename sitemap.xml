@@ -200,6 +200,20 @@
   </url>
   
   <url>
+    <loc>https://yanghaoi.github.io/tags/windows%E6%9C%8D%E5%8A%A1%E6%8F%90%E6%9D%83/</loc>
+    <lastmod>2021-10-18</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://yanghaoi.github.io/tags/metasploit/</loc>
+    <lastmod>2021-10-18</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://yanghaoi.github.io/tags/msfvenom%E5%85%8D%E6%9D%80/</loc>
     <lastmod>2021-10-18</lastmod>
     <changefreq>daily</changefreq>
@@ -215,20 +229,6 @@
   
   <url>
     <loc>https://yanghaoi.github.io/tags/%E9%9A%90%E8%97%8F%E7%A8%8B%E5%BA%8F%E7%AA%97%E5%8F%A3/</loc>
-    <lastmod>2021-10-18</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://yanghaoi.github.io/tags/windows%E6%9C%8D%E5%8A%A1%E6%8F%90%E6%9D%83/</loc>
-    <lastmod>2021-10-18</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://yanghaoi.github.io/tags/metasploit/</loc>
     <lastmod>2021-10-18</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
