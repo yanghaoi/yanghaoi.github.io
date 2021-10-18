@@ -442,7 +442,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    4.3k
+                    4.4k
                 </div>
                 
 
@@ -613,6 +613,50 @@ bgsave<span aria-hidden="true" class="line-numbers-rows"><span></span><span></sp
 <span class="token comment" spellcheck="true"># │ │ │ │ │</span>
 <span class="token comment" spellcheck="true"># *  *  *  *  *  用户名 执行的命令</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>系统层次的任务时间表（crontabs）的任务经常会指定一个或以上的用户进行执行，因此任务时间表（crontabs）文件需要增加“用户名”字段。<code>/etc/crontab</code> 文件定期自动执行多个子目录中的项目。放置在不同目录中<code>/etc/cron.*</code>脚本按照下面给出的时间间隔运行。这些目录中的所有脚本都以 root 权限运行。<br>| 目录     | 时间 |<br>|:—–|:—–|<br>| /etc/cron.d  | 几分钟 |<br>| /etc/cron.hourly |每小时的第一分钟 |<br>| /etc/cron.daily | 每天凌晨 3:05 至晚上 10.55 |<br>| /etc/cron.weekly |自上次执行后 7 天后的上午 3:25 至晚上 11:10 之间 |<br>| /etc/cron.monthly | 自上次执行后一个月后的凌晨 3:45 至晚上 11:30 之间 | </p>
+<table>
+<thead>
+<tr>
+<th>位运算</th>
+<th>符号</th>
+<th>计算</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>按位与</td>
+<td>&amp;</td>
+<td>相同为1，不同为0</td>
+</tr>
+<tr>
+<td>按位或</td>
+<td>|</td>
+<td>有1则1</td>
+</tr>
+<tr>
+<td>按位异或</td>
+<td>^</td>
+<td>相同为0，不同位1</td>
+</tr>
+<tr>
+<td>按位取反</td>
+<td>~</td>
+<td></td>
+</tr>
+<tr>
+<td>左移</td>
+<td>&lt;&lt;</td>
+<td>相当于乘以2^n^</td>
+</tr>
+<tr>
+<td>右移</td>
+<td><code>&gt;&gt;</code></td>
+<td>相当于除以2^n^</td>
+</tr>
+<tr>
+<td>无符号右移</td>
+<td><code>&gt;&gt;&gt;</code></td>
+<td></td>
+</tr>
+</tbody></table>
 <p><code>/var/spool/cron/</code>下的任务时间表（crontab）文件是用户层次的（但是只能root权限建），计划任务文件的名称与用户的用户名相同，格式如下：</p>
 <pre class="line-numbers language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 文件格式说明</span>
 <span class="token comment" spellcheck="true"># ┌──分钟（0 - 59）</span>
@@ -1134,7 +1178,7 @@ system.exec 'id'<span aria-hidden="true" class="line-numbers-rows"><span></span>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            在不同系统下搭建Redis漏洞环境，测试各种连接工具，整理总结Redis命令的使用、不同环境下的利用方式和相关工具的使用。\r\n\r\n
+                            在不同系统下搭建Redis漏洞环境，测试各种连接工具，整理总结Redis命令的使用、不同环境下的利用方式和相关工具的使用。
                         
                     </div>
                     <div class="publish-info">
@@ -1183,7 +1227,7 @@ system.exec 'id'<span aria-hidden="true" class="line-numbers-rows"><span></span>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            对SSRF漏洞的类型、原理、协议使用、限制绕过、攻击其他组件、常用的利用工具和方法等进行记录。
+                            通过Webgoat靶场和编写一些具有漏洞的PHP程序对SSRF漏洞的类型、原理、协议使用、限制绕过、攻击其他组件、常用的利用工具和方法等进行记录。
                         
                     </div>
                     <div class="publish-info">
@@ -1392,7 +1436,7 @@ system.exec 'id'<span aria-hidden="true" class="line-numbers-rows"><span></span>
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">26.6k</span>&nbsp;字
+                class="white-color">26.7k</span>&nbsp;字
             
             
             
