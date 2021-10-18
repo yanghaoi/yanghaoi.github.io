@@ -486,8 +486,8 @@ $ tar xzf redis-6.2.6.tar.gz
 $ cd redis-6.2.6
 $ make
 $ cd src && ./redis-server<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>4.Docker 环境<br>**<a target="_blank" rel="noopener" href="https://github.com/vulhub/vulhub/tree/master/redis/4-unacc">vulhub</a>**<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/ed8fb9d44d975a36d16033f3a26f3ab3.png"></p>
-<p><strong><a target="_blank" rel="noopener" href="https://hub.docker.com/_/redis">dockerhub-redis</a></strong><br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/792704d7190b0d603cb165a695c2f52d.png"></p>
+<p>4.Docker 环境<br><a target="_blank" rel="noopener" href="https://github.com/vulhub/vulhub/tree/master/redis/4-unacc">vulhub</a><br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/ed8fb9d44d975a36d16033f3a26f3ab3.png"></p>
+<p><a target="_blank" rel="noopener" href="https://hub.docker.com/_/redis">dockerhub-redis</a><br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/792704d7190b0d603cb165a695c2f52d.png"></p>
 <pre class="line-numbers language-bash"><code class="language-bash">docker pull redis:5-bullseye<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/9c73d5c602c38d59d9e96092e13ca56e.png"></p>
 <h3 id="Dockerhub-CentOS"><a href="#Dockerhub-CentOS" class="headerlink" title="Dockerhub-CentOS"></a>Dockerhub-CentOS</h3><p>使用Docker在CentOS容器内部署PHPStudy和Redis环境：</p>
@@ -512,6 +512,7 @@ yum <span class="token function">install</span> -y <span class="token function">
 系统初始账号:admin
 系统初始密码:hLQGQ6HGP9
 <span class="token comment" spellcheck="true">#ssh -fgN -L 8080:localhost:80 localhost</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/9345d24c4c1123f0a84def9d60eef471.png"></p>
 <h3 id="Redis-Install-For-Windows"><a href="#Redis-Install-For-Windows" class="headerlink" title="Redis Install For Windows"></a>Redis Install For Windows</h3><p>Windows下找到的几个版本安装包：<a target="_blank" rel="noopener" href="https://github.com/dmajkic/redis/downloads">Redis&lt;2.4.5安装包</a> ， <a target="_blank" rel="noopener" href="https://www.xp.cn/download.html">PHPStudy-Redis3.0.504</a> ， <a target="_blank" rel="noopener" href="https://github.com/microsoftarchive/redis/releases">Redis-x64-3.2.100.msi</a>分别是2.4.5，3.0.504，3.2.100三个版本，PHPStudy中启动效果：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/4a64eea99d9856ecf4545f935aff74ac.png"><br>Redis-x64-3.2.100.msi安装后会以服务形式启动：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/eb11327e4b205370d64d7e2b55e1cb7e.png"></p>
 <h2 id="0x03-利用方式"><a href="#0x03-利用方式" class="headerlink" title="0x03 利用方式"></a>0x03 利用方式</h2><h3 id="密码爆破"><a href="#密码爆破" class="headerlink" title="密码爆破"></a>密码爆破</h3><p><strong>Dict协议</strong></p>
 <pre class="line-numbers language-html"><code class="language-html">dict://192.168.200.97:6379/auth:password<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
