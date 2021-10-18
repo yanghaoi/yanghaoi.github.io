@@ -41,9 +41,9 @@
     <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/jquery/jquery.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/live2d-widget/autoload.js"></script>
 
-<meta name="generator" content="Hexo 5.1.1"><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
-<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"><link rel="alternate" href="/atom.xml" title="Yang Hao's blog" type="application/atom+xml">
-</head>
+<meta name="generator" content="Hexo 5.1.1"><link rel="alternate" href="/atom.xml" title="Yang Hao's blog" type="application/atom+xml">
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
 
 
 <body>
@@ -617,27 +617,33 @@ bgsave<span aria-hidden="true" class="line-numbers-rows"><span></span><span></sp
 <tr>
 <th>目录</th>
 <th>时间</th>
+<th>权限</th>
 </tr>
 </thead>
 <tbody><tr>
 <td>/etc/cron.d</td>
 <td>几分钟</td>
+<td>root</td>
 </tr>
 <tr>
 <td>/etc/cron.hourly</td>
 <td>每小时的第一分钟</td>
+<td>root</td>
 </tr>
 <tr>
 <td>/etc/cron.daily</td>
 <td>每天凌晨 3:05 至晚上 10.55</td>
+<td>root</td>
 </tr>
 <tr>
 <td>/etc/cron.weekly</td>
 <td>自上次执行后 7 天后的上午 3:25 至晚上 11:10 之间</td>
+<td>root</td>
 </tr>
 <tr>
 <td>/etc/cron.monthly</td>
 <td>自上次执行后一个月后的凌晨 3:45 至晚上 11:30 之间</td>
+<td>root</td>
 </tr>
 </tbody></table>
 <p><code>/var/spool/cron/</code>下的任务时间表（crontab）文件是用户层次的（但是只能root权限建），计划任务文件的名称与用户的用户名相同，格式如下：</p>
