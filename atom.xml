@@ -6,7 +6,7 @@
   <link href="https://yanghaoi.github.io/atom.xml" rel="self"/>
   
   <link href="https://yanghaoi.github.io/"/>
-  <updated>2021-10-29T08:27:11.535Z</updated>
+  <updated>2021-11-02T18:18:06.496Z</updated>
   <id>https://yanghaoi.github.io/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>一次HSTS警告的排查</title>
+    <link href="https://yanghaoi.github.io/2021/11/03/yi-ci-hsts-jing-gao-de-pai-cha/"/>
+    <id>https://yanghaoi.github.io/2021/11/03/yi-ci-hsts-jing-gao-de-pai-cha/</id>
+    <published>2021-11-02T18:18:06.422Z</published>
+    <updated>2021-11-02T18:18:06.496Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;最近访问博客发现页面显示不正常，F12查看网络情况后发现cloudflare加载的静态资源出了问题，具体表现为浏览器出现HSTS警告，使用socks5代理时正常(使用socks5代理时，DNS查询也是用的socks5代理)：&lt;br&gt;&lt;img</summary>
+        
+      
+    
+    
+    
+    <category term="杂记" scheme="https://yanghaoi.github.io/categories/%E6%9D%82%E8%AE%B0/"/>
+    
+    
+    <category term="DNS解析配置" scheme="https://yanghaoi.github.io/tags/DNS%E8%A7%A3%E6%9E%90%E9%85%8D%E7%BD%AE/"/>
+    
+  </entry>
   
   <entry>
     <title>Redis漏洞利用</title>
@@ -150,7 +175,7 @@
     <link href="https://yanghaoi.github.io/2021/07/27/phpstudy-phpstorm-de-dai-ma-diao-shi-pei-zhi/"/>
     <id>https://yanghaoi.github.io/2021/07/27/phpstudy-phpstorm-de-dai-ma-diao-shi-pei-zhi/</id>
     <published>2021-07-27T11:25:05.292Z</published>
-    <updated>2021-07-27T11:46:46.261Z</updated>
+    <updated>2021-11-02T18:19:37.727Z</updated>
     
     
       
@@ -204,7 +229,7 @@
     <link href="https://yanghaoi.github.io/2020/10/09/cve-2020-1313-fu-xian/"/>
     <id>https://yanghaoi.github.io/2020/10/09/cve-2020-1313-fu-xian/</id>
     <published>2020-10-09T08:14:44.972Z</published>
-    <updated>2020-11-13T13:10:14.175Z</updated>
+    <updated>2021-11-02T18:19:12.603Z</updated>
     
     
       
@@ -233,7 +258,7 @@
     <link href="https://yanghaoi.github.io/2020/09/06/ji-yi-ci-jian-dan-de-win-ti-quan/"/>
     <id>https://yanghaoi.github.io/2020/09/06/ji-yi-ci-jian-dan-de-win-ti-quan/</id>
     <published>2020-09-06T06:32:24.637Z</published>
-    <updated>2020-10-09T18:14:50.916Z</updated>
+    <updated>2021-11-02T18:18:59.278Z</updated>
     
     
       
@@ -260,7 +285,7 @@
     <link href="https://yanghaoi.github.io/2020/08/30/jian-dan-de-yuan-ma-mian-sha/"/>
     <id>https://yanghaoi.github.io/2020/08/30/jian-dan-de-yuan-ma-mian-sha/</id>
     <published>2020-08-30T05:49:04.297Z</published>
-    <updated>2020-10-09T18:15:10.943Z</updated>
+    <updated>2021-11-02T18:19:06.460Z</updated>
     
     
       
