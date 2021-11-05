@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://yanghaoi.github.io/2021/10/09/redis-lou-dong-li-yong/</loc>
+    <lastmod>2021-11-03</lastmod>
+  </url>
+  <url>
+    <loc>https://yanghaoi.github.io/2021/11/03/yi-ci-hsts-jing-gao-de-pai-cha/</loc>
+    <lastmod>2021-11-02</lastmod>
+  </url>
+  <url>
     <loc>https://yanghaoi.github.io/2020/08/22/weblogic-iiop-fan-xu-lie-hua-lou-dong-cve-2020-2551-fu-xian/</loc>
     <lastmod>2021-11-02</lastmod>
   </url>
@@ -19,14 +27,6 @@
   <url>
     <loc>https://yanghaoi.github.io/2020/09/06/ji-yi-ci-jian-dan-de-win-ti-quan/</loc>
     <lastmod>2021-11-02</lastmod>
-  </url>
-  <url>
-    <loc>https://yanghaoi.github.io/2021/11/03/yi-ci-hsts-jing-gao-de-pai-cha/</loc>
-    <lastmod>2021-11-02</lastmod>
-  </url>
-  <url>
-    <loc>https://yanghaoi.github.io/2021/10/09/redis-lou-dong-li-yong/</loc>
-    <lastmod>2021-10-29</lastmod>
   </url>
   <url>
     <loc>https://yanghaoi.github.io/2021/10/07/ssrf-lou-dong-ji-chu/</loc>
