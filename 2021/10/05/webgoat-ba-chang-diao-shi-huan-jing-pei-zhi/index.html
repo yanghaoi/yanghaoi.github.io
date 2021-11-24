@@ -484,7 +484,7 @@
 <p>这个过程中可能会遇到包已经在仓库中存在但是mvn依赖报红，可以尝试关闭项目后，重新导入项目。最终效果：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_11/22820cf4926c6e38c429dea528bea41d.png"></p>
 <h2 id="0x04-JDK和热重载配置"><a href="#0x04-JDK和热重载配置" class="headerlink" title="0x04 JDK和热重载配置"></a>0x04 JDK和热重载配置</h2><p>WebGoat需要使用JDK15来运行，在菜单”文件”-“项目结构”-“JDK”中配置版本为<a target="_blank" rel="noopener" href="http://jdk.java.net/15/">JDK15</a>:<br><img src="https://i.loli.net/2021/08/04/VnZADElt6gWNhCu.png"><br>然后在左上角🔨图标配置菜单里选择编辑项目配置,添加一个Spring Bot配置，名称为StartWebGoat，主类org.owasp.webgoat.StartWebGoat，这一步可能输入了主类会报错，提示找不到main函数，要等idea扫描一下类，然后就自己好了:<br><img src="https://i.loli.net/2021/08/04/rdx4onaIChsplJR.png"><br>同样配置webwolf(用来验证一些请求的服务，如SSRF之类的)，下面记得设置下更新操作,用来在代码中增加语句后热重载:<br><img src="https://i.loli.net/2021/08/04/zRCi1L4muDyWs2c.png"><br>点击调试按钮，访问本地8080，程序已经运行起来了:<br><img src="https://i.loli.net/2021/08/04/OQBXF76ckWJCLVH.png"><br>然后在<code>src/main/java/org/owasp/webgoat/users/UserService.java</code>中用户名检查断点，浏览器中登录，可以看到成功命中:<br><img src="https://i.loli.net/2021/08/05/Pmfyjs37RA9eVqO.png"><br>再试试热重载，加入一条打印语句，然后重载类:<br><img src="https://i.loli.net/2021/08/05/TSQNfmFGkIe5u2q.png"><br>已经输出了调试语句:<br><img src="https://i.loli.net/2021/08/05/8vltejyMwENUs7f.png"></p>
 <h2 id="0x04-Burp抓包配置"><a href="#0x04-Burp抓包配置" class="headerlink" title="0x04 Burp抓包配置"></a>0x04 Burp抓包配置</h2><p>Webgoat为了安全只会在本地127.0.0.1开启靶场服务，使用burp抓包的时，在Google中没法对127.0.0.1抓包。可以使用Firefox设置本地代理，在地址栏输入<code>about:config</code>，然后搜索<code>network.proxy.allow_hijacking_localhost</code>，设置为True：<br><img src="https://i.loli.net/2021/08/05/O8nuI1YxJLkUfTd.png"><br>然后就可以在Burp中拦截数据包了：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/4c0c8ade47a5d71de049e8d2809b9263.png"></p>
-<h2 id="0x05-源码打包"><a href="#0x05-源码打包" class="headerlink" title="0x05 源码打包"></a>0x05 源码打包</h2><p>有时候可能有对源码进行修改后打包为JAR进行远程部署的需求，但是直接对源码进行 <code>mvn clean install</code>时会出现各种报错：<br>1.JDK版本错误</p>
+<h2 id="0x05-源码打包"><a href="#0x05-源码打包" class="headerlink" title="0x05 源码打包"></a>0x05 源码打包</h2><p>有时候可能有对源码进行修改后重新打包为JAR进行部署的需求，但是对源码进行 <code>mvn clean install</code>时会出现各种报错，如：<br>1.JDK版本错误</p>
 <pre class="line-numbers language-cmd"><code class="language-cmd">No compiler is provided in this environment. Perhaps you are running on a JRE rather than a JDK?<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_11/16d129fd3ef443f5556a8b8bcc63c015.png"><br>这是由于没有用正确的JDK版本构建出现的错误，可在cmd中设置正确的jdk位置，如<code>set JAVA_HOME=D:\Program Files\JAVA\jdk-15</code>，然后再执行<code>mvn clean install</code>。</p>
 <p>2.UTF-8 序列的字节 1 无效</p>
@@ -1164,7 +1164,7 @@ Expected: is "Congratulations. You have successfully completed the assignment."
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">34.2k</span>&nbsp;字
+                class="white-color">36.8k</span>&nbsp;字
             
             
             
