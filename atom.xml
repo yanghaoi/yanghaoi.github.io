@@ -6,7 +6,7 @@
   <link href="https://yanghaoi.github.io/atom.xml" rel="self"/>
   
   <link href="https://yanghaoi.github.io/"/>
-  <updated>2021-11-24T14:49:26.213Z</updated>
+  <updated>2021-12-30T08:43:05.073Z</updated>
   <id>https://yanghaoi.github.io/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://yanghaoi.github.io/2021/11/24/php-ren-yi-wen-jian-shang-chuan-rao-guo-duo-chong-xian-zhi/"/>
     <id>https://yanghaoi.github.io/2021/11/24/php-ren-yi-wen-jian-shang-chuan-rao-guo-duo-chong-xian-zhi/</id>
     <published>2021-11-24T02:46:26.349Z</published>
-    <updated>2021-11-24T14:49:26.213Z</updated>
+    <updated>2021-12-30T08:43:05.073Z</updated>
     
     
       
@@ -40,6 +40,31 @@
     <category term="阿里云WAF绕过" scheme="https://yanghaoi.github.io/tags/%E9%98%BF%E9%87%8C%E4%BA%91WAF%E7%BB%95%E8%BF%87/"/>
     
     <category term="PHP二次渲染绕过" scheme="https://yanghaoi.github.io/tags/PHP%E4%BA%8C%E6%AC%A1%E6%B8%B2%E6%9F%93%E7%BB%95%E8%BF%87/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>DLL劫持漏洞</title>
+    <link href="https://yanghaoi.github.io/2021/11/18/dll-jie-chi/"/>
+    <id>https://yanghaoi.github.io/2021/11/18/dll-jie-chi/</id>
+    <published>2021-11-18T08:10:41.850Z</published>
+    <updated>2021-12-31T14:27:28.230Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;0x01-简介&quot;&gt;&lt;a href=&quot;#0x01-简介&quot; class=&quot;headerlink&quot; title=&quot;0x01 简介&quot;&gt;&lt;/a&gt;0x01</summary>
+        
+      
+    
+    
+    
+    <category term="基础漏洞" scheme="https://yanghaoi.github.io/categories/%E5%9F%BA%E7%A1%80%E6%BC%8F%E6%B4%9E/"/>
+    
+    
+    <category term="Windows DLL劫持" scheme="https://yanghaoi.github.io/tags/Windows-DLL%E5%8A%AB%E6%8C%81/"/>
     
   </entry>
   
@@ -73,7 +98,7 @@
     <link href="https://yanghaoi.github.io/2021/10/09/redis-lou-dong-li-yong/"/>
     <id>https://yanghaoi.github.io/2021/10/09/redis-lou-dong-li-yong/</id>
     <published>2021-10-09T10:56:39.491Z</published>
-    <updated>2021-11-18T15:05:10.799Z</updated>
+    <updated>2021-12-30T08:37:57.951Z</updated>
     
     
       
@@ -148,7 +173,7 @@
     <link href="https://yanghaoi.github.io/2021/10/05/webgoat-ba-chang-diao-shi-huan-jing-pei-zhi/"/>
     <id>https://yanghaoi.github.io/2021/10/05/webgoat-ba-chang-diao-shi-huan-jing-pei-zhi/</id>
     <published>2021-10-05T13:52:05.000Z</published>
-    <updated>2021-11-22T09:18:06.134Z</updated>
+    <updated>2021-11-25T02:49:43.593Z</updated>
     
     
       
@@ -167,31 +192,6 @@
     <category term="IDEA" scheme="https://yanghaoi.github.io/tags/IDEA/"/>
     
     <category term="Webgoat" scheme="https://yanghaoi.github.io/tags/Webgoat/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>DLL劫持</title>
-    <link href="https://yanghaoi.github.io/2021/09/06/dll-jie-chi/"/>
-    <id>https://yanghaoi.github.io/2021/09/06/dll-jie-chi/</id>
-    <published>2021-09-06T13:52:05.000Z</published>
-    <updated>2021-11-18T15:06:31.640Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;h2 id=&quot;0x01-简介&quot;&gt;&lt;a href=&quot;#0x01-简介&quot; class=&quot;headerlink&quot; title=&quot;0x01 简介&quot;&gt;&lt;/a&gt;0x01</summary>
-        
-      
-    
-    
-    
-    <category term="基础漏洞" scheme="https://yanghaoi.github.io/categories/%E5%9F%BA%E7%A1%80%E6%BC%8F%E6%B4%9E/"/>
-    
-    
-    <category term="Windows DLL劫持" scheme="https://yanghaoi.github.io/tags/Windows-DLL%E5%8A%AB%E6%8C%81/"/>
     
   </entry>
   

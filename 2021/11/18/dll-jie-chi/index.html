@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="DLL劫持, Yang Hao&#39;s blog">
+    <meta name="keywords" content="DLL劫持漏洞, Yang Hao&#39;s blog">
     <meta name="description" content="Yang Hao&#39;s blog">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -27,7 +27,7 @@
 </script>
 
 
-    <title>DLL劫持 | Yang Hao&#39;s blog</title>
+    <title>DLL劫持漏洞 | Yang Hao&#39;s blog</title>
     <link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/favicon.ico">
 
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/awesome/css/all.css">
@@ -286,7 +286,7 @@
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">DLL劫持</h1>
+                    <h1 class="description center-align post-title">DLL劫持漏洞</h1>
                 </div>
             </div>
         </div>
@@ -428,28 +428,28 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2021-09-06
+                    2021-11-18
                 </div>
                 
 
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2021-11-18
+                    2021-12-31
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    6.2k
+                    7.2k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    24 分
+                    28 分
                 </div>
                 
 
@@ -639,7 +639,7 @@ cl<span class="token punctuation">.</span>exe <span class="token operator">/</sp
 <span class="token keyword">del</span> Src\\Resource<span class="token punctuation">.</span>res<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>这时候需要在<code>Resource.rc</code>文件中将打包的资源文件名统一：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/6f31fa1224523b222faf1caacdad4789.png"></p>
 <p>要让DLL程序看起来是正常的DLL，继续添加版本等信息。这里在资源文件中补充版本信息时出现”未能完成操作,拒绝访问”，将资源文件涉及到的编辑窗口都关闭即可：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/171844e4637759a4f18ee94f4ebd40bb.png"></p>
-<p>使用ResourceHacker工具获取到目标DLL版本信息后添加到载荷DLL中：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/459d0e7599aeb80a62a6c2eb1da4de23.png"></p>
+<p>使用ResourceHacker工具获取到目标DLL版本信息后，在载荷DLL的资源信息中添加：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_12/b0197eddca4727b6f975573741e03ada.png"><br>完成后在DLL看到具有了相同的版本信息：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/459d0e7599aeb80a62a6c2eb1da4de23.png"></p>
 <p>还可以通过<code>sigthief.py</code>伪造签名：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/821d726b56625292c08f5ef6c059227e.png"></p>
 <p>在代码上的优化，主要是设置互斥锁防止DLL被加载后反复触发shellcode注入，DllMain代码如下：</p>
 <pre class="line-numbers language-c++"><code class="language-c++">BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved) {
@@ -773,8 +773,30 @@ BOOL APIENTRY DllMain( HMODULE hModule,
     <span class="token keyword">return</span> <span class="token punctuation">;</span>
 <span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>最终的实现是在主流程中执行想要的操作而不使用线程，执行完成将流程返回即可：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/e5f99259c16fe6563f653dd06535cfa2.gif"></p>
-<h3 id="权限维持"><a href="#权限维持" class="headerlink" title="权限维持"></a>权限维持</h3><p>使用DLL劫持漏洞在进行权限维持时比较便捷和稳定，而且大部分被利用的主程序都带有数字签名或者是Windows系统文件，所以在防御规避上也有优秀表现。针对一些常见软件的DLL劫持、Office-wll扩展项等等，在 <a target="_blank" rel="noopener" href="https://www.wietzebeukema.nl/blog/hijacking-dlls-in-windows">hijacking-dlls-in-windows-lists</a> 文章中针对Windows下的系统文件进行了大量的DLL劫持测试，已经是比较全了，本文就不再深入了。</p>
-<h2 id="0x09-DLL-劫持防御"><a href="#0x09-DLL-劫持防御" class="headerlink" title="0x09 DLL 劫持防御"></a>0x09 DLL 劫持防御</h2><p>防御DLL劫持可以在开发注意进行下列处理：</p>
+<p>更多的LOLBIN类的系统程序，在 <a target="_blank" rel="noopener" href="https://www.wietzebeukema.nl/blog/hijacking-dlls-in-windows">hijacking-dlls-in-windows-lists</a> 文章中针对这些程序进行了大量的DLL劫持测试，可以合理利用文章提供的受<a target="_blank" rel="noopener" href="https://github.com/wietze/windows-dll-hijacking/blob/master/dll_hijacking_candidates.csv">DLL劫持影响的程序列表</a>。<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_12/fdf0252099f26de65cb18b4487d45eeb.png"><br>而这些程序大部分不具有持续运行的属性，所以劫持后需要在DLL的主线程中进行操作。持续运行属性就是指程序运行后可以在后台运行或持续一定时间，上文的 LicensingUI.exe 就属于持续运行程序，在hijacking-dlls-in-windows-lists表中的computerdefaults.exe就不属于，它执行后会创建线程启动设置，然后退出自身：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_12/0da334297ad0d9bfb925c370ea06d238.png"><br>对于这样的程序最好的利用方法就是创建子进程进行注入:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_12/0b3aee7abec6c18fed22ef7f2ce37d0c.png"><br>子进程也可以选择一些带有数字签名的程序，这在后续执行的防御规避方面有一定效果：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_12/a8a66941db5b1237a622251710367ec5.png"></p>
+<h3 id="权限维持"><a href="#权限维持" class="headerlink" title="权限维持"></a>权限维持</h3><p>使用DLL劫持漏洞在进行权限维持时比较便捷和稳定，而且大部分被利用的主程序都带有数字签名或者是Windows系统文件，所以在防御规避上也有优秀表现。在上文也对一些程序进行了DLL劫持测试，也对被劫持程序有一定要求，才能做到比较好的权限维持效果。接下来对不同的程序和情况，通过实例进行讲解。</p>
+<h4 id="系统程序DLL劫持"><a href="#系统程序DLL劫持" class="headerlink" title="系统程序DLL劫持"></a>系统程序DLL劫持</h4><p>利用一些会随着系统启动或用户登录后启动的程序进行权限维持。对于C盘系统目录下的操作，都需要管理员甚至更高权限。对于随用户启动的程序，返回的都是用户权限，对于权限维持来说，已经是够用了。</p>
+<h4 id="msdtc-exe"><a href="#msdtc-exe" class="headerlink" title="msdtc.exe"></a>msdtc.exe</h4><p>msdtc.exe是微软分布式传输协调程序，在域内主机上一般是作为服务自启动的，需要管理员权限操作：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_12/7f9d7759d125e02eaf2ce9b090d7b36e.png"><br>msdtc会加载注册表位置DLL文件：</p>
+<pre><code>计算机\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\MSDTC\MTxOCI</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_12/847ff49d956ce72a9764952a03f780e5.png"><br>这里的oci.dll在系统目录下并不存在，所以可以在msdtc.exe的相对目录中写入oci.dll，利用msdtc.exe加载。利用方式也非常简单，可以直接将beacon.dll改名为oci.dll放入C:\windows\system32\目录下直接加载即可(dll要与msdtc.exe相同位数)：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_12/7ed9d27777f8c0b320d3c704af0b8caf.png"><br>返回的msdtc进程返回权限是<code>nt authority\network service</code>，通过<code>sc config msdtc start= auto obj= LocalSystem</code>命令可修改服务启动的权限。这个程序的CobaltStrike利用插件已经开发完成，详见：<a target="_blank" rel="noopener" href="https://github.com/yanghaoi/CobaltStrike_CNA">https://github.com/yanghaoi/CobaltStrike_CNA</a></p>
+<h4 id="wmiprvse-exe"><a href="#wmiprvse-exe" class="headerlink" title="wmiprvse.exe"></a>wmiprvse.exe</h4><p>wmiprvse.exe是一个进行WMI的事件监控程序，会在系统启动后执行一段时间，程序会加载 <code>C:\windows\system32\wbem\WMICLNT.dll</code>动态链接库。但是该dll文件实际并不存在，所以也可以进行利用（通过Process Monitor发现）：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_12/157651a52a0fc0c1c29e1fd58fb86a64.png"><br>这个程序返回权限为SYSTEM，但是持续一段时间(大概两三分钟)后会退出：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_12/4c44517d45a69dffc9009f7955122665.png"></p>
+<h4 id="explorer-exe"><a href="#explorer-exe" class="headerlink" title="explorer.exe"></a>explorer.exe</h4><p>explorer.exe是Windows程序管理器或者文件资源管理器，用户登录系统后自动执行，用于显示桌面等GUI功能。explorer同样会搜索加载一些不存在的DLL，如 <code>C:\Windows\linkinfo.dll</code>、<code>C:\windows\netutils.dll</code> 等，返回的是用户权限，dll写入后需要重启或注销后用户登录才生效。<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_12/ddf50aa9229b563e7ab8f5ecd702fc4d.png"></p>
+<h4 id="常用软件DLL劫持"><a href="#常用软件DLL劫持" class="headerlink" title="常用软件DLL劫持"></a>常用软件DLL劫持</h4><p>常见软件的DLL劫持在上文对挖掘方法和一些案例也进行了介绍，如navicat、QQLive等程序。一般的利用尽量在获取目标系统安装软件版本后，本地测试好再去实际操作。获取系统安装的程序可以使用<code>wmic product get name,version</code>命令：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_12/6527c3d31b4c50d414cc421d225d5bef.png"><br>注册表查询<code>REG QUERY "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths"</code>等方式：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_12/833c4d2612d77c270bd58cdd5fa75883.png"></p>
+<h4 id="Office-加载项"><a href="#Office-加载项" class="headerlink" title="Office-加载项"></a>Office-加载项</h4><p>利用office的自动加载项进行权限维持。将编写好的dll文件扩展名该为.dll放置到<code>C:\Users\&lt;用户名&gt;\AppData\Roaming\Microsoft\Word\STARTUP</code>的加载项中，编写代码为：</p>
+<pre class="line-numbers language-c"><code class="language-c"><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">"stdafx.h"</span></span>
+BOOL APIENTRY <span class="token function">DllMain</span><span class="token punctuation">(</span> HANDLE hModule<span class="token punctuation">,</span> 
+                       DWORD  ul_reason_for_call<span class="token punctuation">,</span> 
+                       LPVOID lpReserved
+                     <span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>ul_reason_for_call <span class="token operator">==</span> DLL_PROCESS_ATTACH<span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        <span class="token function">WinExec</span><span class="token punctuation">(</span><span class="token string">"CMD /K calc"</span><span class="token punctuation">,</span>SW_SHOWNORMAL<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">return</span> TRUE<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>打开word后程序执行：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_12/3b93c49b7a5fba8474f5aa4e5ecf9d8c.gif"><br>在office软件的加载中心可以看到加载的扩展：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_12/d570e3933ff9f249f8473db0266e2e52.png"><br>也会发现有其他类型的加载项，比如百度云的COM加载项，如果有机会的话也可以尝试实现这一类型。</p>
+<h2 id="0x09-DLL-劫持防御"><a href="#0x09-DLL-劫持防御" class="headerlink" title="0x09 DLL 劫持防御"></a>0x09 DLL 劫持防御</h2><p>开发过程中防御DLL劫持可以在DLL加载前进行下列一些处理：</p>
 <ol>
 <li>检查DLL文件签名</li>
 <li>程序中校验DLL哈希</li>
@@ -826,7 +848,7 @@ BOOL APIENTRY DllMain( HMODULE hModule,
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://yanghaoi.github.io/2021/09/06/dll-jie-chi/">https://yanghaoi.github.io/2021/09/06/dll-jie-chi/</a>
+                    <a href="https://yanghaoi.github.io/2021/11/18/dll-jie-chi/">https://yanghaoi.github.io/2021/11/18/dll-jie-chi/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -1174,30 +1196,30 @@ BOOL APIENTRY DllMain( HMODULE hModule,
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2021/10/05/webgoat-ba-chang-diao-shi-huan-jing-pei-zhi/">
+                <a href="/2021/11/24/php-ren-yi-wen-jian-shang-chuan-rao-guo-duo-chong-xian-zhi/">
                     <div class="card-image">
                         
-                        <img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/8509b1add189e4272eea5a7df80740df.png" class="responsive-img" alt="Webgoat靶场调试环境配置">
+                        <img src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/medias/banner/3.jpg" class="responsive-img" alt="PHP任意文件上传绕过多重限制">
                         
-                        <span class="card-title">Webgoat靶场调试环境配置</span>
+                        <span class="card-title">PHP任意文件上传绕过多重限制</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            WebGoat是OWASP组织研制出的用于进行web漏洞实验的Java靶场程序，用来说明web应用中存在的安全漏洞。本文介绍在IDEA中进行源码编译和调试的环境配置方法。
+                            一次授权渗透测试中遇到一个任意文件上传的漏洞点，但是存在云WAF和php-GD库图像二次渲染。通过多次尝试，最终成功获取目标权限。
                         
                     </div>
                     <div class="publish-info">
                         <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2021-10-05
+                            <i class="far fa-clock fa-fw icon-date"></i>2021-11-24
                         </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E9%9D%B6%E5%9C%BA%E7%8E%AF%E5%A2%83/" class="post-category">
-                                    靶场环境
+                            <a href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/" class="post-category">
+                                    渗透测试
                                 </a>
                             
                             
@@ -1207,12 +1229,12 @@ BOOL APIENTRY DllMain( HMODULE hModule,
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/IDEA/">
-                        <span class="chip bg-color">IDEA</span>
+                    <a href="/tags/%E9%98%BF%E9%87%8C%E4%BA%91WAF%E7%BB%95%E8%BF%87/">
+                        <span class="chip bg-color">阿里云WAF绕过</span>
                     </a>
                     
-                    <a href="/tags/Webgoat/">
-                        <span class="chip bg-color">Webgoat</span>
+                    <a href="/tags/PHP%E4%BA%8C%E6%AC%A1%E6%B8%B2%E6%9F%93%E7%BB%95%E8%BF%87/">
+                        <span class="chip bg-color">PHP二次渲染绕过</span>
                     </a>
                     
                 </div>
@@ -1226,30 +1248,30 @@ BOOL APIENTRY DllMain( HMODULE hModule,
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2021/08/19/cobaltstrike-liu-liang-yin-cang-yu-an-quan-pei-zhi/">
+                <a href="/2021/11/03/yi-ci-hsts-jing-gao-de-pai-cha/">
                     <div class="card-image">
                         
-                        <img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_9/f0214927bd28ba7a980c3f49a35e65c6.png" class="responsive-img" alt="CobaltStrike流量伪装与安全配置">
+                        <img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_11/e0f5f87f01e358d667c07683c647c83e.jpg" class="responsive-img" alt="一次HSTS警告的排查">
                         
-                        <span class="card-title">CobaltStrike流量伪装与安全配置</span>
+                        <span class="card-title">一次HSTS警告的排查</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            在个人实践中摸索实践中学习CobaltStrike的使用，针对CobaltStrike的流量隐藏进行了研究，主要涉及到Cloudflare的CDN配置、Nginx的反向代理以及profile的使用。分析解决在之前的实践过程中遇到的问题，弥补解决方案的不足点。
+                            最近访问博客发现页面显示不正常，F12查看网络情况后发现cloudflare加载的静态资源出了问题，表现为浏览器出现HSTS警告，经过DNS的排除最终成功修复。
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-08-19
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-11-03
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E5%AE%89%E5%85%A8%E5%B7%A5%E5%85%B7/" class="post-category">
-                                    安全工具
+                            <a href="/categories/%E6%9D%82%E8%AE%B0/" class="post-category">
+                                    杂记
                                 </a>
                             
                             
@@ -1259,12 +1281,8 @@ BOOL APIENTRY DllMain( HMODULE hModule,
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/CobaltStrike/">
-                        <span class="chip bg-color">CobaltStrike</span>
-                    </a>
-                    
-                    <a href="/tags/%E6%B5%81%E9%87%8F%E4%BC%AA%E8%A3%85/">
-                        <span class="chip bg-color">流量伪装</span>
+                    <a href="/tags/DNS%E8%A7%A3%E6%9E%90%E9%85%8D%E7%BD%AE/">
+                        <span class="chip bg-color">DNS解析配置</span>
                     </a>
                     
                 </div>
@@ -1450,7 +1468,7 @@ BOOL APIENTRY DllMain( HMODULE hModule,
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">36.8k</span>&nbsp;字
+                class="white-color">37.8k</span>&nbsp;字
             
             
             

