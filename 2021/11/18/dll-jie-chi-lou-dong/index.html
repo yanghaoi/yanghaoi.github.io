@@ -439,21 +439,21 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2021-12-31
+                    2022-03-02
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    7.2k
+                    7.4k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    28 分
+                    29 分
                 </div>
                 
 
@@ -682,11 +682,12 @@ del Src\\Resource.res</code></pre>
 <li>尽量使用进程迁移，否则beacon退出后程序可能也退出。</li>
 </ol>
 <h2 id="0x08-案例与分析"><a href="#0x08-案例与分析" class="headerlink" title="0x08 案例与分析"></a>0x08 案例与分析</h2><p>一般的，劫持资源类DLL(Satellite DLL)和文件替换来达到攻击效果的不会被接收，更多详情参考腾讯SRC：<a target="_blank" rel="noopener" href="https://security.tencent.com/index.php/blog/msg/20">DLL劫持漏洞解析</a> ，在漏洞挖掘时主要还是关注搜索顺序劫持，特别是权限提升的情况，基本上挖掘到知名产品的DLL劫持后可以进行权限提升就可以申请CVE了。</p>
-<h3 id="DLL劫持到权限提升"><a href="#DLL劫持到权限提升" class="headerlink" title="DLL劫持到权限提升"></a>DLL劫持到权限提升</h3><p><a target="_blank" rel="noopener" href="https://blog.zsec.uk/nvidia-cve-2020/">CVE‑2020‑5980</a>是NVIDIA Windows GPU驱动程序在C盘的文件夹权限设置错误，导致普通用户可以写入DLL进行劫持后获得权限提升。在微星(MSI)Dragon_Center(龙中心)程序2.0.116.0版本中也存在提权漏洞，其服务<code>Mystic_Light_Service</code>子进程<code>LEDKeeper2.exe</code>会搜索<code>mscorjit.dll</code>进行加载，但是在其其安装目录下并没有该文件，并且系统目录中也不存在该文件(是.Net的链接库文件，在<code>C:\Windows\Microsoft.NET\Framework\</code>和<code>C:\Windows\WinSxS\</code>下存在)，就造成了在环境变量中进行搜索，可以如下配置Procmon：</p>
+<h3 id="DLL劫持到权限提升"><a href="#DLL劫持到权限提升" class="headerlink" title="DLL劫持到权限提升"></a>DLL劫持到权限提升</h3><p>可以看到有一些DLL劫持导致权限提升的CVE，如<a target="_blank" rel="noopener" href="https://blog.zsec.uk/nvidia-cve-2020/">CVE‑2020‑5980</a>是NVIDIA Windows GPU驱动程序在C盘的文件夹权限设置错误，导致普通用户可以写入DLL进行劫持后获得权限提升，这是一个文件夹ACL设置错误的情况。在微星(MSI)Dragon_Center(龙中心)程序2.0.116.0版本中存在一个环境变量DLL劫持的提权漏洞，其服务<code>Mystic_Light_Service</code>子进程<code>LEDKeeper2.exe</code>会搜索<code>mscorjit.dll</code>进行加载，但是在其其安装目录下并没有该文件，并且系统目录中也不存在该文件(是.Net的链接库文件，在<code>C:\Windows\Microsoft.NET\Framework\</code>和<code>C:\Windows\WinSxS\</code>下存在)，就造成了在 %PATH%环境变量(如常见的Python、JAVA等一些安装在非C盘的环境变量路径)中进行搜索，可以如下配置Procmon：</p>
 <pre><code class="line-numbers language-python">Result contains NOT FOUND
 User contains SYSTEM
 Path ends with .dll</code></pre>
-<p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/414a465883d1ae5ce7b831167005f2ce.png"><br>编写DLL启动SYSTEM权限的CMD(通过Session0穿透的方式)和写入文件：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/5f6d679ca5a3f96b91c208f157b96965.png"><br>在PATH目录中放入DLL文件后重启服务，成功进行了权限提升：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/d766de84c87cb15ee82a2ee1142be1e8.png"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/414a465883d1ae5ce7b831167005f2ce.png"><br>编写DLL启动SYSTEM权限的CMD(通过Session0穿透的方式)和写入文件：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/5f6d679ca5a3f96b91c208f157b96965.png"><br>测试时将一个C盘以外的可控路径加入到了环境变量中（这里将E:\加入了环境变量）：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/add196ac227f7c1f63709e94fc41bd18.png"></p>
+<p>根据宿主程序位数，在PATH目录中放入x86的DLL文件：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/88a96d55c85d716d233b7ff0fc3961c9.png"><br>触发方式可以是管理员用户重启服务和普通用户注销后进行登录触发<code>LEDKeeper2.exe</code>执行。如下管理员用户重启服务，成功进行了权限提升：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/d766de84c87cb15ee82a2ee1142be1e8.png"><br>普通用户也可以完成权限提升：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/92622a117b59a0027975693ff4bbc541.gif"></p>
 <h3 id="当前目录劫持"><a href="#当前目录劫持" class="headerlink" title="当前目录劫持"></a>当前目录劫持</h3><p>当前工作目录 (CWD) DLL 劫持，也被称为相对路径 DLL 劫持。这种利用方式在各种攻击事件中屡见不鲜，主要手法是文件关联程序DLL劫持和“白+黑”利用。</p>
 <h4 id="文件关联程序DLL劫持"><a href="#文件关联程序DLL劫持" class="headerlink" title="文件关联程序DLL劫持"></a>文件关联程序DLL劫持</h4><blockquote>
 <p>文件关联就是将一种类型的文件与一个可以打开它的程序建立起一种依存关系。一个文件可以与多个应用程序发生关联。可以利用文件的“打开方式”进行关联选择。- 文件关联 - 百度百科</p>
@@ -852,7 +853,7 @@ BOOL APIENTRY DllMain( HANDLE hModule,
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://yanghaoi.github.io/2021/11/18/dll-jie-chi/">https://yanghaoi.github.io/2021/11/18/dll-jie-chi/</a>
+                    <a href="https://yanghaoi.github.io/2021/11/18/dll-jie-chi-lou-dong/">https://yanghaoi.github.io/2021/11/18/dll-jie-chi-lou-dong/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -1472,7 +1473,7 @@ BOOL APIENTRY DllMain( HANDLE hModule,
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">38.1k</span>&nbsp;字
+                class="white-color">38.3k</span>&nbsp;字
             
             
             
