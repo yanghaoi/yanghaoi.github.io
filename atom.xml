@@ -6,7 +6,7 @@
   <link href="https://yanghaoi.github.io/atom.xml" rel="self"/>
   
   <link href="https://yanghaoi.github.io/"/>
-  <updated>2021-12-30T08:43:05.073Z</updated>
+  <updated>2022-03-07T04:52:50.914Z</updated>
   <id>https://yanghaoi.github.io/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>通过 C++ 操作注册表禁用 Windows Defender</title>
+    <link href="https://yanghaoi.github.io/2022/03/07/tong-guo-c-cao-zuo-zhu-ce-biao-jin-yong-windows-defender/"/>
+    <id>https://yanghaoi.github.io/2022/03/07/tong-guo-c-cao-zuo-zhu-ce-biao-jin-yong-windows-defender/</id>
+    <published>2022-03-07T03:39:19.880Z</published>
+    <updated>2022-03-07T04:52:50.914Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;0x01-简介&quot;&gt;&lt;a href=&quot;#0x01-简介&quot; class=&quot;headerlink&quot; title=&quot;0x01 简介&quot;&gt;&lt;/a&gt;0x01 简介&lt;/h2&gt;&lt;p&gt;最近整理文件，发现自己之前禁用&lt;code&gt;Windows</summary>
+        
+      
+    
+    
+    
+    <category term="安全工具" scheme="https://yanghaoi.github.io/categories/%E5%AE%89%E5%85%A8%E5%B7%A5%E5%85%B7/"/>
+    
+    
+    <category term="C++ 注册表操作" scheme="https://yanghaoi.github.io/tags/C-%E6%B3%A8%E5%86%8C%E8%A1%A8%E6%93%8D%E4%BD%9C/"/>
+    
+  </entry>
   
   <entry>
     <title>PHP任意文件上传绕过多重限制</title>
