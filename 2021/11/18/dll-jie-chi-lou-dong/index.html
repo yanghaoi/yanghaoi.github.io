@@ -439,7 +439,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2022-03-02
+                    2022-03-10
                 </div>
                 
 
@@ -694,7 +694,7 @@ Path ends with .dll</code></pre>
 </blockquote>
 <p>利用这种文件关联，DLL劫持攻击就可能发生在双击打开图片文件时，在Windows10之前的系统照片查看器中就存在该问题，当照片查看器被设置为默认的图片程序时，双击打开图片时会进行搜索DLL以期望加载<code>lmagingEngine.dll</code>：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/803bf21f943aee3c9792714143b3eb84.png"><br>查看命令行参数估计是在<code>PhotoViewer.dll</code>中的导出函数<code>ImageView_Fullscreen</code>中没有指定加载目录，触发了DLL搜索：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/acf05fd43cdf2e873b4f09ae03ce1072.png"></p>
 <p>其期望加载的DLL文件 <code>lmagingEngine.dll</code> 在<code>C:\Program Files&lt;(x86)&gt;\Windows Photo Viewer</code>中，触发DLL搜索后会搜索到当前目录，结果就导致了CWD劫持：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/4e202a51022664cee03fc13bc3396a48.gif"></p>
-<h4 id="白加黑利用"><a href="#白加黑利用" class="headerlink" title="白加黑利用"></a>白加黑利用</h4><p>这种利用方式一般是将带有合法签名的应用程序(可以重命名)和恶意 DLL 一起复制到同一文件夹中，执行应用程序后在当前目录加载恶意DLL。就其使用方式而言，它与DLL代理执行有相似之处，但是这种情况利用稍微复杂一些，有可能没有合适的DLL进行函数的代理转发，需要对应用程序流程进行分析以保证执行后程序看起来像是正常的。这种利用方式一般会被称为白+黑利用，或者“自带 LOLbin”。以<code>WINWORD.EXE + WWLIB.DLL</code>白加黑为例，<code>WINWORD.EXE</code>是合法的签名文件，<code>WWLIB.DLL</code>是恶意DLL：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/c2a44f09a4289668e2b7fa8648d3e98d.png"><br>在实验过程中发现，如果只在DllMain中使用WinExec执行命令是可以成功的，但是在DllMain中想要通过创建远程线程来注入Cobat Strike的shellcode却无法上线：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/a40fdf16eef1b88cf3ec0d65327741c7.png"><br>这可能是因为<code>WINWORD.EXE</code>代码层面的原因，主进程执行完成就直接退出了，没有线程创建函数的生存时间。以下是通过两个程序加载DLL验证执行情况，其中<code>CmdUseDLL1.exe</code>主程序代码如下：</p>
+<h4 id="白加黑利用"><a href="#白加黑利用" class="headerlink" title="白加黑利用"></a>白加黑利用</h4><p>这种利用方式一般是将带有合法签名的应用程序(可以重命名)和恶意 DLL 一起复制到同一文件夹中，执行应用程序后在当前目录加载恶意DLL。就其使用方式而言，它与DLL代理执行有相似之处，但是这种情况利用稍微复杂一些，有可能没有合适的DLL进行函数的代理转发，需要对应用程序流程进行分析以保证执行后程序看起来像是正常的。这种利用方式一般会被称为白+黑利用，或者“自带 LOLbin”（LOLBIN指一类默认在系统上或者由信誉良好的软件提供，更多内容详见:<a target="_blank" rel="noopener" href="https://lolbas-project.github.io/">lolbas</a>）。以<code>WINWORD.EXE + WWLIB.DLL</code>白加黑为例，<code>WINWORD.EXE</code>是合法的签名文件，<code>WWLIB.DLL</code>是恶意DLL：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/c2a44f09a4289668e2b7fa8648d3e98d.png"><br>在实验过程中发现，如果只在DllMain中使用WinExec执行命令是可以成功的，但是在DllMain中想要通过创建远程线程来注入Cobat Strike的shellcode却无法上线：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/a40fdf16eef1b88cf3ec0d65327741c7.png"><br>这可能是因为<code>WINWORD.EXE</code>代码层面的原因，主进程执行完成就直接退出了，没有线程创建函数的生存时间。以下是通过两个程序加载DLL验证执行情况，其中<code>CmdUseDLL1.exe</code>主程序代码如下：</p>
 <pre><code class="line-numbers language-cpp">#include &lt;windows.h&gt;
 int main()
 {
