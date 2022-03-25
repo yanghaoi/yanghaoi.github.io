@@ -439,7 +439,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2022-03-18
+                    2022-03-25
                 </div>
                 
 
@@ -520,7 +520,7 @@ wmic process call create cmd
 # vbs script , wscript xx.vbs / xx.vbs 对象调用
 INT GetObject("winmgmts:Win32_Process").Create("cmd.exe",null,null,null)</code></pre>
 <p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/4c3c72f6191b8ba1b15a4b82c894bde0.png"><br>这种方式与<code>msiexec</code>方式获得的权限一致。</p>
-<h2 id="0x04-概念验证实现"><a href="#0x04-概念验证实现" class="headerlink" title="0x04 概念验证实现"></a>0x04 概念验证实现</h2><p>通过以上测试，选择explorer作为逃逸的利用程序。编写POC进行验证，主要使用CreateProcessA创建进程获得沙箱外的命令执行：</p>
+<h2 id="0x04-漏洞验证实现"><a href="#0x04-漏洞验证实现" class="headerlink" title="0x04 漏洞验证实现"></a>0x04 漏洞验证实现</h2><p>通过以上测试，选择explorer作为逃逸的利用程序。编写POC进行验证，主要使用CreateProcessA创建进程获得沙箱外的命令执行：</p>
 <pre><code class="line-numbers language-c">#include &lt;windows.h&gt;
 #include &lt;stdio.h&gt;
 int main(int argc, char* argv[])
@@ -548,8 +548,8 @@ SeTimeZonePrivilege           更改时区             已禁用</code></pre>
 <p>将简单以该特权判断是否在沙箱中运行，在沙箱中利用<code>AdjustTokenPrivileges</code>修改不存在的<code>SeShutdownPrivilege</code>特权会抛出<code>ERROR_NOT_ALL_ASSIGNED</code>(错误号1300)错误：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/e22f752ff6f5cc14f7f0ad5df49c3620.png"><br>1300错误号说明:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/f8722d7b06506593e363072a027787c8.png"></p>
 <p>当在程序中修改特权返回<code>ERROR_NOT_ALL_ASSIGNED</code>时就说明在沙箱中，则通过<code>explorer</code>来执行当前文件获得沙箱外命令执行，如果修改特权正常，就执行<code>shellcode</code>注入等操作:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/26bce200b6f06eb8aabd0542d81f142b.png"><br>测试逃逸沙箱执行<code>cmd</code>:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/6f5d7a19a643ef76b24adca5c8a90cf1.gif"><br>将执行<code>cmd</code>的命令换成<code>shellcode</code>注入：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/d2352305fc895aef879c5afc7204f6e4.png"><br>因为360安全沙箱是与360安全卫士配套的，所以就需要对360安全卫士进行一次免杀绕过，这里的<code>shellcode</code>就直接使用<code>RWA</code>格式的<code>stage</code>加上简单异或：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/40e961a6c4cfdd845c8cdc15e29a1902.png"><br>将异或后的数组还原后打印出来，可以看出来就是原来的<code>shellcode</code>:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/256037955ad115613e26ce2e2e44d40e.png"><br>通过这种方式简单绕过安全卫士的查杀，接下来在沙箱中执行获取<code>beacon</code>，执行结果如下:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/ecf9a9eb3ff69c9d148d3c77464ec3f3.gif"></p>
 <p>最终可以实现在安全沙箱中逃逸并绕过查杀返回beacon。</p>
-<h2 id="0x06-文末总结"><a href="#0x06-文末总结" class="headerlink" title="0x06 文末总结"></a>0x06 文末总结</h2><p>最开始通过漏洞交易网站获得漏洞信息，然后对该安全沙箱程序进行实验，最终发现了可以进行逃逸的Payload，并通过编程实现的方式完成了POC和EXP的编写。该缺陷在cnvd上已有相关编号(CNVD-2021-41714、CNVD-2021-52377)，POC源码： <a target="_blank" rel="noopener" href="https://github.com/yanghaoi/360SecuritySandboxEscape">360SecuritySandboxEscape</a> .</p>
-<h2 id="0x07-参考链接"><a href="#0x07-参考链接" class="headerlink" title="0x07 参考链接"></a>0x07 参考链接</h2><p><a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows/security/threat-protection/security-policy-settings/user-rights-assignment">Token列表</a><br><a target="_blank" rel="noopener" href="https://f01965.com/2020/06/28/Chrome-%E6%B2%99%E7%9B%92%E9%80%83%E9%80%B8/">Chrome 沙盒逃逸</a><br><a target="_blank" rel="noopener" href="https://www.oreilly.com/library/view/secure-programming-cookbook/0596003943/ch01s02.html">限制 Windows 上的权限(AdjustTokenPrivileges和CreateRestrictedToken)</a></p>
+<h2 id="0x06-文末总结"><a href="#0x06-文末总结" class="headerlink" title="0x06 文末总结"></a>0x06 文末总结</h2><p>最开始通过漏洞交易网站获得漏洞信息，然后对该安全沙箱程序进行实验，最终发现了可以进行逃逸的Payload，并通过编程实现的方式完成了POC和EXP的编写。该缺陷在cnvd上已有相关编号(CNVD-2021-41714、CNVD-2021-52377)，POC: <a target="_blank" rel="noopener" href="https://github.com/yanghaoi/360SecuritySandboxEscape">360SecuritySandboxEscape</a></p>
+<h2 id="0x07-参考链接"><a href="#0x07-参考链接" class="headerlink" title="0x07 参考链接"></a>0x07 参考链接</h2><p><a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows/security/threat-protection/security-policy-settings/user-rights-assignment">Token列表</a><br><a target="_blank" rel="noopener" href="https://f01965.com/2020/06/28/Chrome-%E6%B2%99%E7%9B%92%E9%80%83%E9%80%B8/">Chrome 沙盒逃逸</a><br><a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/windows/win32/secbp/changing-privileges-in-a-token">更改令牌中的特权</a><br><a target="_blank" rel="noopener" href="https://www.oreilly.com/library/view/secure-programming-cookbook/0596003943/ch01s02.html">限制 Windows 上的权限(AdjustTokenPrivileges和CreateRestrictedToken)</a></p>
 <script>
         document.querySelectorAll('.github-emoji')
           .forEach(el => {
