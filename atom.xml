@@ -6,7 +6,7 @@
   <link href="https://yanghaoi.github.io/atom.xml" rel="self"/>
   
   <link href="https://yanghaoi.github.io/"/>
-  <updated>2022-03-25T07:26:51.517Z</updated>
+  <updated>2022-03-28T12:44:26.726Z</updated>
   <id>https://yanghaoi.github.io/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Windows Installer安装包的构建和执行</title>
+    <link href="https://yanghaoi.github.io/2022/03/28/windows-installer-an-zhuang-bao-de-gou-jian-he-zhi-xing/"/>
+    <id>https://yanghaoi.github.io/2022/03/28/windows-installer-an-zhuang-bao-de-gou-jian-he-zhi-xing/</id>
+    <published>2022-03-28T12:12:43.906Z</published>
+    <updated>2022-03-28T12:44:26.726Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;0x01-简介&quot;&gt;&lt;a href=&quot;#0x01-简介&quot; class=&quot;headerlink&quot; title=&quot;0x01 简介&quot;&gt;&lt;/a&gt;0x01 简介&lt;/h2&gt;&lt;p&gt;Msiexec是WIndows上从命令行执行Windows</summary>
+        
+      
+    
+    
+    
+    <category term="Defense Evasion" scheme="https://yanghaoi.github.io/categories/Defense-Evasion/"/>
+    
+    
+    <category term="Proxy Execution" scheme="https://yanghaoi.github.io/tags/Proxy-Execution/"/>
+    
+    <category term="Msiexec" scheme="https://yanghaoi.github.io/tags/Msiexec/"/>
+    
+  </entry>
   
   <entry>
     <title>360隔离沙箱逃逸</title>
