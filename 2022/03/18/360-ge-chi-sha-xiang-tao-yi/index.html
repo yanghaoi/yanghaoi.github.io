@@ -439,7 +439,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2022-03-25
+                    2022-04-29
                 </div>
                 
 
@@ -473,7 +473,7 @@
 <h2 id="0x03-可视化逃逸"><a href="#0x03-可视化逃逸" class="headerlink" title="0x03 可视化逃逸"></a>0x03 可视化逃逸</h2><p>这一部分是登录系统后直接在隔离沙箱中执行测试程序来尝试逃逸。测试程序是系统自带的程序或者安装的软件，通过观察这些软件是否可以在沙箱外造成影响。</p>
 <h3 id="0x3-1-Explorer"><a href="#0x3-1-Explorer" class="headerlink" title="0x3-1 Explorer"></a>0x3-1 Explorer</h3><p>测试时可以进入到命令行中执行系统的其他程序。在之前的版本(2020年测试时)，可以直接在沙箱中指向<code>cmd</code>等程序现在已经不能直接运行，说明程序还是进行了一些更新：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/3bcac6a1ca5a7f7cbd6ce3d0ab1bced8.png"><br>通过打开文本文件后，另存为时进入命令行界面：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/7d36d31a4782586b49ce4155a08b1b2c.png"><br>在另存为的界面顶部地址栏中执行<code>CMD</code>(或者<code>shift</code>右键在此处打开命令行):<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/4dea17616c25a6d5d873e85b2c4217df.png"><br>在获得的命令行中查看当前用户和权限：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/0c5fe11965a7635741d4b0356aba0239.png"><br>可以发现该进程的令牌特权是低完整性的，可能是通过API函数 <a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/windows/win32/api/securitybaseapi/nf-securitybaseapi-createrestrictedtoken">CreateRestrictedToken</a>或 <a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows/win32/api/securitybaseapi/nf-securitybaseapi-adjusttokenprivileges">AdjustTokenPrivileges</a>&nbsp;删除了部分特权：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/8655afbc9746e11c9d2e1533b5ed4880.png"><br>在这个命令行中启动其他程序来测试，创建的子进程也会在沙箱环境中执行：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/5348c36cf1cb051c9605387a469216e4.png"><br>尝试在沙箱中运行浏览器等软件都仍然在沙箱中执行：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/73799a2957c243c3b6e4786533db1bec.png"><br>当执行<code>explorer</code>程序时，资源管理器程序没有显示在沙箱中执行的标记：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/37cd1d7371a10338484a010a261dc95a.png"><br>尝试在顶部地址栏中打开命令行，查看当前权限发现已经是完整的管理员权限了：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/194fddc28ce08524094709367825790b.png"><br>当然也可以在沙箱外对磁盘写入文件等全部操作：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/eec25ce9a94e52f0102486e315638ea1.png"><br>这说明通过<code>explorer</code>程序可以在沙箱外进行操作，那么也可以直接通过<code>explorer</code>执行其他文件：</p>
 <pre><code class="line-numbers language-cmd">#以资源管理器方式打开选中的文件夹或文件
-explorer  /e /select,C:\windows\system32\cmd.exe
+explorer /e /select,C:\windows\system32\cmd.exe
 #通过关联程序打开文件
 explorer C:\windows\system32\cmd.exe</code></pre>
 <p>可以看到，果然可以通过<code>explorer</code>来逃逸沙箱:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/5e4de52c4ccd06cc7ba7e0f3b6e3a1ec.png"></p>
