@@ -242,6 +242,20 @@
   </url>
   
   <url>
+    <loc>https://yanghaoi.github.io/tags/weblogic%E6%BC%8F%E6%B4%9E/</loc>
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://yanghaoi.github.io/tags/IDEA%E7%BC%96%E8%AF%91/</loc>
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://yanghaoi.github.io/tags/IDEA/</loc>
     <lastmod>2026-08-31</lastmod>
     <changefreq>daily</changefreq>
@@ -256,14 +270,14 @@
   </url>
   
   <url>
-    <loc>https://yanghaoi.github.io/tags/weblogic%E6%BC%8F%E6%B4%9E/</loc>
+    <loc>https://yanghaoi.github.io/tags/Proxy-Execution/</loc>
     <lastmod>2026-08-31</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://yanghaoi.github.io/tags/IDEA%E7%BC%96%E8%AF%91/</loc>
+    <loc>https://yanghaoi.github.io/tags/Msiexec/</loc>
     <lastmod>2026-08-31</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -285,20 +299,6 @@
   
   <url>
     <loc>https://yanghaoi.github.io/tags/CVE-2020-1313/</loc>
-    <lastmod>2026-08-31</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://yanghaoi.github.io/tags/Proxy-Execution/</loc>
-    <lastmod>2026-08-31</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://yanghaoi.github.io/tags/Msiexec/</loc>
     <lastmod>2026-08-31</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -482,14 +482,14 @@
   </url>
   
   <url>
-    <loc>https://yanghaoi.github.io/categories/%E9%9D%B6%E5%9C%BA%E7%8E%AF%E5%A2%83/</loc>
+    <loc>https://yanghaoi.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/</loc>
     <lastmod>2026-08-31</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://yanghaoi.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/</loc>
+    <loc>https://yanghaoi.github.io/categories/%E9%9D%B6%E5%9C%BA%E7%8E%AF%E5%A2%83/</loc>
     <lastmod>2026-08-31</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
