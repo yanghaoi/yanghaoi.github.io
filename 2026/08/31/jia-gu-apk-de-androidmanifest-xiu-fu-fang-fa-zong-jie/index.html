@@ -494,7 +494,7 @@
 <p>这种加固混淆一般是在<code>AndroidManifest.xml</code>中插入垃圾字节或非常规格式，破坏工具的解析。但是对于这种混淆的场景，有一个底层事实：<strong>Android 系统安装时必须能解析 manifest</strong>，厂商可以对 dex 加密、对资源混淆，但 manifest 必须保持 PackageManager 可读的形态。Android 系统必须能读懂这份 manifest，所以永远存在一条还原路径。原因是框架自带的解析器对规范外的脏数据相当宽容（跳过、忽略、按剩余有效信息继续解析），而 jadx、AXMLPrinter2 这类严格按规范实现的解析器一遇到偏差就直接报错放弃。</p>
 <h2 id="2-方案一：aapt2-直接提取"><a href="#2-方案一：aapt2-直接提取" class="headerlink" title="2. 方案一：aapt2 直接提取"></a>2. 方案一：aapt2 直接提取</h2><p>系统必须能读懂 manifest，官方解析工具自然也能。AAPT2（Android 资源打包工具）是一种构建工具，Android Studio 和 Android Gradle 插件使用它来编译和打包应用的<a target="_blank" rel="noopener" href="https://developer.android.com/guide/topics/resources/providing-resources?hl=zh-cn">资源</a>。AAPT2 会解析资源、为资源编制索引，并将资源编译为针对 Android 平台进行过优化的二进制格式。AAPT2工具随 <a target="_blank" rel="noopener" href="https://developer.android.com/studio/releases/build-tools?hl=zh-cn">Android SDK Build Tools</a> 工具包发布：</p>
 <p><img src="/2026/08/31/jia-gu-apk-de-androidmanifest-xiu-fu-fang-fa-zong-jie/image-20260831142029546.png" alt="build-tools 目录中的 aapt2 工具"></p>
-<p><code>aapt2</code> 对新旧格式原生兼容，工具可直接对 APK 操作（实测 build-tools 36.1.0；cmd 下使用命令 chcp 65001 切换到 UTF-8 编码再执行）：</p>
+<p><code>aapt2</code> 对新旧格式原生兼容，工具可直接对 APK 操作（注意 cmd 下使用命令 chcp 65001 切换到 UTF-8 编码再执行，否则中文信息可能乱码）：</p>
 <pre><code class="line-numbers language-bash"># 关键摘要：包名、版本、SDK、入口 Activity、权限
 aapt2 dump badging your_app.apk
 
