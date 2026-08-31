@@ -256,20 +256,6 @@
   </url>
   
   <url>
-    <loc>https://yanghaoi.github.io/tags/IDEA/</loc>
-    <lastmod>2026-08-31</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://yanghaoi.github.io/tags/Webgoat/</loc>
-    <lastmod>2026-08-31</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://yanghaoi.github.io/tags/Proxy-Execution/</loc>
     <lastmod>2026-08-31</lastmod>
     <changefreq>daily</changefreq>
@@ -305,6 +291,41 @@
   </url>
   
   <url>
+    <loc>https://yanghaoi.github.io/tags/IDEA/</loc>
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://yanghaoi.github.io/tags/Webgoat/</loc>
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://yanghaoi.github.io/tags/CVE-2024-2961/</loc>
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://yanghaoi.github.io/tags/DNS%E8%A7%A3%E6%9E%90%E9%85%8D%E7%BD%AE/</loc>
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://yanghaoi.github.io/tags/LOLBAS/</loc>
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://yanghaoi.github.io/tags/msfvenom%E5%85%8D%E6%9D%80/</loc>
     <lastmod>2026-08-31</lastmod>
     <changefreq>daily</changefreq>
@@ -320,27 +341,6 @@
   
   <url>
     <loc>https://yanghaoi.github.io/tags/%E9%9A%90%E8%97%8F%E7%A8%8B%E5%BA%8F%E7%AA%97%E5%8F%A3/</loc>
-    <lastmod>2026-08-31</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://yanghaoi.github.io/tags/CVE-2024-2961/</loc>
-    <lastmod>2026-08-31</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://yanghaoi.github.io/tags/LOLBAS/</loc>
-    <lastmod>2026-08-31</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://yanghaoi.github.io/tags/DNS%E8%A7%A3%E6%9E%90%E9%85%8D%E7%BD%AE/</loc>
     <lastmod>2026-08-31</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -496,7 +496,7 @@
   </url>
   
   <url>
-    <loc>https://yanghaoi.github.io/categories/%E7%BD%91%E7%BB%9C%E6%94%BB%E9%98%B2/</loc>
+    <loc>https://yanghaoi.github.io/categories/%E6%9D%82%E8%AE%B0/</loc>
     <lastmod>2026-08-31</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -510,7 +510,7 @@
   </url>
   
   <url>
-    <loc>https://yanghaoi.github.io/categories/%E6%9D%82%E8%AE%B0/</loc>
+    <loc>https://yanghaoi.github.io/categories/%E7%BD%91%E7%BB%9C%E6%94%BB%E9%98%B2/</loc>
     <lastmod>2026-08-31</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
