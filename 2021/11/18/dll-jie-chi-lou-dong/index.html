@@ -441,21 +441,21 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2022-03-10
+                    2025-09-26
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    7.3k
+                    7.5k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    28 分
+                    29 分
                 </div>
                 
 
@@ -471,6 +471,10 @@
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <h2 id="0x01-简介"><a href="#0x01-简介" class="headerlink" title="0x01 简介"></a>0x01 简介</h2><p>DLL劫持是一种诱使正常的应用程序加载任意DLL的技术，通过这种技术，DLL将会被加载到目标程序内存中，以目标程序身份进行代码执行、权限维持和权限提升。</p>
+<p><a target="_blank" rel="noopener" href="https://hijacklibs.net/entries/3rd_party/wxwidgets/wxmsw313u_aui_vc_custom.html">wxmsw313u_aui_vc_custom.dll |劫持图书馆</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/wietze/HijackLibs?tab=readme-ov-file">wietze/HijackLibs：跟踪公开披露的 DLL 劫持机会的项目。</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/dis0rder0x00/obex">dis0rder0x00/obex：Obex – 在用户模式下阻止不需要的 DLL</a></p>
+<p>DLL 劫持允许通过签名和/或受信任的可执行文件执行恶意代码。AV 和 EDR 解决方案等防御措施可能无法立即获取此活动，并且 AppLocker 等允许列表应用程序可能不会阻止不受信任的代码的执行。有许多威胁行为者的例子被观察到通过 DLL 劫持来实现其目标。</p>
 <h2 id="0x02-什么是-DLL"><a href="#0x02-什么是-DLL" class="headerlink" title="0x02 什么是 DLL"></a>0x02 什么是 DLL</h2><p>在进行DLL劫持之前，先熟悉一下什么是DLL。在WIndows中DLL(Dynamic link library，动态链接库)是一个共享的库，其中包含可同时由多个程序使用的代码和数据，对常用函数和功能进行封装，这些DLL可实现不同的功能，每个DLL的功能实现可通过导出函数来提供调用接口。在Windows的不同系统目录中存在大量的DLL文件，应用程序在实现时相应的功能时会调用这些DLL程序。</p>
 <h3 id="DLL-入口函数"><a href="#DLL-入口函数" class="headerlink" title="DLL 入口函数"></a>DLL 入口函数</h3><p><code>dllmain</code>是DLL的入口函数，当进程或线程加载DLL或分离DLL时，将调用入口点函数传入对应事件通知，示例：</p>
 <pre><code class="line-numbers language-c++">// dllmain.cpp : 定义 DLL 应用程序的入口点。
@@ -1483,7 +1487,7 @@ BOOL APIENTRY DllMain( HANDLE hModule,
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">73.2k</span>&nbsp;字
+                class="white-color">76.7k</span>&nbsp;字
             
             
             

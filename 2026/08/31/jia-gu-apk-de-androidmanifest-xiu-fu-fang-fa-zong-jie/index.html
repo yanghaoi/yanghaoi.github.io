@@ -1,0 +1,1604 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="加固APK的AndroidManifest.xml修复方法总结, Yang Hao&#39;s blog">
+    <meta name="description" content="Yang Hao&#39;s blog">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-KYC8PY5RS4"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', 'G-KYC8PY5RS4');
+</script>
+
+
+    <title>加固APK的AndroidManifest.xml修复方法总结 | Yang Hao&#39;s blog</title>
+    <link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/favicon.ico">
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/lightGallery/css/lightgallery.min.css">
+	
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/css/my.css">
+	
+	<!--prism-->
+	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/prism/prism.css">
+    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/prism/prism.js" async ></script>
+
+
+    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/jquery/jquery.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/live2d-widget/autoload.js"></script>
+<meta name="generator" content="Hexo 5.4.2">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="Yang Hao's blog" type="application/atom+xml">
+</head>
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">Yang Hao&#39;s blog</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="javascript:void(0);" class="waves-effect waves-light">
+
+      
+      <i class="fas fa-list" style="zoom: 0.6;"></i>
+      
+      <span>文章</span>
+      <i class="fas fa-chevron-down" aria-hidden="true" style="zoom: 0.6;"></i>
+    </a>
+    <ul class="sub-nav menus_item_child ">
+      
+      <li>
+        <a href="/tags">
+          
+          <i class="fas fa-tags" style="margin-top: -20px; zoom: 0.6;"></i>
+          
+          <span>标签</span>
+        </a>
+      </li>
+      
+      <li>
+        <a href="/categories">
+          
+          <i class="fas fa-bookmark" style="margin-top: -20px; zoom: 0.6;"></i>
+          
+          <span>分类</span>
+        </a>
+      </li>
+      
+      <li>
+        <a href="/archives">
+          
+          <i class="fas fa-archive" style="margin-top: -20px; zoom: 0.6;"></i>
+          
+          <span>归档</span>
+        </a>
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言板</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>友情链接</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">Yang Hao&#39;s blog</div>
+        <div class="logo-desc">
+            
+            Yang Hao&#39;s blog
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="javascript:;">
+			
+				<i class="fa-fw fas fa-list"></i>
+			
+			文章
+			<span class="m-icon"><i class="fas fa-chevron-right"></i></span>
+		</a>
+            <ul  style="background:  ;" >
+              
+                <li>
+
+                  <a href="/tags " style="margin-left:50px">
+				  
+				   <i class="fa fas fa-tags" style="position: absolute;left:28px" ></i>
+			      
+		          <span>标签</span>
+                  </a>
+                </li>
+              
+                <li>
+
+                  <a href="/categories " style="margin-left:50px">
+				  
+				   <i class="fa fas fa-bookmark" style="position: absolute;left:28px" ></i>
+			      
+		          <span>分类</span>
+                  </a>
+                </li>
+              
+                <li>
+
+                  <a href="/archives " style="margin-left:50px">
+				  
+				   <i class="fa fas fa-archive" style="position: absolute;left:28px" ></i>
+			      
+		          <span>归档</span>
+                  </a>
+                </li>
+              
+            </ul>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			留言板
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			友情链接
+		</a>
+          
+        </li>
+        
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/medias/featureimages/16.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">加固APK的AndroidManifest.xml修复方法总结</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        height: calc(100vh - 250px);
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+
+        position: absolute;
+        right: 23.5vw;
+        display: block;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/Android/">
+                                <span class="chip bg-color">Android</span>
+                            </a>
+                        
+                            <a href="/tags/%E5%8A%A0%E5%9B%BA/">
+                                <span class="chip bg-color">加固</span>
+                            </a>
+                        
+                            <a href="/tags/AXML/">
+                                <span class="chip bg-color">AXML</span>
+                            </a>
+                        
+                            <a href="/tags/drozer/">
+                                <span class="chip bg-color">drozer</span>
+                            </a>
+                        
+                            <a href="/tags/aapt2/">
+                                <span class="chip bg-color">aapt2</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/%E9%80%86%E5%90%91%E5%88%86%E6%9E%90/" class="post-category">
+                                逆向分析
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2026-08-31
+                </div>
+                
+
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
+                    2026-08-31
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    3.4k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                    13 分
+                </div>
+                
+
+                
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="far fa-eye fa-fw"></i>阅读次数:&nbsp;&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
+            </div>
+        </div>
+        <hr class="clearfix">
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h1 id="加固APK的AndroidManifest-xml修复方法总结"><a href="#加固APK的AndroidManifest-xml修复方法总结" class="headerlink" title="加固APK的AndroidManifest.xml修复方法总结"></a>加固APK的AndroidManifest.xml修复方法总结</h1><p>分析加固后的 Android 应用时，解包得到的 <code>AndroidManifest.xml</code> 经常无法解码或显示为乱码，导致包名、组件声明等关键信息无法获取。本文以 X加密加固的银行类样本（<code>cn.com.x.bank</code>）为例，分析乱码的成因，整理三种修复方案的原理、操作方法和适用场景。</p>
+<h2 id="1-简介"><a href="#1-简介" class="headerlink" title="1. 简介"></a>1. 简介</h2><p>APK 内的 <code>AndroidManifest.xml</code> 本身就不是文本文件，而是 AXML（Android Binary XML）格式——Android 为安装时快速解析设计的二进制编码。所以直接解包后用编辑器打开看到”乱码”是正常现象，正常情况下解码工具可以还原。一般可以通过<code>jadx</code>工具解析APK查看<code>AndroidManifest.xml</code>配置文件：</p>
+<p><img src="/2026/08/31/jia-gu-apk-de-androidmanifest-xiu-fu-fang-fa-zong-jie/image-20260831095245516.png" alt="image-20260831095245516"></p>
+<p>当APK（cn.com.x.bank）经过加固后，可能会混淆<code>AndroidManifest.xml</code>，这时候使用<code>jadx</code>工具查看就是乱码形式了：</p>
+<p><img src="/2026/08/31/jia-gu-apk-de-androidmanifest-xiu-fu-fang-fa-zong-jie/image-20260831095850691.png" alt="image-20260831095850691"></p>
+<p>这种加固混淆一般是在<code>AndroidManifest.xml</code>中插入垃圾字节或非常规格式，破坏工具的解析。但是对于这种混淆的场景，有一个底层事实：<strong>Android 系统安装时必须能解析 manifest</strong>，厂商可以对 dex 加密、对资源混淆，但 manifest 必须保持 PackageManager 可读的形态。Android 系统必须能读懂这份 manifest，所以永远存在一条还原路径。原因是框架自带的解析器对规范外的脏数据相当宽容（跳过、忽略、按剩余有效信息继续解析），而 jadx、AXMLPrinter2 这类严格按规范实现的解析器一遇到偏差就直接报错放弃。</p>
+<h2 id="2-方案一：aapt2-直接提取"><a href="#2-方案一：aapt2-直接提取" class="headerlink" title="2. 方案一：aapt2 直接提取"></a>2. 方案一：aapt2 直接提取</h2><p>系统必须能读懂 manifest，官方解析工具自然也能。AAPT2（Android 资源打包工具）是一种构建工具，Android Studio 和 Android Gradle 插件使用它来编译和打包应用的<a target="_blank" rel="noopener" href="https://developer.android.com/guide/topics/resources/providing-resources?hl=zh-cn">资源</a>。AAPT2 会解析资源、为资源编制索引，并将资源编译为针对 Android 平台进行过优化的二进制格式。AAPT2工具随 <a target="_blank" rel="noopener" href="https://developer.android.com/studio/releases/build-tools?hl=zh-cn">Android SDK Build Tools</a> 工具包发布：</p>
+<p><img src="/2026/08/31/jia-gu-apk-de-androidmanifest-xiu-fu-fang-fa-zong-jie/image-20260831142029546.png" alt="image-20260831142029546"></p>
+<p><code>aapt2</code> 对新旧格式原生兼容，工具可直接对 APK 操作（实测 build-tools 36.1.0；cmd 下使用命令 chcp 65001 切换到 UTF-8 编码再执行）：</p>
+<pre><code class="line-numbers language-bash"># 关键摘要：包名、版本、SDK、入口 Activity、权限
+aapt2 dump badging your_app.apk
+
+# 完整 manifest 的 XML 树
+aapt2 dump xmltree --file AndroidManifest.xml your_app.apk
+
+# 老版 aapt 同样可用
+aapt dump badging your_app.apk
+</code></pre>
+<p>如使用<code>aapt2 dump badging</code>解析加固包配置：</p>
+<p><img src="/2026/08/31/jia-gu-apk-de-androidmanifest-xiu-fu-fang-fa-zong-jie/image-20260831103443463.png" alt="image-20260831103443463"></p>
+<p>使用<code>aapt2 dump xmltree --file AndroidManifest.xml your_app.apk</code>输出<code>AndroidManifest.xml</code>：</p>
+<p><img src="/2026/08/31/jia-gu-apk-de-androidmanifest-xiu-fu-fang-fa-zong-jie/image-20260831104205524.png" alt="image-20260831104205524"></p>
+<p>实测包名、版本号、minSdk/targetSdk、启动 Activity、全部 <code>uses-permission</code> 可以 100% 拿到。但是输出数据是 aapt2 自定义的摘要/树形格式，<strong>不是标准 XML 文件</strong>，无法直接喂给需要 XML 输入的下游工具。</p>
+<h2 id="3-方案二：drozer-运行时还原"><a href="#3-方案二：drozer-运行时还原" class="headerlink" title="3. 方案二：drozer 运行时还原"></a>3. 方案二：drozer 运行时还原</h2><p><code>run app.package.manifest</code> 模块的思路是把 APK 装进真实设备，由 Android 框架自带的资源解析器代为解析 manifest（细节见 3.1），drozer 再输出解析结果。任何格式差异、加固混淆，只要系统能装能跑，输出的就是完整明文。</p>
+<p>前置条件：设备上安装 drozer Agent 并启动（进入 Embedded Server），然后建立端口转发和连接 Agent（实测 drozer Console v3.1.0）：</p>
+<pre><code class="line-numbers language-bash">adb forward tcp:31415 tcp:31415
+drozer console connect
+</code></pre>
+<p>然后在 <code>drozer</code> 控制台中执行：</p>
+<pre><code>dz&gt; run app.package.manifest cn.com.x.bank
+</code></pre>
+<p><img src="/2026/08/31/jia-gu-apk-de-androidmanifest-xiu-fu-fang-fa-zong-jie/image-20260831143755267.png" alt="image-20260831143755267"></p>
+<p>输出为完整、标准的 XML，包含全部组件声明、intent-filter、meta-data，信息完备性优于方案一。</p>
+<p>局限：需要设备、drozer Agent 和端口转发，环境搭建成本最高；原版模块输出在控制台，只能手动复制保存；不适合批量分析。适合对少量重点样本做深度分析。</p>
+<h3 id="3-1-drozer-模块实现原理"><a href="#3-1-drozer-模块实现原理" class="headerlink" title="3.1 drozer 模块实现原理"></a>3.1 drozer 模块实现原理</h3><p>模块源码位于 PC 端 <code>drozer\modules\app\package.py</code>（<code>class Manifest</code>），实现分两层：</p>
+<p><strong>解析层</strong>：<code>getAndroidManifest()</code>（定义在 <code>drozer\modules\common\assets.py</code>）通过反射操作设备端 Java 对象，三步拿到清单：</p>
+<pre><code class="line-numbers language-python">def getAndroidManifest(self, package):
+    XmlAssetReader = self.loadClass("common/XmlAssetReader.apk", "XmlAssetReader")
+    asset_manager = self.getAssetManager(package)
+    xml = asset_manager.openXmlResourceParser("AndroidManifest.xml")
+    xml_string = str(XmlAssetReader.read(xml))
+    return xml_string
+</code></pre>
+<ol>
+<li><code>createPackageContext(package).getAssets()</code> —— 在设备端为目标应用创建 Context，取得指向它的 AssetManager；</li>
+<li><code>openXmlResourceParser("AndroidManifest.xml")</code> —— 由 Android 框架自带的资源解析器（AssetManager / ResourceTypes 层，运行时读资源用的同一套代码）把二进制 AXML 解析成 XmlResourceParser。严格说干活的是它而不是安装阶段的 PackageParser，但效果相同：系统解析什么，我们就拿到什么；</li>
+<li><code>XmlAssetReader.read()</code> —— drozer 打包的小 Java 助手，遍历 XmlPullParser 事件流序列化回 XML 字符串。</li>
+</ol>
+<p><strong>输出层</strong>：字符串回传 PC 后，<code>__write_manifest</code> 给它加缩进和 <code>[color green]</code> 之类的标记，console 再渲染成终端着色——原版只能复制终端内容就是这么来的。</p>
+<p>这里有一个容易误解的关键点：<strong>模块的 <code>execute()</code> 是在 PC 端 console 进程里执行的</strong>（<code>drozer\modules\base.py</code> 的 <code>run()</code> 直接本地调用 <code>self.execute(arguments)</code>），只有 Java 相关操作通过 reflector 代理到设备端。也就是说，raw XML 字符串返回时已经在 PC 的内存里了——这为直接落盘创造了条件。</p>
+<h3 id="3-2-drozer-module-改造"><a href="#3-2-drozer-module-改造" class="headerlink" title="3.2 drozer module 改造"></a>3.2 drozer module 改造</h3><p>基于上面的结论，可以在 <code>Manifest</code> 模块中增加 <code>-o/--output</code> 参数实现<code>AndroidManifest.xml</code>配置本地写入，共两处改动：</p>
+<p><strong>改动一：新增 <code>-o</code> 参数，raw XML 直接写 PC 本地文件</strong></p>
+<pre><code class="line-numbers language-python">def add_arguments(self, parser):
+    parser.add_argument("package", help="the identifier of the package")
+    parser.add_argument("-o", "--output", default=None, metavar="PATH",
+                        help="write the raw manifest to a local file on the PC, e.g. C:/1.xml")
+
+def execute(self, arguments):
+    if arguments.package == None or arguments.package == "":
+        self.stderr.write("No package provided.\n")
+        return
+    manifest = self.getAndroidManifest(arguments.package)
+    if arguments.output != None:
+        self.__save_manifest(manifest, arguments.output)
+    else:
+        self.__write_manifest(manifest)   # 原行为不变
+
+def __save_manifest(self, manifest, path):
+    data = manifest.encode("utf-8")
+    with open(path, "wb") as f:
+        f.write(data)
+    self.stdout.write("[+] manifest written to %s (%d bytes)\n" % (path, len(data)))
+</code></pre>
+<p>原理：<code>execute()</code> 既然跑在 PC 进程里，<code>open()</code> 写的就是本地路径——数据在模块内部就已经落盘，不经过控制台渲染，天然无横幅、无颜色标记。不带 <code>-o</code> 时行为与原版完全一致。</p>
+<p><strong>改动二：顺带修复上游 bug</strong></p>
+<p><code>package.py:319</code> 有一处上游代码 <code>if out is not ""</code>，在 Python 3.8+ 会触发 <code>SyntaxWarning: "is not" with a literal</code>。<code>is not</code> 比较的是对象身份而非值，对字符串字面量应使用 <code>!=</code>，已一并修正。</p>
+<p><strong>改进后的用法</strong>——一条命令直接得到标准 XML 文件：</p>
+<pre><code class="line-numbers language-bash">drozer console connect -c "run app.package.manifest cn.com.x.bank -o m_raw.xml"
+</code></pre>
+<p>实测输出 <code>m_raw.xml</code>（79241 字节）即为标准 XML，可直接用编辑器打开：</p>
+<p><img src="/2026/08/31/jia-gu-apk-de-androidmanifest-xiu-fu-fang-fa-zong-jie/image-20260831120941652.png" alt="image-20260831120941652"></p>
+<p><img src="/2026/08/31/jia-gu-apk-de-androidmanifest-xiu-fu-fang-fa-zong-jie/image-20260831122343609.png" alt="image-20260831122343609"></p>
+<p>两点注意：</p>
+<ol>
+<li>console 用 <code>shlex.split</code> 解析参数，会把 <code>\</code> 当转义符吃掉，Windows 路径请写 <code>C:/1.xml</code> 或 <code>C:\\1.xml</code>；</li>
+<li>模块代码每次运行由 console 下发，改动只需重启 console 生效，无需重装 Agent；但 drozer 升级会覆盖 <code>package.py</code>，常用建议把改过的 <code>Manifest</code> 类放进自己的 module repository。</li>
+</ol>
+<p>改造后的完整模块文件见随文附件 <code>drozer_module/package.py</code>，直接覆盖 <code>site-packages/drozer/modules/app/package.py</code> 即可。</p>
+<h2 id="4-方案三：AXML-字节级修复"><a href="#4-方案三：AXML-字节级修复" class="headerlink" title="4. 方案三：AXML 字节级修复"></a>4. 方案三：AXML 字节级修复</h2><p>前两种方案都是绕过文件，但如果手头只有一份损坏的 manifest（来源 APK 都不在了），或者需要离线批量处理，就得正面修文件。这就需要先理解 AXML 的格式。</p>
+<h3 id="4-1-AXML-格式结构"><a href="#4-1-AXML-格式结构" class="headerlink" title="4.1 AXML 格式结构"></a>4.1 AXML 格式结构</h3><p>AXML 是线性的块（chunk）序列：</p>
+<pre><code>偏移    结构
+0x00    根块 RES_XML_TYPE (type=0x0003)
+        ├─ 老格式: headerSize=0x08  [type:2][headerSize:2][size:4]
+        └─ 新格式: headerSize=0x0C  [type:2][headerSize:2][size:4][保留:4]
+0x08*   字符串池 RES_STRING_POOL_TYPE (type=0x0001, headerSize=0x1C)
+        [块头 28B][字符串偏移表 4*N][可能的对齐填充][字符串数据]
+随后    资源映射块 → 命名空间 → 元素 ...
+</code></pre>
+<blockquote>
+<p>* 字符串池紧跟根块头之后：老格式在 0x08，新格式在 0x0C。</p>
+</blockquote>
+<p>老版解码工具（以 <code>AXMLPrinter2.jar</code> 为代表）失败的原因是新版 aapt2（AGP 7+ / Android 12+ 构建链）的两处格式变化：</p>
+<ul>
+<li><strong>坑① 根块头从 8 字节扩为 12 字节</strong>：多出 4 字节保留字段（通常为 <code>00 00 00 00</code>），老工具按 8 字节读头后整体错位，报 <code>Expected chunk of type 0x80003, read 0xc0003</code>；</li>
+<li><strong>坑② 字符串池新增对齐填充</strong>：偏移表与字符串数据之间插入若干字节 0 填充（<code>stringsStart &gt; 28 + 4*字符串数</code>），老工具不跳过填充，报 <code>Invalid chunk type</code> 之类的怪错误。</li>
+</ul>
+<h3 id="4-2-文件头诊断"><a href="#4-2-文件头诊断" class="headerlink" title="4.2 文件头诊断"></a>4.2 文件头诊断</h3><table>
+<thead>
+<tr>
+<th>文件头特征</th>
+<th>状态</th>
+<th>处理</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>03 00 08 00</code></td>
+<td>标准老格式 AXML</td>
+<td>直接 <code>java -jar AXMLPrinter2.jar</code> 解码</td>
+</tr>
+<tr>
+<td><code>03 00 0c 00</code></td>
+<td>新 aapt2 格式（根块头 12 字节）</td>
+<td>坑①②修补后解码</td>
+</tr>
+<tr>
+<td>开头正常但大量 <code>EF BF BD</code></td>
+<td>文本编码损坏</td>
+<td>不可逆，回 APK 二进制重提取</td>
+</tr>
+<tr>
+<td><code>50 4b 03 04</code> (<code>PK</code>)</td>
+<td>这是 ZIP/APK 本体</td>
+<td>二进制提取其中的 manifest</td>
+</tr>
+<tr>
+<td><code>3c 3f 78 6d</code> (<code>&lt;?xm</code>)</td>
+<td>已是文本 XML</td>
+<td>无需处理</td>
+</tr>
+</tbody></table>
+<h3 id="4-3-修补坑①：根块头"><a href="#4-3-修补坑①：根块头" class="headerlink" title="4.3 修补坑①：根块头"></a>4.3 修补坑①：根块头</h3><pre><code class="line-numbers language-python">import struct
+d = bytearray(open('clean.xml','rb').read())
+t, hs, size = struct.unpack_from('&lt;HHI', d, 0)
+if hs == 0x0C:
+    # 头改回 0x08，删掉 4 字节保留字段，根块 size 减 4
+    d = d[:2] + struct.pack('&lt;HI', 8, size - 4) + d[12:]
+</code></pre>
+<h3 id="4-4-修补坑②：字符串池填充"><a href="#4-4-修补坑②：字符串池填充" class="headerlink" title="4.4 修补坑②：字符串池填充"></a>4.4 修补坑②：字符串池填充</h3><p>以下代码假设坑①已修补完毕（字符串池位于偏移 8）；若直接处理未修坑①的新格式文件，需把各偏移整体 +4（字符串池在 0x0C）：</p>
+<pre><code class="line-numbers language-python">pt, phs, psize = struct.unpack_from('&lt;HHI', d, 8)
+cnt, sty, flags, sstart, styoff = struct.unpack_from('&lt;IIIII', d, 16)
+gap = sstart - (28 + 4 * (cnt + sty))   # 填充字节数
+if gap &gt; 0:
+    cut = 8 + 28 + 4 * (cnt + sty)
+    d = d[:cut] + d[cut + gap:]
+    # 同步修正 4 处尺寸/偏移字段
+    struct.pack_into('&lt;I', d, 12, psize - gap)
+    struct.pack_into('&lt;I', d, 28, sstart - gap)
+    if styoff: struct.pack_into('&lt;I', d, 32, styoff - gap)
+    struct.pack_into('&lt;I', d, 4, struct.unpack_from('&lt;I', d, 4)[0] - gap)
+</code></pre>
+<p>修补能成立的原理：字符串偏移表中的偏移都是<strong>相对 <code>stringsStart</code></strong> 的，删掉填充不影响任何引用，只需修正外围 4 个字段。</p>
+<h3 id="4-5-损坏文件溯源"><a href="#4-5-损坏文件溯源" class="headerlink" title="4.5 损坏文件溯源"></a>4.5 损坏文件溯源</h3><p>如果文件已被文本方式损坏，还可以对候选 APK 的干净 manifest 模拟同样的损坏过程，逐字节比对定位来源：</p>
+<pre><code class="line-numbers language-python">simulate = orig.decode('utf-8', errors='replace').encode('utf-8')
+if simulate == corrupted_bytes:   # 定位到来源 APK
+</code></pre>
+<h3 id="4-6-一键脚本"><a href="#4-6-一键脚本" class="headerlink" title="4.6 一键脚本"></a>4.6 一键脚本</h3><p>以上流程已封装为 <code>fix_axml.py</code>（Python 3 标准库，无第三方依赖，配套 <code>AXMLPrinter2.jar</code>，见随文附件 <code>FIX_AXML</code> 目录，内含 README 与详细修复文档）：</p>
+<pre><code class="line-numbers language-bash"># 输入为 APK：提取并解码
+python fix_axml.py xxx.apk    
+# 输入为 manifest：自动修补
+python fix_axml.py AndroidManifest.xml  
+# 手动指定候选来源
+python fix_axml.py AndroidManifest.xml a.apk b.apk  
+</code></pre>
+<p>脚本包含两项安全机制：修补后先按 AXMLPrinter2 的解析逻辑模拟走查整个文件，确认字节对齐才调用 Java；调用时强制 <code>-Dfile.encoding=UTF-8</code> 规避 Windows GBK 控制台的中文乱码。</p>
+<p><img src="/2026/08/31/jia-gu-apk-de-androidmanifest-xiu-fu-fang-fa-zong-jie/image-20260831133958128.png" alt="image-20260831133958128"></p>
+<h3 id="4-7-修复结果"><a href="#4-7-修复结果" class="headerlink" title="4.7 修复结果"></a>4.7 修复结果</h3><p>使用<code>python fix_axml.py AndroidManifest.xml</code>修复混淆的配置文件：</p>
+<p><img src="/2026/08/31/jia-gu-apk-de-androidmanifest-xiu-fu-fang-fa-zong-jie/image-20260831151052690.png" alt="image-20260831151052690"></p>
+<p>修复后的<code>AndroidManifest.xml</code>可直接解析：</p>
+<p><img src="/2026/08/31/jia-gu-apk-de-androidmanifest-xiu-fu-fang-fa-zong-jie/image-20260831134537085.png" alt="image-20260831134537085"></p>
+<p>实测修复了多个加固银行类样本，还原后的清单中 Application 类为 <code>s.h.e.l.l.S</code>（X加密壳特征）——manifest 是壳外真实配置，可直接用于组件面分析，运行时逻辑仍需先脱壳。</p>
+<p>局限：字符串池为 UTF-8 编码（flags &amp; 0x100）时 AXMLPrinter2 不支持，改用 <code>apktool</code> / <code>androguard</code> / <code>jadx</code>；<code>@7F110215</code> 这类资源引用只显示原始 ID，需还原值时用 apktool / jadx；少数厂商对 manifest 做结构性破坏时字节修补失效，回退方案一/二。</p>
+<h2 id="5-方案对比与选型"><a href="#5-方案对比与选型" class="headerlink" title="5. 方案对比与选型"></a>5. 方案对比与选型</h2><table>
+<thead>
+<tr>
+<th>维度</th>
+<th>方案一 aapt2</th>
+<th>方案二 drozer</th>
+<th>方案三 字节修复</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>核心思路</td>
+<td>官方工具直接读 APK</td>
+<td>系统运行时解析还原</td>
+<td>理解格式，修补字节</td>
+</tr>
+<tr>
+<td>输出</td>
+<td>摘要 / XML 树</td>
+<td>完整标准 XML</td>
+<td>完整 XML 文件</td>
+</tr>
+<tr>
+<td>需要设备</td>
+<td>否</td>
+<td>是</td>
+<td>否</td>
+</tr>
+<tr>
+<td>需要原 APK</td>
+<td>是</td>
+<td>是</td>
+<td>不必须（可溯源）</td>
+</tr>
+<tr>
+<td>离线批量</td>
+<td>一般</td>
+<td>差</td>
+<td>好</td>
+</tr>
+<tr>
+<td>环境成本</td>
+<td>build-tools</td>
+<td>设备+Agent+转发</td>
+<td>Python3+Java</td>
+</tr>
+<tr>
+<td>上手难度</td>
+<td>★</td>
+<td>★★</td>
+<td>★★★</td>
+</tr>
+</tbody></table>
+<p>选型建议：</p>
+<ul>
+<li>只要包名/版本/入口/权限 → 方案一，一步到位；</li>
+<li>需要完整组件树且具备设备 + drozer Agent 环境 → 方案二；</li>
+<li>离线 / 批量 / 只有损坏文件 / 需要 XML 交付 → 方案三。</li>
+</ul>
+<p>另注：apktool、androguard 等工具也内置 AXML 解码，可以离线输出文本 XML，本可作为又一候选，但它们与 jadx 一样是严格解析器，对加固混淆样本的容忍度参差，失败时即可按本文方案处理；方案三的局限场景（UTF-8 字符串池、需要还原 <code>@7F110215</code> 资源引用）反而要回退到它们。</p>
+<p>最后是几条预防措施，都比修复省事：</p>
+<ol>
+<li>从 APK 提取文件一律用二进制方式：<code>unzip -p</code>、Python <code>zipfile</code>、<code>7z x</code>，不要用记事本打开另存，不要走文本模式传输；</li>
+<li>长期保存可读版本时保存解码后的文本 XML，不要保存二进制；</li>
+<li>新构建的 APK 用老工具前先 <code>xxd file | head -1</code> 看文件头，<code>03 00 0c 00</code> 即新格式。</li>
+</ol>
+<h2 id="6-总结"><a href="#6-总结" class="headerlink" title="6. 总结"></a>6. 总结</h2><p>加固 APK 的 manifest 乱码是多种问题叠加：AXML 格式演进、文本提取造成的不可逆损坏、加固厂商混淆。三种方案分别从”官方工具绕过”、”系统代为解析”、”格式分析修字节”三个角度应对，覆盖从快速摸底到深度分析的链路。</p>
+<p>核心结论还是那句话：Android 系统必须能读懂这份 manifest，所以永远存在一条还原路径。</p>
+<h2 id="7-参考链接"><a href="#7-参考链接" class="headerlink" title="7. 参考链接"></a>7. 参考链接</h2><ol>
+<li><a target="_blank" rel="noopener" href="https://developer.android.com/tools/aapt2">aapt2 官方文档</a></li>
+<li><a target="_blank" rel="noopener" href="https://labs.withsecure.com/tools/drozer">drozer</a></li>
+<li>AOSP ResourceTypes.h（AXML chunk 结构定义）</li>
+</ol>
+<h2 id="8-附件"><a href="#8-附件" class="headerlink" title="8. 附件"></a>8. 附件</h2><p> <a href="./%E5%8A%A0%E5%9B%BAAPK%E7%9A%84AndroidManifest%E4%BF%AE%E5%A4%8D%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/FIX_AXML.zip">FIX_AXML.zip</a> </p>
+
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="/about" rel="external nofollow noreferrer">YangHao</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://yanghaoi.github.io/2026/08/31/jia-gu-apk-de-androidmanifest-xiu-fu-fang-fa-zong-jie/">https://yanghaoi.github.io/2026/08/31/jia-gu-apk-de-androidmanifest-xiu-fu-fang-fa-zong-jie/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特別声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="/about" target="_blank">YangHao</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/Android/">
+                                    <span class="chip bg-color">Android</span>
+                                </a>
+                            
+                                <a href="/tags/%E5%8A%A0%E5%9B%BA/">
+                                    <span class="chip bg-color">加固</span>
+                                </a>
+                            
+                                <a href="/tags/AXML/">
+                                    <span class="chip bg-color">AXML</span>
+                                </a>
+                            
+                                <a href="/tags/drozer/">
+                                    <span class="chip bg-color">drozer</span>
+                                </a>
+                            
+                                <a href="/tags/aapt2/">
+                                    <span class="chip bg-color">aapt2</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="qq,qzone,wechat,weibo,douban" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+        <style>
+    .valine-card {
+        margin: 1.5rem auto;
+    }
+
+    .valine-card .card-content {
+        padding: 20px 20px 5px 20px;
+    }
+
+    #vcomments textarea {
+        box-sizing: border-box;
+        background: url("/medias/comment_bg.png") 100% 100% no-repeat;
+    }
+
+    #vcomments p {
+        margin: 2px 2px 10px;
+        font-size: 1.05rem;
+        line-height: 1.78rem;
+    }
+
+    #vcomments blockquote p {
+        text-indent: 0.2rem;
+    }
+
+    #vcomments a {
+        padding: 0 2px;
+        color: #4cbf30;
+        font-weight: 500;
+        text-decoration: none;
+    }
+
+    #vcomments img {
+        max-width: 100%;
+        height: auto;
+        cursor: pointer;
+    }
+
+    #vcomments ol li {
+        list-style-type: decimal;
+    }
+
+    #vcomments ol,
+    ul {
+        display: block;
+        padding-left: 2em;
+        word-spacing: 0.05rem;
+    }
+
+    #vcomments ul li,
+    ol li {
+        display: list-item;
+        line-height: 1.8rem;
+        font-size: 1rem;
+    }
+
+    #vcomments ul li {
+        list-style-type: disc;
+    }
+
+    #vcomments ul ul li {
+        list-style-type: circle;
+    }
+
+    #vcomments table, th, td {
+        padding: 12px 13px;
+        border: 1px solid #dfe2e5;
+    }
+
+    #vcomments table, th, td {
+        border: 0;
+    }
+
+    table tr:nth-child(2n), thead {
+        background-color: #fafafa;
+    }
+
+    #vcomments table th {
+        background-color: #f2f2f2;
+        min-width: 80px;
+    }
+
+    #vcomments table td {
+        min-width: 80px;
+    }
+
+    #vcomments h1 {
+        font-size: 1.85rem;
+        font-weight: bold;
+        line-height: 2.2rem;
+    }
+
+    #vcomments h2 {
+        font-size: 1.65rem;
+        font-weight: bold;
+        line-height: 1.9rem;
+    }
+
+    #vcomments h3 {
+        font-size: 1.45rem;
+        font-weight: bold;
+        line-height: 1.7rem;
+    }
+
+    #vcomments h4 {
+        font-size: 1.25rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    #vcomments h5 {
+        font-size: 1.1rem;
+        font-weight: bold;
+        line-height: 1.4rem;
+    }
+
+    #vcomments h6 {
+        font-size: 1rem;
+        line-height: 1.3rem;
+    }
+
+    #vcomments p {
+        font-size: 1rem;
+        line-height: 1.5rem;
+    }
+
+    #vcomments hr {
+        margin: 12px 0;
+        border: 0;
+        border-top: 1px solid #ccc;
+    }
+
+    #vcomments blockquote {
+        margin: 15px 0;
+        border-left: 5px solid #42b983;
+        padding: 1rem 0.8rem 0.3rem 0.8rem;
+        color: #666;
+        background-color: rgba(66, 185, 131, .1);
+    }
+
+    #vcomments pre {
+        font-family: monospace, monospace;
+        padding: 1.2em;
+        margin: .5em 0;
+        background: #272822;
+        overflow: auto;
+        border-radius: 0.3em;
+        tab-size: 4;
+    }
+
+    #vcomments code {
+        font-family: monospace, monospace;
+        padding: 1px 3px;
+        font-size: 0.92rem;
+        color: #e96900;
+        background-color: #f8f8f8;
+        border-radius: 2px;
+    }
+
+    #vcomments pre code {
+        font-family: monospace, monospace;
+        padding: 0;
+        color: #e8eaf6;
+        background-color: #272822;
+    }
+
+    #vcomments pre[class*="language-"] {
+        padding: 1.2em;
+        margin: .5em 0;
+    }
+
+    #vcomments code[class*="language-"],
+    pre[class*="language-"] {
+        color: #e8eaf6;
+    }
+
+    #vcomments [type="checkbox"]:not(:checked), [type="checkbox"]:checked {
+        position: inherit;
+        margin-left: -1.3rem;
+        margin-right: 0.4rem;
+        margin-top: -1px;
+        vertical-align: middle;
+        left: unset;
+        visibility: visible;
+    }
+
+    #vcomments b,
+    strong {
+        font-weight: bold;
+    }
+
+    #vcomments dfn {
+        font-style: italic;
+    }
+
+    #vcomments small {
+        font-size: 85%;
+    }
+
+    #vcomments cite {
+        font-style: normal;
+    }
+
+    #vcomments mark {
+        background-color: #fcf8e3;
+        padding: .2em;
+    }
+
+    #vcomments table, th, td {
+        padding: 12px 13px;
+        border: 1px solid #dfe2e5;
+    }
+
+    table tr:nth-child(2n), thead {
+        background-color: #fafafa;
+    }
+
+    #vcomments table th {
+        background-color: #f2f2f2;
+        min-width: 80px;
+    }
+
+    #vcomments table td {
+        min-width: 80px;
+    }
+
+    #vcomments [type="checkbox"]:not(:checked), [type="checkbox"]:checked {
+        position: inherit;
+        margin-left: -1.3rem;
+        margin-right: 0.4rem;
+        margin-top: -1px;
+        vertical-align: middle;
+        left: unset;
+        visibility: visible;
+    }
+</style>
+
+<div class="card valine-card" data-aos="fade-up">
+    <div class="comment_headling" style="font-size: 20px; font-weight: 700; position: relative; padding-left: 20px; top: 15px; padding-bottom: 5px;">
+        <i class="fas fa-comments fa-fw" aria-hidden="true"></i>
+        <span>评论</span>
+    </div>
+    <div id="vcomments" class="card-content" style="display: grid">
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/valine/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/valine/Valine.min.js"></script>
+<script>
+    new Valine({
+        el: '#vcomments',
+        appId: 'yJD2aXK8GcbXmInljhvHyB1j-gzGzoHsz',
+        appKey: 'p2SkNvakylQnkba2lMvTS09d',
+        notify: 'false' === 'true',
+        verify: 'false' === 'true',
+        visitor: 'true' === 'true',
+        avatar: 'mm',
+        pageSize: '10',
+        lang: 'zh-cn',
+        placeholder: 'just go go'
+    });
+</script>
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
+            <div class="card">
+                <a href="/2026/08/31/jia-gu-apk-de-androidmanifest-xiu-fu-fang-fa-zong-jie/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/medias/featureimages/16.jpg" class="responsive-img" alt="加固APK的AndroidManifest.xml修复方法总结">
+                        
+                        <span class="card-title">加固APK的AndroidManifest.xml修复方法总结</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            加固APK的AndroidManifest.xml修复方法总结分析加固后的 Android 应用时，解包得到的 AndroidManifest.xml 经常无法解码或显示为乱码，导致包名、组件声明等关键信息无法获取。本文以 X加密加固的银行
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2026-08-31
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E9%80%86%E5%90%91%E5%88%86%E6%9E%90/" class="post-category">
+                                    逆向分析
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/Android/">
+                        <span class="chip bg-color">Android</span>
+                    </a>
+                    
+                    <a href="/tags/%E5%8A%A0%E5%9B%BA/">
+                        <span class="chip bg-color">加固</span>
+                    </a>
+                    
+                    <a href="/tags/AXML/">
+                        <span class="chip bg-color">AXML</span>
+                    </a>
+                    
+                    <a href="/tags/drozer/">
+                        <span class="chip bg-color">drozer</span>
+                    </a>
+                    
+                    <a href="/tags/aapt2/">
+                        <span class="chip bg-color">aapt2</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2024/12/04/phpfilters-he-cve-2024-2961-cong-wen-jian-du-qu-dao-rce/">
+                    <div class="card-image">
+                        
+                        <img src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/medias/featureimages/2.jpg" class="responsive-img" alt="PHP filters和CVE-2024-2961组合:从文件读取到RCE">
+                        
+                        <span class="card-title">PHP filters和CVE-2024-2961组合:从文件读取到RCE</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            在PHP中可能通过CVE-2024-3961构造php://filter的数据使PHP在转换ISO-2022-CN-EXT字符集时触发漏洞将文件读取原语提升到远程代码执行。
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2024-12-04
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/" class="post-category">
+                                    漏洞复现
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/CVE-2024-2961/">
+                        <span class="chip bg-color">CVE-2024-2961</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+<script>
+    $('#articleContent').on('copy', function (e) {
+        // IE8 or earlier browser is 'undefined'
+        if (typeof window.getSelection === 'undefined') return;
+
+        var selection = window.getSelection();
+        // if the selection is short let's not annoy our users.
+        if (('' + selection).length < Number.parseInt('1120')) {
+            return;
+        }
+
+        // create a div outside of the visible area and fill it with the selected text.
+        var bodyElement = document.getElementsByTagName('body')[0];
+        var newdiv = document.createElement('div');
+        newdiv.style.position = 'absolute';
+        newdiv.style.left = '-99999px';
+        bodyElement.appendChild(newdiv);
+        newdiv.appendChild(selection.getRangeAt(0).cloneContents());
+
+        // we need a <pre> tag workaround.
+        // otherwise the text inside "pre" loses all the line breaks!
+        if (selection.getRangeAt(0).commonAncestorContainer.nodeName === 'PRE') {
+            newdiv.innerHTML = "<pre>" + newdiv.innerHTML + "</pre>";
+        }
+
+        var url = document.location.href;
+        newdiv.innerHTML += '<br />'
+            + '来源: Yang Hao&#39;s blog<br />'
+            + '文章作者: YangHao<br />'
+            + '文章链接: <a href="' + url + '">' + url + '</a><br />'
+            + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
+
+        selection.selectAllChildren(newdiv);
+        window.setTimeout(function () {bodyElement.removeChild(newdiv);}, 200);
+    });
+</script>
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/codeBlock/codeShrink.js"></script>
+
+
+<!-- 代码块折行 -->
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('5'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+    
+    <div class="container row center-align" style="margin-bottom: 15px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            <span id="year">2020</span>
+            <a href="/about" target="_blank">YangHao</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+            
+            &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                class="white-color">76.7k</span>&nbsp;字
+            
+            
+            
+            
+            
+            
+            <span id="busuanzi_container_site_pv">
+                |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+            
+            
+            <span id="busuanzi_container_site_uv">
+                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span>
+            
+            <br>
+            
+            <span id="sitetime">载入运行时间...</span>
+            <script>
+                function siteTime() {
+                    var seconds = 1000;
+                    var minutes = seconds * 60;
+                    var hours = minutes * 60;
+                    var days = hours * 24;
+                    var years = days * 365;
+                    var today = new Date();
+                    var startYear = "2020";
+                    var startMonth = "08";
+                    var startDate = "10";
+                    var startHour = "0";
+                    var startMinute = "0";
+                    var startSecond = "0";
+                    var todayYear = today.getFullYear();
+                    var todayMonth = today.getMonth() + 1;
+                    var todayDate = today.getDate();
+                    var todayHour = today.getHours();
+                    var todayMinute = today.getMinutes();
+                    var todaySecond = today.getSeconds();
+                    var t1 = Date.UTC(startYear, startMonth, startDate, startHour, startMinute, startSecond);
+                    var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
+                    var diff = t2 - t1;
+                    var diffYears = Math.floor(diff / years);
+                    var diffDays = Math.floor((diff / days) - diffYears * 365);
+                    var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours);
+                    var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) /
+                        minutes);
+                    var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours -
+                        diffMinutes * minutes) / seconds);
+                    if (startYear == todayYear) {
+                        document.getElementById("year").innerHTML = todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已缓慢运行 " + diffDays + " 天 " + diffHours +
+                            " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    } else {
+                        document.getElementById("year").innerHTML = startYear + " - " + todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已缓慢运行 " + diffYears + " 年 " + diffDays +
+                            " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    }
+                }
+                setInterval(siteTime, 1000);
+            </script>
+            
+
+			<br>
+			
+            <span id="showcdn" style='display:none;'>当前CDN节点: <span id="cdn">【未知】</span>&nbsp;|&nbsp;你的ip: <span id="ip">【未知】</span>&nbsp;|&nbsp;你的所在国家/地区: <span id="loc">【未知】</span></span>
+            <script>
+                	getCDNinfo = function() {
+	$.ajax({
+		url: "https://cdnjs.cloudflare.com/cdn-cgi/trace",
+		success: function(data, status) {
+			let areas = "Antananarivo, Madagascar - (TNR);Cape Town, South Africa - (CPT);Casablanca, Morocco - (CMN);Dar Es Salaam, Tanzania - (DAR);Djibouti City, Djibouti - (JIB);Durban, South Africa - (DUR);Johannesburg, South Africa - (JNB);Kigali, Rwanda - (KGL);Lagos, Nigeria - (LOS);Luanda, Angola - (LAD);Maputo, MZ - (MPM);Mombasa, Kenya - (MBA);Port Louis, Mauritius - (MRU);Réunion, France - (RUN);Bangalore, India - (BLR);Bangkok, Thailand - (BKK);Bandar Seri Begawan, Brunei - (BWN);Cebu, Philippines - (CEB);Chengdu, China - (CTU);Chennai, India - (MAA);Chittagong, Bangladesh - (CGP);Chongqing, China - (CKG);Colombo, Sri Lanka - (CMB);Dhaka, Bangladesh - (DAC);Dongguan, China - (SZX);Foshan, China - (FUO);Fuzhou, China - (FOC);Guangzhou, China - (CAN);Hangzhou, China - (HGH);Hanoi, Vietnam - (HAN);Hengyang, China - (HNY);Ho Chi Minh City, Vietnam - (SGN);Hong Kong - (HKG);Hyderabad, India - (HYD);Islamabad, Pakistan - (ISB);Jakarta, Indonesia - (CGK);Jinan, China - (TNA);Karachi, Pakistan - (KHI);Kathmandu, Nepal - (KTM);Kolkata, India - (CCU);Kuala Lumpur, Malaysia - (KUL);Lahore, Pakistan - (LHE);Langfang, China - (NAY);Luoyang, China - (LYA);Macau - (MFM);Malé, Maldives - (MLE);Manila, Philippines - (MNL);Mumbai, India - (BOM);Nagpur, India - (NAG);Nanning, China - (NNG);New Delhi, India - (DEL);Osaka, Japan - (KIX);Phnom Penh, Cambodia - (PNH);Qingdao, China - (TAO);Seoul, South Korea - (ICN);Shanghai, China - (SHA);Shenyang, China - (SHE);Shijiazhuang, China - (SJW);Singapore, Singapore - (SIN);Suzhou, China - (SZV);Taipei - (TPE);Thimphu, Bhutan - (PBH);Tianjin, China - (TSN);Tokyo, Japan - (NRT);Ulaanbaatar, Mongolia - (ULN);Vientiane, Laos - (VTE);Wuhan, China - (WUH);Wuxi, China - (WUX);Xi'an, China - (XIY);Yerevan, Armenia - (EVN);Zhengzhou, China - (CGO);Zuzhou, China - (CSX);Amsterdam, Netherlands - (AMS);Athens, Greece - (ATH);Barcelona, Spain - (BCN);Belgrade, Serbia - (BEG);Berlin, Germany - (TXL);Brussels, Belgium - (BRU);Bucharest, Romania - (OTP);Budapest, Hungary - (BUD);Chișinău, Moldova - (KIV);Copenhagen, Denmark - (CPH);Cork, Ireland -  (ORK);Dublin, Ireland - (DUB);Düsseldorf, Germany - (DUS);Edinburgh, United Kingdom - (EDI);Frankfurt, Germany - (FRA);Geneva, Switzerland - (GVA);Gothenburg, Sweden - (GOT);Hamburg, Germany - (HAM);Helsinki, Finland - (HEL);Istanbul, Turkey - (IST);Kyiv, Ukraine - (KBP);Lisbon, Portugal - (LIS);London, United Kingdom - (LHR);Luxembourg City, Luxembourg - (LUX);Madrid, Spain - (MAD);Manchester, United Kingdom - (MAN);Marseille, France - (MRS);Milan, Italy - (MXP);Moscow, Russia - (DME);Munich, Germany - (MUC);Nicosia, Cyprus - (LCA);Oslo, Norway - (OSL);Paris, France - (CDG);Prague, Czech Republic - (PRG);Reykjavík, Iceland - (KEF);Riga, Latvia - (RIX);Rome, Italy - (FCO);Saint Petersburg, Russia - (LED);Sofia, Bulgaria - (SOF);Stockholm, Sweden - (ARN);Tallinn, Estonia - (TLL);Thessaloniki, Greece - (SKG);Vienna, Austria - (VIE);Vilnius, Lithuania - (VNO);Warsaw, Poland - (WAW);Zagreb, Croatia - (ZAG);Zürich, Switzerland - (ZRH);Arica, Chile - (ARI);Asunción, Paraguay - (ASU);Bogotá, Colombia - (BOG);Buenos Aires, Argentina - (EZE);Curitiba, Brazil - (CWB);Fortaleza, Brazil - (FOR);Guatemala City, Guatemala - (GUA);Lima, Peru - (LIM);Medellín, Colombia - (MDE);Panama City, Panama - (PTY);Porto Alegre, Brazil - (POA);Quito, Ecuador - (UIO);Rio de Janeiro, Brazil - (GIG);São Paulo, Brazil - (GRU);Santiago, Chile - (SCL);Willemstad, Curaçao - (CUR);St. George's, Grenada - (GND);Amman, Jordan - (AMM);Baghdad, Iraq - (BGW);Baku, Azerbaijan - (GYD);Beirut, Lebanon - (BEY);Doha, Qatar - (DOH);Dubai, United Arab Emirates - (DXB);Kuwait City, Kuwait - (KWI);Manama, Bahrain - (BAH);Muscat, Oman - (MCT);Ramallah - (ZDM);Riyadh, Saudi Arabia - (RUH);Tel Aviv, Israel - (TLV);Ashburn, VA, United States - (IAD);Atlanta, GA, United States - (ATL);Boston, MA, United States - (BOS);Buffalo, NY, United States - (BUF);Calgary, AB, Canada - (YYC);Charlotte, NC, United States - (CLT);Chicago, IL, United States - (ORD);Columbus, OH, United States - (CMH);Dallas, TX, United States - (DFW);Denver, CO, United States - (DEN);Detroit, MI, United States - (DTW);Honolulu, HI, United States - (HNL);Houston, TX, United States - (IAH);Indianapolis, IN, United States - (IND);Jacksonville, FL, United States - (JAX);Kansas City, MO, United States - (MCI);Las Vegas, NV, United States - (LAS);Los Angeles, CA, United States - (LAX);McAllen, TX, United States - (MFE);Memphis, TN, United States - (MEM);Mexico City, Mexico - (MEX);Miami, FL, United States - (MIA);Minneapolis, MN, United States - (MSP);Montgomery, AL, United States - (MGM);Montréal, QC, Canada - (YUL);Nashville, TN, United States - (BNA);Newark, NJ, United States - (EWR);Norfolk, VA, United States - (ORF);Omaha, NE, United States - (OMA);Philadelphia, United States - (PHL);Phoenix, AZ, United States - (PHX);Pittsburgh, PA, United States - (PIT);Port-Au-Prince, Haiti - (PAP);Portland, OR, United States - (PDX);Queretaro, MX, Mexico - (QRO);Richmond, Virginia - (RIC);Sacramento, CA, United States - (SMF);Salt Lake City, UT, United States - (SLC);San Diego, CA, United States - (SAN);San Jose, CA, United States - (SJC);Saskatoon, SK, Canada - (YXE);Seattle, WA, United States - (SEA);St. Louis, MO, United States - (STL);Tampa, FL, United States - (TPA);Toronto, ON, Canada - (YYZ);Vancouver, BC, Canada - (YVR);Tallahassee, FL, United States - (TLH);Winnipeg, MB, Canada - (YWG);Adelaide, SA, Australia - (ADL);Auckland, New Zealand - (AKL);Brisbane, QLD, Australia - (BNE);Melbourne, VIC, Australia - (MEL);Noumea, New caledonia - (NOU);Perth, WA, Australia - (PER);Sydney, NSW, Australia - (SYD)".split(";");
+			let area = data.split("colo=")[1].split("\n")[0];
+			for (var i = 0; i < areas.length; i++) {
+				if (areas[i].indexOf(area) != -1) {
+					$("#cdn").text(areas[i]);
+					$("#ip").text(data.split("ip=")[1].split("\n")[0]);
+					$("#loc").text(data.split("loc=")[1].split("\n")[0]);
+					break;
+				}
+			}
+			$("#showcdn").css('display','block');
+		}
+	})
+}
+$(document).ready(function() {
+	getCDNinfo();
+});
+            </script>
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+
+
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/js/search.js"></script>
+<script type="text/javascript">
+$(function () {
+    searchFunc("https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/search.xml", 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+	
+    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/materialize/materialize.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/aos/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/js/matery.js"></script>
+
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+    
+    
+    <script async src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>

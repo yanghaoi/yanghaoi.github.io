@@ -441,7 +441,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2024-08-18
+                    2025-04-21
                 </div>
                 
 
@@ -512,7 +512,7 @@ HKLM\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Run
 <p>以为也可以通过这样的方式来禁用启动项目，尝试操作了下并不能成功(这步操作还被某数字安全卫士阻止了很久，表现就是新建了项无法重命名，也无法删除。还以为是代码出了问题，最后在虚拟机中反复尝试，卸载了才成功，不得不说保护确实到位！)。思考这里应该也是操作注册表来实现的，于是就找到了一款监控程序操作注册表的软件(<code>RegFromApp</code>)，发现了任务管理写入注册表的位置(<code>HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run</code>)：</p>
 <p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/052e90e760f1cc2c82096d6c8a4e5d6d.png"></p>
 <p>定位到具体的注册表项，三个子项分别是<code>Run</code>、<code>Run32</code>、<code>StartupFolder</code>，其中<code>StartupFolder</code>是管理启动目录的：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/edb23bb988e104ee02f0cdee8745bbfd.png"></p>
-<p><code>StartupApproved\Run</code>值对应的是启动项中的<code>CurrentVersion\Run</code>的值，都有值才会在任意管理器的启动项中显示出来，数据是<code>REG_BINANY</code>二进制类型的：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/ac568e7bea5d57b8e41120228e802902.png"></p>
+<p><code>StartupApproved\Run</code>值对应的是启动项中的<code>CurrentVersion\Run</code>的值，都有值才会在任务管理器的启动项中显示出来，数据是<code>REG_BINANY</code>二进制类型的：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/ac568e7bea5d57b8e41120228e802902.png"></p>
 <p>通过分析发现，总共有3个区块共12个二进制位数据，前面4个二进制位0x02是控制是否启用的，偶数是启用，奇数是禁用：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/06d2c64e8a5748e26929a975e5663f01.png"><br>后面的8个二进制用来设置禁用的时间：</p>
 <p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/ed7b78ea8eb3fec2d547c358e4028772.png"></p>
 <p>其实到这里就已经可以设置启用和禁用了，但是还想能够操作禁用的时间，让整个的功能实现更完善。于是又进行了研究。</p>
@@ -1241,7 +1241,7 @@ int main()
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">73.2k</span>&nbsp;字
+                class="white-color">76.7k</span>&nbsp;字
             
             
             
