@@ -464,14 +464,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    3.4k
+                    3.9k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    13 分
+                    15 分
                 </div>
                 
 
@@ -667,6 +667,19 @@ python fix_axml.py AndroidManifest.xml a.apk b.apk
 <p><img src="/2026/08/31/jia-gu-apk-de-androidmanifest-xiu-fu-fang-fa-zong-jie/image-20260831134537085.png" alt="image-20260831134537085"></p>
 <p>实测修复了多个加固银行类样本，还原后的清单中 Application 类为 <code>s.h.e.l.l.S</code>（X加密壳特征）——manifest 是壳外真实配置，可直接用于组件面分析，运行时逻辑仍需先脱壳。</p>
 <p>局限：字符串池为 UTF-8 编码（flags &amp; 0x100）时 AXMLPrinter2 不支持，改用 <code>apktool</code> / <code>androguard</code> / <code>jadx</code>；<code>@7F110215</code> 这类资源引用只显示原始 ID，需还原值时用 apktool / jadx；少数厂商对 manifest 做结构性破坏时字节修补失效，回退方案一/二。</p>
+<h3 id="4-8-jadx-插件：把修复搬进日常工具"><a href="#4-8-jadx-插件：把修复搬进日常工具" class="headerlink" title="4.8 jadx 插件：把修复搬进日常工具"></a>4.8 jadx 插件：把修复搬进日常工具</h3><p>上面反复提到”需要还原资源引用 / 处理 UTF-8 字符串池时换用 jadx”，但 jadx（实测 1.5.5）同样是严格解析器：遇到坑①的新格式 manifest，它会把二进制当文本输出乱码，或静默输出空 XML（<code>isBinaryXml()</code> 只认 8 字节根块头）。也就是说日常逆向 jadx 打开这类加固包，manifest 依然是废的——1. 节截图里那片乱码就是这么来的。</p>
+<p>为此我把坑①修补逻辑封装成了 jadx 插件 **<code>jadx-fix-axml</code>**（源码与构建方法见附件仓库 <code>jadx-fix-axml/</code> 目录，内含技术文档）：</p>
+<ul>
+<li><strong>原理</strong>：通过 jadx 官方扩展点 <code>IResContainerFactory</code> 挂入资源解码链路，仅对 <code>AndroidManifest.xml</code> 生效——检测到根块 headerSize=0x0C 时就地修补字节流（逻辑同 4.3），再交给 jadx 自带的 <code>BinaryXMLParser</code> 解码。由于最终用的是 jadx 自己的解析器，输出质量与内置解码完全一致，资源引用直接还原为 <code>@style/...</code>、<code>@string/...</code>，优于 AXMLPrinter2 的裸 ID；</li>
+<li><strong>零干扰</strong>：正常格式的 APK 门控直接放行，不读流、不改变任何原有行为；修补发生时日志面板输出 <code>[fix-axml]</code> 前缀的 INFO 信息；</li>
+<li><strong>局限</strong>：只修坑①（jadx 对坑②的字符串池填充天然免疫，无需处理）；manifest 已被文本模式损坏（大量 <code>EF BF BD</code>）时字节已永久丢失，插件只告警，仍需 <code>fix_axml.py</code> 走来源 APK 重提取。</li>
+</ul>
+<p>安装只需把插件 jar 放入 jadx 的 dropins 目录（GUI / CLI 通用，重启即生效）：</p>
+<pre><code class="line-numbers language-bat">copy /y jadx-fix-axml.jar "%APPDATA%\skylot\jadx\config\plugins\dropins\"
+</code></pre>
+<p>再次用 jadx 打开 1. 节中乱码的同一样本，manifest 已直接正常显示，日志提示插件已加载、修补工厂已注册，插件管理器中也能看到 <code>Fix AXML Manifest</code>：</p>
+<p><img src="/2026/08/31/jia-gu-apk-de-androidmanifest-xiu-fu-fang-fa-zong-jie/plugin-demo.jpg" alt="jadx-fix-axml 插件效果"></p>
+<p>正确性上与 <code>fix_axml.py</code> 做了交叉验证：对同一个约 216MB 的加固样本，插件与脚本两条链路独立解码，组件计数（activity 316 / service 51 / receiver 12 / provider 10 / meta-data 98 / uses-permission 68）完全一致。</p>
 <h2 id="5-方案对比与选型"><a href="#5-方案对比与选型" class="headerlink" title="5. 方案对比与选型"></a>5. 方案对比与选型</h2><table>
 <thead>
 <tr>
@@ -723,7 +736,8 @@ python fix_axml.py AndroidManifest.xml a.apk b.apk
 <ul>
 <li>只要包名/版本/入口/权限 → 方案一，一步到位；</li>
 <li>需要完整组件树且具备设备 + drozer Agent 环境 → 方案二；</li>
-<li>离线 / 批量 / 只有损坏文件 / 需要 XML 交付 → 方案三。</li>
+<li>离线 / 批量 / 只有损坏文件 / 需要 XML 交付 → 方案三；</li>
+<li>日常以 jadx 为主力逆向工具 → 直接装 4.8 的 <code>jadx-fix-axml</code> 插件，坑①格式一次性解决，配合 <code>fix_axml.py</code> 覆盖损坏场景。</li>
 </ul>
 <p>另注：apktool、androguard 等工具也内置 AXML 解码，可以离线输出文本 XML，本可作为又一候选，但它们与 jadx 一样是严格解析器，对加固混淆样本的容忍度参差，失败时即可按本文方案处理；方案三的局限场景（UTF-8 字符串池、需要还原 <code>@7F110215</code> 资源引用）反而要回退到它们。</p>
 <p>最后是几条预防措施，都比修复省事：</p>
@@ -739,7 +753,7 @@ python fix_axml.py AndroidManifest.xml a.apk b.apk
 <li><a target="_blank" rel="noopener" href="https://labs.withsecure.com/tools/drozer">drozer</a></li>
 <li>AOSP ResourceTypes.h（AXML chunk 结构定义）</li>
 </ol>
-<h2 id="8-附件"><a href="#8-附件" class="headerlink" title="8. 附件"></a>8. 附件</h2><p><a target="_blank" rel="noopener" href="https://github.com/yanghaoi/hardened-apk-manifest-fix">yanghaoi/hardened-apk-manifest-fix</a></p>
+<h2 id="8-源码和附件"><a href="#8-源码和附件" class="headerlink" title="8. 源码和附件"></a>8. 源码和附件</h2><p><a target="_blank" rel="noopener" href="https://github.com/yanghaoi/hardened-apk-manifest-fix">yanghaoi/hardened-apk-manifest-fix</a></p>
 
             </div>
             <hr/>
@@ -1416,7 +1430,7 @@ python fix_axml.py AndroidManifest.xml a.apk b.apk
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">76.7k</span>&nbsp;字
+                class="white-color">77.3k</span>&nbsp;字
             
             
             

