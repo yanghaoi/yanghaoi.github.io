@@ -6,7 +6,7 @@
   <link href="https://yanghaoi.github.io/atom.xml" rel="self"/>
   
   <link href="https://yanghaoi.github.io/"/>
-  <updated>2026-08-31T10:58:32.052Z</updated>
+  <updated>2026-08-31T11:08:19.343Z</updated>
   <id>https://yanghaoi.github.io/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://yanghaoi.github.io/2026/08/31/jia-gu-apk-de-androidmanifest-xiu-fu-fang-fa-zong-jie/"/>
     <id>https://yanghaoi.github.io/2026/08/31/jia-gu-apk-de-androidmanifest-xiu-fu-fang-fa-zong-jie/</id>
     <published>2026-08-30T16:00:00.000Z</published>
-    <updated>2026-08-31T10:58:32.052Z</updated>
+    <updated>2026-08-31T11:08:19.343Z</updated>
     
     
     <summary type="html">分析加固APK中AndroidManifest.xml乱码的成因，整理aapt2、drozer、AXML字节修复三种方案的原理、操作和适用场景，附jadx自动修复插件，并给出选型建议。</summary>
