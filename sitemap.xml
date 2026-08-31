@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://yanghaoi.github.io/2026/08/31/phpfilters-he-cve-2024-2961-cong-wen-jian-du-qu-dao-rce/</loc>
+    
+    <lastmod>2026-08-31</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://yanghaoi.github.io/2026/08/31/jia-gu-apk-de-androidmanifest-xiu-fu-fang-fa-zong-jie/</loc>
     
     <lastmod>2026-08-31</lastmod>
@@ -9,142 +16,135 @@
   </url>
   
   <url>
-    <loc>https://yanghaoi.github.io/2021/11/18/dll-jie-chi-lou-dong/</loc>
+    <loc>https://yanghaoi.github.io/2026/08/31/dll-jie-chi-lou-dong/</loc>
     
-    <lastmod>2025-09-26</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://yanghaoi.github.io/2022/03/07/tong-guo-c-cao-zuo-zhu-ce-biao-jin-yong-windows-defender/</loc>
-    
-    <lastmod>2025-04-21</lastmod>
+    <lastmod>2026-08-31</lastmod>
     
   </url>
   
   <url>
-    <loc>https://yanghaoi.github.io/2024/12/04/phpfilters-he-cve-2024-2961-cong-wen-jian-du-qu-dao-rce/</loc>
+    <loc>https://yanghaoi.github.io/2026/08/31/tong-guo-c-cao-zuo-zhu-ce-biao-jin-yong-windows-defender/</loc>
     
-    <lastmod>2025-01-24</lastmod>
+    <lastmod>2026-08-31</lastmod>
     
   </url>
   
   <url>
-    <loc>https://yanghaoi.github.io/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/</loc>
+    <loc>https://yanghaoi.github.io/2026/08/31/windows-installer-an-zhuang-bao-de-gou-jian-he-zhi-xing/</loc>
     
-    <lastmod>2025-01-24</lastmod>
+    <lastmod>2026-08-31</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://yanghaoi.github.io/2026/08/31/windows-ben-di-ti-quan-lou-dong-cve-2020-1313-fu-xian/</loc>
+    
+    <lastmod>2026-08-31</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://yanghaoi.github.io/2026/08/31/phpstudy-phpstorm-de-dai-ma-diao-shi-pei-zhi/</loc>
+    
+    <lastmod>2026-08-31</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://yanghaoi.github.io/2026/08/31/redis-lou-dong-li-yong/</loc>
+    
+    <lastmod>2026-08-31</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://yanghaoi.github.io/2026/08/31/ssrf-lou-dong-ji-chu/</loc>
+    
+    <lastmod>2026-08-31</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://yanghaoi.github.io/2026/08/31/php-ren-yi-wen-jian-shang-chuan-rao-guo-duo-chong-xian-zhi/</loc>
+    
+    <lastmod>2026-08-31</lastmod>
     
   </url>
   
   <url>
     <loc>https://yanghaoi.github.io/2021/10/06/xxe-lou-dong-ji-chu/</loc>
     
-    <lastmod>2024-07-04</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://yanghaoi.github.io/2020/08/30/jian-dan-de-yuan-ma-mian-sha/</loc>
-    
-    <lastmod>2023-05-11</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://yanghaoi.github.io/2020/09/06/ji-yi-ci-jian-dan-de-win-ti-quan/</loc>
-    
-    <lastmod>2023-05-01</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://yanghaoi.github.io/2022/03/18/360-ge-chi-sha-xiang-tao-yi/</loc>
-    
-    <lastmod>2023-05-01</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://yanghaoi.github.io/2022/08/29/li-yong-azureattestservice-chi-jiu-hua/</loc>
-    
-    <lastmod>2022-08-29</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://yanghaoi.github.io/2022/03/28/windows-installer-an-zhuang-bao-de-gou-jian-he-zhi-xing/</loc>
-    
-    <lastmod>2022-06-02</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://yanghaoi.github.io/2021/10/09/redis-lou-dong-li-yong/</loc>
-    
-    <lastmod>2022-03-19</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://yanghaoi.github.io/2021/11/24/php-ren-yi-wen-jian-shang-chuan-rao-guo-duo-chong-xian-zhi/</loc>
-    
-    <lastmod>2021-12-30</lastmod>
+    <lastmod>2026-08-31</lastmod>
     
   </url>
   
   <url>
     <loc>https://yanghaoi.github.io/2021/10/05/webgoat-ba-chang-diao-shi-huan-jing-pei-zhi/</loc>
     
-    <lastmod>2021-11-25</lastmod>
+    <lastmod>2026-08-31</lastmod>
     
   </url>
   
   <url>
-    <loc>https://yanghaoi.github.io/2021/11/03/yi-ci-hsts-jing-gao-de-pai-cha/</loc>
+    <loc>https://yanghaoi.github.io/2026/08/31/cobaltstrike-liu-liang-yin-cang-yu-an-quan-pei-zhi/</loc>
     
-    <lastmod>2021-11-02</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://yanghaoi.github.io/2020/08/22/weblogic-iiop-fan-xu-lie-hua-lou-dong-cve-2020-2551-fu-xian/</loc>
-    
-    <lastmod>2021-11-02</lastmod>
+    <lastmod>2026-08-31</lastmod>
     
   </url>
   
   <url>
-    <loc>https://yanghaoi.github.io/2020/10/09/windows-ben-di-ti-quan-lou-dong-cve-2020-1313-fu-xian/</loc>
+    <loc>https://yanghaoi.github.io/2026/08/31/yi-ci-hsts-jing-gao-de-pai-cha/</loc>
     
-    <lastmod>2021-11-02</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://yanghaoi.github.io/2021/07/27/phpstudy-phpstorm-de-dai-ma-diao-shi-pei-zhi/</loc>
-    
-    <lastmod>2021-11-02</lastmod>
+    <lastmod>2026-08-31</lastmod>
     
   </url>
   
   <url>
-    <loc>https://yanghaoi.github.io/2021/10/07/ssrf-lou-dong-ji-chu/</loc>
+    <loc>https://yanghaoi.github.io/2026/08/31/weblogic-iiop-fan-xu-lie-hua-lou-dong-cve-2020-2551-fu-xian/</loc>
     
-    <lastmod>2021-10-18</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://yanghaoi.github.io/2021/08/19/cobaltstrike-liu-liang-yin-cang-yu-an-quan-pei-zhi/</loc>
-    
-    <lastmod>2021-09-06</lastmod>
+    <lastmod>2026-08-31</lastmod>
     
   </url>
   
   <url>
-    <loc>https://yanghaoi.github.io/2021/04/22/cobalt-strike-cha-jian-zhi-cve-2020-0796-ti-quan-jiao-ben-kai-fa/</loc>
+    <loc>https://yanghaoi.github.io/2026/08/31/jian-dan-de-yuan-ma-mian-sha/</loc>
     
-    <lastmod>2021-04-22</lastmod>
+    <lastmod>2026-08-31</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://yanghaoi.github.io/2026/08/31/ji-yi-ci-jian-dan-de-win-ti-quan/</loc>
+    
+    <lastmod>2026-08-31</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://yanghaoi.github.io/2026/08/31/360-ge-chi-sha-xiang-tao-yi/</loc>
+    
+    <lastmod>2026-08-31</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://yanghaoi.github.io/2026/08/31/li-yong-azureattestservice-chi-jiu-hua/</loc>
+    
+    <lastmod>2026-08-31</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://yanghaoi.github.io/2026/08/31/cobalt-strike-cha-jian-zhi-cve-2020-0796-ti-quan-jiao-ben-kai-fa/</loc>
+    
+    <lastmod>2026-08-31</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://yanghaoi.github.io/2026/08/31/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/</loc>
+    
+    <lastmod>2026-08-31</lastmod>
     
   </url>
   
@@ -214,20 +214,6 @@
   </url>
   
   <url>
-    <loc>https://yanghaoi.github.io/tags/PHPStorm%E8%B0%83%E8%AF%95/</loc>
-    <lastmod>2026-08-31</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://yanghaoi.github.io/tags/PHP%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/</loc>
-    <lastmod>2026-08-31</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://yanghaoi.github.io/tags/%E9%98%BF%E9%87%8C%E4%BA%91WAF%E7%BB%95%E8%BF%87/</loc>
     <lastmod>2026-08-31</lastmod>
     <changefreq>daily</changefreq>
@@ -236,6 +222,20 @@
   
   <url>
     <loc>https://yanghaoi.github.io/tags/PHP%E4%BA%8C%E6%AC%A1%E6%B8%B2%E6%9F%93%E7%BB%95%E8%BF%87/</loc>
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://yanghaoi.github.io/tags/PHPStorm%E8%B0%83%E8%AF%95/</loc>
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://yanghaoi.github.io/tags/PHP%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/</loc>
     <lastmod>2026-08-31</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -256,20 +256,6 @@
   </url>
   
   <url>
-    <loc>https://yanghaoi.github.io/tags/Proxy-Execution/</loc>
-    <lastmod>2026-08-31</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://yanghaoi.github.io/tags/Msiexec/</loc>
-    <lastmod>2026-08-31</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://yanghaoi.github.io/tags/weblogic%E6%BC%8F%E6%B4%9E/</loc>
     <lastmod>2026-08-31</lastmod>
     <changefreq>daily</changefreq>
@@ -278,6 +264,20 @@
   
   <url>
     <loc>https://yanghaoi.github.io/tags/IDEA%E7%BC%96%E8%AF%91/</loc>
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://yanghaoi.github.io/tags/Proxy-Execution/</loc>
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://yanghaoi.github.io/tags/Msiexec/</loc>
     <lastmod>2026-08-31</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
@@ -468,14 +468,14 @@
   </url>
   
   <url>
-    <loc>https://yanghaoi.github.io/categories/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/</loc>
+    <loc>https://yanghaoi.github.io/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/</loc>
     <lastmod>2026-08-31</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>https://yanghaoi.github.io/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/</loc>
+    <loc>https://yanghaoi.github.io/categories/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/</loc>
     <lastmod>2026-08-31</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>

@@ -6,7 +6,7 @@
   <link href="https://yanghaoi.github.io/atom.xml" rel="self"/>
   
   <link href="https://yanghaoi.github.io/"/>
-  <updated>2026-08-31T11:08:19.343Z</updated>
+  <updated>2026-08-31T11:48:22.567Z</updated>
   <id>https://yanghaoi.github.io/</id>
   
   <author>
@@ -17,38 +17,11 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>加固APK的AndroidManifest.xml修复方法总结</title>
-    <link href="https://yanghaoi.github.io/2026/08/31/jia-gu-apk-de-androidmanifest-xiu-fu-fang-fa-zong-jie/"/>
-    <id>https://yanghaoi.github.io/2026/08/31/jia-gu-apk-de-androidmanifest-xiu-fu-fang-fa-zong-jie/</id>
-    <published>2026-08-30T16:00:00.000Z</published>
-    <updated>2026-08-31T11:08:19.343Z</updated>
-    
-    
-    <summary type="html">分析加固APK中AndroidManifest.xml乱码的成因，整理aapt2、drozer、AXML字节修复三种方案的原理、操作和适用场景，附jadx自动修复插件，并给出选型建议。</summary>
-    
-    
-    
-    <category term="逆向分析" scheme="https://yanghaoi.github.io/categories/%E9%80%86%E5%90%91%E5%88%86%E6%9E%90/"/>
-    
-    
-    <category term="Android" scheme="https://yanghaoi.github.io/tags/Android/"/>
-    
-    <category term="加固" scheme="https://yanghaoi.github.io/tags/%E5%8A%A0%E5%9B%BA/"/>
-    
-    <category term="AXML" scheme="https://yanghaoi.github.io/tags/AXML/"/>
-    
-    <category term="drozer" scheme="https://yanghaoi.github.io/tags/drozer/"/>
-    
-    <category term="aapt2" scheme="https://yanghaoi.github.io/tags/aapt2/"/>
-    
-  </entry>
-  
-  <entry>
     <title>PHP filters和CVE-2024-2961组合:从文件读取到RCE</title>
-    <link href="https://yanghaoi.github.io/2024/12/04/phpfilters-he-cve-2024-2961-cong-wen-jian-du-qu-dao-rce/"/>
-    <id>https://yanghaoi.github.io/2024/12/04/phpfilters-he-cve-2024-2961-cong-wen-jian-du-qu-dao-rce/</id>
-    <published>2024-12-04T06:27:20.270Z</published>
-    <updated>2025-01-24T10:24:10.753Z</updated>
+    <link href="https://yanghaoi.github.io/2026/08/31/phpfilters-he-cve-2024-2961-cong-wen-jian-du-qu-dao-rce/"/>
+    <id>https://yanghaoi.github.io/2026/08/31/phpfilters-he-cve-2024-2961-cong-wen-jian-du-qu-dao-rce/</id>
+    <published>2026-08-31T11:48:22.567Z</published>
+    <updated>2026-08-31T11:48:22.567Z</updated>
     
     
       
@@ -69,165 +42,11 @@
   </entry>
   
   <entry>
-    <title>Fastjson反序列化漏洞复现</title>
-    <link href="https://yanghaoi.github.io/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/"/>
-    <id>https://yanghaoi.github.io/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/</id>
-    <published>2024-08-18T14:14:47.337Z</published>
-    <updated>2025-01-24T08:04:58.161Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;h2 id=&quot;0x01-简介&quot;&gt;&lt;a href=&quot;#0x01-简介&quot; class=&quot;headerlink&quot; title=&quot;0x01 简介&quot;&gt;&lt;/a&gt;0x01 简介&lt;/h2&gt;&lt;p&gt;Fastjson 是阿里巴巴开源的一个高性能 JSON 库，广泛应用于 Java 应用中进行</summary>
-        
-      
-    
-    
-    
-    <category term="漏洞复现" scheme="https://yanghaoi.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
-    
-    
-    <category term="Fastjson" scheme="https://yanghaoi.github.io/tags/Fastjson/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>利用Azure Attest Service持久化</title>
-    <link href="https://yanghaoi.github.io/2022/08/29/li-yong-azureattestservice-chi-jiu-hua/"/>
-    <id>https://yanghaoi.github.io/2022/08/29/li-yong-azureattestservice-chi-jiu-hua/</id>
-    <published>2022-08-29T00:57:32.220Z</published>
-    <updated>2022-08-29T02:48:32.111Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;h2 id=&quot;0x01-简介&quot;&gt;&lt;a href=&quot;#0x01-简介&quot; class=&quot;headerlink&quot; title=&quot;0x01 简介&quot;&gt;&lt;/a&gt;0x01 简介&lt;/h2&gt;&lt;p&gt;&lt;code&gt;AzureAttestService&lt;/code&gt;是安装&lt;code&gt;SQL</summary>
-        
-      
-    
-    
-    
-    <category term="权限维持" scheme="https://yanghaoi.github.io/categories/%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81/"/>
-    
-    
-    <category term="LOLBAS" scheme="https://yanghaoi.github.io/tags/LOLBAS/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Windows Installer安装包的构建和执行</title>
-    <link href="https://yanghaoi.github.io/2022/03/28/windows-installer-an-zhuang-bao-de-gou-jian-he-zhi-xing/"/>
-    <id>https://yanghaoi.github.io/2022/03/28/windows-installer-an-zhuang-bao-de-gou-jian-he-zhi-xing/</id>
-    <published>2022-03-28T12:12:43.906Z</published>
-    <updated>2022-06-02T09:46:46.623Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;h2 id=&quot;0x01-简介&quot;&gt;&lt;a href=&quot;#0x01-简介&quot; class=&quot;headerlink&quot; title=&quot;0x01 简介&quot;&gt;&lt;/a&gt;0x01 简介&lt;/h2&gt;&lt;p&gt;Msiexec是WIndows上从命令行执行Windows</summary>
-        
-      
-    
-    
-    
-    <category term="Defense Evasion" scheme="https://yanghaoi.github.io/categories/Defense-Evasion/"/>
-    
-    
-    <category term="Proxy Execution" scheme="https://yanghaoi.github.io/tags/Proxy-Execution/"/>
-    
-    <category term="Msiexec" scheme="https://yanghaoi.github.io/tags/Msiexec/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>360隔离沙箱逃逸</title>
-    <link href="https://yanghaoi.github.io/2022/03/18/360-ge-chi-sha-xiang-tao-yi/"/>
-    <id>https://yanghaoi.github.io/2022/03/18/360-ge-chi-sha-xiang-tao-yi/</id>
-    <published>2022-03-18T07:15:09.220Z</published>
-    <updated>2023-05-01T14:37:42.493Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;h2 id=&quot;0x01-简介&quot;&gt;&lt;a href=&quot;#0x01-简介&quot; class=&quot;headerlink&quot; title=&quot;0x01 简介&quot;&gt;&lt;/a&gt;0x01</summary>
-        
-      
-    
-    
-    
-    <category term="Defense Evasion" scheme="https://yanghaoi.github.io/categories/Defense-Evasion/"/>
-    
-    
-    <category term="沙箱逃逸" scheme="https://yanghaoi.github.io/tags/%E6%B2%99%E7%AE%B1%E9%80%83%E9%80%B8/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>通过 C++ 操作注册表禁用 Windows Defender</title>
-    <link href="https://yanghaoi.github.io/2022/03/07/tong-guo-c-cao-zuo-zhu-ce-biao-jin-yong-windows-defender/"/>
-    <id>https://yanghaoi.github.io/2022/03/07/tong-guo-c-cao-zuo-zhu-ce-biao-jin-yong-windows-defender/</id>
-    <published>2022-03-07T03:39:19.880Z</published>
-    <updated>2025-04-21T07:38:46.253Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;h2 id=&quot;0x01-简介&quot;&gt;&lt;a href=&quot;#0x01-简介&quot; class=&quot;headerlink&quot; title=&quot;0x01 简介&quot;&gt;&lt;/a&gt;0x01 简介&lt;/h2&gt;&lt;p&gt;最近整理文件，发现自己之前禁用&lt;code&gt;Windows</summary>
-        
-      
-    
-    
-    
-    <category term="安全工具" scheme="https://yanghaoi.github.io/categories/%E5%AE%89%E5%85%A8%E5%B7%A5%E5%85%B7/"/>
-    
-    
-    <category term="C++ 注册表操作" scheme="https://yanghaoi.github.io/tags/C-%E6%B3%A8%E5%86%8C%E8%A1%A8%E6%93%8D%E4%BD%9C/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>PHP任意文件上传绕过多重限制</title>
-    <link href="https://yanghaoi.github.io/2021/11/24/php-ren-yi-wen-jian-shang-chuan-rao-guo-duo-chong-xian-zhi/"/>
-    <id>https://yanghaoi.github.io/2021/11/24/php-ren-yi-wen-jian-shang-chuan-rao-guo-duo-chong-xian-zhi/</id>
-    <published>2021-11-24T02:46:26.349Z</published>
-    <updated>2021-12-30T08:43:05.073Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;h2 id=&quot;0x01-简介&quot;&gt;&lt;a href=&quot;#0x01-简介&quot; class=&quot;headerlink&quot; title=&quot;0x01 简介&quot;&gt;&lt;/a&gt;0x01</summary>
-        
-      
-    
-    
-    
-    <category term="渗透测试" scheme="https://yanghaoi.github.io/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
-    
-    
-    <category term="阿里云WAF绕过" scheme="https://yanghaoi.github.io/tags/%E9%98%BF%E9%87%8C%E4%BA%91WAF%E7%BB%95%E8%BF%87/"/>
-    
-    <category term="PHP二次渲染绕过" scheme="https://yanghaoi.github.io/tags/PHP%E4%BA%8C%E6%AC%A1%E6%B8%B2%E6%9F%93%E7%BB%95%E8%BF%87/"/>
-    
-  </entry>
-  
-  <entry>
     <title>DLL劫持漏洞</title>
-    <link href="https://yanghaoi.github.io/2021/11/18/dll-jie-chi-lou-dong/"/>
-    <id>https://yanghaoi.github.io/2021/11/18/dll-jie-chi-lou-dong/</id>
-    <published>2021-11-18T08:10:41.850Z</published>
-    <updated>2025-09-26T01:55:43.277Z</updated>
+    <link href="https://yanghaoi.github.io/2026/08/31/dll-jie-chi-lou-dong/"/>
+    <id>https://yanghaoi.github.io/2026/08/31/dll-jie-chi-lou-dong/</id>
+    <published>2026-08-31T11:47:29.808Z</published>
+    <updated>2026-08-31T11:47:29.808Z</updated>
     
     
       
@@ -248,145 +67,18 @@
   </entry>
   
   <entry>
-    <title>一次HSTS警告的排查</title>
-    <link href="https://yanghaoi.github.io/2021/11/03/yi-ci-hsts-jing-gao-de-pai-cha/"/>
-    <id>https://yanghaoi.github.io/2021/11/03/yi-ci-hsts-jing-gao-de-pai-cha/</id>
-    <published>2021-11-02T18:18:06.422Z</published>
-    <updated>2021-11-02T18:26:16.575Z</updated>
+    <title>通过 C++ 操作注册表禁用 Windows Defender</title>
+    <link href="https://yanghaoi.github.io/2026/08/31/tong-guo-c-cao-zuo-zhu-ce-biao-jin-yong-windows-defender/"/>
+    <id>https://yanghaoi.github.io/2026/08/31/tong-guo-c-cao-zuo-zhu-ce-biao-jin-yong-windows-defender/</id>
+    <published>2026-08-31T11:46:59.549Z</published>
+    <updated>2026-08-31T11:46:59.550Z</updated>
     
     
       
       
         
         
-    <summary type="html">&lt;p&gt;最近访问博客发现页面显示不正常，F12查看网络情况后发现cloudflare加载的静态资源出了问题，具体表现为浏览器出现HSTS警告，使用socks5代理时正常(使用socks5代理时，DNS查询也是用的socks5代理)：&lt;br&gt;&lt;img</summary>
-        
-      
-    
-    
-    
-    <category term="杂记" scheme="https://yanghaoi.github.io/categories/%E6%9D%82%E8%AE%B0/"/>
-    
-    
-    <category term="DNS解析配置" scheme="https://yanghaoi.github.io/tags/DNS%E8%A7%A3%E6%9E%90%E9%85%8D%E7%BD%AE/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Redis漏洞利用</title>
-    <link href="https://yanghaoi.github.io/2021/10/09/redis-lou-dong-li-yong/"/>
-    <id>https://yanghaoi.github.io/2021/10/09/redis-lou-dong-li-yong/</id>
-    <published>2021-10-09T10:56:39.491Z</published>
-    <updated>2022-03-19T22:03:44.454Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;h2 id=&quot;0x01-简介&quot;&gt;&lt;a href=&quot;#0x01-简介&quot; class=&quot;headerlink&quot; title=&quot;0x01 简介&quot;&gt;&lt;/a&gt;0x01 简介&lt;/h2&gt;&lt;p&gt;Redis</summary>
-        
-      
-    
-    
-    
-    <category term="漏洞利用" scheme="https://yanghaoi.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8/"/>
-    
-    
-    <category term="Redis漏洞利用" scheme="https://yanghaoi.github.io/tags/Redis%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>SSRF漏洞基础</title>
-    <link href="https://yanghaoi.github.io/2021/10/07/ssrf-lou-dong-ji-chu/"/>
-    <id>https://yanghaoi.github.io/2021/10/07/ssrf-lou-dong-ji-chu/</id>
-    <published>2021-10-06T17:16:12.129Z</published>
-    <updated>2021-10-18T09:46:39.162Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;h2 id=&quot;0x01-简介&quot;&gt;&lt;a href=&quot;#0x01-简介&quot; class=&quot;headerlink&quot; title=&quot;0x01 简介&quot;&gt;&lt;/a&gt;0x01 简介&lt;/h2&gt;&lt;p&gt;SSRF(Server-side request forgery，服务端跨站请求伪造)是一种</summary>
-        
-      
-    
-    
-    
-    <category term="基础漏洞" scheme="https://yanghaoi.github.io/categories/%E5%9F%BA%E7%A1%80%E6%BC%8F%E6%B4%9E/"/>
-    
-    
-    <category term="SSRF漏洞" scheme="https://yanghaoi.github.io/tags/SSRF%E6%BC%8F%E6%B4%9E/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>XXE漏洞基础</title>
-    <link href="https://yanghaoi.github.io/2021/10/06/xxe-lou-dong-ji-chu/"/>
-    <id>https://yanghaoi.github.io/2021/10/06/xxe-lou-dong-ji-chu/</id>
-    <published>2021-10-06T13:52:05.000Z</published>
-    <updated>2024-07-04T04:59:32.640Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;h2 id=&quot;0x01-前言&quot;&gt;&lt;a href=&quot;#0x01-前言&quot; class=&quot;headerlink&quot; title=&quot;0x01 前言&quot;&gt;&lt;/a&gt;0x01</summary>
-        
-      
-    
-    
-    
-    <category term="基础漏洞" scheme="https://yanghaoi.github.io/categories/%E5%9F%BA%E7%A1%80%E6%BC%8F%E6%B4%9E/"/>
-    
-    
-    <category term="XXE漏洞" scheme="https://yanghaoi.github.io/tags/XXE%E6%BC%8F%E6%B4%9E/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Webgoat靶场调试环境配置</title>
-    <link href="https://yanghaoi.github.io/2021/10/05/webgoat-ba-chang-diao-shi-huan-jing-pei-zhi/"/>
-    <id>https://yanghaoi.github.io/2021/10/05/webgoat-ba-chang-diao-shi-huan-jing-pei-zhi/</id>
-    <published>2021-10-05T13:52:05.000Z</published>
-    <updated>2021-11-25T02:49:43.593Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;h2 id=&quot;0x01-简介&quot;&gt;&lt;a href=&quot;#0x01-简介&quot; class=&quot;headerlink&quot; title=&quot;0x01 简介&quot;&gt;&lt;/a&gt;0x01 简介&lt;/h2&gt;&lt;p&gt;选择&lt;a</summary>
-        
-      
-    
-    
-    
-    <category term="靶场环境" scheme="https://yanghaoi.github.io/categories/%E9%9D%B6%E5%9C%BA%E7%8E%AF%E5%A2%83/"/>
-    
-    
-    <category term="IDEA" scheme="https://yanghaoi.github.io/tags/IDEA/"/>
-    
-    <category term="Webgoat" scheme="https://yanghaoi.github.io/tags/Webgoat/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>CobaltStrike流量伪装与安全配置</title>
-    <link href="https://yanghaoi.github.io/2021/08/19/cobaltstrike-liu-liang-yin-cang-yu-an-quan-pei-zhi/"/>
-    <id>https://yanghaoi.github.io/2021/08/19/cobaltstrike-liu-liang-yin-cang-yu-an-quan-pei-zhi/</id>
-    <published>2021-08-18T18:06:24.926Z</published>
-    <updated>2021-09-06T12:44:17.573Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;h2 id=&quot;0x01-前言&quot;&gt;&lt;a href=&quot;#0x01-前言&quot; class=&quot;headerlink&quot; title=&quot;0x01 前言&quot;&gt;&lt;/a&gt;0x01</summary>
+    <summary type="html">&lt;h2 id=&quot;0x01-简介&quot;&gt;&lt;a href=&quot;#0x01-简介&quot; class=&quot;headerlink&quot; title=&quot;0x01 简介&quot;&gt;&lt;/a&gt;0x01 简介&lt;/h2&gt;&lt;p&gt;最近整理文件，发现自己之前禁用&lt;code&gt;Windows</summary>
         
       
     
@@ -395,72 +87,43 @@
     <category term="安全工具" scheme="https://yanghaoi.github.io/categories/%E5%AE%89%E5%85%A8%E5%B7%A5%E5%85%B7/"/>
     
     
-    <category term="CobaltStrike" scheme="https://yanghaoi.github.io/tags/CobaltStrike/"/>
-    
-    <category term="流量伪装" scheme="https://yanghaoi.github.io/tags/%E6%B5%81%E9%87%8F%E4%BC%AA%E8%A3%85/"/>
+    <category term="C++ 注册表操作" scheme="https://yanghaoi.github.io/tags/C-%E6%B3%A8%E5%86%8C%E8%A1%A8%E6%93%8D%E4%BD%9C/"/>
     
   </entry>
   
   <entry>
-    <title>PHPStorm+PHPStudy调试配置</title>
-    <link href="https://yanghaoi.github.io/2021/07/27/phpstudy-phpstorm-de-dai-ma-diao-shi-pei-zhi/"/>
-    <id>https://yanghaoi.github.io/2021/07/27/phpstudy-phpstorm-de-dai-ma-diao-shi-pei-zhi/</id>
-    <published>2021-07-27T11:25:05.292Z</published>
-    <updated>2021-11-02T18:19:37.727Z</updated>
+    <title>Windows Installer安装包的构建和执行</title>
+    <link href="https://yanghaoi.github.io/2026/08/31/windows-installer-an-zhuang-bao-de-gou-jian-he-zhi-xing/"/>
+    <id>https://yanghaoi.github.io/2026/08/31/windows-installer-an-zhuang-bao-de-gou-jian-he-zhi-xing/</id>
+    <published>2026-08-31T11:46:10.613Z</published>
+    <updated>2026-08-31T11:46:10.613Z</updated>
     
     
       
       
         
         
-    <summary type="html">&lt;h2 id=&quot;0x01-简述&quot;&gt;&lt;a href=&quot;#0x01-简述&quot; class=&quot;headerlink&quot; title=&quot;0x01 简述&quot;&gt;&lt;/a&gt;0x01</summary>
+    <summary type="html">&lt;h2 id=&quot;0x01-简介&quot;&gt;&lt;a href=&quot;#0x01-简介&quot; class=&quot;headerlink&quot; title=&quot;0x01 简介&quot;&gt;&lt;/a&gt;0x01 简介&lt;/h2&gt;&lt;p&gt;Msiexec是Windows上从命令行执行Windows</summary>
         
       
     
     
     
-    <category term="代码审计" scheme="https://yanghaoi.github.io/categories/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/"/>
+    <category term="Defense Evasion" scheme="https://yanghaoi.github.io/categories/Defense-Evasion/"/>
     
     
-    <category term="PHPStorm调试" scheme="https://yanghaoi.github.io/tags/PHPStorm%E8%B0%83%E8%AF%95/"/>
+    <category term="Proxy Execution" scheme="https://yanghaoi.github.io/tags/Proxy-Execution/"/>
     
-    <category term="PHP代码审计" scheme="https://yanghaoi.github.io/tags/PHP%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Cobalt Strike插件之CVE-2020-0796提权脚本开发</title>
-    <link href="https://yanghaoi.github.io/2021/04/22/cobalt-strike-cha-jian-zhi-cve-2020-0796-ti-quan-jiao-ben-kai-fa/"/>
-    <id>https://yanghaoi.github.io/2021/04/22/cobalt-strike-cha-jian-zhi-cve-2020-0796-ti-quan-jiao-ben-kai-fa/</id>
-    <published>2021-04-22T14:41:13.080Z</published>
-    <updated>2021-04-22T15:21:56.503Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;h2 id=&quot;0x00-前言&quot;&gt;&lt;a href=&quot;#0x00-前言&quot; class=&quot;headerlink&quot; title=&quot;0x00 前言&quot;&gt;&lt;/a&gt;0x00 前言&lt;/h2&gt;&lt;p&gt;CVE-2020-0796(Windows SMBv3 Client/Server Remote</summary>
-        
-      
-    
-    
-    
-    <category term="安全工具" scheme="https://yanghaoi.github.io/categories/%E5%AE%89%E5%85%A8%E5%B7%A5%E5%85%B7/"/>
-    
-    
-    <category term="CVE-2020-0796" scheme="https://yanghaoi.github.io/tags/CVE-2020-0796/"/>
-    
-    <category term="Cobalt Strike" scheme="https://yanghaoi.github.io/tags/Cobalt-Strike/"/>
+    <category term="Msiexec" scheme="https://yanghaoi.github.io/tags/Msiexec/"/>
     
   </entry>
   
   <entry>
     <title>Windows本地提权漏洞CVE-2020-1313复现</title>
-    <link href="https://yanghaoi.github.io/2020/10/09/windows-ben-di-ti-quan-lou-dong-cve-2020-1313-fu-xian/"/>
-    <id>https://yanghaoi.github.io/2020/10/09/windows-ben-di-ti-quan-lou-dong-cve-2020-1313-fu-xian/</id>
-    <published>2020-10-09T08:14:44.972Z</published>
-    <updated>2021-11-02T18:21:22.654Z</updated>
+    <link href="https://yanghaoi.github.io/2026/08/31/windows-ben-di-ti-quan-lou-dong-cve-2020-1313-fu-xian/"/>
+    <id>https://yanghaoi.github.io/2026/08/31/windows-ben-di-ti-quan-lou-dong-cve-2020-1313-fu-xian/</id>
+    <published>2026-08-31T11:45:18.398Z</published>
+    <updated>2026-08-31T11:45:18.398Z</updated>
     
     
       
@@ -485,11 +148,224 @@
   </entry>
   
   <entry>
+    <title>PHPStorm+PHPStudy调试配置</title>
+    <link href="https://yanghaoi.github.io/2026/08/31/phpstudy-phpstorm-de-dai-ma-diao-shi-pei-zhi/"/>
+    <id>https://yanghaoi.github.io/2026/08/31/phpstudy-phpstorm-de-dai-ma-diao-shi-pei-zhi/</id>
+    <published>2026-08-31T11:45:15.417Z</published>
+    <updated>2026-08-31T11:45:15.418Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;0x01-简述&quot;&gt;&lt;a href=&quot;#0x01-简述&quot; class=&quot;headerlink&quot; title=&quot;0x01 简述&quot;&gt;&lt;/a&gt;0x01</summary>
+        
+      
+    
+    
+    
+    <category term="代码审计" scheme="https://yanghaoi.github.io/categories/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/"/>
+    
+    
+    <category term="PHPStorm调试" scheme="https://yanghaoi.github.io/tags/PHPStorm%E8%B0%83%E8%AF%95/"/>
+    
+    <category term="PHP代码审计" scheme="https://yanghaoi.github.io/tags/PHP%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Redis漏洞利用</title>
+    <link href="https://yanghaoi.github.io/2026/08/31/redis-lou-dong-li-yong/"/>
+    <id>https://yanghaoi.github.io/2026/08/31/redis-lou-dong-li-yong/</id>
+    <published>2026-08-31T11:45:01.232Z</published>
+    <updated>2026-08-31T11:45:01.233Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;0x01-简介&quot;&gt;&lt;a href=&quot;#0x01-简介&quot; class=&quot;headerlink&quot; title=&quot;0x01 简介&quot;&gt;&lt;/a&gt;0x01 简介&lt;/h2&gt;&lt;p&gt;Redis</summary>
+        
+      
+    
+    
+    
+    <category term="漏洞利用" scheme="https://yanghaoi.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8/"/>
+    
+    
+    <category term="Redis漏洞利用" scheme="https://yanghaoi.github.io/tags/Redis%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>SSRF漏洞基础</title>
+    <link href="https://yanghaoi.github.io/2026/08/31/ssrf-lou-dong-ji-chu/"/>
+    <id>https://yanghaoi.github.io/2026/08/31/ssrf-lou-dong-ji-chu/</id>
+    <published>2026-08-31T11:44:47.909Z</published>
+    <updated>2026-08-31T11:44:47.910Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;0x01-简介&quot;&gt;&lt;a href=&quot;#0x01-简介&quot; class=&quot;headerlink&quot; title=&quot;0x01 简介&quot;&gt;&lt;/a&gt;0x01 简介&lt;/h2&gt;&lt;p&gt;SSRF(Server-side request forgery，服务端请求伪造)是一种 Web</summary>
+        
+      
+    
+    
+    
+    <category term="基础漏洞" scheme="https://yanghaoi.github.io/categories/%E5%9F%BA%E7%A1%80%E6%BC%8F%E6%B4%9E/"/>
+    
+    
+    <category term="SSRF漏洞" scheme="https://yanghaoi.github.io/tags/SSRF%E6%BC%8F%E6%B4%9E/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>PHP任意文件上传绕过多重限制</title>
+    <link href="https://yanghaoi.github.io/2026/08/31/php-ren-yi-wen-jian-shang-chuan-rao-guo-duo-chong-xian-zhi/"/>
+    <id>https://yanghaoi.github.io/2026/08/31/php-ren-yi-wen-jian-shang-chuan-rao-guo-duo-chong-xian-zhi/</id>
+    <published>2026-08-31T11:44:15.258Z</published>
+    <updated>2026-08-31T11:44:15.258Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;0x01-简介&quot;&gt;&lt;a href=&quot;#0x01-简介&quot; class=&quot;headerlink&quot; title=&quot;0x01 简介&quot;&gt;&lt;/a&gt;0x01</summary>
+        
+      
+    
+    
+    
+    <category term="渗透测试" scheme="https://yanghaoi.github.io/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"/>
+    
+    
+    <category term="阿里云WAF绕过" scheme="https://yanghaoi.github.io/tags/%E9%98%BF%E9%87%8C%E4%BA%91WAF%E7%BB%95%E8%BF%87/"/>
+    
+    <category term="PHP二次渲染绕过" scheme="https://yanghaoi.github.io/tags/PHP%E4%BA%8C%E6%AC%A1%E6%B8%B2%E6%9F%93%E7%BB%95%E8%BF%87/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>CobaltStrike流量伪装与安全配置</title>
+    <link href="https://yanghaoi.github.io/2026/08/31/cobaltstrike-liu-liang-yin-cang-yu-an-quan-pei-zhi/"/>
+    <id>https://yanghaoi.github.io/2026/08/31/cobaltstrike-liu-liang-yin-cang-yu-an-quan-pei-zhi/</id>
+    <published>2026-08-31T11:43:58.534Z</published>
+    <updated>2026-08-31T11:43:58.534Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;0x01-前言&quot;&gt;&lt;a href=&quot;#0x01-前言&quot; class=&quot;headerlink&quot; title=&quot;0x01 前言&quot;&gt;&lt;/a&gt;0x01</summary>
+        
+      
+    
+    
+    
+    <category term="安全工具" scheme="https://yanghaoi.github.io/categories/%E5%AE%89%E5%85%A8%E5%B7%A5%E5%85%B7/"/>
+    
+    
+    <category term="CobaltStrike" scheme="https://yanghaoi.github.io/tags/CobaltStrike/"/>
+    
+    <category term="流量伪装" scheme="https://yanghaoi.github.io/tags/%E6%B5%81%E9%87%8F%E4%BC%AA%E8%A3%85/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>一次HSTS警告的排查</title>
+    <link href="https://yanghaoi.github.io/2026/08/31/yi-ci-hsts-jing-gao-de-pai-cha/"/>
+    <id>https://yanghaoi.github.io/2026/08/31/yi-ci-hsts-jing-gao-de-pai-cha/</id>
+    <published>2026-08-31T11:43:52.744Z</published>
+    <updated>2026-08-31T11:43:52.744Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;最近访问博客发现页面显示不正常，F12查看网络情况后发现cloudflare加载的静态资源出了问题，具体表现为浏览器出现HSTS警告，使用socks5代理时正常(使用socks5代理时，DNS查询也是用的socks5代理)：&lt;br&gt;&lt;img</summary>
+        
+      
+    
+    
+    
+    <category term="杂记" scheme="https://yanghaoi.github.io/categories/%E6%9D%82%E8%AE%B0/"/>
+    
+    
+    <category term="DNS解析配置" scheme="https://yanghaoi.github.io/tags/DNS%E8%A7%A3%E6%9E%90%E9%85%8D%E7%BD%AE/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Weblogic IIOP反序列化漏洞CVE-2020-2551复现</title>
+    <link href="https://yanghaoi.github.io/2026/08/31/weblogic-iiop-fan-xu-lie-hua-lou-dong-cve-2020-2551-fu-xian/"/>
+    <id>https://yanghaoi.github.io/2026/08/31/weblogic-iiop-fan-xu-lie-hua-lou-dong-cve-2020-2551-fu-xian/</id>
+    <published>2026-08-31T11:43:50.187Z</published>
+    <updated>2026-08-31T11:43:50.188Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h4 id=&quot;1-前言&quot;&gt;&lt;a href=&quot;#1-前言&quot; class=&quot;headerlink&quot; title=&quot;1. 前言&quot;&gt;&lt;/a&gt;1. 前言&lt;/h4&gt;&lt;blockquote&gt;
+&lt;p&gt;2020年1月15日, Oracle官方发布了Weblogic</summary>
+        
+      
+    
+    
+    
+    <category term="漏洞复现" scheme="https://yanghaoi.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
+    
+    
+    <category term="weblogic漏洞" scheme="https://yanghaoi.github.io/tags/weblogic%E6%BC%8F%E6%B4%9E/"/>
+    
+    <category term="IDEA编译" scheme="https://yanghaoi.github.io/tags/IDEA%E7%BC%96%E8%AF%91/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>简单的源码免杀</title>
+    <link href="https://yanghaoi.github.io/2026/08/31/jian-dan-de-yuan-ma-mian-sha/"/>
+    <id>https://yanghaoi.github.io/2026/08/31/jian-dan-de-yuan-ma-mian-sha/</id>
+    <published>2026-08-31T11:43:44.200Z</published>
+    <updated>2026-08-31T11:43:44.201Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h4 id=&quot;1-前言&quot;&gt;&lt;a href=&quot;#1-前言&quot; class=&quot;headerlink&quot; title=&quot;1. 前言&quot;&gt;&lt;/a&gt;1.</summary>
+        
+      
+    
+    
+    
+    <category term="网络攻防" scheme="https://yanghaoi.github.io/categories/%E7%BD%91%E7%BB%9C%E6%94%BB%E9%98%B2/"/>
+    
+    
+    <category term="msfvenom免杀" scheme="https://yanghaoi.github.io/tags/msfvenom%E5%85%8D%E6%9D%80/"/>
+    
+    <category term="C语言免杀" scheme="https://yanghaoi.github.io/tags/C%E8%AF%AD%E8%A8%80%E5%85%8D%E6%9D%80/"/>
+    
+    <category term="隐藏程序窗口" scheme="https://yanghaoi.github.io/tags/%E9%9A%90%E8%97%8F%E7%A8%8B%E5%BA%8F%E7%AA%97%E5%8F%A3/"/>
+    
+  </entry>
+  
+  <entry>
     <title>记一次简单的win提权</title>
-    <link href="https://yanghaoi.github.io/2020/09/06/ji-yi-ci-jian-dan-de-win-ti-quan/"/>
-    <id>https://yanghaoi.github.io/2020/09/06/ji-yi-ci-jian-dan-de-win-ti-quan/</id>
-    <published>2020-09-06T06:32:24.637Z</published>
-    <updated>2023-05-01T14:38:10.342Z</updated>
+    <link href="https://yanghaoi.github.io/2026/08/31/ji-yi-ci-jian-dan-de-win-ti-quan/"/>
+    <id>https://yanghaoi.github.io/2026/08/31/ji-yi-ci-jian-dan-de-win-ti-quan/</id>
+    <published>2026-08-31T11:43:44.187Z</published>
+    <updated>2026-08-31T11:43:44.187Z</updated>
     
     
       
@@ -512,31 +388,156 @@
   </entry>
   
   <entry>
-    <title>简单的源码免杀</title>
-    <link href="https://yanghaoi.github.io/2020/08/30/jian-dan-de-yuan-ma-mian-sha/"/>
-    <id>https://yanghaoi.github.io/2020/08/30/jian-dan-de-yuan-ma-mian-sha/</id>
-    <published>2020-08-30T05:49:04.297Z</published>
-    <updated>2023-05-11T07:37:33.142Z</updated>
+    <title>360隔离沙箱逃逸</title>
+    <link href="https://yanghaoi.github.io/2026/08/31/360-ge-chi-sha-xiang-tao-yi/"/>
+    <id>https://yanghaoi.github.io/2026/08/31/360-ge-chi-sha-xiang-tao-yi/</id>
+    <published>2026-08-31T11:43:44.149Z</published>
+    <updated>2026-08-31T11:43:44.149Z</updated>
     
     
       
       
         
         
-    <summary type="html">&lt;h4 id=&quot;1-前言&quot;&gt;&lt;a href=&quot;#1-前言&quot; class=&quot;headerlink&quot; title=&quot;1. 前言&quot;&gt;&lt;/a&gt;1.</summary>
+    <summary type="html">&lt;h2 id=&quot;0x01-简介&quot;&gt;&lt;a href=&quot;#0x01-简介&quot; class=&quot;headerlink&quot; title=&quot;0x01 简介&quot;&gt;&lt;/a&gt;0x01</summary>
         
       
     
     
     
-    <category term="网络攻防" scheme="https://yanghaoi.github.io/categories/%E7%BD%91%E7%BB%9C%E6%94%BB%E9%98%B2/"/>
+    <category term="Defense Evasion" scheme="https://yanghaoi.github.io/categories/Defense-Evasion/"/>
     
     
-    <category term="msfvenom免杀" scheme="https://yanghaoi.github.io/tags/msfvenom%E5%85%8D%E6%9D%80/"/>
+    <category term="沙箱逃逸" scheme="https://yanghaoi.github.io/tags/%E6%B2%99%E7%AE%B1%E9%80%83%E9%80%B8/"/>
     
-    <category term="C语言免杀" scheme="https://yanghaoi.github.io/tags/C%E8%AF%AD%E8%A8%80%E5%85%8D%E6%9D%80/"/>
+  </entry>
+  
+  <entry>
+    <title>利用Azure Attest Service持久化</title>
+    <link href="https://yanghaoi.github.io/2026/08/31/li-yong-azureattestservice-chi-jiu-hua/"/>
+    <id>https://yanghaoi.github.io/2026/08/31/li-yong-azureattestservice-chi-jiu-hua/</id>
+    <published>2026-08-31T11:43:32.716Z</published>
+    <updated>2026-08-31T11:43:32.716Z</updated>
     
-    <category term="隐藏程序窗口" scheme="https://yanghaoi.github.io/tags/%E9%9A%90%E8%97%8F%E7%A8%8B%E5%BA%8F%E7%AA%97%E5%8F%A3/"/>
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;0x01-简介&quot;&gt;&lt;a href=&quot;#0x01-简介&quot; class=&quot;headerlink&quot; title=&quot;0x01 简介&quot;&gt;&lt;/a&gt;0x01 简介&lt;/h2&gt;&lt;p&gt;&lt;code&gt;AzureAttestService&lt;/code&gt;是安装&lt;code&gt;SQL</summary>
+        
+      
+    
+    
+    
+    <category term="权限维持" scheme="https://yanghaoi.github.io/categories/%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81/"/>
+    
+    
+    <category term="LOLBAS" scheme="https://yanghaoi.github.io/tags/LOLBAS/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Cobalt Strike插件之CVE-2020-0796提权脚本开发</title>
+    <link href="https://yanghaoi.github.io/2026/08/31/cobalt-strike-cha-jian-zhi-cve-2020-0796-ti-quan-jiao-ben-kai-fa/"/>
+    <id>https://yanghaoi.github.io/2026/08/31/cobalt-strike-cha-jian-zhi-cve-2020-0796-ti-quan-jiao-ben-kai-fa/</id>
+    <published>2026-08-31T11:41:34.708Z</published>
+    <updated>2026-08-31T11:41:34.709Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;0x00-前言&quot;&gt;&lt;a href=&quot;#0x00-前言&quot; class=&quot;headerlink&quot; title=&quot;0x00 前言&quot;&gt;&lt;/a&gt;0x00 前言&lt;/h2&gt;&lt;p&gt;CVE-2020-0796(Windows SMBv3 Client/Server Remote</summary>
+        
+      
+    
+    
+    
+    <category term="安全工具" scheme="https://yanghaoi.github.io/categories/%E5%AE%89%E5%85%A8%E5%B7%A5%E5%85%B7/"/>
+    
+    
+    <category term="CVE-2020-0796" scheme="https://yanghaoi.github.io/tags/CVE-2020-0796/"/>
+    
+    <category term="Cobalt Strike" scheme="https://yanghaoi.github.io/tags/Cobalt-Strike/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Fastjson反序列化漏洞复现</title>
+    <link href="https://yanghaoi.github.io/2026/08/31/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/"/>
+    <id>https://yanghaoi.github.io/2026/08/31/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/</id>
+    <published>2026-08-31T11:41:12.039Z</published>
+    <updated>2026-08-31T11:41:12.040Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;0x01-简介&quot;&gt;&lt;a href=&quot;#0x01-简介&quot; class=&quot;headerlink&quot; title=&quot;0x01 简介&quot;&gt;&lt;/a&gt;0x01 简介&lt;/h2&gt;&lt;p&gt;Fastjson 是阿里巴巴开源的一个高性能 JSON 库，广泛应用于 Java 应用中进行</summary>
+        
+      
+    
+    
+    
+    <category term="漏洞复现" scheme="https://yanghaoi.github.io/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
+    
+    
+    <category term="Fastjson" scheme="https://yanghaoi.github.io/tags/Fastjson/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>加固APK的AndroidManifest.xml修复方法总结</title>
+    <link href="https://yanghaoi.github.io/2026/08/31/jia-gu-apk-de-androidmanifest-xiu-fu-fang-fa-zong-jie/"/>
+    <id>https://yanghaoi.github.io/2026/08/31/jia-gu-apk-de-androidmanifest-xiu-fu-fang-fa-zong-jie/</id>
+    <published>2026-08-30T16:00:00.000Z</published>
+    <updated>2026-08-31T11:47:36.301Z</updated>
+    
+    
+    <summary type="html">分析加固APK中AndroidManifest.xml乱码的成因，整理aapt2、drozer、AXML字节修复三种方案的原理、操作和适用场景，附jadx自动修复插件，并给出选型建议。</summary>
+    
+    
+    
+    <category term="逆向分析" scheme="https://yanghaoi.github.io/categories/%E9%80%86%E5%90%91%E5%88%86%E6%9E%90/"/>
+    
+    
+    <category term="Android" scheme="https://yanghaoi.github.io/tags/Android/"/>
+    
+    <category term="加固" scheme="https://yanghaoi.github.io/tags/%E5%8A%A0%E5%9B%BA/"/>
+    
+    <category term="AXML" scheme="https://yanghaoi.github.io/tags/AXML/"/>
+    
+    <category term="drozer" scheme="https://yanghaoi.github.io/tags/drozer/"/>
+    
+    <category term="aapt2" scheme="https://yanghaoi.github.io/tags/aapt2/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>XXE漏洞基础</title>
+    <link href="https://yanghaoi.github.io/2021/10/06/xxe-lou-dong-ji-chu/"/>
+    <id>https://yanghaoi.github.io/2021/10/06/xxe-lou-dong-ji-chu/</id>
+    <published>2021-10-06T13:52:05.000Z</published>
+    <updated>2026-08-31T11:44:11.249Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;0x01-前言&quot;&gt;&lt;a href=&quot;#0x01-前言&quot; class=&quot;headerlink&quot; title=&quot;0x01 前言&quot;&gt;&lt;/a&gt;0x01</summary>
+        
+      
+    
+    
+    
+    <category term="基础漏洞" scheme="https://yanghaoi.github.io/categories/%E5%9F%BA%E7%A1%80%E6%BC%8F%E6%B4%9E/"/>
+    
+    
+    <category term="XXE漏洞" scheme="https://yanghaoi.github.io/tags/XXE%E6%BC%8F%E6%B4%9E/"/>
     
   </entry>
   

