@@ -1156,7 +1156,7 @@ shell&gt;net start wpscloudsvr
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">87.3k</span>&nbsp;字
+                class="white-color">87.2k</span>&nbsp;字
             
             
             
@@ -1322,7 +1322,30 @@ $(function () {
 
     
     
-    <script async src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/others/busuanzi.pure.mini.js"></script>
+    <!--
+      不蒜子计数：原写法是 <script async src="...">。async 脚本同样会挂住 window.load，
+      一旦 busuanzi.ibruce.info 卡住，页面就一直转圈、Network 里那条请求长期 pending。
+      改成：先隐藏计数 → 等 load 之后再动态插入脚本 → 成功才由脚本自己显示出来。
+      这样页面加载完全不受第三方接口影响；接口不通时保持隐藏，不会留一个空标签。
+    -->
+    <script>
+        (function () {
+            var src = 'https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/others/busuanzi.pure.mini.js';
+            var keys = ['site_pv', 'page_pv', 'site_uv'];
+            keys.forEach(function (k) {
+                var el = document.getElementById('busuanzi_container_' + k);
+                if (el) { el.style.display = 'none'; }
+            });
+            function start() {
+                var s = document.createElement('script');
+                s.src = src;
+                s.async = true;
+                document.head.appendChild(s);
+            }
+            if (document.readyState === 'complete') { start(); }
+            else { window.addEventListener('load', start); }
+        })();
+    </script>
     
 
     
