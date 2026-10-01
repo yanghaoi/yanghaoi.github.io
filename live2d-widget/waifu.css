@@ -23,6 +23,8 @@
 }
 
 #waifu {
+	/* 看板娘等比缩放：只改这一个值即可（原版为 1，即 300x300）。0.8 = 240x240 */
+	--waifu-zoom: 0.8;
 	bottom: -1000px;
 	left: 0;
 	line-height: 0;
@@ -43,17 +45,18 @@
 	border: 1px solid rgba(224, 186, 140, .62);
 	border-radius: 12px;
 	box-shadow: 0 3px 15px 2px rgba(191, 158, 118, .2);
+	/* 字号与行高保持不变以保证可读性，只让气泡的占位跟着缩放比走 */
 	font-size: 14px;
 	line-height: 24px;
-	margin: -30px 20px;
-	min-height: 70px;
+	margin: calc(-30px * var(--waifu-zoom)) calc(20px * var(--waifu-zoom));
+	min-height: calc(70px * var(--waifu-zoom));
 	opacity: 0;
 	overflow: hidden;
-	padding: 5px 10px;
+	padding: calc(5px * var(--waifu-zoom)) calc(10px * var(--waifu-zoom));
 	position: absolute;
 	text-overflow: ellipsis;
 	transition: opacity 1s;
-	width: 250px;
+	width: calc(250px * var(--waifu-zoom));
 	word-break: break-all;
 }
 
@@ -68,9 +71,9 @@
 
 #waifu #live2d {
 	cursor: grab;
-	height: 300px;
+	height: calc(300px * var(--waifu-zoom));
 	position: relative;
-	width: 300px;
+	width: calc(300px * var(--waifu-zoom));
 }
 
 #waifu #live2d:active {
@@ -81,8 +84,11 @@
 	color: #aaa;
 	opacity: 0;
 	position: absolute;
-	right: -10px;
-	top: 70px;
+	right: calc(-10px * var(--waifu-zoom));
+	top: calc(70px * var(--waifu-zoom));
+	/* 图标与间距一起等比缩放，避免缩小后按钮显得过大 */
+	transform: scale(var(--waifu-zoom));
+	transform-origin: right top;
 	transition: opacity 1s;
 }
 
