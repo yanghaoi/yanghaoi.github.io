@@ -1100,7 +1100,7 @@ release\peres.exe --help               :: 查看全部选项
 <pre><code class="line-numbers language-text">*.bat text eol=crlf
 </code></pre>
 <p>工具链不做任何探测，脚本里直接调用 PATH 上的 <code>gcc</code>——编译环境由使用者自行准备。</p>
-<h3 id="10-6-peview-查看器：从-Python-到-C"><a href="#10-6-peview-查看器：从-Python-到-C" class="headerlink" title="10.6 peview 查看器：从 Python 到 C"></a>10.6 peview 查看器：从 Python 到 C</h3><p>开发过程中曾用 6 个 Python 脚本做验证（<code>dump_pe.py</code> / <code>list_res.py</code> / <code>enum_res.py</code> / <code>dir_dump.py</code> / <code>scan_sig.py</code> / <code>peinfo.py</code>）。最终将这些功能集成为一个 C + Win32 API + 无 CRT 的原生 GUI 程序 <code>peview.exe</code>，复用 <code>common/util.c</code> 与 <code>common/buffer.c</code> 基建，不再依赖 Python 运行时。</p>
+<h3 id="10-6-peview-查看器移植到-C"><a href="#10-6-peview-查看器移植到-C" class="headerlink" title="10.6 peview 查看器移植到 C"></a>10.6 peview 查看器移植到 C</h3><p>开发过程中曾用 6 个 Python 脚本做验证（<code>dump_pe.py</code> / <code>list_res.py</code> / <code>enum_res.py</code> / <code>dir_dump.py</code> / <code>scan_sig.py</code> / <code>peinfo.py</code>）。最终将这些功能集成为一个 C + Win32 API + 无 CRT 的原生 GUI 程序 <code>peview.exe</code>，复用 <code>common/util.c</code> 与 <code>common/buffer.c</code> 基建，不再依赖 Python 运行时。</p>
 <table>
 <thead>
 <tr>
@@ -1336,7 +1336,7 @@ release\peres.exe --help               :: 查看全部选项
 </tr>
 </tbody></table>
 <p>回归验证：gcc -O2 零警告编译；对真实样本执行全流程注入，读回校验 <code>\StringFileInfo\040904B0\CompanyName</code> 正确；<code>peinfo</code> 复核输出 PE 的 <code>.rsrc</code> 节与资源目录结构正常。</p>
-<h2 id="15-附录-B：多模块拆分与-peview-集成"><a href="#15-附录-B：多模块拆分与-peview-集成" class="headerlink" title="15 附录 B：多模块拆分与 peview 集成"></a>15 附录 B：多模块拆分与 peview 集成</h2><p>（2026-10-01）两部分改动：把单文件的 <code>peres.c</code> 拆成多模块工程，并把 6 个 Python 验证脚本集成为 C 原生程序。</p>
+<h2 id="15-附录-B-多模块化与-peview-集成"><a href="#15-附录-B-多模块化与-peview-集成" class="headerlink" title="15 附录 B 多模块化与 peview 集成"></a>15 附录 B 多模块化与 peview 集成</h2><p>（2026-10-01）两部分改动：把单文件的 <code>peres.c</code> 拆成多模块工程，并把 6 个 Python 验证脚本集成为 C 原生程序。</p>
 <h3 id="15-1-peres-c-拆分"><a href="#15-1-peres-c-拆分" class="headerlink" title="15.1 peres.c 拆分"></a>15.1 peres.c 拆分</h3><p><code>peres.c</code>（2512 行 / 94 函数）拆分为 <code>common/</code>（3 文件）+ <code>peres/</code>（10 文件）+ <code>peview/</code>（6 文件），<code>-Wall -Wextra</code> 零警告编译通过。拆分原则：</p>
 <ul>
 <li><strong>共享基建独立</strong>：<code>util.c</code>（内存/字符串/随机数）、<code>buffer.c</code>（BUF 动态缓冲区）、<code>peres.h</code>（类型/宏/extern）归入 <code>common/</code>，两个程序 <code>-Icommon</code> 共享</li>
@@ -2071,7 +2071,7 @@ release\peres.exe --help               :: 查看全部选项
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">87.3k</span>&nbsp;字
+                class="white-color">87.2k</span>&nbsp;字
             
             
             
