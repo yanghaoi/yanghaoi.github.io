@@ -56,3 +56,8 @@
         transform: translate(0, 0.5px) rotate(1.5deg);
     }
 }
+
+/* 卡片封面图上的白色标题：加文字阴影，浅色封面图也能看清 */
+.card .card-image .card-title {
+    text-shadow: 0 2px 8px rgba(0, 0, 0, .72), 0 1px 2px rgba(0, 0, 0, .55);
+}

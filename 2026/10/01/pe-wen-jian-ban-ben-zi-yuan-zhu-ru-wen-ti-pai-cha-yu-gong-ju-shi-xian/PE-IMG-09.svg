@@ -1,0 +1,57 @@
+<svg width="100%" viewBox="0 0 680 380" xmlns="http://www.w3.org/2000/svg" role="img" font-family="system-ui, -apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif">
+<title>数字签名信息：WinVerifyTrust 验证结果</title>
+<desc>左侧为源文件签名（有效，WinVerifyTrust=0），右侧为复制后摘要不匹配（0x80096010）。</desc>
+
+<rect x="0" y="0" width="680" height="380" fill="#ffffff"/>
+<text x="40" y="30" font-size="14" font-weight="500" fill="#212121">数字签名信息：WinVerifyTrust 验证结果</text>
+
+<!-- 左：源文件 -->
+<rect x="40" y="50" width="280" height="300" rx="8" fill="#eaf3de" stroke="#3B6D11" stroke-width="1"/>
+<text x="56" y="74" font-size="13" font-weight="600" fill="#173404">源文件签名（有效）</text>
+
+<rect x="56" y="90" width="248" height="26" rx="4" fill="#ffffff" stroke="#3B6D11" stroke-width="0.5"/>
+<text x="70" y="107" font-size="11" fill="#173404">使用者：HUAWEI Device CA</text>
+
+<rect x="56" y="120" width="248" height="26" rx="4" fill="#ffffff" stroke="#3B6D11" stroke-width="0.5"/>
+<text x="70" y="137" font-size="11" fill="#173404">颁发者：HUAWEI Root CA</text>
+
+<rect x="56" y="150" width="248" height="26" rx="4" fill="#ffffff" stroke="#3B6D11" stroke-width="0.5"/>
+<text x="70" y="167" font-size="11" fill="#173404">序列号：01 23 45 67 89 AB CD EF</text>
+
+<rect x="56" y="180" width="248" height="26" rx="4" fill="#ffffff" stroke="#3B6D11" stroke-width="0.5"/>
+<text x="70" y="197" font-size="11" fill="#173404">有效期：2024-01-01 ~ 2025-12-31</text>
+
+<rect x="56" y="210" width="248" height="26" rx="4" fill="#ffffff" stroke="#3B6D11" stroke-width="0.5"/>
+<text x="70" y="227" font-size="11" fill="#173404">SHA1：A1B2C3D4E5F6...</text>
+
+<rect x="56" y="250" width="248" height="30" rx="4" fill="#3B6D11"/>
+<text x="70" y="270" font-size="12" font-weight="600" fill="#ffffff">WinVerifyTrust = 0</text>
+<text x="70" y="286" font-size="10" fill="#c8e6c9">签名有效且受信任</text>
+
+<!-- 右：复制后 -->
+<rect x="360" y="50" width="280" height="300" rx="8" fill="#f1e6ea" stroke="#A32D2D" stroke-width="1"/>
+<text x="376" y="74" font-size="13" font-weight="600" fill="#A32D2D">复制到别的文件后</text>
+
+<rect x="376" y="90" width="248" height="26" rx="4" fill="#ffffff" stroke="#A32D2D" stroke-width="0.5"/>
+<text x="390" y="107" font-size="11" fill="#444441">使用者：HUAWEI Device CA</text>
+
+<rect x="376" y="120" width="248" height="26" rx="4" fill="#ffffff" stroke="#A32D2D" stroke-width="0.5"/>
+<text x="390" y="137" font-size="11" fill="#444441">颁发者：HUAWEI Root CA</text>
+
+<rect x="376" y="150" width="248" height="26" rx="4" fill="#ffffff" stroke="#A32D2D" stroke-width="0.5"/>
+<text x="390" y="167" font-size="11" fill="#444441">序列号：01 23 45 67 89 AB CD EF</text>
+
+<rect x="376" y="180" width="248" height="26" rx="4" fill="#ffffff" stroke="#A32D2D" stroke-width="0.5"/>
+<text x="390" y="197" font-size="11" fill="#444441">有效期：2024-01-01 ~ 2025-12-31</text>
+
+<rect x="376" y="210" width="248" height="26" rx="4" fill="#ffffff" stroke="#A32D2D" stroke-width="0.5"/>
+<text x="390" y="227" font-size="11" fill="#444441">SHA1：A1B2C3D4E5F6...</text>
+
+<rect x="376" y="250" width="248" height="30" rx="4" fill="#A32D2D"/>
+<text x="390" y="270" font-size="12" font-weight="600" fill="#ffffff">WinVerifyTrust = 0x80096010</text>
+<text x="390" y="286" font-size="10" fill="#f5c6cb">数字摘要不匹配</text>
+
+<!-- 底部说明 -->
+<rect x="40" y="340" width="600" height="24" rx="4" fill="#f0f0f0"/>
+<text x="56" y="357" font-size="11" fill="#666">Authenticode 摘要覆盖除证书表外的全部文件内容，换文件后必然不匹配</text>
+</svg>

