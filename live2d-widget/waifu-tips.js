@@ -5,15 +5,27 @@
 
 function loadWidget(config) {
 	let { waifuPath, apiPath, cdnPath } = config;
-	let useCDN = false, modelList;
+	let useCDN = false, modelList, activeCdn = null, cdnList = [];
 	if (typeof cdnPath === "string") {
 		useCDN = true;
-		if (!cdnPath.endsWith("/")) cdnPath += "/";
+		cdnList = [cdnPath];
+	} else if (Array.isArray(cdnPath)) {
+		// 支持传入多个 CDN：按顺序自动探测，避免单一源不可用导致看板娘加载失败
+		useCDN = true;
+		cdnList = cdnPath.slice();
 	} else if (typeof apiPath === "string") {
 		if (!apiPath.endsWith("/")) apiPath += "/";
 	} else {
 		console.error("Invalid initWidget argument!");
 		return;
+	}
+	if (useCDN) {
+		cdnList = cdnList.filter(Boolean).map(url => url.endsWith("/") ? url : url + "/");
+		if (cdnList.length === 0) {
+			console.error("Invalid cdnPath!");
+			return;
+		}
+		activeCdn = cdnList[0];
 	}
 	localStorage.removeItem("waifu-display");
 	sessionStorage.removeItem("waifu-text");
@@ -37,6 +49,32 @@ function loadWidget(config) {
 
 	function randomSelection(obj) {
 		return Array.isArray(obj) ? obj[Math.floor(Math.random() * obj.length)] : obj;
+	}
+	// 带超时的 fetch：网络卡住时不会一直等；force-cache 让下过的资源优先走本地缓存
+	async function fetchWithTimeout(url, timeout) {
+		const controller = new AbortController();
+		const timer = setTimeout(() => controller.abort(), timeout || 8000);
+		try {
+			return await fetch(url, { signal: controller.signal, cache: "force-cache" });
+		} finally {
+			clearTimeout(timer);
+		}
+	}
+	// 完整下载并丢弃 body，确保资源真正进入浏览器缓存，之后 live2d.min.js 的 XHR 才能命中缓存
+	async function preloadAsset(url, timeout) {
+		try {
+			const response = await fetchWithTimeout(url, timeout);
+			if (!response.ok) return false;
+			await response.arrayBuffer();
+			return true;
+		} catch (e) {
+			return false;
+		}
+	}
+	// CDN 候选：当前可用的排最前
+	function cdnCandidates() {
+		if (!activeCdn) return cdnList.slice();
+		return [activeCdn].concat(cdnList.filter(url => url !== activeCdn));
 	}
 	// 检测用户活动状态，并在空闲时显示消息
 	let userAction = false,
@@ -129,7 +167,9 @@ function loadWidget(config) {
 
 	function showHitokoto() {
 		// 增加 hitokoto.cn 的 API
-		fetch("https://v1.hitokoto.cn")
+		// 先给一句即时反馈，避免网络慢时点了半天没动静、看着像卡住
+		showMessage("让我想想说点什么…", 8000, 9);
+		fetchWithTimeout("https://v1.hitokoto.cn", 8000)
 			.then(response => response.json())
 			.then(result => {
 				const text = `这句一言来自 <span>「${result.from}」</span>，是 <span>${result.creator}</span> 在 hitokoto.cn 投稿的。`;
@@ -137,6 +177,9 @@ function loadWidget(config) {
 				setTimeout(() => {
 					showMessage(text, 4000, 9);
 				}, 6000);
+			})
+			.catch(() => {
+				showMessage("一言服务暂时连不上，待会儿再试试吧～", 4000, 9);
 			});
 	}
 
@@ -166,9 +209,11 @@ function loadWidget(config) {
 			modelTexturesId = 53; // 材质 ID
 		}
 		loadModel(modelId, modelTexturesId);
-		fetch(waifuPath)
+		fetchWithTimeout(waifuPath, 8000)
 			.then(response => response.json())
+			.catch(() => null)
 			.then(result => {
+				if (!result) return;
 				window.addEventListener("mouseover", event => {
 					for (let { selector, text } of result.mouseover) {
 						if (!event.target.matches(selector)) continue;
@@ -201,23 +246,67 @@ function loadWidget(config) {
 			});
 	})();
 
+	// 依次探测各 CDN，拿到可用的 model_list.json
 	async function loadModelList() {
-		const response = await fetch(`${cdnPath}model_list.json`);
-		modelList = await response.json();
+		for (const base of cdnCandidates()) {
+			try {
+				const response = await fetchWithTimeout(`${base}model_list.json`, 8000);
+				if (!response.ok) continue;
+				modelList = await response.json();
+				activeCdn = base;
+				return modelList;
+			} catch (e) {
+				// 换下一个源
+			}
+		}
+		modelList = null;
+		return null;
+	}
+
+	// 关键：先把模型用到的 moc/贴图全部预取进缓存，确认都拿到了再交给 loadlive2d。
+	// 否则 loadlive2d 会先清空画布，加载失败就只剩空白（表现为「切换人物后人物消失」）。
+	async function applyModel(target, message) {
+		for (const base of cdnCandidates()) {
+			try {
+				const response = await fetchWithTimeout(`${base}model/${target}/index.json`, 8000);
+				if (!response.ok) continue;
+				const setting = await response.json();
+				const files = [setting.model].concat(setting.textures || []).filter(Boolean);
+				const results = await Promise.all(files.map(file => preloadAsset(`${base}model/${target}/${file}`, 15000)));
+				if (!results.every(Boolean)) continue;
+				activeCdn = base;
+				loadlive2d("live2d", `${base}model/${target}/index.json`);
+				showMessage(message, 4000, 10);
+				return true;
+			} catch (e) {
+				// 换下一个源
+			}
+		}
+		// 所有源都失败：保留当前模型，绝不清空画布
+		showMessage("模型加载失败了，检查一下网络，或稍后再试试～", 5000, 11);
+		return false;
 	}
 
 	async function loadModel(modelId, modelTexturesId, message) {
+		if (useCDN) {
+			if (!modelList) await loadModelList();
+			if (!modelList || !modelList.models) {
+				showMessage("模型列表加载失败，检查一下网络，或稍后再试试～", 5000, 11);
+				return;
+			}
+			const target = randomSelection(modelList.models[modelId]);
+			// 加载成功才落盘，避免失败后状态被写脏
+			if (await applyModel(target, message)) {
+				localStorage.setItem("modelId", modelId);
+				localStorage.setItem("modelTexturesId", modelTexturesId);
+			}
+			return;
+		}
 		localStorage.setItem("modelId", modelId);
 		localStorage.setItem("modelTexturesId", modelTexturesId);
 		showMessage(message, 4000, 10);
-		if (useCDN) {
-			if (!modelList) await loadModelList();
-			const target = randomSelection(modelList.models[modelId]);
-			loadlive2d("live2d", `${cdnPath}model/${target}/index.json`);
-		} else {
-			loadlive2d("live2d", `${apiPath}get/?id=${modelId}-${modelTexturesId}`);
-			console.log(`Live2D 模型 ${modelId}-${modelTexturesId} 加载完成`);
-		}
+		loadlive2d("live2d", `${apiPath}get/?id=${modelId}-${modelTexturesId}`);
+		console.log(`Live2D 模型 ${modelId}-${modelTexturesId} 加载完成`);
 	}
 
 	async function loadRandModel() {
@@ -225,9 +314,17 @@ function loadWidget(config) {
 			modelTexturesId = localStorage.getItem("modelTexturesId");
 		if (useCDN) {
 			if (!modelList) await loadModelList();
-			const target = randomSelection(modelList.models[modelId]);
-			loadlive2d("live2d", `${cdnPath}model/${target}/index.json`);
-			showMessage("我的新衣服好看嘛？", 4000, 10);
+			if (!modelList || !modelList.models) {
+				showMessage("模型列表加载失败，检查一下网络，或稍后再试试～", 5000, 11);
+				return;
+			}
+			const group = modelList.models[modelId];
+			// 该模型组只有一套时，别假装换装成功
+			if (!Array.isArray(group) || group.length <= 1) {
+				showMessage("我还没有其他衣服呢！", 4000, 10);
+				return;
+			}
+			await applyModel(randomSelection(group), "我的新衣服好看嘛？");
 		} else {
 			// 可选 "rand"(随机), "switch"(顺序)
 			fetch(`${apiPath}rand_textures/?id=${modelId}-${modelTexturesId}`)
@@ -235,7 +332,8 @@ function loadWidget(config) {
 				.then(result => {
 					if (result.textures.id === 1 && (modelTexturesId === 1 || modelTexturesId === 0)) showMessage("我还没有其他衣服呢！", 4000, 10);
 					else loadModel(modelId, result.textures.id, "我的新衣服好看嘛？");
-				});
+				})
+				.catch(() => showMessage("换装失败了，待会儿再试试～", 4000, 10));
 		}
 	}
 
@@ -243,6 +341,10 @@ function loadWidget(config) {
 		let modelId = localStorage.getItem("modelId");
 		if (useCDN) {
 			if (!modelList) await loadModelList();
+			if (!modelList || !modelList.models) {
+				showMessage("模型列表加载失败，检查一下网络，或稍后再试试～", 5000, 11);
+				return;
+			}
 			const index = (++modelId >= modelList.models.length) ? 0 : modelId;
 			loadModel(index, 0, modelList.messages[index]);
 		} else {
@@ -250,7 +352,8 @@ function loadWidget(config) {
 				.then(response => response.json())
 				.then(result => {
 					loadModel(result.model.id, 0, result.model.message);
-				});
+				})
+				.catch(() => showMessage("切换失败了，待会儿再试试～", 4000, 10));
 		}
 	}
 }

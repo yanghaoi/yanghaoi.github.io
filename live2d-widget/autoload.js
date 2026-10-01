@@ -1,7 +1,6 @@
 // 注意：live2d_path 参数应使用绝对路径
-//const live2d_path = "https://cdn.jsdelivr.net/gh/stevenjoezhang/live2d-widget@latest/";
-//const live2d_path = "/live2d-widget/";
-const live2d_path = "https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/live2d-widget/";
+// 本站自托管：资源就在博客仓库里，不再走 jsDelivr，避免 CDN 不稳导致看板娘整体加载不出来
+const live2d_path = "/live2d-widget/";
 
 // 封装异步加载资源的方法
 function loadExternalResource(url, type) {
@@ -35,8 +34,15 @@ if (screen.width >= 768) {
 		initWidget({
 			waifuPath: live2d_path + "waifu-tips.json",
 			//apiPath: "https://live2d.fghrsh.net/api/",
-			cdnPath: "https://cdn.jsdelivr.net/gh/fghrsh/live2d_api/"
+			// 模型 CDN 候选：按顺序自动探测，取第一个可用的；某个源挂了会自动换下一个
+			cdnPath: [
+				"https://fastly.jsdelivr.net/gh/fghrsh/live2d_api/",
+				"https://gcore.jsdelivr.net/gh/fghrsh/live2d_api/",
+				"https://cdn.jsdelivr.net/gh/fghrsh/live2d_api/"
+			]
 		});
+	}).catch(() => {
+		console.error("Live2D 组件资源加载失败，请刷新重试");
 	});
 }
 // initWidget 第一个参数为 waifu-tips.json 的路径，第二个参数为 API 地址
