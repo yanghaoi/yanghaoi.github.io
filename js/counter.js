@@ -9,7 +9,7 @@
   'use strict';
 
   // ===== 配置 =====
-  var WORKER_API = '';                                  // ← 部署好 Worker 后填：'https://blog-counter.xxx.workers.dev/count'
+  var WORKER_API = 'https://counter.systemic-playground.ccwu.cc/count'; // ← 自建 Cloudflare Worker（自定义域名，国内可达）
   var VERCENT_JS = 'https://events.vercount.one/js';    // 回退用
   var TIMEOUT = 6000;                                   // 自建后端超时（毫秒）
   var VID_KEY = 'counter_vid';
