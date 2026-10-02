@@ -80,6 +80,12 @@
 	cursor: grabbing;
 }
 
+/* 模型没加载好之前不显示工具条：避免出现「只有按钮、没有人物」的空白状态。
+   加载成功后由 waifu-tips.js 移除 #waifu 上的 waifu-loading 类。 */
+#waifu.waifu-loading #waifu-tool {
+	display: none;
+}
+
 #waifu-tool {
 	color: #aaa;
 	opacity: 0;

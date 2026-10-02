@@ -29,7 +29,7 @@ function loadWidget(config) {
 	}
 	localStorage.removeItem("waifu-display");
 	sessionStorage.removeItem("waifu-text");
-	document.body.insertAdjacentHTML("beforeend", `<div id="waifu">
+	document.body.insertAdjacentHTML("beforeend", `<div id="waifu" class="waifu-loading">
 			<div id="waifu-tips"></div>
 			<canvas id="live2d" width="350" height="350"></canvas>
 			<div id="waifu-tool">
@@ -277,6 +277,11 @@ function loadWidget(config) {
 				activeCdn = base;
 				loadlive2d("live2d", `${base}model/${target}/index.json`);
 				showMessage(message, 4000, 10);
+				// 资源都预取成功、loadlive2d 已调用，再等一小会儿让首帧画出来，然后才显示工具条
+				setTimeout(() => {
+					const w = document.getElementById("waifu");
+					if (w) w.classList.remove("waifu-loading");
+				}, 400);
 				return true;
 			} catch (e) {
 				// 换下一个源
