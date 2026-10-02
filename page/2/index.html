@@ -264,10 +264,23 @@
             <div class="description center-align">
                 
 				<script src="/libs/typed/typed.js"></script>
+                <!-- 打字机语句库：站点自托管，内容在 source/js/typing-phrases.js -->
+                <script src="/js/typing-phrases.js"></script>
                 <span id="subtitle"></span>
                 <script>
                     var typed = new Typed("#subtitle", {
-                        strings: ['123456789...','987654321...'],
+                        strings: (function () {
+                            // 优先用语句库；加载失败则回退到主题配置里的两条
+                            var p = (window.BLOG_TYPING_PHRASES && window.BLOG_TYPING_PHRASES.length)
+                                ? window.BLOG_TYPING_PHRASES.slice()
+                                : ['123456789...', '987654321...'];
+                            // 每次刷新换个顺序（Fisher-Yates 洗牌）
+                            for (var i = p.length - 1; i > 0; i--) {
+                                var j = Math.floor(Math.random() * (i + 1));
+                                var t = p[i]; p[i] = p[j]; p[j] = t;
+                            }
+                            return p;
+                        })(),
                         startDelay: 300,
                         typeSpeed: 100,
                         loop: true,

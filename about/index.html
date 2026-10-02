@@ -270,10 +270,23 @@
             <div class="description center-align">
                 
 				<script src="/libs/typed/typed.js"></script>
+                <!-- 打字机语句库：站点自托管，内容在 source/js/typing-phrases.js -->
+                <script src="/js/typing-phrases.js"></script>
                 <span id="subtitle"></span>
                 <script>
                     var typed = new Typed("#subtitle", {
-                        strings: ['123456789...','987654321...'],
+                        strings: (function () {
+                            // 优先用语句库；加载失败则回退到主题配置里的两条
+                            var p = (window.BLOG_TYPING_PHRASES && window.BLOG_TYPING_PHRASES.length)
+                                ? window.BLOG_TYPING_PHRASES.slice()
+                                : ['123456789...', '987654321...'];
+                            // 每次刷新换个顺序（Fisher-Yates 洗牌）
+                            for (var i = p.length - 1; i > 0; i--) {
+                                var j = Math.floor(Math.random() * (i + 1));
+                                var t = p[i]; p[i] = p[j]; p[j] = t;
+                            }
+                            return p;
+                        })(),
                         startDelay: 300,
                         typeSpeed: 100,
                         loop: true,
@@ -513,7 +526,7 @@
                 type: 'pie',
                 radius: '50%',
                 color: ['#6772e5', '#ff9e0f', '#fa755a', '#3ecf8e', '#82d3f4', '#ab47bc', '#525f7f', '#f51c47', '#26A69A'],
-                data: [{"name":"安全工具","value":3},{"name":"Defense Evasion","value":2},{"name":"代码审计","value":1},{"name":"渗透测试","value":1},{"name":"靶场环境","value":1},{"name":"漏洞复现","value":4},{"name":"杂记","value":2},{"name":"权限维持","value":1},{"name":"网络攻防","value":2},{"name":"漏洞利用","value":1},{"name":"基础漏洞","value":3},{"name":"逆向分析","value":1}],
+                data: [{"name":"Defense Evasion","value":2},{"name":"安全工具","value":3},{"name":"代码审计","value":1},{"name":"渗透测试","value":1},{"name":"漏洞复现","value":4},{"name":"靶场环境","value":1},{"name":"杂记","value":2},{"name":"权限维持","value":1},{"name":"网络攻防","value":2},{"name":"漏洞利用","value":1},{"name":"基础漏洞","value":3},{"name":"逆向分析","value":1}],
                 itemStyle: {
                     emphasis: {
                         shadowBlur: 10,
@@ -537,7 +550,7 @@
         xAxis: [
             {
                 type: 'category',
-                data: ["CVE-2020-0796","Cobalt Strike","沙箱逃逸","PHPStorm调试","PHP代码审计","阿里云WAF绕过","PHP二次渲染绕过","IDEA","Webgoat","weblogic漏洞"]
+                data: ["沙箱逃逸","CVE-2020-0796","Cobalt Strike","PHPStorm调试","PHP代码审计","阿里云WAF绕过","PHP二次渲染绕过","weblogic漏洞","IDEA编译","Proxy Execution"]
             }
         ],
         yAxis: [
