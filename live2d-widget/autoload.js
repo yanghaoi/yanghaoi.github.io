@@ -34,11 +34,11 @@ if (screen.width >= 768) {
 		initWidget({
 			waifuPath: live2d_path + "waifu-tips.json",
 			//apiPath: "https://live2d.fghrsh.net/api/",
-			// 模型 CDN 候选：按顺序自动探测，取第一个可用的；某个源挂了会自动换下一个
+			// 模型已整仓搬进站内（source/live2d-widget/model/，约 134MB），默认走本地；
+			// 万一本地缺文件，再回退到 CDN。按顺序探测，取第一个可用的。
 			cdnPath: [
-				"https://fastly.jsdelivr.net/gh/fghrsh/live2d_api/",
-				"https://gcore.jsdelivr.net/gh/fghrsh/live2d_api/",
-				"https://cdn.jsdelivr.net/gh/fghrsh/live2d_api/"
+				"/live2d-widget/",
+				"https://fastly.jsdelivr.net/gh/fghrsh/live2d_api/"
 			]
 		});
 	}).catch(() => {
