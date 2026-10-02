@@ -48,7 +48,7 @@
             <div class="brand-logo">
                 <a href="/" class="waves-effect waves-light">
                     
-                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    <img src="/medias/logo.webp" class="logo-img" alt="LOGO">
                     
                     <span class="logo-span">Yang Hao&#39;s blog</span>
                 </a>
@@ -146,7 +146,7 @@
 
     <div class="mobile-head bg-color">
         
-        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        <img src="/medias/logo.webp" class="logo-img circle responsive-img">
         
         <div class="logo-name">Yang Hao&#39;s blog</div>
         <div class="logo-desc">
@@ -254,7 +254,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/2026/10/01/pe-wen-jian-ban-ben-zi-yuan-zhu-ru-wen-ti-pai-cha-yu-gong-ju-shi-xian/PE-IMG-COVER.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/2026/10/01/pe-wen-jian-ban-ben-zi-yuan-zhu-ru-wen-ti-pai-cha-yu-gong-ju-shi-xian/PE-IMG-COVER.webp')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -740,8 +740,8 @@ put16(out, 8, 0);  put16(out, 10, 0);
 put16(out, 12, 0); put16(out, 14, 0);
 </code></pre>
 <p>实测：只要存在这样一个空目录，<code>UpdateResource</code> 即可正常工作，资源目录完全交给 Windows 构建，「看不见」的问题不再出现。最终实现删去了全部 250 余行自建目录的代码，产物体积同时减小了 8KB。</p>
-<p><img src="/2026/10/01/pe-wen-jian-ban-ben-zi-yuan-zhu-ru-wen-ti-pai-cha-yu-gong-ju-shi-xian/PE-IMG-04.png" alt="resdump 枚举出全部七个资源"></p>
-<p><img src="/2026/10/01/pe-wen-jian-ban-ben-zi-yuan-zhu-ru-wen-ti-pai-cha-yu-gong-ju-shi-xian/PE-IMG-05.png" alt="空资源目录头只有十六字节"></p>
+<p><img src="/2026/10/01/pe-wen-jian-ban-ben-zi-yuan-zhu-ru-wen-ti-pai-cha-yu-gong-ju-shi-xian/PE-IMG-04.webp" alt="resdump 枚举出全部七个资源"></p>
+<p><img src="/2026/10/01/pe-wen-jian-ban-ben-zi-yuan-zhu-ru-wen-ti-pai-cha-yu-gong-ju-shi-xian/PE-IMG-05.webp" alt="空资源目录头只有十六字节"></p>
 <h2 id="6-写入顺序约束"><a href="#6-写入顺序约束" class="headerlink" title="6 写入顺序约束"></a>6 写入顺序约束</h2><p>同一个 <code>BeginUpdateResource</code> 会话内，<strong>资源的写入顺序会影响成败</strong>。改用 <code>UpdateResource</code> 后，865 个资源的大样本一次通过；但更换样本后即失败：</p>
 <pre><code class="line-numbers language-text">[错误] UpdateResource 失败 type=10 name="PRND_DAC2CFD1" lang=0x0000 size=4799
 [错误] UpdateResource 失败，GetLastError=50 (0x00000032) 不支持该请求。
@@ -794,7 +794,7 @@ put16(out, 12, 0); put16(out, 14, 0);
    total = 7        ← 这次 7 个全都在
 </code></pre>
 <p>多写一次文件的代价，换来的是不会交付「看似成功、实际缺资源」的产物，这一交换是合理的。</p>
-<p><img src="/2026/10/01/pe-wen-jian-ban-ben-zi-yuan-zhu-ru-wen-ti-pai-cha-yu-gong-ju-shi-xian/PE-IMG-07.png" alt="自动检出缺失后换顺序重试"></p>
+<p><img src="/2026/10/01/pe-wen-jian-ban-ben-zi-yuan-zhu-ru-wen-ti-pai-cha-yu-gong-ju-shi-xian/PE-IMG-07.webp" alt="自动检出缺失后换顺序重试"></p>
 <h2 id="7-删除未被提交"><a href="#7-删除未被提交" class="headerlink" title="7 删除未被提交"></a>7 删除未被提交</h2><p>删除请求<strong>可能根本没有被提交到文件</strong>。工具还有一个「清理上次注入的随机资源」的功能，按 <code>PRND_</code> 前缀和 60000–60999 的位图 ID 精确删除（删除时必须命中真实的 <code>(type, name, lang)</code> 三元组，猜测语言会让 <code>EndUpdateResource</code> 报 1359）。</p>
 <p>在只有 2 个资源的文件上行为正常；但在 867 个资源的文件上：</p>
 <pre><code class="line-numbers language-text">  清理上次注入的随机资源: 2 项
@@ -807,7 +807,7 @@ $ md5sum m1.patched.exe # 输出
 3188f10912ee30bc9adfcbd399c725b9   ← 完全一致
 </code></pre>
 <p><strong>输出文件与输入一个字节都没有差异。</strong></p>
-<p><img src="/2026/10/01/pe-wen-jian-ban-ben-zi-yuan-zhu-ru-wen-ti-pai-cha-yu-gong-ju-shi-xian/PE-IMG-08.png" alt="输入输出 md5 完全一致"></p>
+<p><img src="/2026/10/01/pe-wen-jian-ban-ben-zi-yuan-zhu-ru-wen-ti-pai-cha-yu-gong-ju-shi-xian/PE-IMG-08.webp" alt="输入输出 md5 完全一致"></p>
 <p>每个 <code>UpdateResource(..., NULL, 0)</code> 删除调用都返回成功，计数也如实报了「2 项」，但 <code>EndUpdateResource</code> 未把删除写入。资源数仍是 867，<code>PRND_51427DA4</code> 仍然存在。</p>
 <h3 id="7-1-解法：清理完再数一遍"><a href="#7-1-解法：清理完再数一遍" class="headerlink" title="7.1 解法：清理完再数一遍"></a>7.1 解法：清理完再数一遍</h3><p>删除可能被吞掉，因此清理之后<strong>重新计数</strong>，未删干净就如实报告，而不是把「已清理 N 项」当作成功：</p>
 <pre><code class="line-numbers language-c">if (cb_checked(7)) {
@@ -852,7 +852,7 @@ guid.Data4[4]=0x4Fu; guid.Data4[5]=0xC2u; guid.Data4[6]=0x95u; guid.Data4[7]=0xE
                 SHELL32   USER32   VERSION  WINTRUST
 peview.exe (5): comdlg32  GDI32    KERNEL32  SHELL32  USER32
 </code></pre>
-<p><img src="/2026/10/01/pe-wen-jian-ban-ben-zi-yuan-zhu-ru-wen-ti-pai-cha-yu-gong-ju-shi-xian/PE-IMG-10.png" alt="导入表仅九个系统动态库"></p>
+<p><img src="/2026/10/01/pe-wen-jian-ban-ben-zi-yuan-zhu-ru-wen-ti-pai-cha-yu-gong-ju-shi-xian/PE-IMG-10.webp" alt="导入表仅九个系统动态库"></p>
 <p>无 CRT 环境下还须自行解决以下事项（在 <code>common/util.c</code> 中均有对应实现，两个程序共享）：</p>
 <table>
 <thead>
@@ -1479,7 +1479,7 @@ release\peres.exe --help               :: 查看全部选项
 
     #vcomments textarea {
         box-sizing: border-box;
-        background: url("/medias/comment_bg.png") 100% 100% no-repeat;
+        background: url("/medias/comment_bg.webp") 100% 100% no-repeat;
     }
 
     #vcomments p {
@@ -1747,7 +1747,7 @@ release\peres.exe --help               :: 查看全部选项
                 <a href="/2026/10/01/pe-wen-jian-ban-ben-zi-yuan-zhu-ru-wen-ti-pai-cha-yu-gong-ju-shi-xian/">
                     <div class="card-image">
                         
-                        <img src="/2026/10/01/pe-wen-jian-ban-ben-zi-yuan-zhu-ru-wen-ti-pai-cha-yu-gong-ju-shi-xian/PE-IMG-COVER.jpg" class="responsive-img" alt="PE文件版本资源注入问题排查与工具实现">
+                        <img src="/2026/10/01/pe-wen-jian-ban-ben-zi-yuan-zhu-ru-wen-ti-pai-cha-yu-gong-ju-shi-xian/PE-IMG-COVER.webp" class="responsive-img" alt="PE文件版本资源注入问题排查与工具实现">
                         
                         <span class="card-title">PE文件版本资源注入问题排查与工具实现</span>
                     </div>
@@ -1805,7 +1805,7 @@ release\peres.exe --help               :: 查看全部选项
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/16.jpg" class="responsive-img" alt="加固APK的AndroidManifest.xml修复方法总结">
+                        <img src="/medias/featureimages/16.webp" class="responsive-img" alt="加固APK的AndroidManifest.xml修复方法总结">
                         
                         <span class="card-title">加固APK的AndroidManifest.xml修复方法总结</span>
                     </div>

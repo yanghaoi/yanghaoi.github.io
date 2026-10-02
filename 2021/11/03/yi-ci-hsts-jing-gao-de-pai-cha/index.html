@@ -48,7 +48,7 @@
             <div class="brand-logo">
                 <a href="/" class="waves-effect waves-light">
                     
-                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    <img src="/medias/logo.webp" class="logo-img" alt="LOGO">
                     
                     <span class="logo-span">Yang Hao&#39;s blog</span>
                 </a>
@@ -146,7 +146,7 @@
 
     <div class="mobile-head bg-color">
         
-        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        <img src="/medias/logo.webp" class="logo-img circle responsive-img">
         
         <div class="logo-name">Yang Hao&#39;s blog</div>
         <div class="logo-desc">
@@ -254,7 +254,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/images/saymehi/2021_11/e0f5f87f01e358d667c07683c647c83e.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/images/saymehi/2021_11/e0f5f87f01e358d667c07683c647c83e.webp')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -437,25 +437,25 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>最近访问博客发现页面显示不正常，F12查看网络情况后发现cloudflare加载的静态资源出了问题，具体表现为浏览器出现HSTS警告，使用socks5代理时正常(使用socks5代理时，DNS查询也是用的socks5代理)：<br><img src="/images/saymehi/2021_11/8b94cbff2e08e006ece6906503dbff0c.png"><br>查看证书发现证书是vmware.com的，安装了VM虚拟机后在本地443端口有这个服务：<br><img src="/images/saymehi/2021_11/733862ea7c649072c2fed9374aa7e9ce.png"><br>猜测是DNS出了问题，cloudflare被解析到了127.0.0.1上，使用ping和nslookup查看解析情况：</p>
+                <p>最近访问博客发现页面显示不正常，F12查看网络情况后发现cloudflare加载的静态资源出了问题，具体表现为浏览器出现HSTS警告，使用socks5代理时正常(使用socks5代理时，DNS查询也是用的socks5代理)：<br><img src="/images/saymehi/2021_11/8b94cbff2e08e006ece6906503dbff0c.webp"><br>查看证书发现证书是vmware.com的，安装了VM虚拟机后在本地443端口有这个服务：<br><img src="/images/saymehi/2021_11/733862ea7c649072c2fed9374aa7e9ce.webp"><br>猜测是DNS出了问题，cloudflare被解析到了127.0.0.1上，使用ping和nslookup查看解析情况：</p>
 <pre><code class="line-numbers language-stylus">ping cdnjs.cloudflare.com
 </code></pre>
-<p><img src="/images/saymehi/2021_11/981791cbfa078c9f58475d707fb610a1.png"></p>
+<p><img src="/images/saymehi/2021_11/981791cbfa078c9f58475d707fb610a1.webp"></p>
 <pre><code class="line-numbers language-stylus">nslookup cdnjs.cloudflare.com
 </code></pre>
-<p><img src="/images/saymehi/2021_11/552c8f3656ae2571bdbb9b3592508f2c.png"></p>
-<p>这里的DNS服务器是路由器上的，都将cloudflare.com解析到了本地，手动设置一下主备DNS服务器分别为<code>114.114.114.114</code>，<code>8.8.8.8</code>：<br><img src="/images/saymehi/2021_11/dd7bf0921433d43070082305540612bf.png"></p>
+<p><img src="/images/saymehi/2021_11/552c8f3656ae2571bdbb9b3592508f2c.webp"></p>
+<p>这里的DNS服务器是路由器上的，都将cloudflare.com解析到了本地，手动设置一下主备DNS服务器分别为<code>114.114.114.114</code>，<code>8.8.8.8</code>：<br><img src="/images/saymehi/2021_11/dd7bf0921433d43070082305540612bf.webp"></p>
 <p>这样一来就可以正常访问了：</p>
-<p><img src="/images/saymehi/2021_11/60d887c133cf51126441870b6d82c9ab.png"></p>
-<p>后来使用有线网络时又出现了上面的情况，但是这时候设置IPV4的DNS没有效果，nslookup查询时地址为 IPV6的本地地址fe80::1 ，似乎是IPV6：<br><img src="/images/saymehi/2021_11/bfacabde78f9e74262af8ddd529f4e30.png"><br>怎么变成了IPV6解析了，按计划设置下IPV6的DNS服务器：<br><img src="/images/saymehi/2021_11/9c4120d3e0031386528f1fdafef2299e.png"><br>一些公共IPV6 DNS：</p>
+<p><img src="/images/saymehi/2021_11/60d887c133cf51126441870b6d82c9ab.webp"></p>
+<p>后来使用有线网络时又出现了上面的情况，但是这时候设置IPV4的DNS没有效果，nslookup查询时地址为 IPV6的本地地址fe80::1 ，似乎是IPV6：<br><img src="/images/saymehi/2021_11/bfacabde78f9e74262af8ddd529f4e30.webp"><br>怎么变成了IPV6解析了，按计划设置下IPV6的DNS服务器：<br><img src="/images/saymehi/2021_11/9c4120d3e0031386528f1fdafef2299e.webp"><br>一些公共IPV6 DNS：</p>
 <pre><code class="line-numbers language-python">2400:3200::1
 2400:3200:baba::1
 2400:da00::6666
 2001:4860:4860::8888 
 2001:4860:4860::8844
 </code></pre>
-<p>配置完成后解析成功：<br><img src="/images/saymehi/2021_11/53ff4226815e7904098e3abb7446cdae.png"></p>
-<p>或者可以将IPV6关闭，这样就直接使用IPV4的DNS解析了：<br><img src="/images/saymehi/2021_11/fa529d3238eb58c9ee8ec1a94140aa6e.png"></p>
+<p>配置完成后解析成功：<br><img src="/images/saymehi/2021_11/53ff4226815e7904098e3abb7446cdae.webp"></p>
+<p>或者可以将IPV6关闭，这样就直接使用IPV4的DNS解析了：<br><img src="/images/saymehi/2021_11/fa529d3238eb58c9ee8ec1a94140aa6e.webp"></p>
 <p>设置完成后如果不生效可以使用 <code>ipconfig /flushdns</code> 刷新本地DNS缓存。</p>
 
             </div>
@@ -566,7 +566,7 @@
 
     #vcomments textarea {
         box-sizing: border-box;
-        background: url("/medias/comment_bg.png") 100% 100% no-repeat;
+        background: url("/medias/comment_bg.webp") 100% 100% no-repeat;
     }
 
     #vcomments p {
@@ -833,7 +833,7 @@
                 <a href="/2021/11/18/dll-jie-chi-lou-dong/">
                     <div class="card-image">
                         
-                        <img src="/images/saymehi/2021_11/e0f5f87f01e358d667c07683c647c83e.jpg" class="responsive-img" alt="DLL劫持漏洞">
+                        <img src="/images/saymehi/2021_11/e0f5f87f01e358d667c07683c647c83e.webp" class="responsive-img" alt="DLL劫持漏洞">
                         
                         <span class="card-title">DLL劫持漏洞</span>
                     </div>
@@ -881,7 +881,7 @@
                 <a href="/2021/10/09/redis-lou-dong-li-yong/">
                     <div class="card-image">
                         
-                        <img src="/images/saymehi/2021_10/c54b4438d8fb064d0c827998804a2f89.png" class="responsive-img" alt="Redis漏洞利用">
+                        <img src="/images/saymehi/2021_10/c54b4438d8fb064d0c827998804a2f89.webp" class="responsive-img" alt="Redis漏洞利用">
                         
                         <span class="card-title">Redis漏洞利用</span>
                     </div>

