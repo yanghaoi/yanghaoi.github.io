@@ -103,11 +103,16 @@ $(function () {
                 this.insertAdjacentElement('afterend', captionDiv)
             }
         });
-        $('#articleContent, #myGallery').lightGallery({
-            selector: '.img-item',
-            // 启用字幕
-            subHtmlSelectorRelative: true
-        });
+        // lightgallery 只在文章页加载（首页等页面不需要），这里必须判空 + 判库存在，
+        // 否则在没加载该库的页面上会抛 TypeError，导致后面初始化代码全部中断。
+        var $lgTarget = $('#articleContent, #myGallery');
+        if ($lgTarget.length && $.fn.lightGallery) {
+            $lgTarget.lightGallery({
+                selector: '.img-item',
+                // 启用字幕
+                subHtmlSelectorRelative: true
+            });
+        }
 
         // progress bar init
         const progressElement = window.document.querySelector('.progress-bar');

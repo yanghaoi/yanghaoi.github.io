@@ -23,18 +23,46 @@
     <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
     <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
     <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    
     <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    
 	
     <link rel="stylesheet" type="text/css" href="/css/matery.css">
     <link rel="stylesheet" type="text/css" href="/css/my.css">
 	
+	
+	
 	<!--prism-->
 	<link rel="stylesheet" type="text/css" href="/libs/prism/prism.css">
     <script src="/libs/prism/prism.js" async ></script>
+	
 
 
     <script src="/libs/jquery/jquery.min.js"></script>
-	<script src="/live2d-widget/autoload.js"></script>
+	<script>
+	// 看板娘是非关键装饰资源：等页面 load 完（再趁空闲）才加载，避免和首屏图片抢带宽。
+	// 原先在 <head> 里同步引入，实测 live2d.min.js 会被排到图片后面，看板娘要 19s 才出现。
+	(function () {
+		function loadWaifu() {
+			var s = document.createElement('script');
+			s.src = "/live2d-widget/autoload.js";
+			s.async = true;
+			document.body.appendChild(s);
+		}
+		function schedule() {
+			if ('requestIdleCallback' in window) {
+				window.requestIdleCallback(loadWaifu, { timeout: 2000 });
+			} else {
+				setTimeout(loadWaifu, 200);
+			}
+		}
+		if (document.readyState === 'complete') {
+			schedule();
+		} else {
+			window.addEventListener('load', schedule);
+		}
+	})();
+	</script>
 <meta name="generator" content="Hexo 5.4.2">
 <style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
 <link rel="alternate" href="/atom.xml" title="Yang Hao's blog" type="application/atom+xml">
@@ -1157,7 +1185,7 @@ system.exec 'id'
                 <a href="/2021/11/03/yi-ci-hsts-jing-gao-de-pai-cha/">
                     <div class="card-image">
                         
-                        <img src="/images/2021_11/e0f5f87f01e358d667c07683c647c83e.webp" class="responsive-img" alt="一次HSTS警告的排查">
+                        <img src="/images/2021_11/e0f5f87f01e358d667c07683c647c83e.webp" class="responsive-img" loading="lazy" decoding="async" alt="一次HSTS警告的排查">
                         
                         <span class="card-title">一次HSTS警告的排查</span>
                     </div>
@@ -1205,7 +1233,7 @@ system.exec 'id'
                 <a href="/2021/10/07/ssrf-lou-dong-ji-chu/">
                     <div class="card-image">
                         
-                        <img src="/images/2021_10/8e747a43120a59986fdbc8840ff6f6f1.webp" class="responsive-img" alt="SSRF漏洞基础">
+                        <img src="/images/2021_10/8e747a43120a59986fdbc8840ff6f6f1.webp" class="responsive-img" loading="lazy" decoding="async" alt="SSRF漏洞基础">
                         
                         <span class="card-title">SSRF漏洞基础</span>
                     </div>
@@ -1561,10 +1589,54 @@ $(document).ready(function() {
     </div>
 </div>
 
+<style>
+    #searchResult .search-index-loading {
+        color: #8a8a8a;
+        font-size: 14px;
+        padding: 12px 2px;
+        margin: 0;
+    }
+</style>
+
 <script src="/js/search.js"></script>
 <script type="text/javascript">
 $(function () {
+    // 搜索索引 search.xml 有一百多 KB，原先在 DOM ready 时无条件下载，占着首屏带宽。
+    // 现在只注册事件（不发请求），索引改由 search.js 在真正需要时懒加载：
+    //   1) 用户点搜索图标 -> 立刻加载
+    //   2) 页面 load 完成后趁空闲后台预取，保证真搜的时候是即时的
+    //   3) 兜底：8s 后仍未预取则强制预取
     searchFunc("/search.xml", 'searchInput', 'searchResult');
+
+    var preload = function () {
+        if (typeof window.searchLoadIndex === 'function') window.searchLoadIndex();
+    };
+
+    $(document).on('click', 'a[href="#searchModal"]', function () {
+        preload();
+        setTimeout(function () {
+            var el = document.getElementById('searchInput');
+            if (el) el.focus();
+        }, 0);
+    });
+
+    function schedulePreload() {
+        if ('requestIdleCallback' in window) {
+            window.requestIdleCallback(preload, { timeout: 4000 });
+        } else {
+            setTimeout(preload, 1200);
+        }
+    }
+    // 注意：jQuery 的 ready 回调是异步执行的，页面极快时 load 可能已经先触发了，
+    // 那时再 on('load') 就永远不会回调。所以要判一次 readyState。
+    if (document.readyState === 'complete') {
+        schedulePreload();
+    } else {
+        $(window).on('load', schedulePreload);
+    }
+
+
+    if (location.hash === '#searchModal') preload();
 });
 </script>
 
@@ -1577,10 +1649,11 @@ $(function () {
 
 	
     <script src="/libs/materialize/materialize.min.js"></script>
-    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
     <script src="/libs/aos/aos.js"></script>
     <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    
     <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    
     <script src="/js/matery.js"></script>
 
 
