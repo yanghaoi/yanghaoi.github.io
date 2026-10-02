@@ -57,10 +57,13 @@ $(function () {
         fixStyles();
     });
 
-    /*初始化瀑布流布局*/
-    $('#articles').masonry({
-        itemSelector: '.article'
-    });
+    /*
+      文章卡片不再用 Masonry 排版。
+      原因：Masonry 自己测量列宽，在小数 devicePixelRatio（如 Windows 125%/150% 缩放）下
+      会把 padding 重复计入，量到 397 而不是 375，于是 floor(1125/397)=2，
+      三列被算成两列（表现为「一行只显示 2 张卡」）。卡片本来就是等高，
+      交给 CSS 栅格（.col.l4 浮动）排版即可，稳定且无副作用。
+    */
 
     AOS.init({
         easing: 'ease-in-out-sine',
