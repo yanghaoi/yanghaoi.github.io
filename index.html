@@ -15,7 +15,11 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-KYC8PY5RS4"></script>
+<!--
+  gtag.js 从 googletagmanager.com 加载，该域名在中国大陆不可达；原来用 async 会一直挂住 window.load
+  （表现：页面一直转圈、Network 里那条请求长期 pending）。改为「等 load 之后再动态插入」。
+  上报不受影响，只是晚一点点；页面加载则完全不受第三方影响。
+-->
 <script>
     window.dataLayer = window.dataLayer || [];
     function gtag() {
@@ -24,27 +28,37 @@
 
     gtag('js', new Date());
     gtag('config', 'G-KYC8PY5RS4');
+    (function () {
+        function start() {
+            var s = document.createElement('script');
+            s.async = true;
+            s.src = 'https://www.googletagmanager.com/gtag/js?id=G-KYC8PY5RS4';
+            document.head.appendChild(s);
+        }
+        if (document.readyState === 'complete') { start(); }
+        else { window.addEventListener('load', start); }
+    })();
 </script>
 
 
     <title>Yang Hao&#39;s blog</title>
-    <link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/favicon.ico">
+    <link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="/favicon.ico">
 
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/awesome/css/all.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/materialize/materialize.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/aos/aos.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/animate/animate.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
 	
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/css/matery.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/css/my.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
 	
 	<!--prism-->
-	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/prism/prism.css">
-    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/prism/prism.js" async ></script>
+	<link rel="stylesheet" type="text/css" href="/libs/prism/prism.css">
+    <script src="/libs/prism/prism.js" async ></script>
 
 
-    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/jquery/jquery.min.js"></script>
+    <script src="/libs/jquery/jquery.min.js"></script>
 	<script src="/live2d-widget/autoload.js"></script>
 <meta name="generator" content="Hexo 5.4.2">
 <style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
@@ -59,7 +73,7 @@
             <div class="brand-logo">
                 <a href="/" class="waves-effect waves-light">
                     
-                    <img src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/medias/logo.png" class="logo-img" alt="LOGO">
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
                     
                     <span class="logo-span">Yang Hao&#39;s blog</span>
                 </a>
@@ -157,7 +171,7 @@
 
     <div class="mobile-head bg-color">
         
-        <img src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/medias/logo.png" class="logo-img circle responsive-img">
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
         
         <div class="logo-name">Yang Hao&#39;s blog</div>
         <div class="logo-desc">
@@ -320,7 +334,7 @@
             </div>
             <div class="description center-align">
                 
-				<script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/typed/typed.js"></script>
+				<script src="/libs/typed/typed.js"></script>
                 <span id="subtitle"></span>
                 <script>
                     var typed = new Typed("#subtitle", {
@@ -341,7 +355,7 @@
 
 <script>
     // 每天切换 banner 图.  Switch banner image every day.
-    var bannerUrl = "https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/medias/banner/" + new Date().getDay() + '.jpg';
+    var bannerUrl = "/medias/banner/" + new Date().getDay() + '.jpg';
     $('.bg-cover').css('background-image', 'url(' + bannerUrl + ')');
 </script>
 
@@ -515,7 +529,7 @@
                         <div class="card-image">
                             
                             
-                            <img src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/medias/featureimages/16.jpg" class="responsive-img" alt="加固APK的AndroidManifest.xml修复方法总结">
+                            <img src="/medias/featureimages/16.jpg" class="responsive-img" alt="加固APK的AndroidManifest.xml修复方法总结">
                             
                             <span class="card-title">加固APK的AndroidManifest.xml修复方法总结</span>
                         </div>
@@ -575,7 +589,7 @@
                     <a href="/2024/12/04/phpfilters-he-cve-2024-2961-cong-wen-jian-du-qu-dao-rce/">
                         <div class="card-image">
                             
-                            <img src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/medias/featureimages/2.jpg" class="responsive-img" alt="PHP filters和CVE-2024-2961组合:从文件读取到RCE">
+                            <img src="/medias/featureimages/2.jpg" class="responsive-img" alt="PHP filters和CVE-2024-2961组合:从文件读取到RCE">
                             
                             <span class="card-title">PHP filters和CVE-2024-2961组合:从文件读取到RCE</span>
                         </div>
@@ -619,7 +633,7 @@
                     <a href="/2024/08/18/fastjson-lou-dong-chang-jian-wa-jue-he-li-yong-fang-fa/">
                         <div class="card-image">
                             
-                            <img src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/medias/featureimages/11.jpg" class="responsive-img" alt="Fastjson反序列化漏洞复现">
+                            <img src="/medias/featureimages/11.jpg" class="responsive-img" alt="Fastjson反序列化漏洞复现">
                             
                             <span class="card-title">Fastjson反序列化漏洞复现</span>
                         </div>
@@ -663,7 +677,7 @@
                     <a href="/2022/08/29/li-yong-azureattestservice-chi-jiu-hua/">
                         <div class="card-image">
                             
-                            <img src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/medias/featureimages/17.jpg" class="responsive-img" alt="利用Azure Attest Service持久化">
+                            <img src="/medias/featureimages/17.jpg" class="responsive-img" alt="利用Azure Attest Service持久化">
                             
                             <span class="card-title">利用Azure Attest Service持久化</span>
                         </div>
@@ -707,7 +721,7 @@
                     <a href="/2022/03/28/windows-installer-an-zhuang-bao-de-gou-jian-he-zhi-xing/">
                         <div class="card-image">
                             
-                            <img src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/medias/featureimages/7.jpg" class="responsive-img" alt="Windows Installer安装包的构建和执行">
+                            <img src="/medias/featureimages/7.jpg" class="responsive-img" alt="Windows Installer安装包的构建和执行">
                             
                             <span class="card-title">Windows Installer安装包的构建和执行</span>
                         </div>
@@ -755,7 +769,7 @@
                     <a href="/2022/03/18/360-ge-chi-sha-xiang-tao-yi/">
                         <div class="card-image">
                             
-                            <img src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/medias/featureimages/16.jpg" class="responsive-img" alt="360隔离沙箱逃逸">
+                            <img src="/medias/featureimages/16.jpg" class="responsive-img" alt="360隔离沙箱逃逸">
                             
                             <span class="card-title">360隔离沙箱逃逸</span>
                         </div>
@@ -799,7 +813,7 @@
                     <a href="/2022/03/07/tong-guo-c-cao-zuo-zhu-ce-biao-jin-yong-windows-defender/">
                         <div class="card-image">
                             
-                            <img src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/medias/featureimages/17.jpg" class="responsive-img" alt="通过 C++ 操作注册表禁用 Windows Defender">
+                            <img src="/medias/featureimages/17.jpg" class="responsive-img" alt="通过 C++ 操作注册表禁用 Windows Defender">
                             
                             <span class="card-title">通过 C++ 操作注册表禁用 Windows Defender</span>
                         </div>
@@ -843,7 +857,7 @@
                     <a href="/2021/11/24/php-ren-yi-wen-jian-shang-chuan-rao-guo-duo-chong-xian-zhi/">
                         <div class="card-image">
                             
-                            <img src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/medias/banner/3.jpg" class="responsive-img" alt="PHP任意文件上传绕过多重限制">
+                            <img src="/medias/banner/3.jpg" class="responsive-img" alt="PHP任意文件上传绕过多重限制">
                             
                             <span class="card-title">PHP任意文件上传绕过多重限制</span>
                         </div>
@@ -891,7 +905,7 @@
                     <a href="/2021/11/18/dll-jie-chi-lou-dong/">
                         <div class="card-image">
                             
-                            <img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_11/e0f5f87f01e358d667c07683c647c83e.jpg" class="responsive-img" alt="DLL劫持漏洞">
+                            <img src="/images/saymehi/2021_11/e0f5f87f01e358d667c07683c647c83e.jpg" class="responsive-img" alt="DLL劫持漏洞">
                             
                             <span class="card-title">DLL劫持漏洞</span>
                         </div>
@@ -935,7 +949,7 @@
                     <a href="/2021/11/03/yi-ci-hsts-jing-gao-de-pai-cha/">
                         <div class="card-image">
                             
-                            <img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_11/e0f5f87f01e358d667c07683c647c83e.jpg" class="responsive-img" alt="一次HSTS警告的排查">
+                            <img src="/images/saymehi/2021_11/e0f5f87f01e358d667c07683c647c83e.jpg" class="responsive-img" alt="一次HSTS警告的排查">
                             
                             <span class="card-title">一次HSTS警告的排查</span>
                         </div>
@@ -979,7 +993,7 @@
                     <a href="/2021/10/09/redis-lou-dong-li-yong/">
                         <div class="card-image">
                             
-                            <img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/c54b4438d8fb064d0c827998804a2f89.png" class="responsive-img" alt="Redis漏洞利用">
+                            <img src="/images/saymehi/2021_10/c54b4438d8fb064d0c827998804a2f89.png" class="responsive-img" alt="Redis漏洞利用">
                             
                             <span class="card-title">Redis漏洞利用</span>
                         </div>
@@ -1196,10 +1210,10 @@ $(document).ready(function() {
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/js/search.js"></script>
+<script src="/js/search.js"></script>
 <script type="text/javascript">
 $(function () {
-    searchFunc("https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/search.xml", 'searchInput', 'searchResult');
+    searchFunc("/search.xml", 'searchInput', 'searchResult');
 });
 </script>
 
@@ -1211,12 +1225,12 @@ $(function () {
 </div>
 
 	
-    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/materialize/materialize.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/masonry/masonry.pkgd.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/aos/aos.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/scrollprogress/scrollProgress.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/lightGallery/js/lightgallery-all.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/js/matery.js"></script>
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
 
 
     <!-- Baidu Analytics -->
@@ -1226,14 +1240,13 @@ $(function () {
     
     
     <!--
-      不蒜子计数：原写法是 <script async src="...">。async 脚本同样会挂住 window.load，
-      一旦 busuanzi.ibruce.info 卡住，页面就一直转圈、Network 里那条请求长期 pending。
-      改成：先隐藏计数 → 等 load 之后再动态插入脚本 → 成功才由脚本自己显示出来。
-      这样页面加载完全不受第三方接口影响；接口不通时保持隐藏，不会留一个空标签。
+      访问计数：脚本等 window.load 之后再动态插入，任何第三方接口卡住都不影响页面加载。
+      后端见 source/js/counter.js —— 自建 Cloudflare Worker 优先，未配置/失败时回退 Vercount。
+      计数容器默认隐藏，拿到数字才显示，避免留一个「总访问量: 」空标签。
     -->
     <script>
         (function () {
-            var src = 'https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/others/busuanzi.pure.mini.js';
+            var src = '/js/counter.js';
             var keys = ['site_pv', 'page_pv', 'site_uv'];
             keys.forEach(function (k) {
                 var el = document.getElementById('busuanzi_container_' + k);
@@ -1262,7 +1275,7 @@ $(function () {
     
 
     
-    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/instantpage/instantpage.js" type="module"></script>
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
     
 
 </body>

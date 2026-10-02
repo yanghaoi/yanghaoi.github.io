@@ -15,7 +15,11 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-KYC8PY5RS4"></script>
+<!--
+  gtag.js 从 googletagmanager.com 加载，该域名在中国大陆不可达；原来用 async 会一直挂住 window.load
+  （表现：页面一直转圈、Network 里那条请求长期 pending）。改为「等 load 之后再动态插入」。
+  上报不受影响，只是晚一点点；页面加载则完全不受第三方影响。
+-->
 <script>
     window.dataLayer = window.dataLayer || [];
     function gtag() {
@@ -24,27 +28,37 @@
 
     gtag('js', new Date());
     gtag('config', 'G-KYC8PY5RS4');
+    (function () {
+        function start() {
+            var s = document.createElement('script');
+            s.async = true;
+            s.src = 'https://www.googletagmanager.com/gtag/js?id=G-KYC8PY5RS4';
+            document.head.appendChild(s);
+        }
+        if (document.readyState === 'complete') { start(); }
+        else { window.addEventListener('load', start); }
+    })();
 </script>
 
 
     <title>PE文件版本资源注入问题排查与工具实现 | Yang Hao&#39;s blog</title>
-    <link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/favicon.ico">
+    <link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="/favicon.ico">
 
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/awesome/css/all.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/materialize/materialize.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/aos/aos.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/animate/animate.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
 	
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/css/matery.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/css/my.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
 	
 	<!--prism-->
-	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/prism/prism.css">
-    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/prism/prism.js" async ></script>
+	<link rel="stylesheet" type="text/css" href="/libs/prism/prism.css">
+    <script src="/libs/prism/prism.js" async ></script>
 
 
-    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/jquery/jquery.min.js"></script>
+    <script src="/libs/jquery/jquery.min.js"></script>
 	<script src="/live2d-widget/autoload.js"></script>
 <meta name="generator" content="Hexo 5.4.2">
 <style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
@@ -59,7 +73,7 @@
             <div class="brand-logo">
                 <a href="/" class="waves-effect waves-light">
                     
-                    <img src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/medias/logo.png" class="logo-img" alt="LOGO">
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
                     
                     <span class="logo-span">Yang Hao&#39;s blog</span>
                 </a>
@@ -157,7 +171,7 @@
 
     <div class="mobile-head bg-color">
         
-        <img src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/medias/logo.png" class="logo-img circle responsive-img">
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
         
         <div class="logo-name">Yang Hao&#39;s blog</div>
         <div class="logo-desc">
@@ -283,7 +297,7 @@
 <main class="post-container content">
 
     
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/tocbot/tocbot.css">
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
 <style>
     #articleContent h1::before,
     #articleContent h2::before,
@@ -1452,12 +1466,12 @@ release\peres.exe --help               :: 查看全部选项
                     
                 </div>
                 <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
-                    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/share/css/share.min.css">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
 <div id="article-share">
 
     
     <div class="social-share" data-sites="qq,qzone,wechat,weibo,douban" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
-    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/share/js/social-share.min.js"></script>
+    <script src="/libs/share/js/social-share.min.js"></script>
     
 
     
@@ -1724,8 +1738,8 @@ release\peres.exe --help               :: 查看全部选项
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/valine/av-min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/valine/Valine.min.js"></script>
+<script src="/libs/valine/av-min.js"></script>
+<script src="/libs/valine/Valine.min.js"></script>
 <script>
     new Valine({
         el: '#vcomments',
@@ -1816,7 +1830,7 @@ release\peres.exe --help               :: 查看全部选项
                     <div class="card-image">
                         
                         
-                        <img src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/medias/featureimages/16.jpg" class="responsive-img" alt="加固APK的AndroidManifest.xml修复方法总结">
+                        <img src="/medias/featureimages/16.jpg" class="responsive-img" alt="加固APK的AndroidManifest.xml修复方法总结">
                         
                         <span class="card-title">加固APK的AndroidManifest.xml修复方法总结</span>
                     </div>
@@ -1916,21 +1930,21 @@ release\peres.exe --help               :: 查看全部选项
 
 
 <!-- 代码块功能依赖 -->
-<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/codeBlock/codeBlockFuction.js"></script>
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
 
 <!-- 代码语言 -->
 
-<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/codeBlock/codeLang.js"></script>
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
 
 
 <!-- 代码块复制 -->
 
-<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/codeBlock/codeCopy.js"></script>
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
 
 
 <!-- 代码块收缩 -->
 
-<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/codeBlock/codeShrink.js"></script>
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
 
 
 <!-- 代码块折行 -->
@@ -1954,7 +1968,7 @@ release\peres.exe --help               :: 查看全部选项
 </div>
 
 
-<script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/tocbot/tocbot.min.js"></script>
+<script src="/libs/tocbot/tocbot.min.js"></script>
 <script>
     $(function () {
         tocbot.init({
@@ -2186,10 +2200,10 @@ $(document).ready(function() {
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/js/search.js"></script>
+<script src="/js/search.js"></script>
 <script type="text/javascript">
 $(function () {
-    searchFunc("https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/search.xml", 'searchInput', 'searchResult');
+    searchFunc("/search.xml", 'searchInput', 'searchResult');
 });
 </script>
 
@@ -2201,12 +2215,12 @@ $(function () {
 </div>
 
 	
-    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/materialize/materialize.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/masonry/masonry.pkgd.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/aos/aos.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/scrollprogress/scrollProgress.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/lightGallery/js/lightgallery-all.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/js/matery.js"></script>
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
 
 
     <!-- Baidu Analytics -->
@@ -2216,14 +2230,13 @@ $(function () {
     
     
     <!--
-      不蒜子计数：原写法是 <script async src="...">。async 脚本同样会挂住 window.load，
-      一旦 busuanzi.ibruce.info 卡住，页面就一直转圈、Network 里那条请求长期 pending。
-      改成：先隐藏计数 → 等 load 之后再动态插入脚本 → 成功才由脚本自己显示出来。
-      这样页面加载完全不受第三方接口影响；接口不通时保持隐藏，不会留一个空标签。
+      访问计数：脚本等 window.load 之后再动态插入，任何第三方接口卡住都不影响页面加载。
+      后端见 source/js/counter.js —— 自建 Cloudflare Worker 优先，未配置/失败时回退 Vercount。
+      计数容器默认隐藏，拿到数字才显示，避免留一个「总访问量: 」空标签。
     -->
     <script>
         (function () {
-            var src = 'https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/others/busuanzi.pure.mini.js';
+            var src = '/js/counter.js';
             var keys = ['site_pv', 'page_pv', 'site_uv'];
             keys.forEach(function (k) {
                 var el = document.getElementById('busuanzi_container_' + k);
@@ -2252,7 +2265,7 @@ $(function () {
     
 
     
-    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/instantpage/instantpage.js" type="module"></script>
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
     
 
 </body>

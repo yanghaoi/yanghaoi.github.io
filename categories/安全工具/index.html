@@ -15,7 +15,11 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-KYC8PY5RS4"></script>
+<!--
+  gtag.js 从 googletagmanager.com 加载，该域名在中国大陆不可达；原来用 async 会一直挂住 window.load
+  （表现：页面一直转圈、Network 里那条请求长期 pending）。改为「等 load 之后再动态插入」。
+  上报不受影响，只是晚一点点；页面加载则完全不受第三方影响。
+-->
 <script>
     window.dataLayer = window.dataLayer || [];
     function gtag() {
@@ -24,27 +28,37 @@
 
     gtag('js', new Date());
     gtag('config', 'G-KYC8PY5RS4');
+    (function () {
+        function start() {
+            var s = document.createElement('script');
+            s.async = true;
+            s.src = 'https://www.googletagmanager.com/gtag/js?id=G-KYC8PY5RS4';
+            document.head.appendChild(s);
+        }
+        if (document.readyState === 'complete') { start(); }
+        else { window.addEventListener('load', start); }
+    })();
 </script>
 
 
     <title>分类: 安全工具 | Yang Hao&#39;s blog</title>
-    <link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/favicon.ico">
+    <link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="/favicon.ico">
 
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/awesome/css/all.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/materialize/materialize.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/aos/aos.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/animate/animate.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
 	
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/css/matery.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/css/my.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
 	
 	<!--prism-->
-	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/prism/prism.css">
-    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/prism/prism.js" async ></script>
+	<link rel="stylesheet" type="text/css" href="/libs/prism/prism.css">
+    <script src="/libs/prism/prism.js" async ></script>
 
 
-    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/jquery/jquery.min.js"></script>
+    <script src="/libs/jquery/jquery.min.js"></script>
 	<script src="/live2d-widget/autoload.js"></script>
 <meta name="generator" content="Hexo 5.4.2">
 <style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
@@ -59,7 +73,7 @@
             <div class="brand-logo">
                 <a href="/" class="waves-effect waves-light">
                     
-                    <img src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/medias/logo.png" class="logo-img" alt="LOGO">
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
                     
                     <span class="logo-span">Yang Hao&#39;s blog</span>
                 </a>
@@ -157,7 +171,7 @@
 
     <div class="mobile-head bg-color">
         
-        <img src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/medias/logo.png" class="logo-img circle responsive-img">
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
         
         <div class="logo-name">Yang Hao&#39;s blog</div>
         <div class="logo-desc">
@@ -273,7 +287,7 @@
             </div>
             <div class="description center-align">
                 
-				<script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/typed/typed.js"></script>
+				<script src="/libs/typed/typed.js"></script>
                 <span id="subtitle"></span>
                 <script>
                     var typed = new Typed("#subtitle", {
@@ -294,7 +308,7 @@
 
 <script>
     // 每天切换 banner 图.  Switch banner image every day.
-    var bannerUrl = "https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/medias/banner/" + new Date().getDay() + '.jpg';
+    var bannerUrl = "/medias/banner/" + new Date().getDay() + '.jpg';
     $('.bg-cover').css('background-image', 'url(' + bannerUrl + ')');
 </script>
 
@@ -316,29 +330,20 @@
                 
                 
                 
-                <a href="/categories/Defense-Evasion/" title="Defense Evasion: 2">
-                    <span class="chip center-align waves-effect waves-light
-                             chip-default "
-                            style="background-color: #F9EBEA;">Defense Evasion
-                        <span class="tag-length">2</span>
-                    </span>
-                </a>
-                
-                
                 <a href="/categories/%E5%AE%89%E5%85%A8%E5%B7%A5%E5%85%B7/" title="安全工具: 3">
                     <span class="chip center-align waves-effect waves-light
                              chip-active "
-                            style="background-color: #F5EEF8;">安全工具
+                            style="background-color: #F9EBEA;">安全工具
                         <span class="tag-length">3</span>
                     </span>
                 </a>
                 
                 
-                <a href="/categories/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" title="代码审计: 1">
+                <a href="/categories/Defense-Evasion/" title="Defense Evasion: 2">
                     <span class="chip center-align waves-effect waves-light
                              chip-default "
-                            style="background-color: #D5F5E3;">代码审计
-                        <span class="tag-length">1</span>
+                            style="background-color: #F5EEF8;">Defense Evasion
+                        <span class="tag-length">2</span>
                     </span>
                 </a>
                 
@@ -346,7 +351,16 @@
                 <a href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/" title="渗透测试: 1">
                     <span class="chip center-align waves-effect waves-light
                              chip-default "
-                            style="background-color: #E8F8F5;">渗透测试
+                            style="background-color: #D5F5E3;">渗透测试
+                        <span class="tag-length">1</span>
+                    </span>
+                </a>
+                
+                
+                <a href="/categories/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" title="代码审计: 1">
+                    <span class="chip center-align waves-effect waves-light
+                             chip-default "
+                            style="background-color: #E8F8F5;">代码审计
                         <span class="tag-length">1</span>
                     </span>
                 </a>
@@ -440,7 +454,7 @@
                     <a href="/2022/03/07/tong-guo-c-cao-zuo-zhu-ce-biao-jin-yong-windows-defender/">
                         <div class="card-image tag-image">
                             
-                            <img src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/medias/featureimages/17.jpg" class="responsive-img" alt="通过 C++ 操作注册表禁用 Windows Defender">
+                            <img src="/medias/featureimages/17.jpg" class="responsive-img" alt="通过 C++ 操作注册表禁用 Windows Defender">
                             
                             <span class="card-title">通过 C++ 操作注册表禁用 Windows Defender</span>
                         </div>
@@ -485,7 +499,7 @@
                     <a href="/2021/08/19/cobaltstrike-liu-liang-yin-cang-yu-an-quan-pei-zhi/">
                         <div class="card-image tag-image">
                             
-                            <img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_9/f0214927bd28ba7a980c3f49a35e65c6.png" class="responsive-img" alt="CobaltStrike流量伪装与安全配置">
+                            <img src="/images/saymehi/2021_9/f0214927bd28ba7a980c3f49a35e65c6.png" class="responsive-img" alt="CobaltStrike流量伪装与安全配置">
                             
                             <span class="card-title">CobaltStrike流量伪装与安全配置</span>
                         </div>
@@ -534,7 +548,7 @@
                     <a href="/2021/04/22/cobalt-strike-cha-jian-zhi-cve-2020-0796-ti-quan-jiao-ben-kai-fa/">
                         <div class="card-image tag-image">
                             
-                            <img src="https://i.loli.net/2021/04/22/bkADY1NGVMFeJCu.png" class="responsive-img" alt="Cobalt Strike插件之CVE-2020-0796提权脚本开发">
+                            <img src="/images/loli/2021/04/22/bkADY1NGVMFeJCu.png" class="responsive-img" alt="Cobalt Strike插件之CVE-2020-0796提权脚本开发">
                             
                             <span class="card-title">Cobalt Strike插件之CVE-2020-0796提权脚本开发</span>
                         </div>
@@ -734,10 +748,10 @@ $(document).ready(function() {
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/js/search.js"></script>
+<script src="/js/search.js"></script>
 <script type="text/javascript">
 $(function () {
-    searchFunc("https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/search.xml", 'searchInput', 'searchResult');
+    searchFunc("/search.xml", 'searchInput', 'searchResult');
 });
 </script>
 
@@ -749,12 +763,12 @@ $(function () {
 </div>
 
 	
-    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/materialize/materialize.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/masonry/masonry.pkgd.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/aos/aos.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/scrollprogress/scrollProgress.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/lightGallery/js/lightgallery-all.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/js/matery.js"></script>
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
 
 
     <!-- Baidu Analytics -->
@@ -764,14 +778,13 @@ $(function () {
     
     
     <!--
-      不蒜子计数：原写法是 <script async src="...">。async 脚本同样会挂住 window.load，
-      一旦 busuanzi.ibruce.info 卡住，页面就一直转圈、Network 里那条请求长期 pending。
-      改成：先隐藏计数 → 等 load 之后再动态插入脚本 → 成功才由脚本自己显示出来。
-      这样页面加载完全不受第三方接口影响；接口不通时保持隐藏，不会留一个空标签。
+      访问计数：脚本等 window.load 之后再动态插入，任何第三方接口卡住都不影响页面加载。
+      后端见 source/js/counter.js —— 自建 Cloudflare Worker 优先，未配置/失败时回退 Vercount。
+      计数容器默认隐藏，拿到数字才显示，避免留一个「总访问量: 」空标签。
     -->
     <script>
         (function () {
-            var src = 'https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/others/busuanzi.pure.mini.js';
+            var src = '/js/counter.js';
             var keys = ['site_pv', 'page_pv', 'site_uv'];
             keys.forEach(function (k) {
                 var el = document.getElementById('busuanzi_container_' + k);
@@ -800,7 +813,7 @@ $(function () {
     
 
     
-    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/instantpage/instantpage.js" type="module"></script>
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
     
 
 </body>

@@ -15,7 +15,11 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-KYC8PY5RS4"></script>
+<!--
+  gtag.js 从 googletagmanager.com 加载，该域名在中国大陆不可达；原来用 async 会一直挂住 window.load
+  （表现：页面一直转圈、Network 里那条请求长期 pending）。改为「等 load 之后再动态插入」。
+  上报不受影响，只是晚一点点；页面加载则完全不受第三方影响。
+-->
 <script>
     window.dataLayer = window.dataLayer || [];
     function gtag() {
@@ -24,27 +28,37 @@
 
     gtag('js', new Date());
     gtag('config', 'G-KYC8PY5RS4');
+    (function () {
+        function start() {
+            var s = document.createElement('script');
+            s.async = true;
+            s.src = 'https://www.googletagmanager.com/gtag/js?id=G-KYC8PY5RS4';
+            document.head.appendChild(s);
+        }
+        if (document.readyState === 'complete') { start(); }
+        else { window.addEventListener('load', start); }
+    })();
 </script>
 
 
     <title>PHPStorm+PHPStudy调试配置 | Yang Hao&#39;s blog</title>
-    <link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/favicon.ico">
+    <link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="/favicon.ico">
 
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/awesome/css/all.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/materialize/materialize.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/aos/aos.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/animate/animate.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
 	
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/css/matery.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/css/my.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
 	
 	<!--prism-->
-	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/prism/prism.css">
-    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/prism/prism.js" async ></script>
+	<link rel="stylesheet" type="text/css" href="/libs/prism/prism.css">
+    <script src="/libs/prism/prism.js" async ></script>
 
 
-    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/jquery/jquery.min.js"></script>
+    <script src="/libs/jquery/jquery.min.js"></script>
 	<script src="/live2d-widget/autoload.js"></script>
 <meta name="generator" content="Hexo 5.4.2">
 <style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
@@ -59,7 +73,7 @@
             <div class="brand-logo">
                 <a href="/" class="waves-effect waves-light">
                     
-                    <img src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/medias/logo.png" class="logo-img" alt="LOGO">
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
                     
                     <span class="logo-span">Yang Hao&#39;s blog</span>
                 </a>
@@ -157,7 +171,7 @@
 
     <div class="mobile-head bg-color">
         
-        <img src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/medias/logo.png" class="logo-img circle responsive-img">
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
         
         <div class="logo-name">Yang Hao&#39;s blog</div>
         <div class="logo-desc">
@@ -265,7 +279,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_11/e0f5f87f01e358d667c07683c647c83e.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/images/saymehi/2021_11/e0f5f87f01e358d667c07683c647c83e.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -283,7 +297,7 @@
 <main class="post-container content">
 
     
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/tocbot/tocbot.css">
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
 <style>
     #articleContent h1::before,
     #articleContent h2::before,
@@ -459,15 +473,15 @@
 <li>php配置开启Xdebug插件</li>
 </ol>
 <p>本地PHPStorm配置<br>1.	PHP远程调试<br>2.	PHP Web页面</p>
-<h3 id="2-1-PHPStudy开启FTP"><a href="#2-1-PHPStudy开启FTP" class="headerlink" title="2.1 PHPStudy开启FTP"></a>2.1 PHPStudy开启FTP</h3><p>在FTP选项里配置好用户名和密码，根目录设置为WEB目录<br><img src="https://i.loli.net/2021/07/27/CLW2Zt856zkRpbH.png"></p>
-<h3 id="2-2-PHP开启Xdebug"><a href="#2-2-PHP开启Xdebug" class="headerlink" title="2.2 PHP开启Xdebug"></a>2.2 PHP开启Xdebug</h3><p>在Phpstudy菜单软件管理-PHP-设置-扩展组件-Xdebug中设置，选择启用即可:<br><img src="https://i.loli.net/2021/07/27/Wd2yxL3AQvpH7lO.png"><br>查看配置文件：<br><img src="https://i.loli.net/2021/07/27/SnpyvB6g4Xj5rZU.png"><br>在WEB下新建个index.php，写入<code>&lt;?php phpinfo();?&gt;</code>,然后访问发现Xdebug已启用：<br><img src="https://i.loli.net/2021/07/27/TpH2PtfvSkUnl8o.png"><br>接下来把远程调试开启，需要PHPStorm主机的IP地址(我这里是192.168.200.32)，并开启远程调试：<br><img src="https://i.loli.net/2021/07/27/GQYDx2uEXKjt8hl.png"><br>然后重启nginx服务器，接下来就可以配置PHPStorm了。</p>
-<h3 id="2-3-PHPStorm远程调试配置"><a href="#2-3-PHPStorm远程调试配置" class="headerlink" title="2.3 PHPStorm远程调试配置"></a>2.3 PHPStorm远程调试配置</h3><p>远程配置涉及到代码文件的同步，Web页面的显示，远程调试接口的配置。<br><strong>PHP远程调试</strong><br>首先配置远程调试，这里配置其一是服务器Xdebug扩展，二是本地的文件怎么同步到远程。因为本地在文件中添加了语句，需要同步到远程服务器执行才能看到效果，在菜单:运行-编辑配置-PHP远程调试中:<br><img src="https://i.loli.net/2021/07/27/iWhKrUnZj4LIpO1.png"><br>接下来配置部署服务器，部署就是需要将本地文件上传到远程服务器，就是上传到FTP中：<br><img src="https://i.loli.net/2021/07/27/FOWSUtxLeRA7cwa.png"><br>到这里添加一个FTP服务的连接即可，根路径就是FTP的根路径：<br><img src="https://i.loli.net/2021/07/27/OMBDF42Q7GgVdAv.png"><br>然后再配置映射，即为本地要传到远程的路径：<br><img src="https://i.loli.net/2021/07/27/5zOj1GNBFAwQxSb.png"><br>配置好后点击验证，这一步已经配置好文件同步和远程调试功能了：<br><img src="https://i.loli.net/2021/07/27/ZAOsvQViPlwJyMg.png"><br>由于我们需要实时修改文件，所以在&lt;执行前&gt;这个选项中配置一下同步，选择将文件上传到远程主机，配置下要上传的路径即可：<br><img src="https://i.loli.net/2021/07/27/HEQ6A8JcxwBDYsV.png"></p>
-<p><strong>PHP Web页面</strong><br>这里主要是为了在浏览器中显示执行效果，配置本地浏览器要访问远程URL，触发PHP执行，在菜单运行-编辑配置-PHPWeb页面添加：<br><img src="https://i.loli.net/2021/07/27/SaYoXVqCcUlbgn9.png"><br>配置好远程服务器(文件-设置-PHP-服务器):<br><img src="https://i.loli.net/2021/07/27/oiuvHpkYnAKRf2N.png"><br>配置完成后，可以尝试调试查看效果，选择调试，这里先试试Web页面的，选择了Web的配置，点击Run后，打开了浏览器，并成功命中断点，输出<code>$_SERVER</code>信息，这里的Run每次都会打开浏览器访问URL输出，所以打开窗口后刷新页面即可不用再点Run：<br><img src="https://i.loli.net/2021/07/27/rUveWN3PMyo5ucR.png"><br>打开了浏览器后，就可以选择远程调试的配置了，点击调试按钮：<br><img src="https://i.loli.net/2021/07/27/tZAwMuxzalgUQI6.png"><br>刷新刚才的浏览器页面，命中断点：<br><img src="https://i.loli.net/2021/07/27/wlT2YbmiSLjQI9f.png"><br>如果对文件进行了更新，需要再次点击Debug按钮,对传入参数进行调试:<br><img src="https://i.loli.net/2021/07/27/TwAmpSn96PjxBOW.png"><br>到这里远程调试的环境就配置好了。</p>
+<h3 id="2-1-PHPStudy开启FTP"><a href="#2-1-PHPStudy开启FTP" class="headerlink" title="2.1 PHPStudy开启FTP"></a>2.1 PHPStudy开启FTP</h3><p>在FTP选项里配置好用户名和密码，根目录设置为WEB目录<br><img src="/images/loli/2021/07/27/CLW2Zt856zkRpbH.png"></p>
+<h3 id="2-2-PHP开启Xdebug"><a href="#2-2-PHP开启Xdebug" class="headerlink" title="2.2 PHP开启Xdebug"></a>2.2 PHP开启Xdebug</h3><p>在Phpstudy菜单软件管理-PHP-设置-扩展组件-Xdebug中设置，选择启用即可:<br><img src="/images/loli/2021/07/27/Wd2yxL3AQvpH7lO.png"><br>查看配置文件：<br><img src="/images/loli/2021/07/27/SnpyvB6g4Xj5rZU.png"><br>在WEB下新建个index.php，写入<code>&lt;?php phpinfo();?&gt;</code>,然后访问发现Xdebug已启用：<br><img src="/images/loli/2021/07/27/TpH2PtfvSkUnl8o.png"><br>接下来把远程调试开启，需要PHPStorm主机的IP地址(我这里是192.168.200.32)，并开启远程调试：<br><img src="/images/loli/2021/07/27/GQYDx2uEXKjt8hl.png"><br>然后重启nginx服务器，接下来就可以配置PHPStorm了。</p>
+<h3 id="2-3-PHPStorm远程调试配置"><a href="#2-3-PHPStorm远程调试配置" class="headerlink" title="2.3 PHPStorm远程调试配置"></a>2.3 PHPStorm远程调试配置</h3><p>远程配置涉及到代码文件的同步，Web页面的显示，远程调试接口的配置。<br><strong>PHP远程调试</strong><br>首先配置远程调试，这里配置其一是服务器Xdebug扩展，二是本地的文件怎么同步到远程。因为本地在文件中添加了语句，需要同步到远程服务器执行才能看到效果，在菜单:运行-编辑配置-PHP远程调试中:<br><img src="/images/loli/2021/07/27/iWhKrUnZj4LIpO1.png"><br>接下来配置部署服务器，部署就是需要将本地文件上传到远程服务器，就是上传到FTP中：<br><img src="/images/loli/2021/07/27/FOWSUtxLeRA7cwa.png"><br>到这里添加一个FTP服务的连接即可，根路径就是FTP的根路径：<br><img src="/images/loli/2021/07/27/OMBDF42Q7GgVdAv.png"><br>然后再配置映射，即为本地要传到远程的路径：<br><img src="/images/loli/2021/07/27/5zOj1GNBFAwQxSb.png"><br>配置好后点击验证，这一步已经配置好文件同步和远程调试功能了：<br><img src="/images/loli/2021/07/27/ZAOsvQViPlwJyMg.png"><br>由于我们需要实时修改文件，所以在&lt;执行前&gt;这个选项中配置一下同步，选择将文件上传到远程主机，配置下要上传的路径即可：<br><img src="/images/loli/2021/07/27/HEQ6A8JcxwBDYsV.png"></p>
+<p><strong>PHP Web页面</strong><br>这里主要是为了在浏览器中显示执行效果，配置本地浏览器要访问远程URL，触发PHP执行，在菜单运行-编辑配置-PHPWeb页面添加：<br><img src="/images/loli/2021/07/27/SaYoXVqCcUlbgn9.png"><br>配置好远程服务器(文件-设置-PHP-服务器):<br><img src="/images/loli/2021/07/27/oiuvHpkYnAKRf2N.png"><br>配置完成后，可以尝试调试查看效果，选择调试，这里先试试Web页面的，选择了Web的配置，点击Run后，打开了浏览器，并成功命中断点，输出<code>$_SERVER</code>信息，这里的Run每次都会打开浏览器访问URL输出，所以打开窗口后刷新页面即可不用再点Run：<br><img src="/images/loli/2021/07/27/rUveWN3PMyo5ucR.png"><br>打开了浏览器后，就可以选择远程调试的配置了，点击调试按钮：<br><img src="/images/loli/2021/07/27/tZAwMuxzalgUQI6.png"><br>刷新刚才的浏览器页面，命中断点：<br><img src="/images/loli/2021/07/27/wlT2YbmiSLjQI9f.png"><br>如果对文件进行了更新，需要再次点击Debug按钮,对传入参数进行调试:<br><img src="/images/loli/2021/07/27/TwAmpSn96PjxBOW.png"><br>到这里远程调试的环境就配置好了。</p>
 <h2 id="3-本地调试配置"><a href="#3-本地调试配置" class="headerlink" title="3 本地调试配置"></a>3 本地调试配置</h2><p>本地调试的效果是可以在PHPStorm中运行、调试脚本，也可以配合浏览器运行、调试，参考上面远程调试的配置，开启PHPstudy的Xdebug配置，然后配置好PHPStorm。</p>
-<h3 id="3-1-PHPStorm调试配置"><a href="#3-1-PHPStorm调试配置" class="headerlink" title="3.1 PHPStorm调试配置"></a>3.1 PHPStorm调试配置</h3><p>这里的配置是为了在PHPStorm里运行脚本，在运行-编辑配置-PHP脚本中配置好项目入口文件，php解释器二进制文件的位置即可：<br><img src="https://i.loli.net/2021/07/27/R47yMHgfiXGkZtY.png"><br>执行和调试效果都会在PHPStorm中输出：<br><img src="https://i.loli.net/2021/07/27/5CkyU7NPgYa4jrL.png"></p>
-<h3 id="3-2-浏览器插件调试"><a href="#3-2-浏览器插件调试" class="headerlink" title="3.2 浏览器插件调试"></a>3.2 浏览器插件调试</h3><p>在浏览器中使用Xdebug helper插件和 PHPStorm进行调试，这里要设置PHPStorm调试的监听端口，PHPStorm的服务器配置，Xdebug helper的Cookie。<br>1.PHPStorm中调试端口配置(文件-设置-调试)<br><img src="https://i.loli.net/2021/07/27/FYLzdEhJGbqcReD.png"><br>这里注意端口会被php-cgi占用，所以把phpstorm监听的端口改成了9100：<br><img src="https://i.loli.net/2021/07/27/zluYXmLJN2qBsh5.png"><br>相应地在php配置文件也进行了更新：<br><img src="https://i.loli.net/2021/07/27/Bv9K6m2PMxUoHzw.png"></p>
-<p>2.PHPStorm服务器配置(文件-设置-服务器):<br>配置好本地服务器的路径即可<br><img src="https://i.loli.net/2021/07/27/Yu31fFp5mo8I7a6.png"></p>
-<p>3.Xdebug helper插件配置<br>到谷歌商店下载Xdebug helper<br><img src="https://i.loli.net/2021/07/27/GMYcTst6iAvCqQE.png"><br>设置Xdebug helper的PhpStorm Cookie(插件显示在扩展栏上，右键选项):<br><img src="https://i.loli.net/2021/07/27/r3BtNYqCleHgK1i.png"><br>访问可以看到Cookie：<br><img src="https://i.loli.net/2021/07/27/153C8vfejSTIhzW.png"><br>在代码中设置断点，刷新浏览器即可看到调试效果：<br><img src="https://i.loli.net/2021/07/27/quBQUjZ1Lclpxgf.png"></p>
+<h3 id="3-1-PHPStorm调试配置"><a href="#3-1-PHPStorm调试配置" class="headerlink" title="3.1 PHPStorm调试配置"></a>3.1 PHPStorm调试配置</h3><p>这里的配置是为了在PHPStorm里运行脚本，在运行-编辑配置-PHP脚本中配置好项目入口文件，php解释器二进制文件的位置即可：<br><img src="/images/loli/2021/07/27/R47yMHgfiXGkZtY.png"><br>执行和调试效果都会在PHPStorm中输出：<br><img src="/images/loli/2021/07/27/5CkyU7NPgYa4jrL.png"></p>
+<h3 id="3-2-浏览器插件调试"><a href="#3-2-浏览器插件调试" class="headerlink" title="3.2 浏览器插件调试"></a>3.2 浏览器插件调试</h3><p>在浏览器中使用Xdebug helper插件和 PHPStorm进行调试，这里要设置PHPStorm调试的监听端口，PHPStorm的服务器配置，Xdebug helper的Cookie。<br>1.PHPStorm中调试端口配置(文件-设置-调试)<br><img src="/images/loli/2021/07/27/FYLzdEhJGbqcReD.png"><br>这里注意端口会被php-cgi占用，所以把phpstorm监听的端口改成了9100：<br><img src="/images/loli/2021/07/27/zluYXmLJN2qBsh5.png"><br>相应地在php配置文件也进行了更新：<br><img src="/images/loli/2021/07/27/Bv9K6m2PMxUoHzw.png"></p>
+<p>2.PHPStorm服务器配置(文件-设置-服务器):<br>配置好本地服务器的路径即可<br><img src="/images/loli/2021/07/27/Yu31fFp5mo8I7a6.png"></p>
+<p>3.Xdebug helper插件配置<br>到谷歌商店下载Xdebug helper<br><img src="/images/loli/2021/07/27/GMYcTst6iAvCqQE.png"><br>设置Xdebug helper的PhpStorm Cookie(插件显示在扩展栏上，右键选项):<br><img src="/images/loli/2021/07/27/r3BtNYqCleHgK1i.png"><br>访问可以看到Cookie：<br><img src="/images/loli/2021/07/27/153C8vfejSTIhzW.png"><br>在代码中设置断点，刷新浏览器即可看到调试效果：<br><img src="/images/loli/2021/07/27/quBQUjZ1Lclpxgf.png"></p>
 <h2 id="4-总结"><a href="#4-总结" class="headerlink" title="4 总结"></a>4 总结</h2><p>通过对PHP的调试配置，熟悉了PHPStorm和PHPStudy的配置，并成功实现了本地和远程两种调试的配置方法，一般来说在代码安全的情况下，选择本地调试方案比较方便。</p>
 
             </div>
@@ -544,12 +558,12 @@
                     
                 </div>
                 <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
-                    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/share/css/share.min.css">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
 <div id="article-share">
 
     
     <div class="social-share" data-sites="qq,qzone,wechat,weibo,douban" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
-    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/share/js/social-share.min.js"></script>
+    <script src="/libs/share/js/social-share.min.js"></script>
     
 
     
@@ -816,8 +830,8 @@
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/valine/av-min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/valine/Valine.min.js"></script>
+<script src="/libs/valine/av-min.js"></script>
+<script src="/libs/valine/Valine.min.js"></script>
 <script>
     new Valine({
         el: '#vcomments',
@@ -849,7 +863,7 @@
                 <a href="/2021/08/19/cobaltstrike-liu-liang-yin-cang-yu-an-quan-pei-zhi/">
                     <div class="card-image">
                         
-                        <img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_9/f0214927bd28ba7a980c3f49a35e65c6.png" class="responsive-img" alt="CobaltStrike流量伪装与安全配置">
+                        <img src="/images/saymehi/2021_9/f0214927bd28ba7a980c3f49a35e65c6.png" class="responsive-img" alt="CobaltStrike流量伪装与安全配置">
                         
                         <span class="card-title">CobaltStrike流量伪装与安全配置</span>
                     </div>
@@ -901,7 +915,7 @@
                 <a href="/2021/04/22/cobalt-strike-cha-jian-zhi-cve-2020-0796-ti-quan-jiao-ben-kai-fa/">
                     <div class="card-image">
                         
-                        <img src="https://i.loli.net/2021/04/22/bkADY1NGVMFeJCu.png" class="responsive-img" alt="Cobalt Strike插件之CVE-2020-0796提权脚本开发">
+                        <img src="/images/loli/2021/04/22/bkADY1NGVMFeJCu.png" class="responsive-img" alt="Cobalt Strike插件之CVE-2020-0796提权脚本开发">
                         
                         <span class="card-title">Cobalt Strike插件之CVE-2020-0796提权脚本开发</span>
                     </div>
@@ -989,21 +1003,21 @@
 
 
 <!-- 代码块功能依赖 -->
-<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/codeBlock/codeBlockFuction.js"></script>
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
 
 <!-- 代码语言 -->
 
-<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/codeBlock/codeLang.js"></script>
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
 
 
 <!-- 代码块复制 -->
 
-<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/codeBlock/codeCopy.js"></script>
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
 
 
 <!-- 代码块收缩 -->
 
-<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/codeBlock/codeShrink.js"></script>
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
 
 
 <!-- 代码块折行 -->
@@ -1027,7 +1041,7 @@
 </div>
 
 
-<script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/tocbot/tocbot.min.js"></script>
+<script src="/libs/tocbot/tocbot.min.js"></script>
 <script>
     $(function () {
         tocbot.init({
@@ -1259,10 +1273,10 @@ $(document).ready(function() {
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/js/search.js"></script>
+<script src="/js/search.js"></script>
 <script type="text/javascript">
 $(function () {
-    searchFunc("https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/search.xml", 'searchInput', 'searchResult');
+    searchFunc("/search.xml", 'searchInput', 'searchResult');
 });
 </script>
 
@@ -1274,12 +1288,12 @@ $(function () {
 </div>
 
 	
-    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/materialize/materialize.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/masonry/masonry.pkgd.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/aos/aos.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/scrollprogress/scrollProgress.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/lightGallery/js/lightgallery-all.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/js/matery.js"></script>
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
 
 
     <!-- Baidu Analytics -->
@@ -1289,14 +1303,13 @@ $(function () {
     
     
     <!--
-      不蒜子计数：原写法是 <script async src="...">。async 脚本同样会挂住 window.load，
-      一旦 busuanzi.ibruce.info 卡住，页面就一直转圈、Network 里那条请求长期 pending。
-      改成：先隐藏计数 → 等 load 之后再动态插入脚本 → 成功才由脚本自己显示出来。
-      这样页面加载完全不受第三方接口影响；接口不通时保持隐藏，不会留一个空标签。
+      访问计数：脚本等 window.load 之后再动态插入，任何第三方接口卡住都不影响页面加载。
+      后端见 source/js/counter.js —— 自建 Cloudflare Worker 优先，未配置/失败时回退 Vercount。
+      计数容器默认隐藏，拿到数字才显示，避免留一个「总访问量: 」空标签。
     -->
     <script>
         (function () {
-            var src = 'https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/others/busuanzi.pure.mini.js';
+            var src = '/js/counter.js';
             var keys = ['site_pv', 'page_pv', 'site_uv'];
             keys.forEach(function (k) {
                 var el = document.getElementById('busuanzi_container_' + k);
@@ -1325,7 +1338,7 @@ $(function () {
     
 
     
-    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/instantpage/instantpage.js" type="module"></script>
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
     
 
 </body>

