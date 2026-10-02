@@ -61,3 +61,18 @@
 .card .card-image .card-title {
     text-shadow: 0 2px 8px rgba(0, 0, 0, .72), 0 1px 2px rgba(0, 0, 0, .55);
 }
+
+/*
+  顶部 Logo 的焦点框。
+  点过 Logo（或用 Tab 走到它）之后，浏览器会在 <a> 上画一圈默认焦点框——
+  在 teal 导航栏上呈现为很显眼的黑框，且不点别处就一直留着。
+  这里：鼠标操作不显示焦点框；键盘 Tab 导航时改成柔和的白色圆角描边（保住可访问性）。
+*/
+header .brand-logo a:focus:not(:focus-visible) {
+    outline: none;
+}
+header .brand-logo a:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, .85);
+    outline-offset: 2px;
+    border-radius: 6px;
+}
