@@ -63,6 +63,22 @@
 }
 
 /*
+  封面自带标题的配图：用 front-matter 的 `hideTitle: true` 关掉叠加在封面上的标题。
+  有些封面（比如自己排版的成品图）本身就把标题画在图里了，再叠一遍会两行字打架。
+  卡片上直接不渲染那个 <span>；文章页的 <h1> 保留但视觉隐藏——
+  页面仍然有唯一的主标题，对 SEO / 读屏软件友好。
+*/
+.sr-only {
+    position: absolute !important;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/*
   顶部 Logo 的焦点框。
   点过 Logo（或用 Tab 走到它）之后，浏览器会在 <a> 上画一圈默认焦点框——
   在 teal 导航栏上呈现为很显眼的黑框，且不点别处就一直留着。
