@@ -287,10 +287,7 @@
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    
-                    
                     <h1 class="description center-align post-title">利用Azure Attest Service持久化</h1>
-                    
                 </div>
             </div>
         </div>
@@ -467,8 +464,6 @@
         </div>
         <hr class="clearfix">
         <div class="card-content article-card-content">
-            
-            
             <div id="articleContent">
                 <h2 id="1-简介"><a href="#1-简介" class="headerlink" title="1 简介"></a>1 简介</h2><p><code>AzureAttestService</code>是安装<code>SQL Server 2019</code>后存在的服务，用于远程验证平台的可信度和其中运行的二进制文件的完整性，详细说明见 <a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-ca/azure/attestation/overview">Microsoft Azure Attestation</a>。<code>AzureAttestService</code>存在DLL类型服务文件<code>AzureAttestService.dll</code>和服务安装程序<code>AzureAttestServiceInstaller.exe</code>，可以通过服务安装程序对服务进行安装、启动、停止和卸载。服务安装程序对DLL文件的验证存在问题，其未对要安装的服务DLL进行合法性检测，可将任意服务DLL安装为系统服务，通过这种方式可以绕过安全软件防御进行权限维持。本文测试系统环境为<code>WIN10 x64 1809</code>。</p>
 <h2 id="2-服务程序测试"><a href="#2-服务程序测试" class="headerlink" title="2 服务程序测试"></a>2 服务程序测试</h2><p><code>AzureAttestServiceInstaller.exe</code> 和 <code>AzureAttestService.dll</code> 均是由微软签名的文件，其中<code>AzureAttestServiceInstaller.exe</code> 有4个参数用于服务的操作(-h):<br><img src="/images/2022_8/2309fe408fa13ed263be8312c6403426.webp"><br>其中 <code>-Install &lt;path to service dll&gt;</code>参数可以将DLL注册成为<code>svchost.exe</code>托管的<code>system</code>权限系统服务:<br><img src="/images/2022_8/28a51d2ef523b0fe915b05ae9060855d.webp"><br>注册完成后可以在注册表<code>HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\AzureAttestService</code> 项目中查询到对应注册信息:<br><img src="/images/2022_8/e72f7d2d72c069b195aad4ec652ff566.webp"><br><code>Parameters</code>项中可查询服务DLL路径和导出函数信息:<br><img src="/images/2022_8/020f1cfe5dc64520b15d60b4d1b2de07.webp"><br>因为<code>AzureAttestServiceInstaller.exe</code>可以将DLL注册为服务，那么可以编写一个服务类型DLL交给其注册即可。在实际利用中，如果直接使用自编写的服务DLL进行安装，安全软件可能会进行弹窗提醒，此时可以通过<code>AzureAttestServiceInstaller.exe</code>命令安装服务、停止服务后替换服务DLL达到绕过目的。在实践之前需要先编写一个DLL类型的服务。</p>

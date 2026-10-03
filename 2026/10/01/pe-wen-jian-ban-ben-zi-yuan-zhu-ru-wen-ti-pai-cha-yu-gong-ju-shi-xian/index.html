@@ -287,10 +287,7 @@
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    
-                    
                     <h1 class="description center-align post-title">PE文件版本资源注入问题排查与工具实现</h1>
-                    
                 </div>
             </div>
         </div>
@@ -475,8 +472,6 @@
         </div>
         <hr class="clearfix">
         <div class="card-content article-card-content">
-            
-            
             <div id="articleContent">
                 <p>最近在做一个构建辅助工具：给 PE 文件批量写入版本信息（<code>RT_VERSION</code>），必要时追加图标与随机数据块，并修改 PE 头的时间戳与校验和。按 Windows 文档的描述，这应当是调用 <code>BeginUpdateResource</code> / <code>UpdateResource</code> / <code>EndUpdateResource</code> 三件套的问题。实测下来，其间遇到四个行为问题，共同点是——<strong>API 全部返回成功，而结果都是错的</strong>。</p>
 <p>这个工具经历了四轮草稿迭代才达到可用状态：第一版只写数字版本号的骨架，第二版补齐了字符串结构但语义有误，第三版以固定长度数组实现、字段长度写死导致中文与长值溢出，第四版改用柔性数组加手工 4 字节对齐后达到可用，最后整理为正式工具 <code>pe_resource_injector</code>（源码已开源：<a target="_blank" rel="noopener" href="https://github.com/yanghaoi/pe_resource_injector">GitHub 仓库</a>）——产出两个程序：<code>peres.exe</code>（资源注入器）与 <code>peview.exe</code>（PE 查看器，由 6 个 Python 测试脚本集成为 C 原生程序）。下文先交代这四版各自的问题，再逐个展开实测中遇到的四个 API 行为问题，最后附上 peview 的双路资源视图设计与多模块工程结构。</p>

@@ -287,10 +287,7 @@
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    
-                    
                     <h1 class="description center-align post-title">360隔离沙箱逃逸</h1>
-                    
                 </div>
             </div>
         </div>
@@ -467,8 +464,6 @@
         </div>
         <hr class="clearfix">
         <div class="card-content article-card-content">
-            
-            
             <div id="articleContent">
                 <h2 id="1-简介"><a href="#1-简介" class="headerlink" title="1 简介"></a>1 简介</h2><p>在2020年6月的一天发现在<code>0day.today</code>上有一个关于360沙盒逃逸的漏洞<a target="_blank" rel="noopener" href="https://cn.0day.today/exploit/description/34125">360 Security Sandbox Escape</a>，当时简单测试了下便获得了逃逸的POC(<code>explorer.exe /e /select,C:\windows\system32\cmd.exe</code>)，本文记录详细过程和其他的逃逸方式。</p>
 <h2 id="2-环境准备"><a href="#2-环境准备" class="headerlink" title="2 环境准备"></a>2 环境准备</h2><p>下载360安全卫士进行安装，随后在主界面点击功能大全，选择隔离沙箱添加：<br><img src="/images/2022_3/3ce979dc4db1e455088df8229523b3f4.webp"><br>添加隔离沙箱后，版本是3.5.0.1035(该程序好像已经年久失修了，2020年的逃逸在2022年依然可以利用)：<br><img src="/images/2022_3/3cfd7bd1763dd20253b805491e19fad3.webp"><br>可以在右键菜单中使用在隔离沙箱中运行功能：<br><img src="/images/2022_3/a4b1401d56d396bb87fbce8f28358be3.webp"></p>

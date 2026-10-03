@@ -63,27 +63,12 @@
 }
 
 /*
-  封面自带标题的配图：用 front-matter 的 `hideTitle: true` 关掉叠加在封面上的标题。
-  有些封面（比如自己排版的成品图）本身就把标题画在图里了，再叠一遍会两行字打架。
+  `hideTitle: true`（front-matter）：关掉**首页卡片**上叠加的标题。
+  有些封面是自己排版的成品图、标题已画在图里，卡片上再叠一遍是重复。
 
-  关掉之后标题改由正文顶部显示（见下面的 .post-body-title），
-  这样页面依然有可见的 <h1>——不然读者点进来整页看不到标题。
+  注意：**只影响卡片**。文章页 banner 的标题始终显示——那是该页唯一的标题位，
+  隐藏掉会让读者点进去整页看不到标题（踩过这个坑）。
 */
-.post-body-title {
-    margin: 0 0 1.4rem;
-    padding-bottom: .7rem;
-    font-size: 1.75rem;
-    font-weight: 500;
-    line-height: 1.4;
-    color: rgba(0, 0, 0, .87);
-    border-bottom: 1px solid rgba(0, 0, 0, .09);
-}
-
-@media only screen and (max-width: 601px) {
-    .post-body-title {
-        font-size: 1.45rem;
-    }
-}
 
 /* 视觉隐藏但保留在 DOM / 读屏里（通用工具类） */
 .sr-only {

@@ -287,10 +287,7 @@
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    
-                    
                     <h1 class="description center-align post-title">Redis漏洞利用</h1>
-                    
                 </div>
             </div>
         </div>
@@ -467,8 +464,6 @@
         </div>
         <hr class="clearfix">
         <div class="card-content article-card-content">
-            
-            
             <div id="articleContent">
                 <h2 id="1-简介"><a href="#1-简介" class="headerlink" title="1 简介"></a>1 简介</h2><p>Redis 是一种开源、基于内存的数据结构存储，被用作数据库、缓存和消息代理。其在低版本(&lt;3.2.0 ，从 3.2.0 版本开始，当 Redis 使用默认配置（绑定所有接口）并且没有任何密码来访问它时，它会进入一种称为保护模式的特殊模式。在这种模式下，Redis 只回复来自环回接口的查询，并回复从其他地址连接的客户端有错误，解释发生了什么以及如何正确配置 Redis。)上默认配置绑定在0.0.0.0:6379上且未设置密码验证，导致未授权访问，可结合其他命令组合获取权限。Redis安全性介绍 <a target="_blank" rel="noopener" href="https://redis.io/topics/security">https://redis.io/topics/security</a> 。</p>
 <h2 id="2-环境搭建"><a href="#2-环境搭建" class="headerlink" title="2 环境搭建"></a>2 环境搭建</h2><p>环境根据需要选择，Ubuntu/Centos/Windows下环境搭建可以参考下列记录：</p>
