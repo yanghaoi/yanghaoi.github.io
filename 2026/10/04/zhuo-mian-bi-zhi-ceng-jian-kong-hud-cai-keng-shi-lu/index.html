@@ -455,14 +455,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    12.3k
+                    12.2k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    46 分
+                    45 分
                 </div>
                 
 
@@ -530,7 +530,7 @@ Progman
 <p><img src="/2026/10/04/zhuo-mian-bi-zhi-ceng-jian-kong-hud-cai-keng-shi-lu/AURA-IMG-09.svg" alt="线程模型与源码模块划分"></p>
 <p>跨线程只走消息，不共享可变状态：采样线程 <code>PostMessage(kMsgSnapshot)</code> 通知 UI 重绘，垫底 worker <code>PostMessage(kUnderlayReadyMsg)</code> 通知 UI 套用新裁片。健康检查每 2 秒跑一次，负责“重挂 / z 序自愈 / 显示器变化 / 托盘补挂”。</p>
 <h2 id="3-采集：把机器状态读出来"><a href="#3-采集：把机器状态读出来" class="headerlink" title="3 采集：把机器状态读出来"></a>3 采集：把机器状态读出来</h2><p>前两节讲的是「窗口怎么摆」。但 HUD 的正事其实是另一件事——<strong>把当前环境的资源占用读出来</strong>。这一节记录五个指标的取数方式、必须处理的边界，以及两块容易被略过的东西：<strong>静态硬件身份</strong>和<strong>失联自愈</strong>。</p>
-<h3 id="3-1-一次采样产出一张-Snapshot"><a href="#3-1-一次采样产出一张-Snapshot" class="headerlink" title="3.1 一次采样产出一张 Snapshot"></a>3.1 一次采样产出一张 Snapshot</h3><p>所有指标打包进一个 <code>Snapshot</code>，由采样线程产出、UI 线程按值拷贝消费：</p>
+<h3 id="3-1-Snapshot-与节拍"><a href="#3-1-Snapshot-与节拍" class="headerlink" title="3.1 Snapshot 与节拍"></a>3.1 Snapshot 与节拍</h3><p>所有指标打包进一个 <code>Snapshot</code>，由采样线程产出、UI 线程按值拷贝消费：</p>
 <pre><code class="line-numbers language-cpp">struct Snapshot {
     CpuInfo     cpu;      // usage + 型号 / 核心 / 线程
     MemoryInfo  memory;   // total / used / available / percent + "DDR4 2133MHz 32GB"
@@ -555,7 +555,7 @@ while (!stopping_) {
 <p>写成「采样结束 + interval」的话，<strong>每一轮都会把采样耗时累积进去</strong>（NVML 调用、网卡枚举都不便宜），跑久了节拍就漂。暂停时不采样，但仍响应唤醒（改间隔 / 恢复监控），并把节拍重新锚定，避免 <code>wait_until</code> 在一个已经过去的时间点上空转。</p>
 <p>还有一个容易忽略的细节：<code>Start()</code> 里<strong>先同步采一次</strong>，再起线程。这样首帧——以及「启动时就处于暂停态、永远收不到 tick」这种情形——拿到的是真值而不是一排 0。差值类指标（CPU、网络速率）第一拍天然是 0%，从第二拍才动。</p>
 <p><img src="/2026/10/04/zhuo-mian-bi-zhi-ceng-jian-kong-hud-cai-keng-shi-lu/AURA-IMG-12.svg" alt="采集节拍数据源与失联自愈"></p>
-<h3 id="3-2-CPU：GetSystemTimes-的两次采样"><a href="#3-2-CPU：GetSystemTimes-的两次采样" class="headerlink" title="3.2 CPU：GetSystemTimes 的两次采样"></a>3.2 CPU：<code>GetSystemTimes</code> 的两次采样</h3><p><code>GetSystemTimes</code> 返回三个累计时间：<code>idle</code>、<code>kernel</code>、<code>user</code>。这里有个经典陷阱——**<code>kernel</code> 已经包含 idle 时间**，所以：</p>
+<h3 id="3-2-CPU：两次采样求差"><a href="#3-2-CPU：两次采样求差" class="headerlink" title="3.2 CPU：两次采样求差"></a>3.2 CPU：两次采样求差</h3><p><code>GetSystemTimes</code> 返回三个累计时间：<code>idle</code>、<code>kernel</code>、<code>user</code>。这里有个经典陷阱——**<code>kernel</code> 已经包含 idle 时间**，所以：</p>
 <pre><code class="line-numbers language-cpp">total = dKernel + dUser;                 // ✅ 不要再加 dIdle
 busy  = total - dIdle;
 pct   = 100.0 * busy / total;
@@ -565,7 +565,7 @@ pct   = 100.0 * busy / total;
 <p>原始差值在 100 ms 这种短间隔下相当跳，所以做了一次轻量指数平滑：<code>last_ = last_ * 0.35 + pct * 0.65</code>。新值权重 0.65——既要压住抖动，又不能让数字看起来「慢半拍」。</p>
 <h3 id="3-3-内存与磁盘"><a href="#3-3-内存与磁盘" class="headerlink" title="3.3 内存与磁盘"></a>3.3 内存与磁盘</h3><p>内存直接取 <code>GlobalMemoryStatusEx</code>：<code>used = ullTotalPhys - ullAvailPhys</code>。注意用的是 <code>ullAvailPhys</code>（可用）而不是「空闲」，那才是用户视角的剩余内存。</p>
 <p>磁盘用 <code>GetDiskFreeSpaceExW</code>，盘符<strong>从 <code>GetWindowsDirectoryW</code> 取</strong>而不是硬编码 <code>C</code>——系统装在别的盘上的机器不少。拿不到（卷消失、无权限）就把 <code>valid</code> 置 false，整行显示 <code>N/A</code>，不抛也不崩。</p>
-<h3 id="3-4-网络：一次采样做三件事"><a href="#3-4-网络：一次采样做三件事" class="headerlink" title="3.4 网络：一次采样做三件事"></a>3.4 网络：一次采样做三件事</h3><p>网络这项信息量最大，一次采样要同时产出<strong>速率</strong>和<strong>适配器信息</strong>。</p>
+<h3 id="3-4-网络：速率与适配器"><a href="#3-4-网络：速率与适配器" class="headerlink" title="3.4 网络：速率与适配器"></a>3.4 网络：速率与适配器</h3><p>网络这项信息量最大，一次采样要同时产出<strong>速率</strong>和<strong>适配器信息</strong>。</p>
 <p>速率来自 <code>GetIfTable2</code> 的 64 位计数器 <code>InOctets</code> / <code>OutOctets</code>，两次采样求差再除以 <code>elapsedSec</code>。这里有三条边界，每条都对应过一次真实故障：</p>
 <ul>
 <li><strong>基线必须携带适配器 LUID。</strong> 切换网卡（拔插、VPN 出现、重新排名）后，新网卡的计数器是从开机起累计的另一条序列，拿它去减旧网卡的读数会得到一个 TB/s 级的假尖峰。检测到 LUID 变化就丢弃基线、重新起步。</li>
@@ -579,7 +579,7 @@ if (a-&gt;OperStatus != IfOperStatusUp) continue;          // 未启用
 </code></pre>
 <p>排序打分是「有网关 +4 / 有 IPv4 +2 / 有 IPv6 +1」，取最高分的那块——也就是「最像正在上网的那块」。但<strong>选中的适配器不能每轮重选</strong>：列表重新枚举时，一块短暂出现的 VPN 可能排到前面，监控对象就跳了。所以按 <strong>LUID 优先、名字兜底</strong>沿用上一轮的选择。</p>
 <p>适配器列表本身有 5 秒刷新节流；只有在「本轮没找到该适配器」时才置脏、下一拍强制重枚举。</p>
-<h3 id="3-5-GPU：运行时绑定-NVML，不依赖-SDK"><a href="#3-5-GPU：运行时绑定-NVML，不依赖-SDK" class="headerlink" title="3.5 GPU：运行时绑定 NVML，不依赖 SDK"></a>3.5 GPU：运行时绑定 NVML，不依赖 SDK</h3><p>GPU 是唯一需要「额外能力」的指标。这里刻意<strong>不把 CUDA / NVML SDK 作为构建依赖</strong>——<code>nvml.dll</code> 在运行时用 <code>LoadLibraryExW</code> 加载，每个入口点用 <code>GetProcAddress</code> 解析，ABI 子集自己写在 <code>system/nvml_api.h</code> 里（9 个函数指针）。产物因此仍然是「除系统 DLL 外零依赖」的单个 exe。</p>
+<h3 id="3-5-GPU：动态绑定-NVML"><a href="#3-5-GPU：动态绑定-NVML" class="headerlink" title="3.5 GPU：动态绑定 NVML"></a>3.5 GPU：动态绑定 NVML</h3><p>GPU 是唯一需要「额外能力」的指标。这里刻意<strong>不把 CUDA / NVML SDK 作为构建依赖</strong>——<code>nvml.dll</code> 在运行时用 <code>LoadLibraryExW</code> 加载，每个入口点用 <code>GetProcAddress</code> 解析，ABI 子集自己写在 <code>system/nvml_api.h</code> 里（9 个函数指针）。产物因此仍然是「除系统 DLL 外零依赖」的单个 exe。</p>
 <p>几个工程细节：</p>
 <ul>
 <li><strong>只从绝对路径找 dll</strong>（<code>%SystemRoot%\System32\nvml.dll</code>、<code>%ProgramW6432%\NVIDIA Corporation\NVSMI\nvml.dll</code>），避开工作目录的 DLL 劫持。</li>
@@ -588,7 +588,7 @@ if (a-&gt;OperStatus != IfOperStatusUp) continue;          // 未启用
 <li><strong>采集项彼此独立</strong>：使用率（<code>getUtilizationRates</code>）、显存（<code>getMemoryInfo</code>）、温度、功耗（毫瓦 → 瓦）各判各的返回值。温度传感器在某些卡上不可用，不该连带把使用率也变成 <code>N/A</code>。</li>
 </ul>
 <p><strong>非 N 卡的回退</strong>：用 DXGI 的 <code>EnumAdapters1</code> 拿适配器描述，跳过 <code>DXGI_ADAPTER_FLAG_SOFTWARE</code>，于是 HUD 能显示 <code>Intel(R) UHD Graphics  N/A</code> 而不是一行空白——用户至少知道程序看见了显卡。</p>
-<h3 id="3-6-静态身份：注册表-原始-SMBIOS"><a href="#3-6-静态身份：注册表-原始-SMBIOS" class="headerlink" title="3.6 静态身份：注册表 + 原始 SMBIOS"></a>3.6 静态身份：注册表 + 原始 SMBIOS</h3><p>HUD 标题行还有一行「这是什么机器」，全部取自本机、不联网：</p>
+<h3 id="3-6-静态硬件身份"><a href="#3-6-静态硬件身份" class="headerlink" title="3.6 静态硬件身份"></a>3.6 静态硬件身份</h3><p>HUD 标题行还有一行「这是什么机器」，全部取自本机、不联网：</p>
 <table>
 <thead>
 <tr>
@@ -630,7 +630,7 @@ if (a-&gt;OperStatus != IfOperStatusUp) continue;          // 未启用
 <li><strong>卷消失 / 无权限</strong>：<code>valid = false</code>，整行 <code>N/A</code>。</li>
 </ul>
 <p>配合第 2.2 节的线程模型，整条链路的行为是：<strong>采集永远不阻塞 UI；任何一项拿不到就降级显示，绝不崩、绝不弹窗。</strong></p>
-<h2 id="4-挂载：0x052C-的参数"><a href="#4-挂载：0x052C-的参数" class="headerlink" title="4 挂载：0x052C 的参数"></a>4 挂载：<code>0x052C</code> 的参数</h2><p>壁纸层是懒加载的，不存在时必须发 <code>0x052C</code> 让 shell 把它建出来。<strong>参数写错时窗口一切正常但完全不可见，且没有任何报错。</strong></p>
+<h2 id="4-挂载：0x052C-参数"><a href="#4-挂载：0x052C-参数" class="headerlink" title="4 挂载：0x052C 参数"></a>4 挂载：0x052C 参数</h2><p>壁纸层是懒加载的，不存在时必须发 <code>0x052C</code> 让 shell 把它建出来。<strong>参数写错时窗口一切正常但完全不可见，且没有任何报错。</strong></p>
 <pre><code class="line-numbers language-cpp">// ❌ 静默无效：shell 什么都不做，壁纸层保持隐藏
 SendMessageTimeout(progman, 0x052C, 0, 0, SMTO_NORMAL, 1000, nullptr);
 // ✅ 正确
@@ -647,7 +647,7 @@ SendMessageTimeout(progman, 0x052C, 0x0D, 0x1, SMTO_ABORTIFHUNG, 1000, &amp;igno
 <li>用 <code>SMTO_ABORTIFHUNG</code> 而不是 <code>SMTO_NORMAL</code>——shell 半死时立刻返回，不必等满 1 秒超时。</li>
 <li><strong>催生要限流</strong>：每次调用会让 shell 多建一个 <code>WorkerW</code>。健康检查（2 秒一次）传 <code>allowSpawn=false</code>，绝不反复催生；需要催生的路径限流到 30 秒一次。</li>
 </ul>
-<h2 id="5-跨进程分层子窗口的三种故障模式"><a href="#5-跨进程分层子窗口的三种故障模式" class="headerlink" title="5 跨进程分层子窗口的三种故障模式"></a>5 跨进程分层子窗口的三种故障模式</h2><p>背景：挂载 = <code>SetParent</code> 到 Explorer 的壁纸层 <code>WorkerW</code>（跨进程 graft）。实验与现场日志证明，<strong>跨进程 reparent 之后，分层子窗口在本机不可靠</strong>，共观察到三种互相独立的表现。</p>
+<h2 id="5-分层子窗口的三种故障"><a href="#5-分层子窗口的三种故障" class="headerlink" title="5 分层子窗口的三种故障"></a>5 分层子窗口的三种故障</h2><p>背景：挂载 = <code>SetParent</code> 到 Explorer 的壁纸层 <code>WorkerW</code>（跨进程 graft）。实验与现场日志证明，<strong>跨进程 reparent 之后，分层子窗口在本机不可靠</strong>，共观察到三种互相独立的表现。</p>
 <p><img src="/2026/10/04/zhuo-mian-bi-zhi-ceng-jian-kong-hud-cai-keng-shi-lu/AURA-IMG-03.svg" alt="分层子窗口的三种失效模式"></p>
 <table>
 <thead>
@@ -686,7 +686,7 @@ SendMessageTimeout(progman, 0x052C, 0x0D, 0x1, SMTO_ABORTIFHUNG, 1000, &amp;igno
 <p>关键工程细节：裁片在<strong>后台线程</strong>生成（latest-wins 队列 + 完成后 <code>PostMessage</code> 回 UI 线程套用），大图解码（30–100 ms）不卡渲染；而且<strong>永不保留全分辨率像素</strong>——面板尺寸裁片约 400 KB，而不是全图的约 16 MB。</p>
 <p><img src="/2026/10/04/zhuo-mian-bi-zhi-ceng-jian-kong-hud-cai-keng-shi-lu/AURA-IMG-10.webp" alt="面板的圆角与右对齐数值"></p>
 <p>图中面板的圆角、进度条、右对齐的百分比，全部绘制在一块<strong>不透明</strong>的 GDI 表面上：垫底那张裁片来自面板正后方的真实壁纸，所以圆角外面透出来的仍然是原桌面。</p>
-<h3 id="6-1-屏幕上的壁纸不是“注册表里那个文件”"><a href="#6-1-屏幕上的壁纸不是“注册表里那个文件”" class="headerlink" title="6.1 屏幕上的壁纸不是“注册表里那个文件”"></a>6.1 屏幕上的壁纸不是“注册表里那个文件”</h3><p>这是本项目最反直觉的一处。注册表 / COM 解析出的原图<strong>不是</strong>桌面显示的内容——shell 会连续重编码两层缓存。用 <code>PrintWindow</code> 捕获壁纸层合成画面、与候选文件逐像素比对（<code>mean|diff|/255</code>）得到：</p>
+<h3 id="6-1-壁纸的三层缓存链"><a href="#6-1-壁纸的三层缓存链" class="headerlink" title="6.1 壁纸的三层缓存链"></a>6.1 壁纸的三层缓存链</h3><p>这是本项目最反直觉的一处。注册表 / COM 解析出的原图<strong>不是</strong>桌面显示的内容——shell 会连续重编码两层缓存。用 <code>PrintWindow</code> 捕获壁纸层合成画面、与候选文件逐像素比对（<code>mean|diff|/255</code>）得到：</p>
 <table>
 <thead>
 <tr>
@@ -719,21 +719,21 @@ SendMessageTimeout(progman, 0x052C, 0x0D, 0x1, SMTO_ABORTIFHUNG, 1000, &amp;igno
 <li><strong>单次截屏内自洽对比</strong>：用远离面板的干净区拟合“屏幕壁纸映射”，再预测角部——同源同捕获，对全局色调/残影免疫。</li>
 <li><strong>解析 <code>GetDIBits</code> 缓冲按 BGRX</strong>（按 RGBX 解析 = 通道颠倒，曾让所有文件比对得出 ~48 的伪误差，推翻过一整轮结论）。</li>
 </ol>
-<h3 id="6-2-三条必须遵守的约束"><a href="#6-2-三条必须遵守的约束" class="headerlink" title="6.2 三条必须遵守的约束"></a>6.2 三条必须遵守的约束</h3><ul>
+<h3 id="6-2-三条硬约束"><a href="#6-2-三条硬约束" class="headerlink" title="6.2 三条硬约束"></a>6.2 三条硬约束</h3><ul>
 <li><strong>裁片键携带源文件 <code>LastWriteTime</code><strong>：这些缓存会被</strong>原地重写</strong>（换壁纸、幻灯片轮换、SPI 兜底重放都会删除重建 <code>CachedFiles</code>），只比路径字符串会漏掉内容变化。</li>
 <li>**命中第 3 层时把摆放样式置为 <code>stretch</code>**：显示器尺寸的图片做 stretch 就是精确 1:1，解码数学零改动。</li>
 <li><strong>回放壁纸只能回放原始路径</strong>，绝不能是缓存层文件——否则 shell 对已重编码两代的 JPEG 再编码，桌面每重放劣化一代（实测 <code>CachedImage</code> 296033 → 292907 字节）。</li>
 </ul>
-<h2 id="7-残影：WorkerW-从不重绘被腾出的区域"><a href="#7-残影：WorkerW-从不重绘被腾出的区域" class="headerlink" title="7 残影：WorkerW 从不重绘被腾出的区域"></a>7 残影：WorkerW 从不重绘被腾出的区域</h2><h3 id="7-1-机制"><a href="#7-1-机制" class="headerlink" title="7.1 机制"></a>7.1 机制</h3><p>DWM 下<strong>每个顶层窗口只有一张 GDI 重定向表面</strong>，子窗口树的所有 GDI 输出（包括 HUD 的 <code>BitBlt</code>）都写入 <strong>WorkerW 顶层窗口自己的表面</strong>。当子窗口被移动 / 隐藏 / 销毁后，暴露的矩形需要 WorkerW 自己重绘——但它是 Explorer 的内部窗口，对“寄宿的访客子窗口”<strong>从不重绘</strong>（跨进程 graft 树的绘制同步是坏的）。于是子窗口的最后一帧<strong>永久僵死</strong>在桌面上，也就是“分身”。</p>
+<h2 id="7-残影：WorkerW-从不重绘"><a href="#7-残影：WorkerW-从不重绘" class="headerlink" title="7 残影：WorkerW 从不重绘"></a>7 残影：WorkerW 从不重绘</h2><h3 id="7-1-机制"><a href="#7-1-机制" class="headerlink" title="7.1 机制"></a>7.1 机制</h3><p>DWM 下<strong>每个顶层窗口只有一张 GDI 重定向表面</strong>，子窗口树的所有 GDI 输出（包括 HUD 的 <code>BitBlt</code>）都写入 <strong>WorkerW 顶层窗口自己的表面</strong>。当子窗口被移动 / 隐藏 / 销毁后，暴露的矩形需要 WorkerW 自己重绘——但它是 Explorer 的内部窗口，对“寄宿的访客子窗口”<strong>从不重绘</strong>（跨进程 graft 树的绘制同步是坏的）。于是子窗口的最后一帧<strong>永久僵死</strong>在桌面上，也就是“分身”。</p>
 <p>实证：<code>EnumWindows</code> 始终只有 1 个活窗口（排除窗口泄漏）；重启 Explorer 重建整个场景后分身消失（表面被重建）。这也解释了“隐藏 HUD 后面板不消失、数据不更新；再显示后恢复更新”——窗口藏了，但它烤在 WorkerW 表面里的最后一帧还在。</p>
 <p><img src="/2026/10/04/zhuo-mian-bi-zhi-ceng-jian-kong-hud-cai-keng-shi-lu/AURA-IMG-05.svg" alt="残影成因与三级清除策略"></p>
-<h3 id="7-2-修复：三级策略，按代价递增、命中即止"><a href="#7-2-修复：三级策略，按代价递增、命中即止" class="headerlink" title="7.2 修复：三级策略，按代价递增、命中即止"></a>7.2 修复：三级策略，按代价递增、命中即止</h3><ol>
+<h3 id="7-2-三级清除策略"><a href="#7-2-三级清除策略" class="headerlink" title="7.2 三级清除策略"></a>7.2 三级清除策略</h3><ol>
 <li><strong>绘制覆盖（主路径）</strong>：按当前壁纸状态解码腾出区域应有的像素，经跨进程 <code>GetDC(host)</code> 直接 <code>BitBlt</code> 到壁纸 WorkerW 的表面盖掉冻结帧。<strong>不经 Shell、零缓存流转、像素级正确</strong>（实测覆盖后旧区残影 <code>mean|d| = 0.01/255</code>，缓存文件 mtime 不变）。</li>
 <li><strong>精准失效（绘制失败时伴随）</strong>：<code>RedrawWindow(host, &amp;rect, nullptr, RDW_INVALIDATE | RDW_ERASE | RDW_FRAME | RDW_NOINTERNALPAINT)</code>。<strong>单独使用不足以清残影</strong>（实测 <code>mean|d| = 35.8</code> vs 干净区 0.12）——桌面类窗口只经 <code>WM_ERASEBKGND</code> 重绘；<strong>禁止</strong> <code>RDW_UPDATENOW</code> / <code>RDW_ERASENOW</code>（同步标志对其它进程拥有的窗口无效）。</li>
 <li><strong>SPI 重放（仅兜底）</strong>：绘制失败（无可解码壁纸）或桌面级刷新（<code>vacated == nullptr</code>，会话重连——RDP 客户端缓存里的旧帧需要它）时，<code>SystemParametersInfoW(SPI_SETDESKWALLPAPER, 真实路径, SPIF_SENDWININICHANGE)</code>。三条铁律：<strong>重放原始路径</strong>、**不带 <code>SPIF_UPDATEINIFILE</code>**（否则会写用户注册表、打断幻灯片、把“每屏不同壁纸”场景的其它屏重置）、重放会让 shell 重建缓存 <strong>6–20 秒</strong>（调用方据此让垫底进入“跟随模式”）。另：<code>SPI(NULL)</code> 会把部分配置刷成纯黑，禁用；Win11 24H2 的 raised desktop 下完全跳过——会直接毁掉壁纸 WorkerW（Lively 对同款调用同样门控）。</li>
 </ol>
-<h3 id="7-3-防误伤：去抖合并"><a href="#7-3-防误伤：去抖合并" class="headerlink" title="7.3 防误伤：去抖合并"></a>7.3 防误伤：去抖合并</h3><p>HUD 的每次“腾出矩形”先进入 App 的脏矩形并集（<code>UnionRect</code>），<strong>250 ms 静默后</strong>才真正刷新一次——几何滑块拖动每秒触发数十次腾出报告，不再逐次刷新。其中<strong>桌面级请求（<code>nullptr</code>）是粘性标志</strong>：去抖窗口内后续的矩形报告不得把它降级成单矩形刷新，否则其余区域会留下幽灵帧。退出前必须 flush，保证不留尾巴。</p>
-<h3 id="7-4-两个被实测否定的路线（记录在此，勿重复）"><a href="#7-4-两个被实测否定的路线（记录在此，勿重复）" class="headerlink" title="7.4 两个被实测否定的路线（记录在此，勿重复）"></a>7.4 两个被实测否定的路线（记录在此，勿重复）</h3><ul>
+<h3 id="7-3-去抖合并"><a href="#7-3-去抖合并" class="headerlink" title="7.3 去抖合并"></a>7.3 去抖合并</h3><p>HUD 的每次“腾出矩形”先进入 App 的脏矩形并集（<code>UnionRect</code>），<strong>250 ms 静默后</strong>才真正刷新一次——几何滑块拖动每秒触发数十次腾出报告，不再逐次刷新。其中<strong>桌面级请求（<code>nullptr</code>）是粘性标志</strong>：去抖窗口内后续的矩形报告不得把它降级成单矩形刷新，否则其余区域会留下幽灵帧。退出前必须 flush，保证不留尾巴。</p>
+<h3 id="7-4-两条被否定的路线"><a href="#7-4-两条被否定的路线" class="headerlink" title="7.4 两条被否定的路线"></a>7.4 两条被否定的路线</h3><ul>
 <li><strong>“外科式 <code>RedrawWindow</code> 足以清残影、可去掉 SPI 重放”</strong>：实测残影 35.8 清不掉。重放必须保留为兜底，但改为绘制覆盖为主。</li>
 <li><strong>“渲染管线回归导致残影”</strong>：同半径下新旧二进制角部像素逐位一致——残影与渲染代码无关，回退代码作诊断不能定位此类问题。</li>
 </ul>
@@ -751,7 +751,7 @@ SendMessageTimeout(progman, 0x052C, 0x0D, 0x1, SMTO_ABORTIFHUNG, 1000, &amp;igno
 <li><code>WS_EX_TOPMOST</code> 归窗口管理器管：**清除必须用 <code>SetWindowPos(HWND_NOTOPMOST)</code>**，直接改样式位无效。</li>
 <li>移动期间 <code>HealthCheck</code> 与 <code>TaskbarCreated</code> 处理必须旁观（<code>hud_.InMoveMode()</code> 守卫），否则 2 秒一次的健康检查会把窗口拽回去。</li>
 </ul>
-<h2 id="9-托盘回调：v4-的参数含义完全变了"><a href="#9-托盘回调：v4-的参数含义完全变了" class="headerlink" title="9 托盘回调：v4 的参数含义完全变了"></a>9 托盘回调：v4 的参数含义完全变了</h2><p><code>NOTIFYICON_VERSION_4</code>（<code>NIM_SETVERSION</code> 设置成功后）的回调消息布局与旧版完全不同：</p>
+<h2 id="9-托盘回调-v4-的参数布局"><a href="#9-托盘回调-v4-的参数布局" class="headerlink" title="9 托盘回调 v4 的参数布局"></a>9 托盘回调 v4 的参数布局</h2><p><code>NOTIFYICON_VERSION_4</code>（<code>NIM_SETVERSION</code> 设置成功后）的回调消息布局与旧版完全不同：</p>
 <table>
 <thead>
 <tr>
@@ -780,9 +780,9 @@ SendMessageTimeout(progman, 0x052C, 0x0D, 0x1, SMTO_ABORTIFHUNG, 1000, &amp;igno
 <li>菜单弹出的前置条件（各自失效时都表现为“右键没反应/闪一下就没”）：<strong>owner 窗口不能是隐藏窗口，也不能是 message-only 窗口</strong>（从未显示过的窗口无法成为前台窗口，菜单会在出现的瞬间被“点击在菜单外”关掉）；用屏幕外 1×1、已 <code>ShowWindow</code>、带 <code>WS_EX_TOOLWINDOW</code> 的顶层窗口最稳；<code>SetForegroundWindow</code> 单独调用常失败，要先 <code>AttachThreadInput</code> 再设前台。</li>
 <li>**回调日志记录原始 <code>wParam</code>/<code>lParam</code>**，是定位这类问题最快的手段。</li>
 </ul>
-<h2 id="10-资源与清单：MinGW-的两个坑"><a href="#10-资源与清单：MinGW-的两个坑" class="headerlink" title="10 资源与清单：MinGW 的两个坑"></a>10 资源与清单：MinGW 的两个坑</h2><h3 id="10-1-ICO-的每个条目必须是完整-DIB"><a href="#10-1-ICO-的每个条目必须是完整-DIB" class="headerlink" title="10.1 ICO 的每个条目必须是完整 DIB"></a>10.1 ICO 的每个条目必须是完整 DIB</h3><p>ICO 的每个图像条目必须是<strong>完整 DIB</strong>：40 字节 <code>BITMAPINFOHEADER</code>（<code>biSize=40</code>、<code>biHeight=2×宽</code>）+ XOR 像素 + AND 掩码。</p>
+<h2 id="10-MinGW-的两个坑"><a href="#10-MinGW-的两个坑" class="headerlink" title="10 MinGW 的两个坑"></a>10 MinGW 的两个坑</h2><h3 id="10-1-ICO-条目必须是完整-DIB"><a href="#10-1-ICO-条目必须是完整-DIB" class="headerlink" title="10.1 ICO 条目必须是完整 DIB"></a>10.1 ICO 条目必须是完整 DIB</h3><p>ICO 的每个图像条目必须是<strong>完整 DIB</strong>：40 字节 <code>BITMAPINFOHEADER</code>（<code>biSize=40</code>、<code>biHeight=2×宽</code>）+ XOR 像素 + AND 掩码。</p>
 <p>图标生成脚本曾漏写头部（条目直接以裸像素开头，<code>biSize=0</code>）。<code>windres</code> 不解析 ICO 内部结构、原样嵌入，于是 exe 里有了<strong>无法解码的图标资源</strong>：<code>LoadImageW</code> 静默失败 → 回退到系统默认图标 → “托盘图标不是自己的”。更麻烦的是 <code>ExtractAssociatedIcon</code> 同样返回默认图标——它对坏数据的“成功”没有诊断价值。所以生成脚本务必在写入像素前补齐头部，并用 <code>biSize==40 &amp;&amp; biHeight==2*宽</code> 断言自检。</p>
-<h3 id="10-2-manifest-的-ID-冲突，以及一个更隐蔽的“惰性”问题"><a href="#10-2-manifest-的-ID-冲突，以及一个更隐蔽的“惰性”问题" class="headerlink" title="10.2 manifest 的 ID 冲突，以及一个更隐蔽的“惰性”问题"></a>10.2 manifest 的 ID 冲突，以及一个更隐蔽的“惰性”问题</h3><p>binutils ≥ 2.44 会自动链接 <code>lib/default-manifest.o</code>（自带 <code>RT_MANIFEST</code> 资源 ID 1），项目自己的 <code>.rc</code> 若也用 ID 1 会直接报 <code>multiple non-default manifests</code>。本项目把自有 manifest 放在 <strong>ID 2</strong>，运行时用 <code>CreateActCtxW</code> 显式激活拿到 Common Controls v6。</p>
+<h3 id="10-2-manifest-的两处坑"><a href="#10-2-manifest-的两处坑" class="headerlink" title="10.2 manifest 的两处坑"></a>10.2 manifest 的两处坑</h3><p>binutils ≥ 2.44 会自动链接 <code>lib/default-manifest.o</code>（自带 <code>RT_MANIFEST</code> 资源 ID 1），项目自己的 <code>.rc</code> 若也用 ID 1 会直接报 <code>multiple non-default manifests</code>。本项目把自有 manifest 放在 <strong>ID 2</strong>，运行时用 <code>CreateActCtxW</code> 显式激活拿到 Common Controls v6。</p>
 <p>这里有一个更隐蔽的坑，值得单独记一笔：**<code>CreateActCtx</code> 激活的 manifest，只覆盖 SxS 依赖解析（也就是 comctl32 v6 那条 <code>&lt;dependency&gt;</code>），不覆盖加载器时（loader-time）的设置。** 因此 manifest 里的 <code>&lt;windowsSettings&gt;</code>（<code>dpiAware</code> / <code>dpiAwareness</code> / <code>longPathAware</code>）和 <code>&lt;compatibility&gt;</code> 段在 ID 2 上是<strong>惰性</strong>的——写了也不生效。DPI 感知必须改用 API 在启动时设置：</p>
 <pre><code class="line-numbers language-cpp">// DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2 == (HANDLE)-4
 pfn(SetProcessDpiAwarenessContext, reinterpret_cast&lt;HANDLE&gt;(static_cast&lt;INT_PTR&gt;(-4)));
@@ -804,19 +804,19 @@ VRAM 140px 固定值区: "612.4 MB / 12.0 GB"    -&gt;  ".4 MB / 12.0 GB"
 <p><strong>测量一致性陷阱</strong>：比较字符串宽度必须在<strong>同一 DPI 感知环境</strong>下进行。独立探针进程若不声明 DPI 感知，<code>LOGPIXELSX</code> / DWrite 都被虚拟化到 96，而应用进程是 Per-Monitor-V2（缩放显示器上真实 120）——测出的宽度差一个缩放系数。这不是应用的 bug，探针要加 <code>SetProcessDpiAwareness</code>。</p>
 <p><strong>跨进程 UI 自动化坑</strong>：<code>GetWindowTextW</code> 对<strong>其他进程</strong>的控件返回空串（它不发 <code>WM_GETTEXT</code>，只读本进程缓存的窗口标题）；驱动设置窗口做验证要用 <code>SendMessage(WM_GETTEXT)</code> 直取。</p>
 <h2 id="12-配置与生命周期"><a href="#12-配置与生命周期" class="headerlink" title="12 配置与生命周期"></a>12 配置与生命周期</h2><p>这一节的问题都属于“假设错了但表面正常”的同一族。</p>
-<h3 id="12-1-INI-编码：profile-API-不认-UTF-16-BOM"><a href="#12-1-INI-编码：profile-API-不认-UTF-16-BOM" class="headerlink" title="12.1 INI 编码：profile API 不认 UTF-16 BOM"></a>12.1 INI 编码：profile API 不认 UTF-16 BOM</h3><p>为修“西文系统上把宋体存成 <code>??</code>”，曾把 <code>config.ini</code> 改为 UTF-16LE+BOM 写盘（“<code>GetPrivateProfileStringW</code> 认 BOM”是流传很广的说法）。用 15 行最小程序在 Win10 19045 上实测：<strong>profile API 按原始 ANSI 字节读文件，完全找不到节，全部返回默认值</strong>——若上线会直接毁掉配置读取，冒烟测试都没拦住。结论：INI 编码锁定 <strong>CP_ACP</strong>，这是硬约束不是偏好；编码问题的修法放在 UI 端（字体下拉过滤掉 CP_ACP 不可表示的名字）。</p>
+<h3 id="12-1-INI-编码锁-CP-ACP"><a href="#12-1-INI-编码锁-CP-ACP" class="headerlink" title="12.1 INI 编码锁 CP_ACP"></a>12.1 INI 编码锁 CP_ACP</h3><p>为修“西文系统上把宋体存成 <code>??</code>”，曾把 <code>config.ini</code> 改为 UTF-16LE+BOM 写盘（“<code>GetPrivateProfileStringW</code> 认 BOM”是流传很广的说法）。用 15 行最小程序在 Win10 19045 上实测：<strong>profile API 按原始 ANSI 字节读文件，完全找不到节，全部返回默认值</strong>——若上线会直接毁掉配置读取，冒烟测试都没拦住。结论：INI 编码锁定 <strong>CP_ACP</strong>，这是硬约束不是偏好；编码问题的修法放在 UI 端（字体下拉过滤掉 CP_ACP 不可表示的名字）。</p>
 <blockquote>
 <p><strong>教训：跨 API 的行为假设先写最小程序实测，且冒烟测试要覆盖“写回再读入”的环路。</strong></p>
 </blockquote>
-<h3 id="12-2-WM-ENDSESSION-与-GWLP-USERDATA-的顺序"><a href="#12-2-WM-ENDSESSION-与-GWLP-USERDATA-的顺序" class="headerlink" title="12.2 WM_ENDSESSION 与 GWLP_USERDATA 的顺序"></a>12.2 <code>WM_ENDSESSION</code> 与 <code>GWLP_USERDATA</code> 的顺序</h3><p><code>Shutdown()</code> 先清 <code>GWLP_USERDATA</code> 再 <code>DestroyWindow</code>，<code>WM_DESTROY</code> 在静态 <code>WndProc</code> 里取不到 <code>self</code>，走到 <code>DefWindowProc</code>——<code>PostQuitMessage</code> 永远不执行，消息循环不退出：每次注销/关机应用都拖到系统强杀超时。修复：<code>WM_ENDSESSION</code> 处理完直接 <code>PostQuitMessage(0)</code>，不依赖 <code>WM_DESTROY</code>。</p>
+<h3 id="12-2-注销时消息循环不退出"><a href="#12-2-注销时消息循环不退出" class="headerlink" title="12.2 注销时消息循环不退出"></a>12.2 注销时消息循环不退出</h3><p><code>Shutdown()</code> 先清 <code>GWLP_USERDATA</code> 再 <code>DestroyWindow</code>，<code>WM_DESTROY</code> 在静态 <code>WndProc</code> 里取不到 <code>self</code>，走到 <code>DefWindowProc</code>——<code>PostQuitMessage</code> 永远不执行，消息循环不退出：每次注销/关机应用都拖到系统强杀超时。修复：<code>WM_ENDSESSION</code> 处理完直接 <code>PostQuitMessage(0)</code>，不依赖 <code>WM_DESTROY</code>。</p>
 <blockquote>
 <p><strong>教训：“经 userdata 分发”的静态窗口回调，销毁路径要专门走查一遍（成员清理与消息派发的先后顺序）。</strong></p>
 </blockquote>
-<h3 id="12-3-latest-wins-去重会吞掉失败重试"><a href="#12-3-latest-wins-去重会吞掉失败重试" class="headerlink" title="12.3 latest-wins 去重会吞掉失败重试"></a>12.3 latest-wins 去重会吞掉失败重试</h3><p>垫底解码失败后注释写着“渲染节流会重试”，但重试入口被 <code>key == underlayKey_</code> 去重拦下（失败不改键），“重试”落空。修复：worker 失败置 <code>underlayReqFailed_</code>，调度端见标志放行同键重排。</p>
+<h3 id="12-3-去重吞掉失败重试"><a href="#12-3-去重吞掉失败重试" class="headerlink" title="12.3 去重吞掉失败重试"></a>12.3 去重吞掉失败重试</h3><p>垫底解码失败后注释写着“渲染节流会重试”，但重试入口被 <code>key == underlayKey_</code> 去重拦下（失败不改键），“重试”落空。修复：worker 失败置 <code>underlayReqFailed_</code>，调度端见标志放行同键重排。</p>
 <blockquote>
 <p><strong>教训：“稍后会重试”的注释必须指出具体调用路径；latest-wins 去重的队列必须有失败旁路。</strong></p>
 </blockquote>
-<h3 id="12-4-其余几处（一句话备查）"><a href="#12-4-其余几处（一句话备查）" class="headerlink" title="12.4 其余几处（一句话备查）"></a>12.4 其余几处（一句话备查）</h3><ul>
+<h3 id="12-4-其余几处"><a href="#12-4-其余几处" class="headerlink" title="12.4 其余几处"></a>12.4 其余几处</h3><ul>
 <li><strong>两个显示器枚举的顺序没有文档保证</strong>：<code>Config::monitorIndex</code> 是 <code>EnumDisplayMonitors</code> 序，曾被直接当 <code>IDesktopWallpaper::GetMonitorDevicePathAt</code> 的下标用，多屏不同壁纸时会解码另一台显示器的图。改为按显示器矩形<strong>几何相等</strong>匹配。</li>
 <li><strong>自启动只加不删</strong>：启动路径 <code>if (autoStart) SetAutoStart(true)</code> 让手改 INI <code>AutoStart=0</code> 永远清不掉已有的 Run 键；改为无条件 <code>SetAutoStart(cfg_.autoStart)</code> 双向对齐。</li>
 <li><strong><code>RawSMBIOSData</code> 表区 = 8 字节头 + <code>Length</code> 字节</strong>：扫描终点是 <code>data + 8 + Length</code>（少加 8 会漏掉表尾），<code>Length</code> 需按 API 返回值夹取。</li>
@@ -826,9 +826,9 @@ VRAM 140px 固定值区: "612.4 MB / 12.0 GB"    -&gt;  ".4 MB / 12.0 GB"
 <li><strong>日志轮转 <code>MoveFileW</code> 会因外部程序占用失败</strong>：失败时截断兜底，512 KB 上限继续生效；轮转在锁内，告警只能走 <code>OutputDebugString</code>（<code>log::Warn</code> 会递归死锁）。</li>
 <li><strong>被后台线程 <code>PostMessage</code> 的 HWND 要在销毁路径上提前解绑</strong>（窗口句柄可能被复用）；共享状态用同一把互斥量保护读写。</li>
 </ul>
-<h2 id="13-代码级隐患：几处“两份实现”的漂移"><a href="#13-代码级隐患：几处“两份实现”的漂移" class="headerlink" title="13 代码级隐患：几处“两份实现”的漂移"></a>13 代码级隐患：几处“两份实现”的漂移</h2><p>上面各节是已经踩过并修好的坑。在通读代码的过程中，还有几处<strong>今天不炸、但结构上迟早会炸</strong>的地方，一并记下来。</p>
+<h2 id="13-代码级隐患"><a href="#13-代码级隐患" class="headerlink" title="13 代码级隐患"></a>13 代码级隐患</h2><p>上面各节是已经踩过并修好的坑。在通读代码的过程中，还有几处<strong>今天不炸、但结构上迟早会炸</strong>的地方，一并记下来。</p>
 <p>这一节分两类：<strong>已修</strong>的三处（写出来之后在发布前的编译验证里顺手改掉了，附补丁与验证方式），以及<strong>仍然留着</strong>的三处结构性设计债——它们不是 bug，改动面大、需要配套回归测试，所以只记录不动手。</p>
-<h3 id="13-1（已修）两份镜像的摆放数学，校验强度并不一致"><a href="#13-1（已修）两份镜像的摆放数学，校验强度并不一致" class="headerlink" title="13.1（已修）两份镜像的摆放数学，校验强度并不一致"></a>13.1（已修）两份镜像的摆放数学，校验强度并不一致</h3><p><code>Hud::DecodeUnderlayCrop</code>（垫底裁片）与 <code>desktop::DecodeRegionToBGRA</code>（残影覆盖）是两段几乎逐行相同的摆放数学：<code>center / tile / stretch / fit / fill / span</code> 六种样式、信箱钳制、WIC 裁剪 + 缩放、以及 <code>CopyPixels</code> 步长的绕法。源码注释自己写着：</p>
+<h3 id="13-1（已修）两份镜像的校验"><a href="#13-1（已修）两份镜像的校验" class="headerlink" title="13.1（已修）两份镜像的校验"></a>13.1（已修）两份镜像的校验</h3><p><code>Hud::DecodeUnderlayCrop</code>（垫底裁片）与 <code>desktop::DecodeRegionToBGRA</code>（残影覆盖）是两段几乎逐行相同的摆放数学：<code>center / tile / stretch / fit / fill / span</code> 六种样式、信箱钳制、WIC 裁剪 + 缩放、以及 <code>CopyPixels</code> 步长的绕法。源码注释自己写着：</p>
 <pre><code class="line-numbers language-cpp">// Placement math mirrors Hud::DecodeUnderlayCrop - keep the two in sync.
 </code></pre>
 <p>这确实是 bug 的温床——<code>CopyPixels</code> 步长那个 bug 当初就是靠“两处同步”修好的。但两处的<strong>图片尺寸合理性校验并不一致</strong>：</p>
@@ -844,14 +844,14 @@ if (iw == 0 || ih == 0) hr = E_INVALIDARG;
     hr = E_INVALIDARG;
 </code></pre>
 <p>但<strong>根因没有解决</strong>：摆放数学仍然是两份副本。同一份逻辑写两遍，改一处忘另一处只是时间问题；更稳的形态是把它抽成一个纯函数，两处都调用它，校验只写一遍。</p>
-<h3 id="13-2（未修）RamDesc-的“参数只在首次求值”的-static"><a href="#13-2（未修）RamDesc-的“参数只在首次求值”的-static" class="headerlink" title="13.2（未修）RamDesc 的“参数只在首次求值”的 static"></a>13.2（未修）<code>RamDesc</code> 的“参数只在首次求值”的 static</h3><pre><code class="line-numbers language-cpp">const std::wstring&amp; RamDesc(unsigned long long totalPhysBytes) {
+<h3 id="13-2（未修）RamDesc-的静态缓存"><a href="#13-2（未修）RamDesc-的静态缓存" class="headerlink" title="13.2（未修）RamDesc 的静态缓存"></a>13.2（未修）RamDesc 的静态缓存</h3><pre><code class="line-numbers language-cpp">const std::wstring&amp; RamDesc(unsigned long long totalPhysBytes) {
     static const std::wstring desc = BuildRamDesc(totalPhysBytes);  // 参数被忽略
     return desc;
 }
 </code></pre>
 <p>今天安全——唯一调用点在 <code>memory_.Sample()</code> 填充 <code>total</code> 之后。但它把“调用顺序”变成了<strong>隐式契约</strong>：任何一处提前用 0 调用，就会永久显示空描述。这类“参数只用于首次求值的函数内 static”是典型的潜伏陷阱，改成显式的 <code>std::once_flag</code> + 参数一致性断言，语义才站得住。</p>
-<h3 id="13-3（未修）测宽与绘制是两套代码"><a href="#13-3（未修）测宽与绘制是两套代码" class="headerlink" title="13.3（未修）测宽与绘制是两套代码"></a>13.3（未修）测宽与绘制是两套代码</h3><p><code>ContentMinWidth</code>（测宽）和 <code>RenderToTarget</code> 里的 <code>valueZoneW</code>（绘制）是同一套公式的两个副本，靠注释互相提醒。第 11 节那三个坑（漏 pad、地板呼吸、跨 DPI 测量）本质上都是“两份实现漂移”的症状。如果能抽成同一个函数返回 <code>(labelZone, valueZone)</code>，这类问题可以从结构上消失，而不是靠每次复发再补一条规则。</p>
-<h3 id="13-4（已修）Sampler-Stop-的早退分支跳过了解绑"><a href="#13-4（已修）Sampler-Stop-的早退分支跳过了解绑" class="headerlink" title="13.4（已修）Sampler::Stop 的早退分支跳过了解绑"></a>13.4（已修）<code>Sampler::Stop</code> 的早退分支跳过了解绑</h3><pre><code class="line-numbers language-cpp">void Sampler::Stop() {
+<h3 id="13-3（未修）测宽与绘制"><a href="#13-3（未修）测宽与绘制" class="headerlink" title="13.3（未修）测宽与绘制"></a>13.3（未修）测宽与绘制</h3><p><code>ContentMinWidth</code>（测宽）和 <code>RenderToTarget</code> 里的 <code>valueZoneW</code>（绘制）是同一套公式的两个副本，靠注释互相提醒。第 11 节那三个坑（漏 pad、地板呼吸、跨 DPI 测量）本质上都是“两份实现漂移”的症状。如果能抽成同一个函数返回 <code>(labelZone, valueZone)</code>，这类问题可以从结构上消失，而不是靠每次复发再补一条规则。</p>
+<h3 id="13-4（已修）Stop-的早退分支"><a href="#13-4（已修）Stop-的早退分支" class="headerlink" title="13.4（已修）Stop 的早退分支"></a>13.4（已修）Stop 的早退分支</h3><pre><code class="line-numbers language-cpp">void Sampler::Stop() {
     std::lock_guard&lt;std::mutex&gt; lock(waitMutex_);
     if (!worker_.joinable()) return;   // &lt;- 早退：gpu_.Shutdown() 被跳过
     ...
@@ -874,8 +874,8 @@ if (iw == 0 || ih == 0) hr = E_INVALIDARG;
 }
 </code></pre>
 <p><code>GpuMonitor::Shutdown()</code> 本身是幂等的（内部就是卸载 NVML + 重置重试节流），而 <code>Start()</code> 开头会先调一次 <code>Stop()</code>——所以这条路径重复调用是安全的。<strong>改之前要把这两点确认清楚</strong>，否则「顺手补一行」可能变成「每次启动都多卸载一次驱动句柄」。</p>
-<h3 id="13-5（未修）设计上界在-Config-与-UI-两处硬编码"><a href="#13-5（未修）设计上界在-Config-与-UI-两处硬编码" class="headerlink" title="13.5（未修）设计上界在 Config 与 UI 两处硬编码"></a>13.5（未修）设计上界在 Config 与 UI 两处硬编码</h3><p><code>cornerRadius</code> 的设计上界 32 同时出现在 <code>Config::Sanitize</code> 和 <code>SettingsWindow::WriteControls</code> 的 <code>TBM_SETRANGE(0, 32)</code> 里；同类还有刷新间隔的预设表、宽高上下限。改一处忘另一处，就会出现“滑块能拖到 40 但存下去被夹回 32”这类不一致。抽成一个共享常量（甚至直接把上界暴露成 <code>Config::kMaxCornerRadius</code>）是低成本的做法。</p>
-<h3 id="13-6（已修）-dump-的相对路径会静默落到-APPDATA-AuraUI"><a href="#13-6（已修）-dump-的相对路径会静默落到-APPDATA-AuraUI" class="headerlink" title="13.6（已修）--dump 的相对路径会静默落到 %APPDATA%\AuraUI"></a>13.6（已修）<code>--dump</code> 的相对路径会静默落到 <code>%APPDATA%\AuraUI</code></h3><p>这一处是<strong>发布前实测撞出来的</strong>，不在最初通读代码的清单里。<code>--dump</code> 是 README 里公开的诊断入口：</p>
+<h3 id="13-5（未修）设计上界两处硬编码"><a href="#13-5（未修）设计上界两处硬编码" class="headerlink" title="13.5（未修）设计上界两处硬编码"></a>13.5（未修）设计上界两处硬编码</h3><p><code>cornerRadius</code> 的设计上界 32 同时出现在 <code>Config::Sanitize</code> 和 <code>SettingsWindow::WriteControls</code> 的 <code>TBM_SETRANGE(0, 32)</code> 里；同类还有刷新间隔的预设表、宽高上下限。改一处忘另一处，就会出现“滑块能拖到 40 但存下去被夹回 32”这类不一致。抽成一个共享常量（甚至直接把上界暴露成 <code>Config::kMaxCornerRadius</code>）是低成本的做法。</p>
+<h3 id="13-6（已修）–dump-的相对路径"><a href="#13-6（已修）–dump-的相对路径" class="headerlink" title="13.6（已修）–dump 的相对路径"></a>13.6（已修）–dump 的相对路径</h3><p>这一处是<strong>发布前实测撞出来的</strong>，不在最初通读代码的清单里。<code>--dump</code> 是 README 里公开的诊断入口：</p>
 <pre><code class="line-numbers language-bat">D:\...\AuraUI&gt; build\AuraUI.exe --dump rel_test.bmp
 D:\...\AuraUI&gt; echo %ERRORLEVEL%
 0
@@ -948,7 +948,7 @@ if (opts.dump &amp;&amp; !opts.dumpPath.empty() &amp;&amp; !launchDir.empty() &a
 </tr>
 </tbody></table>
 <p>项目里还沉淀了一套端到端验证脚本（纯 Python 标准库，不依赖鼠标键盘）：挂载与样式位、z 序、实时预览收缩/恢复、z 序破坏自愈、<code>Win+D</code> 存活，逐项 PASS 时输出 <code>RESULT: ALL PASS</code>；另有托盘回调、移动模式、宽度护栏等专项脚本。跨进程读写控件文本必须用 <code>WM_GETTEXT</code>/<code>WM_SETTEXT</code>。</p>
-<h2 id="15-问题清单（按成因分类）"><a href="#15-问题清单（按成因分类）" class="headerlink" title="15 问题清单（按成因分类）"></a>15 问题清单（按成因分类）</h2><h3 id="15-1-采集与硬件信息类"><a href="#15-1-采集与硬件信息类" class="headerlink" title="15.1 采集与硬件信息类"></a>15.1 采集与硬件信息类</h3><ol>
+<h2 id="15-问题清单"><a href="#15-问题清单" class="headerlink" title="15 问题清单"></a>15 问题清单</h2><h3 id="15-1-采集与硬件信息"><a href="#15-1-采集与硬件信息" class="headerlink" title="15.1 采集与硬件信息"></a>15.1 采集与硬件信息</h3><ol>
 <li>⚠️ <code>GetSystemTimes</code> 的 <code>kernel</code> <strong>已含 idle</strong>：total 只能是 <code>kernel + user</code>，否则负载被系统性低估。</li>
 <li>⚠️ 速率类指标（网络）的基线必须<strong>携带适配器标识（LUID）</strong>，换卡时重新起步，否则报出 TB/s 级假尖峰。</li>
 <li>计数器会回绕：差值取 <code>in &gt;= prev ? in - prev : 0</code>，不要输出负数。</li>
@@ -960,7 +960,7 @@ if (opts.dump &amp;&amp; !opts.dumpPath.empty() &amp;&amp; !launchDir.empty() &a
 <li>硬件容量<strong>以 OS 为准</strong>（<code>GlobalMemoryStatusEx</code>），SMBIOS 只信型号与频率，并留一条交叉校验日志。</li>
 <li>磁盘盘符取自 <code>GetWindowsDirectoryW</code>，不要硬编码 <code>C</code>。</li>
 </ol>
-<h3 id="15-2-桌面层挂载类"><a href="#15-2-桌面层挂载类" class="headerlink" title="15.2 桌面层挂载类"></a>15.2 桌面层挂载类</h3><ol>
+<h3 id="15-2-桌面层挂载"><a href="#15-2-桌面层挂载" class="headerlink" title="15.2 桌面层挂载"></a>15.2 桌面层挂载</h3><ol>
 <li>⚠️ <code>0x052C</code> 的 **wParam 必须是 <code>0xD</code>**，lParam <code>0x1</code>；写 <code>(0,0)</code> 静默无效，窗口隐身。</li>
 <li>⚠️ 壁纸层是<strong>懒加载</strong>的，不存在时要催生；催生要限流（每次多建一个 WorkerW）。</li>
 <li>⚠️ 按类名找 <code>WorkerW</code> 不可靠，必须加「属于 Explorer」过滤。</li>
@@ -969,7 +969,7 @@ if (opts.dump &amp;&amp; !opts.dumpPath.empty() &amp;&amp; !launchDir.empty() &a
 <li>壁纸层的位置随 shell 版本变化（顶层 WorkerW / Progman 直接子窗口），两处都要找。</li>
 <li><code>SetWindowPos</code> 用 <code>HWND_BOTTOM</code> 或插到 <code>SHELLDLL_DefView</code> 正下方；**绝不 <code>HWND_TOPMOST</code>**。</li>
 </ol>
-<h3 id="15-3-渲染与合成类"><a href="#15-3-渲染与合成类" class="headerlink" title="15.3 渲染与合成类"></a>15.3 渲染与合成类</h3><ol start="8">
+<h3 id="15-3-渲染与合成"><a href="#15-3-渲染与合成" class="headerlink" title="15.3 渲染与合成"></a>15.3 渲染与合成</h3><ol start="8">
 <li>⚠️ 跨进程 <code>SetParent</code> 之后分层子窗口不可靠（故障模式 A/B/C），挂载态只用普通 GDI。</li>
 <li>⚠️ 在可见状态下清除 <code>WS_EX_LAYERED</code> 会把当前帧“烤”进桌面合成，留永久残影。</li>
 <li>挂载态的半透明只能用“壁纸垫底”模拟；裁片在后台线程生成、latest-wins、永不保留全图。</li>
@@ -978,12 +978,12 @@ if (opts.dump &amp;&amp; !opts.dumpPath.empty() &amp;&amp; !launchDir.empty() &a
 <li><code>CopyPixels</code> 按 <code>cbStride</code> 步长写输出，与目标缓冲真实行距不等时会产生对角错切——先拷进连续临时缓冲再逐行 <code>memcpy</code>。</li>
 <li><code>D2DERR_RECREATE_TARGET</code> 重试时，垫底 bitmap 必须<strong>在重试循环内</strong>懒创建（旧的随 target 一起失效）。</li>
 </ol>
-<h3 id="15-4-残影类"><a href="#15-4-残影类" class="headerlink" title="15.4 残影类"></a>15.4 残影类</h3><ol start="15">
+<h3 id="15-4-残影"><a href="#15-4-残影" class="headerlink" title="15.4 残影"></a>15.4 残影</h3><ol start="15">
 <li>WorkerW 从不重绘被腾出的区域；修复以“绘制覆盖”为主，<code>RedrawWindow</code> 与 SPI 重放为兜底。</li>
 <li>SPI 重放必须<strong>回放原始路径</strong>、**不带 <code>SPIF_UPDATEINIFILE</code>**；<code>SPI(NULL)</code> 禁用；24H2 raised desktop 下跳过。</li>
 <li>腾出矩形要 250 ms 去抖合并；桌面级请求是<strong>粘性</strong>的，不能被单矩形报告降级。</li>
 </ol>
-<h3 id="15-5-交互与资源类"><a href="#15-5-交互与资源类" class="headerlink" title="15.5 交互与资源类"></a>15.5 交互与资源类</h3><ol start="18">
+<h3 id="15-5-交互与资源"><a href="#15-5-交互与资源" class="headerlink" title="15.5 交互与资源"></a>15.5 交互与资源</h3><ol start="18">
 <li>⚠️ 托盘 v4 的 <code>wParam</code> 是坐标、<code>lParam</code> 是事件；同一次点击会同时投递裸消息与抽象事件，<strong>只处理抽象事件</strong>。</li>
 <li>菜单 owner 不能是隐藏/message-only 窗口；<code>SetForegroundWindow</code> 前先 <code>AttachThreadInput</code>。</li>
 <li>⚠️ ICO 每个条目必须是完整 DIB（<code>biSize=40</code>、<code>biHeight=2×宽</code>），否则 <code>LoadImage</code> 静默失败。</li>
@@ -991,7 +991,7 @@ if (opts.dump &amp;&amp; !opts.dumpPath.empty() &amp;&amp; !launchDir.empty() &a
 <li>⚠️ <code>CreateActCtx</code> 激活<strong>不覆盖</strong> <code>&lt;windowsSettings&gt;</code> 这类加载器时设置，DPI 感知要另用 API 设置。</li>
 <li>移动态不要 SLWA 后切回 ULW；<code>WS_EX_TOPMOST</code> 清除必须走 <code>SetWindowPos(HWND_NOTOPMOST)</code>。</li>
 </ol>
-<h3 id="15-6-配置与生命周期类"><a href="#15-6-配置与生命周期类" class="headerlink" title="15.6 配置与生命周期类"></a>15.6 配置与生命周期类</h3><ol start="24">
+<h3 id="15-6-配置与生命周期"><a href="#15-6-配置与生命周期" class="headerlink" title="15.6 配置与生命周期"></a>15.6 配置与生命周期</h3><ol start="24">
 <li>⚠️ profile API 不认 UTF-16 BOM，INI 编码锁 CP_ACP；<code>activeCodePage</code> 不能设 UTF-8（会截断多字节值）。</li>
 <li>⚠️ <code>WM_ENDSESSION</code> 要直接 <code>PostQuitMessage</code>，不能依赖经 userdata 分发的 <code>WM_DESTROY</code>。</li>
 <li>latest-wins 去重必须有失败旁路，否则“稍后重试”落空。</li>
@@ -1698,7 +1698,7 @@ if (opts.dump &amp;&amp; !opts.dumpPath.empty() &amp;&amp; !launchDir.empty() &a
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">99.6k</span>&nbsp;字
+                class="white-color">99.4k</span>&nbsp;字
             
             
             
