@@ -1,0 +1,61 @@
+<svg width="100%" viewBox="0 0 1020 520" xmlns="http://www.w3.org/2000/svg" role="img" font-family="system-ui, -apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif">
+<title>移动模式的两种渲染形态与状态迁移</title>
+<desc>挂载态（GDI 子窗口）与移动态（ULW 顶层弹窗）的样式差异，以及进入/完成移动的完整生命周期。</desc>
+
+<rect x="0" y="0" width="1020" height="520" fill="#ffffff"/>
+<rect x="0" y="0" width="1020" height="34" fill="#f0f0f0"/>
+<text x="16" y="22" font-size="13" fill="#333">HUD 有两种渲染形态，按窗口所处状态切换 —— 跨进程分层子窗口不可靠，顶层弹窗不受此限制</text>
+
+<!-- 挂载态 -->
+<rect x="16" y="54" width="396" height="250" rx="8" fill="#eef4fb" stroke="#9dc0e0"/>
+<text x="34" y="82" font-size="14" fill="#185fa5" font-weight="700">挂载态 · 桌面层子窗口</text>
+<text x="34" y="110" font-size="12" fill="#333" font-family="Consolas, monospace">WS_CHILD  (WorkerW 的子窗口)</text>
+<text x="34" y="134" font-size="12" fill="#333" font-family="Consolas, monospace">WS_EX_LAYERED      无</text>
+<text x="34" y="158" font-size="12" fill="#333" font-family="Consolas, monospace">WS_EX_TRANSPARENT  有（穿透）</text>
+<text x="34" y="182" font-size="12" fill="#333" font-family="Consolas, monospace">WS_EX_NOACTIVATE   有</text>
+<text x="34" y="206" font-size="12" fill="#333" font-family="Consolas, monospace">内容呈现  WM_PAINT + BitBlt</text>
+<text x="34" y="230" font-size="12" fill="#333" font-family="Consolas, monospace">半透明    壁纸垫底模拟</text>
+<rect x="34" y="248" width="362" height="42" rx="5" fill="#ffffff" stroke="#9dc0e0"/>
+<text x="46" y="268" font-size="11" fill="#185fa5">这是唯一被长期实证稳定可见的形态：</text>
+<text x="46" y="284" font-size="11" fill="#185fa5">普通 GDI 重定向表面免疫分层子窗口的全部故障。</text>
+
+<!-- 移动态 -->
+<rect x="612" y="54" width="392" height="250" rx="8" fill="#f2fbf4" stroke="#8fc9a0"/>
+<text x="632" y="82" font-size="14" fill="#1f7a3f" font-weight="700">移动态 · 拖动中的顶层弹窗</text>
+<text x="632" y="110" font-size="12" fill="#333" font-family="Consolas, monospace">WS_POPUP + WS_EX_TOPMOST</text>
+<text x="632" y="134" font-size="12" fill="#333" font-family="Consolas, monospace">WS_EX_LAYERED      有</text>
+<text x="632" y="158" font-size="12" fill="#333" font-family="Consolas, monospace">WS_EX_TRANSPARENT  无</text>
+<text x="632" y="182" font-size="12" fill="#333" font-family="Consolas, monospace">WS_EX_NOACTIVATE   无</text>
+<text x="632" y="206" font-size="12" fill="#333" font-family="Consolas, monospace">内容呈现  UpdateLayeredWindow</text>
+<text x="632" y="230" font-size="12" fill="#333" font-family="Consolas, monospace">半透明    原生逐像素 alpha</text>
+<rect x="632" y="248" width="358" height="42" rx="5" fill="#ffffff" stroke="#8fc9a0"/>
+<text x="644" y="268" font-size="11" fill="#1f7a3f">WM_NCHITTEST 返回 HTCAPTION：整个面板即标题栏，</text>
+<text x="644" y="284" font-size="11" fill="#1f7a3f">走系统原生拖动循环（单个拖动内 Esc 可取消）。</text>
+
+<!-- 迁移箭头 + 连接框 -->
+<defs>
+<marker id="ag" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9 Z" fill="#1f7a3f"/></marker>
+<marker id="ab" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0 0 L9 4.5 L0 9 Z" fill="#185fa5"/></marker>
+</defs>
+<path d="M414 119 H446" stroke="#1f7a3f" stroke-width="2" marker-end="url(#ag)"/>
+<path d="M578 119 H610" stroke="#1f7a3f" stroke-width="2" marker-end="url(#ag)"/>
+<path d="M610 229 H580" stroke="#185fa5" stroke-width="2" marker-end="url(#ab)"/>
+<path d="M444 229 H416" stroke="#185fa5" stroke-width="2" marker-end="url(#ab)"/>
+<rect x="448" y="96" width="128" height="46" rx="4" fill="#ffffff" stroke="#1f7a3f"/>
+<text x="512" y="114" font-size="11" fill="#1f7a3f" text-anchor="middle" font-weight="600">BeginMove</text>
+<text x="512" y="131" font-size="10" fill="#1f7a3f" text-anchor="middle">Detach + 换样式</text>
+<rect x="448" y="206" width="128" height="46" rx="4" fill="#ffffff" stroke="#185fa5"/>
+<text x="512" y="224" font-size="11" fill="#185fa5" text-anchor="middle" font-weight="600">EndMove → 重建</text>
+<text x="512" y="241" font-size="10" fill="#185fa5" text-anchor="middle">落盘 + 重新挂载</text>
+
+<!-- 生命周期 -->
+<rect x="16" y="322" width="988" height="184" rx="8" fill="#fafafa" stroke="#d0d0d0"/>
+<text x="36" y="348" font-size="13" fill="#1a1a1a" font-weight="600">完整生命周期</text>
+<text x="36" y="374" font-size="12" fill="#333"><tspan font-weight="600">进入</tspan>：Detach 脱离桌面层（child → popup，坐标需在 Detach 前后手动保持，SetParent 会按新父重解坐标）；</text>
+<text x="52" y="394" font-size="12" fill="#333">ex 样式去掉 TRANSPARENT|NOACTIVATE、加 TOPMOST|LAYERED；渲染切到 ULW；HUD 原本隐藏则强制显示并持久化 HudVisible=1。</text>
+<text x="36" y="420" font-size="12" fill="#333"><tspan font-weight="600">拖动</tspan>：快照刷新照常渲染内容，但<tspan font-weight="700">跳过 PlaceWindow</tspan>（否则每秒被拽回配置坐标）；健康检查（重挂 / z 序 / 显示器变化）全部跳过。</text>
+<text x="36" y="446" font-size="12" fill="#333"><tspan font-weight="600">完成</tspan>：双击 / 右键落点 → GetWindowRect 换算为“显示器序号 + 显示器相对像素”写回配置 →</text>
+<text x="52" y="466" font-size="12" fill="#333">PostMessage(kMsgRebuildHud) 延迟销毁旧窗口并按新位置重建（不在自己的 WndProc 里同步销毁）。</text>
+<rect x="36" y="478" width="948" height="20" rx="4" fill="#fdf6e3" stroke="#e0c060"/>
+<text x="48" y="493" font-size="11" fill="#8a6d1f">避坑：WS_EX_TOPMOST 归窗口管理器管，清除必须用 SetWindowPos(HWND_NOTOPMOST)，直接改样式位无效。</text>
+</svg>

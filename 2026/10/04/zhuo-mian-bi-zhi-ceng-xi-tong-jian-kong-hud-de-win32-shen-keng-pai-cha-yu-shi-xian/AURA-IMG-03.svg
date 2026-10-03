@@ -1,0 +1,44 @@
+<svg width="100%" viewBox="0 0 1020 600" xmlns="http://www.w3.org/2000/svg" role="img" font-family="system-ui, -apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif">
+<title>跨进程分层子窗口的三种故障模式</title>
+<desc>UpdateLayeredWindow 合成失效、SLWA 状态不合成、LAYERED 位无法恢复三种独立故障，共同点是属性读数全部正常。</desc>
+
+<rect x="0" y="0" width="1020" height="600" fill="#ffffff"/>
+<rect x="0" y="0" width="1020" height="34" fill="#f0f0f0"/>
+<text x="16" y="22" font-size="13" fill="#333">跨进程 SetParent 到 Explorer 的 WorkerW 之后，分层子窗口在本机不可靠 —— 共观察到三种互相独立的故障</text>
+
+<!-- A -->
+<rect x="16" y="50" width="988" height="140" rx="8" fill="#fff8f0" stroke="#e0b080"/>
+<rect x="16" y="50" width="52" height="140" rx="8" fill="#e0a060"/>
+<text x="42" y="130" font-size="26" fill="#ffffff" font-weight="700" text-anchor="middle">A</text>
+<text x="88" y="80" font-size="14" fill="#8a5a1f" font-weight="700">ULW 合成 wedged</text>
+<text x="88" y="106" font-size="12" fill="#555">现象：UpdateLayeredWindow 每秒返回成功，WS_VISIBLE 在、父窗口正确，<tspan font-weight="700" fill="#8a5a1f">但屏幕上什么都没有</tspan>。</text>
+<text x="88" y="130" font-size="12" fill="#555">证据：运行日志无任何 ULW 失败记录；窗口结构探针（样式位 / 父窗口 / z 序 / rect）全部正常；用户目视不可见。</text>
+<rect x="88" y="146" width="900" height="30" rx="4" fill="#ffffff" stroke="#e8d0b0"/>
+<text x="100" y="166" font-size="11" fill="#8a5a1f" font-family="Consolas, monospace">Hud: UpdateLayeredWindow ok   (每秒一行，无错误)</text>
+
+<!-- B -->
+<rect x="16" y="200" width="988" height="140" rx="8" fill="#fff8f0" stroke="#e0b080"/>
+<rect x="16" y="200" width="52" height="140" rx="8" fill="#e0a060"/>
+<text x="42" y="280" font-size="26" fill="#ffffff" font-weight="700" text-anchor="middle">B</text>
+<text x="88" y="230" font-size="14" fill="#8a5a1f" font-weight="700">SLWA 状态不合成</text>
+<text x="88" y="256" font-size="12" fill="#555">现象：GetLayeredWindowAttributes 读回 <tspan font-family="Consolas, monospace">ok=TRUE, alpha=已设置</tspan>，同样不上屏。</text>
+<text x="88" y="280" font-size="12" fill="#555">证据：在 SLWA / ULW 两种模式之间切换均无效 —— 设置成功 ≠ DWM 合成。</text>
+<rect x="88" y="296" width="900" height="30" rx="4" fill="#ffffff" stroke="#e8d0b0"/>
+<text x="100" y="316" font-size="11" fill="#8a5a1f" font-family="Consolas, monospace">GetLayeredWindowAttributes → ok=TRUE  alpha=205  flags=LWA_ALPHA</text>
+
+<!-- C -->
+<rect x="16" y="350" width="988" height="140" rx="8" fill="#fff8f0" stroke="#e0b080"/>
+<rect x="16" y="350" width="52" height="140" rx="8" fill="#e0a060"/>
+<text x="42" y="430" font-size="26" fill="#ffffff" font-weight="700" text-anchor="middle">C</text>
+<text x="88" y="380" font-size="14" fill="#8a5a1f" font-weight="700">LAYERED 位无法恢复</text>
+<text x="88" y="406" font-size="12" fill="#555">现象：子窗口的 WS_EX_LAYERED 被清除后，SetWindowLongPtr 加回<tspan font-weight="700" fill="#8a5a1f">静默失败</tspan>（读回为空，重试 3 次全丢）。</text>
+<text x="88" y="430" font-size="12" fill="#555">证据：日志 ×3 + 样式位跟踪探针。另外：在可见状态下清除 LAYERED 位会把当前帧“烤”进桌面合成，留下永久残影。</text>
+<rect x="88" y="446" width="900" height="30" rx="4" fill="#ffffff" stroke="#e8d0b0"/>
+<text x="100" y="466" font-size="11" fill="#8a5a1f" font-family="Consolas, monospace">WS_EX_LAYERED re-set lost, retrying  (×3)</text>
+
+<!-- 结论 -->
+<rect x="16" y="506" width="988" height="76" rx="8" fill="#f0f4ff" stroke="#185fa5"/>
+<text x="36" y="532" font-size="13" fill="#185fa5" font-weight="700">三种模式的共同点：所有窗口属性读数全部正常，唯独 DWM 不合成。</text>
+<text x="36" y="558" font-size="12" fill="#333">→ 样式位 / 父窗口 / z 序 / 可见位这套“属性探针”全部失效，只能靠像素级探针或人眼判定。</text>
+<text x="36" y="576" font-size="12" fill="#333">→ 结论：挂载态只能用普通 GDI 重定向路径（非分层 + WM_PAINT/BitBlt），它是唯一被长期实证稳定可见的形态。</text>
+</svg>

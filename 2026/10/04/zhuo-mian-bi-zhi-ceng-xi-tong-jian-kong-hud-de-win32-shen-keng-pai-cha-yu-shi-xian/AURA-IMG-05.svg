@@ -1,0 +1,66 @@
+<svg width="100%" viewBox="0 0 1020 640" xmlns="http://www.w3.org/2000/svg" role="img" font-family="system-ui, -apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif">
+<title>残影的成因与三级清除策略</title>
+<desc>WorkerW 从不重绘被腾出的区域，导致子窗口最后一帧僵死；修复按代价递增分为绘制覆盖、精准失效、SPI 重放三级。</desc>
+
+<rect x="0" y="0" width="1020" height="640" fill="#ffffff"/>
+<rect x="0" y="0" width="1020" height="34" fill="#f0f0f0"/>
+<text x="16" y="22" font-size="13" fill="#333">残影（“分身”）：WorkerW 从不重绘被腾出的区域，HUD 移动/隐藏后最后一帧会僵死在桌面上</text>
+
+<!-- 左：机制 -->
+<rect x="16" y="50" width="470" height="330" rx="8" fill="#fafafa" stroke="#d0d0d0"/>
+<text x="34" y="76" font-size="13" fill="#1a1a1a" font-weight="600">机制</text>
+
+<rect x="34" y="92" width="434" height="66" rx="5" fill="#ffffff" stroke="#bbb"/>
+<text x="46" y="114" font-size="11" fill="#333">DWM 下每个顶层窗口只有<tspan font-weight="700">一张</tspan> GDI 重定向表面。</text>
+<text x="46" y="134" font-size="11" fill="#333">子窗口树的所有 GDI 输出（含 HUD 的 BitBlt）都写进</text>
+<text x="46" y="152" font-size="11" fill="#333">WorkerW 顶层窗口自己的那张表面。</text>
+
+<text x="240" y="182" font-size="16" fill="#999" text-anchor="middle">↓</text>
+
+<rect x="34" y="196" width="434" height="66" rx="5" fill="#ffffff" stroke="#bbb"/>
+<text x="46" y="218" font-size="11" fill="#333">子窗口被移动 / 隐藏 / 销毁后，暴露的矩形需要</text>
+<text x="46" y="238" font-size="11" fill="#333">WorkerW 自己重绘 —— 但它是 Explorer 的内部窗口，</text>
+<text x="46" y="256" font-size="11" fill="#333">对“寄宿的访客子窗口”<tspan font-weight="700" fill="#b03030">从不重绘</tspan>。</text>
+
+<text x="240" y="286" font-size="16" fill="#999" text-anchor="middle">↓</text>
+
+<rect x="34" y="300" width="434" height="62" rx="5" fill="#fff3f3" stroke="#e0a0a0"/>
+<text x="46" y="322" font-size="11" fill="#b03030">子窗口的最后一帧<tspan font-weight="700">永久僵死</tspan>在桌面上 = “分身”。</text>
+<text x="46" y="344" font-size="11" fill="#b03030">EnumWindows 始终只有 1 个活窗口（排除窗口泄漏）；</text>
+<text x="46" y="360" font-size="11" fill="#b03030">重启 Explorer 重建场景后分身消失。</text>
+
+<!-- 右上：三级策略 -->
+<rect x="506" y="50" width="498" height="330" rx="8" fill="#fafafa" stroke="#d0d0d0"/>
+<text x="524" y="76" font-size="13" fill="#1a1a1a" font-weight="600">修复：按代价递增，命中即止</text>
+
+<rect x="524" y="90" width="462" height="88" rx="5" fill="#f2fbf4" stroke="#8fc9a0"/>
+<text x="538" y="112" font-size="12" fill="#1f7a3f" font-weight="700">1. 绘制覆盖（主路径）</text>
+<text x="538" y="133" font-size="11" fill="#555">解码腾出区域应有的壁纸像素，跨进程 GetDC(host) 直接</text>
+<text x="538" y="152" font-size="11" fill="#555">BitBlt 到壁纸 WorkerW 表面盖掉冻结帧。</text>
+<text x="538" y="171" font-size="11" fill="#1f7a3f">零闪动 · 不经 Shell · 像素级正确（残影 mean|d| = 0.01/255）</text>
+
+<rect x="524" y="188" width="462" height="76" rx="5" fill="#fff8f0" stroke="#e0b080"/>
+<text x="538" y="210" font-size="12" fill="#8a5a1f" font-weight="700">2. 精准失效（绘制失败时伴随）</text>
+<text x="538" y="231" font-size="11" fill="#555">RedrawWindow(host, &amp;rect, …, RDW_INVALIDATE | RDW_ERASE |</text>
+<text x="538" y="250" font-size="11" fill="#555">RDW_FRAME | RDW_NOINTERNALPAINT)。单独用不够：mean|d| = 35.8。</text>
+
+<rect x="524" y="274" width="462" height="94" rx="5" fill="#fdf6e3" stroke="#e0c060"/>
+<text x="538" y="296" font-size="12" fill="#8a6d1f" font-weight="700">3. SPI 重放（仅兜底）</text>
+<text x="538" y="316" font-size="11" fill="#8a6d1f">绘制失败或会话重连时：SPI_SETDESKWALLPAPER(真实路径,</text>
+<text x="538" y="335" font-size="11" fill="#8a6d1f">SPIF_SENDWININICHANGE)。代价：shell 重建缓存 6–20s。</text>
+<text x="538" y="356" font-size="11" fill="#b03030">24H2 raised desktop 上完全跳过——会直接毁掉壁纸 WorkerW。</text>
+
+<!-- 底部：防误伤 -->
+<rect x="16" y="396" width="988" height="110" rx="8" fill="#f0f4ff" stroke="#185fa5"/>
+<text x="36" y="422" font-size="13" fill="#185fa5" font-weight="700">防误伤：去抖合并</text>
+<text x="36" y="448" font-size="12" fill="#333">· 每次“腾出矩形”先并进 App 的脏矩形并集（UnionRect），<tspan font-weight="600">250 ms 静默后</tspan>才真正刷新一次；</text>
+<text x="52" y="468" font-size="12" fill="#333">几何滑块拖动每秒触发数十次腾出报告，不再逐次刷新。</text>
+<text x="36" y="492" font-size="12" fill="#333">· <tspan font-weight="600">桌面级请求（nullptr）是粘性标志</tspan>：去抖窗口内后续的矩形报告不得把它降级成单矩形刷新，</text>
+<text x="52" y="512" font-size="12" fill="#333">否则其余区域会留下幽灵帧。退出前必须 flush，保证不留尾巴。</text>
+
+<!-- 教训 -->
+<rect x="16" y="522" width="988" height="98" rx="8" fill="#fff5f5" stroke="#e0a0a0"/>
+<text x="36" y="548" font-size="13" fill="#b03030" font-weight="700">两个被实测否定的路线（勿重复）</text>
+<text x="36" y="574" font-size="12" fill="#555">· “外科式 RedrawWindow 足以清残影、可去掉 SPI 重放”：实测残影 35.8 清不掉。重放必须保留为兜底。</text>
+<text x="36" y="598" font-size="12" fill="#555">· “渲染管线回归导致残影”：同半径下新旧二进制角部像素逐位一致——残影与渲染代码无关。</text>
+</svg>

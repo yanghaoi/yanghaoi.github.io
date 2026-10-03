@@ -1,0 +1,97 @@
+<svg width="100%" viewBox="0 0 1020 680" xmlns="http://www.w3.org/2000/svg" role="img" font-family="system-ui, -apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif">
+<title>监控采集管线：节拍、数据源与失联自愈</title>
+<desc>采样线程的绝对节拍、五个指标各自的数据源与关键处理，以及 NVML 失联、网卡切换、卷消失三类降级路径。</desc>
+
+<rect x="0" y="0" width="1020" height="680" fill="#ffffff"/>
+<rect x="0" y="0" width="1020" height="34" fill="#f0f0f0"/>
+<text x="16" y="22" font-size="13" fill="#333">一次采样产出一张 Snapshot：采样线程写入，UI 线程按值拷贝消费 —— 不共享可变状态</text>
+
+<!-- ============ 节拍 ============ -->
+<rect x="16" y="50" width="988" height="140" rx="8" fill="#fafafa" stroke="#d0d0d0"/>
+<text x="36" y="76" font-size="13" fill="#1a1a1a" font-weight="600">采样节拍是「绝对」的</text>
+
+<line x1="60" y1="122" x2="950" y2="122" stroke="#9dc0e0" stroke-width="2"/>
+<g fill="#4a90d9">
+  <circle cx="90"  cy="122" r="7"/><circle cx="250" cy="122" r="7"/>
+  <circle cx="410" cy="122" r="7"/><circle cx="570" cy="122" r="7"/>
+  <circle cx="730" cy="122" r="7"/><circle cx="890" cy="122" r="7"/>
+</g>
+<g font-size="11" fill="#185fa5" text-anchor="middle">
+  <text x="90"  y="148">t₀</text><text x="250" y="148">t₀+i</text>
+  <text x="410" y="148">t₀+2i</text><text x="570" y="148">t₀+3i</text>
+  <text x="730" y="148">t₀+4i</text><text x="890" y="148">t₀+5i</text>
+</g>
+<text x="90"  y="108" font-size="11" fill="#555" text-anchor="middle">Start() 先同步采一次</text>
+<text x="500" y="108" font-size="11" fill="#555" text-anchor="middle">采样本身要花时间（NVML / 枚举网卡）</text>
+
+<rect x="36" y="160" width="474" height="22" rx="4" fill="#f0f4ff" stroke="#185fa5"/>
+<text x="48" y="176" font-size="11" fill="#185fa5">下一拍 = 上一拍 + interval　←　不是「采样结束 + interval」</text>
+<rect x="522" y="160" width="466" height="22" rx="4" fill="#fdf6e3" stroke="#e0c060"/>
+<text x="534" y="176" font-size="11" fill="#8a6d1f">落后（慢采样 / 休眠）→ 跳过遗漏的拍，不补跑</text>
+
+<!-- ============ 指标表 ============ -->
+<rect x="16" y="204" width="988" height="296" rx="8" fill="#fafafa" stroke="#d0d0d0"/>
+<text x="36" y="230" font-size="13" fill="#1a1a1a" font-weight="600">五个指标：取数方式与各自的坑</text>
+
+<rect x="36" y="242" width="948" height="26" rx="4" fill="#eef4fb"/>
+<text x="50" y="260" font-size="11" fill="#185fa5" font-weight="600">指标</text>
+<text x="150" y="260" font-size="11" fill="#185fa5" font-weight="600">数据源</text>
+<text x="430" y="260" font-size="11" fill="#185fa5" font-weight="600">关键处理 / 边界</text>
+
+<rect x="36" y="272" width="948" height="44" rx="4" fill="#ffffff" stroke="#e0e0e0"/>
+<text x="50" y="299" font-size="12" fill="#333" font-weight="600">CPU</text>
+<text x="150" y="299" font-size="11" fill="#555" font-family="Consolas, monospace">GetSystemTimes ×2</text>
+<text x="430" y="292" font-size="11" fill="#333">kernel 里<b>已经含 idle</b> → total = kernel + user，busy = total − idle</text>
+<text x="430" y="309" font-size="11" fill="#888">短间隔抖动大，做 0.35 / 0.65 的指数平滑</text>
+
+<rect x="36" y="316" width="948" height="44" rx="4" fill="#fbfbfb" stroke="#e0e0e0"/>
+<text x="50" y="343" font-size="12" fill="#333" font-weight="600">内存</text>
+<text x="150" y="343" font-size="11" fill="#555" font-family="Consolas, monospace">GlobalMemoryStatusEx</text>
+<text x="430" y="336" font-size="11" fill="#333">used = total − available，百分比 clamp 到 0..100</text>
+<text x="430" y="353" font-size="11" fill="#888">容量一律以 OS 为准，SMBIOS 只提供型号与频率（见下）</text>
+
+<rect x="36" y="360" width="948" height="44" rx="4" fill="#ffffff" stroke="#e0e0e0"/>
+<text x="50" y="387" font-size="12" fill="#333" font-weight="600">磁盘</text>
+<text x="150" y="387" font-size="11" fill="#555" font-family="Consolas, monospace">GetDiskFreeSpaceExW</text>
+<text x="430" y="380" font-size="11" fill="#333">盘符取自 <tspan font-family="Consolas, monospace">GetWindowsDirectoryW</tspan>，不硬编码 C</text>
+<text x="430" y="397" font-size="11" fill="#888">卷消失 / 无权限 → valid=false，整行显示 N/A，不崩</text>
+
+<rect x="36" y="404" width="948" height="44" rx="4" fill="#fbfbfb" stroke="#e0e0e0"/>
+<text x="50" y="431" font-size="12" fill="#333" font-weight="600">网络</text>
+<text x="150" y="431" font-size="11" fill="#555" font-family="Consolas, monospace">GetAdaptersAddresses</text>
+<text x="150" y="446" font-size="11" fill="#555" font-family="Consolas, monospace">+ GetIfTable2</text>
+<text x="430" y="424" font-size="11" fill="#333">跳过 loopback、非 Up、169.254.*（APIPA）、fe80::/10（链路本地）</text>
+<text x="430" y="441" font-size="11" fill="#333">速率基线<b>携带适配器 LUID</b>：切卡时重新起步，不跨卡相减</text>
+
+<rect x="36" y="448" width="948" height="44" rx="4" fill="#ffffff" stroke="#e0e0e0"/>
+<text x="50" y="475" font-size="12" fill="#333" font-weight="600">GPU</text>
+<text x="150" y="475" font-size="11" fill="#555" font-family="Consolas, monospace">NVML 运行时加载</text>
+<text x="150" y="490" font-size="11" fill="#555" font-family="Consolas, monospace">（型号回退 DXGI）</text>
+<text x="430" y="468" font-size="11" fill="#333">不用 CUDA / NVML SDK：<tspan font-family="Consolas, monospace">LoadLibraryW</tspan> + <tspan font-family="Consolas, monospace">GetProcAddress</tspan>，符号带 <tspan font-family="Consolas, monospace">_v2</tspan> 回退</text>
+<text x="430" y="485" font-size="11" fill="#888">温度 / 功耗拿不到不影响使用率；非 N 卡显示型号 + N/A</text>
+
+<!-- ============ 自愈 ============ -->
+<rect x="16" y="512" width="988" height="152" rx="8" fill="#f2fbf4" stroke="#8fc9a0"/>
+<text x="36" y="538" font-size="13" fill="#1f7a3f" font-weight="600">三类「失联」都要自己兜住</text>
+
+<rect x="36" y="550" width="306" height="100" rx="5" fill="#ffffff" stroke="#8fc9a0"/>
+<text x="50" y="572" font-size="12" fill="#1f7a3f" font-weight="600">NVML 失联（驱动重置 / TDR）</text>
+<text x="50" y="594" font-size="11" fill="#555">句柄作废但 nvmlUp_ 仍是 true：核心调用</text>
+<text x="50" y="611" font-size="11" fill="#555">连续失败约 5 拍（1 Hz ≈ 5 s）就卸载重初始化，</text>
+<text x="50" y="628" font-size="11" fill="#555">重试本身再节流 30 s。getCount()==0 时闩锁，</text>
+<text x="50" y="645" font-size="11" fill="#555">避免无卡机器反复 LoadLibrary。</text>
+
+<rect x="357" y="550" width="306" height="100" rx="5" fill="#ffffff" stroke="#8fc9a0"/>
+<text x="371" y="572" font-size="12" fill="#1f7a3f" font-weight="600">网卡切换</text>
+<text x="371" y="594" font-size="11" fill="#555">LUID 变了就丢弃旧基线。否则两块卡各自</text>
+<text x="371" y="611" font-size="11" fill="#555">从开机起的累计字节数会被相减 —— 一个</text>
+<text x="371" y="628" font-size="11" fill="#555">tick 直接报出 TB/s 级的假尖峰。</text>
+<text x="371" y="645" font-size="11" fill="#555">GetIfTable2 失败同样重置基线。</text>
+
+<rect x="678" y="550" width="310" height="100" rx="5" fill="#ffffff" stroke="#8fc9a0"/>
+<text x="692" y="572" font-size="12" fill="#1f7a3f" font-weight="600">计数器回绕</text>
+<text x="692" y="594" font-size="11" fill="#555">网卡重启后 InOctets/OutOctets 会归零：</text>
+<text x="692" y="611" font-size="11" fill="#555">差值取 <tspan font-family="Consolas, monospace">in &gt;= prev ? in − prev : 0</tspan>，</text>
+<text x="692" y="628" font-size="11" fill="#555">宁可这一拍显示 0，也不报一个负数或</text>
+<text x="692" y="645" font-size="11" fill="#555">天文数字。</text>
+</svg>

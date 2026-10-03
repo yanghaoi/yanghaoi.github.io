@@ -1,0 +1,51 @@
+<svg width="100%" viewBox="0 0 1020 620" xmlns="http://www.w3.org/2000/svg" role="img" font-family="system-ui, -apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif">
+<title>面板文字宽度的三层测量保护</title>
+<desc>值区域实测宽、内容最小宽（带收缩迟滞）、设置护栏三层，以及测量一致性的 DPI 陷阱。</desc>
+
+<rect x="0" y="0" width="1020" height="620" fill="#ffffff"/>
+<rect x="0" y="0" width="1020" height="34" fill="#f0f0f0"/>
+<text x="16" y="22" font-size="13" fill="#333">右对齐值文本用 NO_WRAP + CLIP 绘制：比预留区宽时溢出部分向左伸出，被裁掉的是开头字符</text>
+
+<!-- 示例 -->
+<rect x="16" y="50" width="988" height="96" rx="8" fill="#fff5f5" stroke="#e0a0a0"/>
+<text x="36" y="76" font-size="12" fill="#b03030" font-weight="600">两次真实复发</text>
+<rect x="36" y="86" width="460" height="24" rx="3" fill="#ffffff" stroke="#e0a0a0"/>
+<text x="46" y="103" font-size="11" fill="#555" font-family="Consolas, monospace">共享 56px 值区:  "x.x GB / y.y GB"  →  ".0GB"</text>
+<rect x="516" y="86" width="470" height="24" rx="3" fill="#ffffff" stroke="#e0a0a0"/>
+<text x="526" y="103" font-size="11" fill="#555" font-family="Consolas, monospace">VRAM 140px 固定值区:  "612.4 MB / 12.0 GB"  →  ".4 MB / 12.0 GB"</text>
+<text x="36" y="132" font-size="12" fill="#555">魔法数追不胜追，最终方案是三层测量保护（2026-09-24）。</text>
+
+<!-- 层1 -->
+<rect x="16" y="160" width="988" height="96" rx="8" fill="#fafafa" stroke="#c8c8c8"/>
+<rect x="16" y="160" width="8" height="96" rx="4" fill="#185fa5"/>
+<text x="40" y="186" font-size="13" fill="#1a1a1a" font-weight="600">第 1 层 · 值区域实测宽（RenderToTarget 的 valueZoneW）</text>
+<rect x="40" y="200" width="560" height="42" rx="4" fill="#1e1e1e"/>
+<text x="54" y="226" font-size="12" fill="#9ad48a" font-family="Consolas, monospace">max(行下限 × s, 实测宽 + pad + 2s)</text>
+<text x="620" y="220" font-size="11" fill="#555">区域矩形是 [width-w, width-pad]，所以 w 必须覆盖</text>
+<text x="620" y="238" font-size="11" fill="#555">文本<tspan font-weight="700" fill="#b03030">加</tspan> pad——第一版修复漏加 pad，仍被边际裁切。</text>
+
+<!-- 层2 -->
+<rect x="16" y="266" width="988" height="120" rx="8" fill="#fafafa" stroke="#c8c8c8"/>
+<rect x="16" y="266" width="8" height="120" rx="4" fill="#185fa5"/>
+<text x="40" y="292" font-size="13" fill="#1a1a1a" font-weight="600">第 2 层 · 内容最小宽（Hud::ContentMinWidth）</text>
+<rect x="40" y="306" width="560" height="42" rx="4" fill="#1e1e1e"/>
+<text x="54" y="332" font-size="12" fill="#9ad48a" font-family="Consolas, monospace">pad + labelW + gap + valueW + pad</text>
+<text x="620" y="326" font-size="11" fill="#555">逐行算，面板宽 =</text>
+<text x="620" y="344" font-size="11" fill="#555" font-family="Consolas, monospace">max(80, 配置宽, widthFloor_)</text>
+<rect x="40" y="354" width="944" height="24" rx="4" fill="#fdf6e3" stroke="#e0c060"/>
+<text x="52" y="371" font-size="11" fill="#8a6d1f">widthFloor_ 增长即时、<tspan font-weight="700">收缩需连续 5 帧保持更小</tspan>：数值逐秒变长变短，无迟滞的地板会让面板呼吸并反复重裁壁纸垫底。</text>
+
+<!-- 层3 -->
+<rect x="16" y="396" width="988" height="96" rx="8" fill="#fafafa" stroke="#c8c8c8"/>
+<rect x="16" y="396" width="8" height="96" rx="4" fill="#185fa5"/>
+<text x="40" y="422" font-size="13" fill="#1a1a1a" font-weight="600">第 3 层 · 设置护栏（SettingsWindow::EnsureMinWidth）</text>
+<text x="40" y="448" font-size="12" fill="#555">用与渲染端同一套 BuildItemsFor + ContentMinWidth + MakeTextFormat，按草稿配置、<tspan font-weight="700">目标显示器的实际 DPI</tspan></text>
+<text x="40" y="470" font-size="12" fill="#555">（GetDpiForMonitor 的 MDT_EFFECTIVE）计算最小宽；应用/确定时若草稿宽度不足，自动抬高并弹窗说明。</text>
+
+<!-- DPI 陷阱 -->
+<rect x="16" y="502" width="988" height="104" rx="8" fill="#f0f4ff" stroke="#185fa5"/>
+<text x="36" y="528" font-size="13" fill="#185fa5" font-weight="700">测量一致性陷阱：比较字符串宽度必须在同一 DPI 感知环境下进行</text>
+<text x="36" y="554" font-size="12" fill="#333">独立探针进程若不声明 DPI 感知，LOGPIXELSX / DWrite 都被虚拟化到 96；而应用进程是 Per-Monitor-V2，</text>
+<text x="36" y="576" font-size="12" fill="#333">在缩放显示器上真实 120——测出的宽度差一个缩放系数。这不是应用的 bug，探针要加 SetProcessDpiAwareness。</text>
+<text x="36" y="598" font-size="12" fill="#555">同理：跨进程读控件文本必须用 SendMessage(WM_GETTEXT)，GetWindowTextW 对其它进程的控件静默返回空串。</text>
+</svg>

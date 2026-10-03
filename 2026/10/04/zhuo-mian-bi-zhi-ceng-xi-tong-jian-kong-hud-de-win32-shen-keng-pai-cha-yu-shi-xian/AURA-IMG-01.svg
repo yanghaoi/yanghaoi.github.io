@@ -1,0 +1,80 @@
+<svg width="100%" viewBox="0 0 1020 640" xmlns="http://www.w3.org/2000/svg" role="img" font-family="system-ui, -apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif">
+<title>桌面窗口拓扑与壁纸层宿主的三个筛选条件</title>
+<desc>左图给出桌面窗口对象拓扑与视觉层级，右图给出壁纸层 WorkerW 必须同时满足的三个条件。</desc>
+
+<rect x="0" y="0" width="1020" height="640" fill="#ffffff"/>
+<rect x="0" y="0" width="1020" height="34" fill="#f0f0f0"/>
+<text x="16" y="22" font-size="13" fill="#333">桌面窗口拓扑  ·  壁纸层 = 全屏 / 可见 / 属于 Explorer / 不含 SHELLDLL_DefView 的 WorkerW</text>
+
+<!-- ================= 左：视觉层级 ================= -->
+<rect x="16" y="50" width="360" height="574" rx="8" fill="#fafafa" stroke="#d0d0d0"/>
+<text x="32" y="76" font-size="13" font-weight="600" fill="#1a1a1a">视觉层级（屏幕上的叠放）</text>
+
+<rect x="32" y="94" width="328" height="130" rx="6" fill="#eef4fb" stroke="#9dc0e0"/>
+<text x="196" y="118" font-size="12" fill="#185fa5" text-anchor="middle">Windows Desktop</text>
+<rect x="48" y="130" width="296" height="26" rx="3" fill="#dbe9f7" stroke="#9dc0e0"/>
+<text x="196" y="148" font-size="12" fill="#185fa5" text-anchor="middle">Wallpaper  壁纸</text>
+<rect x="48" y="162" width="296" height="26" rx="3" fill="#fde9d9" stroke="#e0a06a"/>
+<text x="196" y="180" font-size="12" fill="#a0522d" text-anchor="middle">AuraUI HUD  ← 本项目</text>
+<rect x="48" y="194" width="296" height="26" rx="3" fill="#dbe9f7" stroke="#9dc0e0"/>
+<text x="196" y="212" font-size="12" fill="#185fa5" text-anchor="middle">Desktop Icons  桌面图标</text>
+
+<text x="32" y="256" font-size="12" fill="#666">目标：夹在壁纸之上、图标之下；Win+D 不消失，</text>
+<text x="32" y="276" font-size="12" fill="#666">点击完全穿透，不进任务栏 / Alt+Tab。</text>
+
+<!-- 对象拓扑 -->
+<rect x="16" y="300" width="360" height="324" rx="8" fill="#fafafa" stroke="#d0d0d0"/>
+<text x="32" y="326" font-size="13" font-weight="600" fill="#1a1a1a">窗口对象拓扑（z 序，上 = 前）</text>
+
+<rect x="32" y="342" width="328" height="44" rx="4" fill="#ffffff" stroke="#bbb"/>
+<text x="44" y="362" font-size="12" fill="#333" font-weight="600">WorkerW（图标宿主）</text>
+<text x="44" y="379" font-size="11" fill="#888">内含 SHELLDLL_DefView → SysListView32</text>
+
+<rect x="32" y="394" width="328" height="44" rx="4" fill="#ffffff" stroke="#bbb"/>
+<text x="44" y="414" font-size="12" fill="#333" font-weight="600">WorkerW（壁纸层）</text>
+<text x="44" y="431" font-size="11" fill="#888">HUD 以 WS_CHILD 挂到这里（HWND_BOTTOM）</text>
+
+<rect x="32" y="446" width="328" height="34" rx="4" fill="#ffffff" stroke="#bbb"/>
+<text x="44" y="467" font-size="12" fill="#333">Progman</text>
+
+<rect x="32" y="492" width="328" height="118" rx="4" fill="#fdf6e3" stroke="#e0c060"/>
+<text x="44" y="513" font-size="12" fill="#8a6d1f" font-weight="600">⚠ 壁纸层的位置随 shell 版本变化</text>
+<text x="44" y="534" font-size="11" fill="#8a6d1f">Win10 ~ Win11 23H2：顶层 WorkerW</text>
+<text x="44" y="552" font-size="11" fill="#8a6d1f">Win11 24H2+ / 发过 0x052C 之后：</text>
+<text x="44" y="570" font-size="11" fill="#8a6d1f">Progman 的直接子窗口</text>
+<text x="44" y="594" font-size="11" fill="#8a6d1f">两处都要找，不能只认一个位置。</text>
+
+<!-- ================= 右：三条件 ================= -->
+<rect x="392" y="50" width="612" height="574" rx="8" fill="#fafafa" stroke="#d0d0d0"/>
+<text x="410" y="76" font-size="13" font-weight="600" fill="#1a1a1a">宿主的三个必要条件（缺一即“窗口隐身”）</text>
+
+<rect x="408" y="92" width="580" height="86" rx="6" fill="#ffffff" stroke="#c8c8c8"/>
+<text x="424" y="116" font-size="12" fill="#185fa5" font-weight="600">① 可见 IsWindowVisible(parent)</text>
+<text x="424" y="138" font-size="11" fill="#555">父窗口隐藏时，子窗口自己的 WS_VISIBLE 仍是 TRUE，</text>
+<text x="424" y="157" font-size="11" fill="#555">但屏幕上什么都没有。壁纸层是懒加载的，不存在时</text>
+<text x="424" y="176" font-size="11" fill="#555">必须先发 0x052C 让 shell 把它建出来。</text>
+
+<rect x="408" y="190" width="580" height="86" rx="6" fill="#ffffff" stroke="#c8c8c8"/>
+<text x="424" y="214" font-size="12" fill="#185fa5" font-weight="600">② 属于 Explorer 进程</text>
+<text x="424" y="236" font-size="11" fill="#555">窗口类按进程注册，类名可以重名，而 FindWindowExW 只比</text>
+<text x="424" y="255" font-size="11" fill="#555">类名字符串。实测本机 18 个 WorkerW 里有 3 个属于第三</text>
+<text x="424" y="274" font-size="11" fill="#555">方（WorkBuddyAI / Everything / RuntimeBroker）。</text>
+
+<rect x="408" y="288" width="580" height="86" rx="6" fill="#ffffff" stroke="#c8c8c8"/>
+<text x="424" y="312" font-size="12" fill="#185fa5" font-weight="600">③ 不含 SHELLDLL_DefView</text>
+<text x="424" y="334" font-size="11" fill="#555">含 DefView 的是图标宿主。DefView 会抓取父窗口图像缓冲</text>
+<text x="424" y="353" font-size="11" fill="#555">画自己的背景，所以 Progman 下没有可用位置：放它下面</text>
+<text x="424" y="372" font-size="11" fill="#555">被背景盖住，放它上面又盖住图标。</text>
+
+<rect x="408" y="386" width="580" height="152" rx="6" fill="#f0f4ff" stroke="#185fa5"/>
+<text x="424" y="410" font-size="12" fill="#185fa5" font-weight="600">挂载步骤</text>
+<text x="424" y="434" font-size="11" fill="#333">1. 找壁纸层；找不到就发 0x052C(0xD, 0x1) 后重试（最多 5 次）</text>
+<text x="424" y="456" font-size="11" fill="#333">2. 先改样式：清 WS_POPUP、置 WS_CHILD，再 SetParent</text>
+<text x="424" y="478" font-size="11" fill="#333">3. SetWindowPos 到 HWND_BOTTOM（或 DefView 正下方）</text>
+<text x="424" y="500" font-size="11" fill="#333">4. 坐标用 MapWindowPoints 换算，兼容负坐标 / 多显示器</text>
+<text x="424" y="524" font-size="11" fill="#a0522d" font-weight="600">绝不使用 HWND_TOPMOST，绝不挂 Progman。</text>
+
+<rect x="408" y="552" width="580" height="56" rx="6" fill="#ffffff" stroke="#c8c8c8"/>
+<text x="424" y="575" font-size="11" fill="#555">注意：步骤 2 的顺序是 MSDN 明文要求。跳过它窗口会停在</text>
+<text x="424" y="594" font-size="11" fill="#555">“半挂载”状态，GetParent() 返回 NULL，z 序与坐标全乱。</text>
+</svg>

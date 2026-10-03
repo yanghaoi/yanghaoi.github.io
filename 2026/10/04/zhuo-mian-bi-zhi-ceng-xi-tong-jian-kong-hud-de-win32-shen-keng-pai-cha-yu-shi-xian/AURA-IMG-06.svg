@@ -1,0 +1,65 @@
+<svg width="100%" viewBox="0 0 1020 600" xmlns="http://www.w3.org/2000/svg" role="img" font-family="system-ui, -apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif">
+<title>NOTIFYICON_VERSION_4 的托盘回调参数布局</title>
+<desc>v4 与 legacy 两种布局下 wParam / lParam 的字段拆解，以及一次右键同时投递裸消息与抽象事件的现象。</desc>
+
+<rect x="0" y="0" width="1020" height="600" fill="#ffffff"/>
+<rect x="0" y="0" width="1020" height="34" fill="#f0f0f0"/>
+<text x="16" y="22" font-size="13" fill="#333">托盘回调：NIM_SETVERSION(NOTIFYICON_VERSION_4) 成功后，wParam / lParam 的含义完全变了</text>
+
+<!-- v4 -->
+<rect x="16" y="50" width="988" height="186" rx="8" fill="#f2fbf4" stroke="#8fc9a0"/>
+<text x="36" y="76" font-size="14" fill="#1f7a3f" font-weight="700">v4 布局（本项目实际使用）</text>
+
+<text x="36" y="106" font-size="12" fill="#333" font-weight="600">wParam</text>
+<rect x="106" y="88" width="200" height="28" rx="3" fill="#ffffff" stroke="#8fc9a0"/>
+<text x="206" y="107" font-size="11" fill="#1f7a3f" text-anchor="middle">LOWORD = x</text>
+<rect x="306" y="88" width="200" height="28" rx="3" fill="#ffffff" stroke="#8fc9a0"/>
+<text x="406" y="107" font-size="11" fill="#1f7a3f" text-anchor="middle">HIWORD = y</text>
+<text x="520" y="107" font-size="11" fill="#666">← 打包的屏幕坐标（signed short）</text>
+
+<text x="36" y="150" font-size="12" fill="#333" font-weight="600">lParam</text>
+<rect x="106" y="132" width="200" height="28" rx="3" fill="#e6f4ea" stroke="#8fc9a0"/>
+<text x="206" y="151" font-size="11" fill="#1f7a3f" text-anchor="middle" font-weight="700">LOWORD = event</text>
+<rect x="306" y="132" width="200" height="28" rx="3" fill="#ffffff" stroke="#8fc9a0"/>
+<text x="406" y="151" font-size="11" fill="#1f7a3f" text-anchor="middle">HIWORD = iconId</text>
+<text x="520" y="151" font-size="11" fill="#666">← 事件永远在 LOWORD(lp)</text>
+
+<rect x="36" y="176" width="948" height="46" rx="5" fill="#ffffff" stroke="#8fc9a0"/>
+<text x="48" y="196" font-size="11" fill="#1f7a3f">NIF_SHOWTIP 必须带上：v4 图标上不给这个标志，shell 接受 szTip 却永远不显示悬停提示。</text>
+<text x="48" y="214" font-size="11" fill="#1f7a3f">坐标不可信时（落在虚拟屏幕外）要回退 GetCursorPos()，否则菜单弹到看不见的地方。</text>
+
+<!-- legacy -->
+<rect x="16" y="246" width="988" height="128" rx="8" fill="#f7f7f7" stroke="#c8c8c8"/>
+<text x="36" y="272" font-size="14" fill="#666" font-weight="700">legacy 布局（NIM_SETVERSION 被拒绝时）</text>
+
+<text x="36" y="302" font-size="12" fill="#333" font-weight="600">wParam</text>
+<rect x="106" y="284" width="400" height="28" rx="3" fill="#ffffff" stroke="#c8c8c8"/>
+<text x="306" y="303" font-size="11" fill="#666" text-anchor="middle">iconId</text>
+
+<text x="36" y="346" font-size="12" fill="#333" font-weight="600">lParam</text>
+<rect x="106" y="328" width="400" height="28" rx="3" fill="#ffffff" stroke="#c8c8c8"/>
+<text x="306" y="347" font-size="11" fill="#666" text-anchor="middle">鼠标消息（值在 16 位内）</text>
+<text x="520" y="347" font-size="11" fill="#666">← 只有坐标来源依赖 version4_</text>
+
+<!-- 事件序列 -->
+<rect x="16" y="386" width="600" height="196" rx="8" fill="#fafafa" stroke="#d0d0d0"/>
+<text x="34" y="412" font-size="13" fill="#1a1a1a" font-weight="600">一次右键，shell 同时投递裸消息和抽象事件</text>
+<rect x="34" y="426" width="564" height="60" rx="5" fill="#1e1e1e"/>
+<text x="46" y="448" font-size="11" fill="#d4d4d4" font-family="Consolas, monospace">lp=0x10204 → 0x10205 → 0x1007B</text>
+<text x="46" y="470" font-size="11" fill="#9ad48a" font-family="Consolas, monospace">WM_RBUTTONDOWN → WM_RBUTTONUP → WM_CONTEXTMENU</text>
+<text x="34" y="508" font-size="12" fill="#333"><tspan font-weight="700" fill="#b03030">只处理抽象事件</tspan>：WM_CONTEXTMENU 弹菜单，NIN_SELECT /</text>
+<text x="34" y="528" font-size="12" fill="#333">NIN_KEYSELECT / NIN_BALLOONUSERCLICK 打开设置，裸消息一律忽略。</text>
+<text x="34" y="552" font-size="12" fill="#555">否则每次点击动作执行两遍——表现为菜单选中后“闪一下”又弹出来。</text>
+<text x="34" y="572" font-size="12" fill="#555">早期版本把事件读到 wParam 里，导致左右键全部无响应。</text>
+
+<!-- 菜单前置条件 -->
+<rect x="632" y="386" width="372" height="196" rx="8" fill="#fdf6e3" stroke="#e0c060"/>
+<text x="650" y="412" font-size="13" fill="#8a6d1f" font-weight="600">菜单能弹出的前置条件</text>
+<text x="650" y="438" font-size="11" fill="#8a6d1f">· owner 不能是隐藏窗口，也不能是 message-only：</text>
+<text x="664" y="456" font-size="11" fill="#8a6d1f">从未显示过的窗口无法成为前台窗口，菜单会在出现</text>
+<text x="664" y="474" font-size="11" fill="#8a6d1f">的瞬间被“点击在菜单外”关掉。</text>
+<text x="650" y="498" font-size="11" fill="#8a6d1f">· 用屏幕外 1×1、已 ShowWindow、带 WS_EX_TOOLWINDOW</text>
+<text x="664" y="516" font-size="11" fill="#8a6d1f">的顶层窗口最稳。</text>
+<text x="650" y="540" font-size="11" fill="#8a6d1f">· SetForegroundWindow 单独调用常失败（shell 持有</text>
+<text x="664" y="558" font-size="11" fill="#8a6d1f">前台锁），要先 AttachThreadInput 再设前台。</text>
+</svg>

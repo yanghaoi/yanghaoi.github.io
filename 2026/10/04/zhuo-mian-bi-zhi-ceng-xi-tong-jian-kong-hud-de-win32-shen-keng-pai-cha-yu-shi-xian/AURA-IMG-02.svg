@@ -1,0 +1,60 @@
+<svg width="100%" viewBox="0 0 1020 560" xmlns="http://www.w3.org/2000/svg" role="img" font-family="system-ui, -apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif">
+<title>0x052C 的 wParam / lParam 对比</title>
+<desc>对比 0x052C 传 (0,0) 与传 (0xD,1) 时，Progman 子 WorkerW 的可见性变化。</desc>
+
+<rect x="0" y="0" width="1020" height="560" fill="#ffffff"/>
+<rect x="0" y="0" width="1020" height="34" fill="#f0f0f0"/>
+<text x="16" y="22" font-size="13" fill="#333">0x052C 的参数：wParam 必须是 0xD —— 写错时窗口一切正常，但完全不可见，且不报任何错</text>
+
+<!-- ============ 左：错误 ============ -->
+<rect x="16" y="50" width="488" height="494" rx="8" fill="#fff5f5" stroke="#e0a0a0"/>
+<text x="36" y="78" font-size="14" fill="#b03030" font-weight="700">✗  0x052C(0, 0)   —— 静默无效</text>
+
+<rect x="36" y="94" width="448" height="88" rx="5" fill="#1e1e1e"/>
+<text x="50" y="118" font-size="11" fill="#d4d4d4" font-family="Consolas, 'Cascadia Mono', monospace">SendMessageTimeoutW(progman,</text>
+<text x="50" y="138" font-size="11" fill="#d4d4d4" font-family="Consolas, 'Cascadia Mono', monospace">    0x052C, 0, 0,</text>
+<text x="50" y="158" font-size="11" fill="#d4d4d4" font-family="Consolas, 'Cascadia Mono', monospace">    SMTO_NORMAL, 1000, nullptr);</text>
+
+<text x="36" y="210" font-size="12" fill="#333" font-weight="600">发送前后的全屏 WorkerW：</text>
+<rect x="36" y="222" width="448" height="120" rx="5" fill="#ffffff" stroke="#e0a0a0"/>
+<text x="50" y="246" font-size="11" fill="#666">发送前:</text>
+<text x="50" y="266" font-size="11" fill="#b03030" font-family="Consolas, monospace">[0x14028c  visible=False]</text>
+<text x="50" y="288" font-size="11" fill="#666">发送后:</text>
+<text x="50" y="308" font-size="11" fill="#b03030" font-family="Consolas, monospace">[0x14028c  visible=False]</text>
+<text x="50" y="328" font-size="11" fill="#888">（没有任何变化）</text>
+
+<rect x="36" y="356" width="448" height="100" rx="5" fill="#ffffff" stroke="#e0a0a0"/>
+<text x="50" y="380" font-size="12" fill="#b03030" font-weight="600">后果</text>
+<text x="50" y="402" font-size="11" fill="#555">shell 什么都不做，壁纸层保持隐藏。窗口挂到那个</text>
+<text x="50" y="421" font-size="11" fill="#555">隐藏的 WorkerW 上后，它自己的 IsWindowVisible</text>
+<text x="50" y="440" font-size="11" fill="#555">仍是 True —— 但屏幕上什么都没有。</text>
+
+<text x="36" y="486" font-size="12" fill="#888">这是本项目最大的坑：所有属性读数正常，唯独不可见。</text>
+<text x="36" y="510" font-size="12" fill="#888">网上大量示例都写成 (0, 0)。</text>
+
+<!-- ============ 右：正确 ============ -->
+<rect x="516" y="50" width="488" height="494" rx="8" fill="#f2fbf4" stroke="#8fc9a0"/>
+<text x="536" y="78" font-size="14" fill="#1f7a3f" font-weight="700">✓  0x052C(0xD, 0x1)   —— 壁纸层出现</text>
+
+<rect x="536" y="94" width="448" height="88" rx="5" fill="#1e1e1e"/>
+<text x="550" y="118" font-size="11" fill="#d4d4d4" font-family="Consolas, 'Cascadia Mono', monospace">SendMessageTimeoutW(progman,</text>
+<text x="550" y="138" font-size="11" fill="#9ad48a" font-family="Consolas, 'Cascadia Mono', monospace">    0x052C, 0x0D, 0x1,</text>
+<text x="550" y="158" font-size="11" fill="#d4d4d4" font-family="Consolas, 'Cascadia Mono', monospace">    SMTO_ABORTIFHUNG, 1000, &amp;r);</text>
+
+<text x="536" y="210" font-size="12" fill="#333" font-weight="600">发送前后的全屏 WorkerW：</text>
+<rect x="536" y="222" width="448" height="120" rx="5" fill="#ffffff" stroke="#8fc9a0"/>
+<text x="550" y="246" font-size="11" fill="#666">发送前:</text>
+<text x="550" y="266" font-size="11" fill="#888" font-family="Consolas, monospace">[0x14028c  visible=False]</text>
+<text x="550" y="288" font-size="11" fill="#666">发送后:</text>
+<text x="550" y="308" font-size="11" fill="#1f7a3f" font-family="Consolas, monospace">[0x14028c  visible=True]</text>
+<text x="550" y="328" font-size="11" fill="#1f7a3f" font-family="Consolas, monospace">[0x2d02fe  visible=True]  ← 新建</text>
+
+<rect x="536" y="356" width="448" height="100" rx="5" fill="#ffffff" stroke="#8fc9a0"/>
+<text x="550" y="380" font-size="12" fill="#1f7a3f" font-weight="600">配套工程约束</text>
+<text x="550" y="402" font-size="11" fill="#555">· 用 SMTO_ABORTIFHUNG：shell 半死时立刻返回，</text>
+<text x="550" y="421" font-size="11" fill="#555">  不必等满 1 秒超时</text>
+<text x="550" y="440" font-size="11" fill="#555">· 催生要限流：每次调用会多建一个 WorkerW</text>
+
+<text x="536" y="486" font-size="12" fill="#888">健康检查（2s 一次）传 allowSpawn=false，</text>
+<text x="536" y="510" font-size="12" fill="#888">绝不反复催生；催生限流 30s 一次。</text>
+</svg>

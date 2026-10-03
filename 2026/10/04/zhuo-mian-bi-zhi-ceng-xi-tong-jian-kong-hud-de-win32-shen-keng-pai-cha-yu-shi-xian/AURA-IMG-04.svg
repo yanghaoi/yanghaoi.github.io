@@ -1,0 +1,73 @@
+<svg width="100%" viewBox="0 0 1020 620" xmlns="http://www.w3.org/2000/svg" role="img" font-family="system-ui, -apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif">
+<title>壁纸的三层缓存链与显示源判定</title>
+<desc>注册表原图、TranscodedWallpaper、CachedFiles\CachedImage 三层，只有第三层是 DWM 实际显示的像素。</desc>
+
+<rect x="0" y="0" width="1020" height="620" fill="#ffffff"/>
+<rect x="0" y="0" width="1020" height="34" fill="#f0f0f0"/>
+<text x="16" y="22" font-size="13" fill="#333">壁纸不是“注册表里那个文件”：shell 会连续重编码两层缓存，DWM 显示的是最后一层</text>
+
+<!-- 三层 -->
+<rect x="16" y="52" width="300" height="170" rx="8" fill="#f7f7f7" stroke="#c8c8c8"/>
+<text x="32" y="76" font-size="12" fill="#888">第 1 层 · 原始来源</text>
+<text x="32" y="100" font-size="13" fill="#333" font-weight="600">注册表 / COM 解析出的原图</text>
+<text x="32" y="124" font-size="11" fill="#777" font-family="Consolas, monospace">HKCU\Control Panel\Desktop</text>
+<text x="32" y="142" font-size="11" fill="#777" font-family="Consolas, monospace">Wallpaper  /  IDesktopWallpaper</text>
+<rect x="32" y="156" width="268" height="50" rx="4" fill="#fff3f3" stroke="#e0a0a0"/>
+<text x="44" y="176" font-size="11" fill="#b03030">误差 ≈ 15/255</text>
+<text x="44" y="195" font-size="11" fill="#b03030">多一层编码差，不是屏幕上的画面</text>
+
+<rect x="352" y="52" width="300" height="170" rx="8" fill="#f7f7f7" stroke="#c8c8c8"/>
+<text x="368" y="76" font-size="12" fill="#888">第 2 层 · 第一次重编码</text>
+<text x="368" y="100" font-size="13" fill="#333" font-weight="600">Themes\TranscodedWallpaper</text>
+<text x="368" y="124" font-size="11" fill="#777" font-family="Consolas, monospace">APPDATA\Microsoft\Windows\Themes\</text>
+<text x="368" y="142" font-size="11" fill="#777">489 KB → 266 KB</text>
+<rect x="368" y="156" width="268" height="50" rx="4" fill="#fff3f3" stroke="#e0a0a0"/>
+<text x="380" y="176" font-size="11" fill="#b03030">误差 ≈ 15/255（按居中裁切数学）</text>
+<text x="380" y="195" font-size="11" fill="#b03030">仍不是屏幕上的画面</text>
+
+<rect x="688" y="52" width="316" height="170" rx="8" fill="#f2fbf4" stroke="#8fc9a0"/>
+<text x="704" y="76" font-size="12" fill="#1f7a3f">第 3 层 · 已按显示器预裁剪</text>
+<text x="704" y="100" font-size="12" fill="#1f7a3f" font-weight="700">CachedFiles\CachedImage_&lt;W&gt;_&lt;H&gt;_POS*.jpg</text>
+<text x="704" y="124" font-size="11" fill="#555">尺寸 = 显示器尺寸，1:1 直接铺放</text>
+<rect x="704" y="138" width="284" height="68" rx="4" fill="#ffffff" stroke="#8fc9a0"/>
+<text x="716" y="160" font-size="12" fill="#1f7a3f" font-weight="700">误差 0.65/255</text>
+<text x="716" y="180" font-size="11" fill="#1f7a3f">← DWM 实际显示的就是它</text>
+<text x="716" y="198" font-size="11" fill="#777">解码它，才等于复刻屏幕像素</text>
+
+<!-- 箭头 -->
+<path d="M316 137 L348 137" stroke="#999" stroke-width="1.5" marker-end="url(#ah)"/>
+<path d="M652 137 L684 137" stroke="#999" stroke-width="1.5" marker-end="url(#ah)"/>
+<defs><marker id="ah" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+<path d="M0 0 L8 4 L0 8 Z" fill="#999"/></marker></defs>
+<text x="318" y="128" font-size="10" fill="#888">重编码</text>
+<text x="654" y="128" font-size="10" fill="#888">重编码</text>
+
+<!-- 判定方法 -->
+<rect x="16" y="242" width="600" height="176" rx="8" fill="#fafafa" stroke="#d0d0d0"/>
+<text x="34" y="268" font-size="13" fill="#1a1a1a" font-weight="600">怎么确定“屏幕显示的是哪一层”</text>
+<text x="34" y="294" font-size="12" fill="#333">PrintWindow(壁纸 WorkerW, PW_RENDERFULLCONTENT)</text>
+<text x="34" y="314" font-size="12" fill="#333">捕获壁纸层合成画面，与候选文件逐像素比对：</text>
+<rect x="34" y="328" width="564" height="34" rx="4" fill="#ffffff" stroke="#ccc"/>
+<text x="46" y="350" font-size="12" fill="#185fa5" font-family="Consolas, monospace">mean(|screen - file|) / 255</text>
+<text x="34" y="384" font-size="12" fill="#333">解析 GetDIBits 缓冲时按 <tspan font-weight="700" fill="#b03030">BGRX</tspan> 读（按 RGBX 解析会得到</text>
+<text x="34" y="404" font-size="12" fill="#333">~48 的伪误差，曾推翻过一整轮结论）。</text>
+
+<!-- 圆角问题 -->
+<rect x="632" y="242" width="372" height="176" rx="8" fill="#fdf6e3" stroke="#e0c060"/>
+<text x="650" y="268" font-size="13" fill="#8a6d1f" font-weight="600">为什么非要第 3 层</text>
+<text x="650" y="294" font-size="11" fill="#8a6d1f">面板主体约 80% 不透明，垫底解码 1/2 层时</text>
+<text x="650" y="313" font-size="11" fill="#8a6d1f">差异基本被盖住。</text>
+<text x="650" y="337" font-size="11" fill="#8a6d1f">但圆角切除区让裁片<tspan font-weight="700">直接紧贴真实桌面</tspan>，</text>
+<text x="650" y="356" font-size="11" fill="#8a6d1f">差异就显形为“半透明的角”——圆角越大越明显。</text>
+<text x="650" y="380" font-size="11" fill="#8a6d1f">第一轮只修到第 2 层，仍差 ~15；</text>
+<text x="650" y="399" font-size="11" fill="#8a6d1f">第二轮修到第 1 层后，角部误差 0.81/255。</text>
+
+<!-- 关键约束 -->
+<rect x="16" y="434" width="988" height="164" rx="8" fill="#f0f4ff" stroke="#185fa5"/>
+<text x="36" y="460" font-size="13" fill="#185fa5" font-weight="700">三条必须遵守的约束</text>
+<text x="36" y="486" font-size="12" fill="#333">① <tspan font-weight="600">裁片键必须携带源文件 LastWriteTime</tspan>：这些缓存会被原地重写（换壁纸、幻灯片轮换、SPI 兜底重放都会删建 CachedFiles），</text>
+<text x="52" y="506" font-size="12" fill="#333">只比路径字符串会漏掉内容变化。</text>
+<text x="36" y="532" font-size="12" fill="#333">② <tspan font-weight="600">命中第 3 层时把 style 置为 stretch</tspan>：显示器尺寸的图片做 stretch 就是精确 1:1，解码数学零改动。</text>
+<text x="36" y="558" font-size="12" fill="#333">③ <tspan font-weight="600">回放壁纸只能回放原始路径</tspan>，绝不能是缓存层文件——否则 shell 对已重编码两代的 JPEG 再编码，</text>
+<text x="52" y="578" font-size="12" fill="#333">桌面每重放劣化一代（实测 CachedImage 296033 → 292907 字节）。</text>
+</svg>

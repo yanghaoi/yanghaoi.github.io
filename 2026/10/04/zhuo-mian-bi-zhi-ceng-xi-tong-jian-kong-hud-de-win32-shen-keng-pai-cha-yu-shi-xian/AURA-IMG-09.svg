@@ -1,0 +1,93 @@
+<svg width="100%" viewBox="0 0 1020 640" xmlns="http://www.w3.org/2000/svg" role="img" font-family="system-ui, -apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif">
+<title>AuraUI 的线程模型与数据流</title>
+<desc>UI 线程、采样线程、垫底解码线程的职责划分与消息传递，以及源码模块划分。</desc>
+
+<rect x="0" y="0" width="1020" height="640" fill="#ffffff"/>
+<rect x="0" y="0" width="1020" height="34" fill="#f0f0f0"/>
+<text x="16" y="22" font-size="13" fill="#333">线程模型：采集全部在后台采样线程完成，UI 线程只做一次 Snapshot 拷贝与绘制；壁纸解码另起 worker</text>
+
+<!-- UI 线程 -->
+<rect x="16" y="50" width="470" height="330" rx="8" fill="#eef4fb" stroke="#9dc0e0"/>
+<text x="36" y="76" font-size="13" fill="#185fa5" font-weight="700">UI 线程（消息循环）</text>
+
+<rect x="34" y="88" width="434" height="52" rx="5" fill="#ffffff" stroke="#9dc0e0"/>
+<text x="46" y="108" font-size="11" fill="#333" font-weight="600">隐藏的顶层消息窗口 AuraUIMessageWindow</text>
+<text x="46" y="128" font-size="11" fill="#777">托盘回调 · TaskbarCreated 广播 · 定时器 · WTS 会话通知</text>
+
+<rect x="34" y="150" width="434" height="86" rx="5" fill="#ffffff" stroke="#9dc0e0"/>
+<text x="46" y="170" font-size="11" fill="#333" font-weight="600">Hud（桌面层子窗口）</text>
+<text x="46" y="190" font-size="11" fill="#777">RenderToTarget → 32bpp 预乘 alpha DIB</text>
+<text x="46" y="208" font-size="11" fill="#777">挂载态：WM_PAINT + BitBlt（壁纸垫底）</text>
+<text x="46" y="226" font-size="11" fill="#777">移动态：UpdateLayeredWindow（逐像素 alpha）</text>
+
+<rect x="34" y="246" width="210" height="70" rx="5" fill="#ffffff" stroke="#9dc0e0"/>
+<text x="46" y="266" font-size="11" fill="#333" font-weight="600">Settings 窗口</text>
+<text x="46" y="286" font-size="11" fill="#777">comctl32 v6 · 实时预览</text>
+<text x="46" y="304" font-size="11" fill="#777">改动实时预览到 HUD</text>
+
+<rect x="258" y="246" width="210" height="70" rx="5" fill="#ffffff" stroke="#9dc0e0"/>
+<text x="270" y="266" font-size="11" fill="#333" font-weight="600">Tray</text>
+<text x="270" y="286" font-size="11" fill="#777">NOTIFYICON_VERSION_4</text>
+<text x="270" y="304" font-size="11" fill="#777">右键菜单 / 左键设置</text>
+
+<rect x="34" y="328" width="434" height="40" rx="5" fill="#f0f4ff" stroke="#185fa5"/>
+<text x="46" y="353" font-size="11" fill="#185fa5">健康检查（2s）：重挂 / z 序自愈 / 显示器变化 / 托盘补挂</text>
+
+<!-- 采样线程 -->
+<rect x="510" y="50" width="230" height="330" rx="8" fill="#f2fbf4" stroke="#8fc9a0"/>
+<text x="530" y="76" font-size="13" fill="#1f7a3f" font-weight="700">采样线程</text>
+<text x="530" y="102" font-size="11" fill="#333">Sampler::Loop</text>
+<text x="530" y="126" font-size="11" fill="#555">GetSystemTimes（CPU）</text>
+<text x="530" y="148" font-size="11" fill="#555">GlobalMemoryStatusEx</text>
+<text x="530" y="170" font-size="11" fill="#555">GetDiskFreeSpaceExW</text>
+<text x="530" y="192" font-size="11" fill="#555">GetIfTable2（网络）</text>
+<text x="530" y="214" font-size="11" fill="#555">GetAdaptersAddresses</text>
+<text x="530" y="236" font-size="11" fill="#555">NVML 动态加载（GPU）</text>
+<rect x="530" y="252" width="190" height="66" rx="5" fill="#ffffff" stroke="#8fc9a0"/>
+<text x="542" y="272" font-size="11" fill="#1f7a3f" font-weight="600">绝对节拍</text>
+<text x="542" y="292" font-size="10" fill="#1f7a3f">下一拍 = 上一拍 + interval</text>
+<text x="542" y="308" font-size="10" fill="#1f7a3f">慢采样/休眠后跳过遗漏拍</text>
+<rect x="530" y="330" width="190" height="38" rx="5" fill="#ffffff" stroke="#8fc9a0"/>
+<text x="542" y="350" font-size="10" fill="#1f7a3f">Snapshot 双锁保护</text>
+<text x="542" y="364" font-size="10" fill="#1f7a3f">1 Hz 采样，UI 只读一份拷贝</text>
+
+<!-- 垫底 worker -->
+<rect x="764" y="50" width="240" height="330" rx="8" fill="#fdf6e3" stroke="#e0c060"/>
+<text x="784" y="76" font-size="13" fill="#8a6d1f" font-weight="700">垫底解码 worker</text>
+<text x="784" y="102" font-size="11" fill="#555">latest-wins 队列</text>
+<text x="784" y="124" font-size="11" fill="#555">WIC 解码壁纸 → 裁剪 + 缩放</text>
+<text x="784" y="146" font-size="11" fill="#555">→ 面板尺寸的不透明裁片</text>
+<text x="784" y="168" font-size="11" fill="#555">（约 400 KB，永不保留全图）</text>
+<rect x="784" y="184" width="200" height="86" rx="5" fill="#ffffff" stroke="#e0c060"/>
+<text x="796" y="204" font-size="11" fill="#8a6d1f" font-weight="600">失败必须有旁路</text>
+<text x="796" y="224" font-size="10" fill="#8a6d1f">worker 失败置 underlayReqFailed_，</text>
+<text x="796" y="240" font-size="10" fill="#8a6d1f">调度端见标志放行同键重排——</text>
+<text x="796" y="256" font-size="10" fill="#8a6d1f">否则“重试”会被 latest-wins 去重吞掉。</text>
+<rect x="784" y="280" width="200" height="88" rx="5" fill="#ffffff" stroke="#e0c060"/>
+<text x="796" y="300" font-size="10" fill="#8a6d1f">CoInitializeEx 只在成功时配对</text>
+<text x="796" y="316" font-size="10" fill="#8a6d1f">CoUninitialize（S_FALSE 也要配对）。</text>
+<text x="796" y="336" font-size="10" fill="#8a6d1f">PostMessage 的 HWND 在销毁路径</text>
+<text x="796" y="352" font-size="10" fill="#8a6d1f">提前解绑，避免句柄复用。</text>
+
+<!-- 消息箭头 -->
+<path d="M740 210 L762 210" stroke="#8fc9a0" stroke-width="1.6" marker-end="url(#a3)"/>
+<path d="M624 380 L624 400" stroke="#1f7a3f" stroke-width="1.6" marker-end="url(#a4)"/>
+<defs>
+<marker id="a3" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#8fc9a0"/></marker>
+<marker id="a4" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#1f7a3f"/></marker>
+</defs>
+<text x="640" y="394" font-size="10" fill="#1f7a3f">PostMessage(kMsgSnapshot)</text>
+
+<!-- 底部：消息表 + 模块 -->
+<rect x="16" y="396" width="988" height="106" rx="8" fill="#fafafa" stroke="#d0d0d0"/>
+<text x="36" y="422" font-size="13" fill="#1a1a1a" font-weight="600">跨线程只走消息，不共享可变状态</text>
+<text x="36" y="448" font-size="12" fill="#333" font-family="Consolas, monospace">kMsgSnapshot  = WM_APP + 5   采样线程 → UI（HUD 重绘）</text>
+<text x="36" y="470" font-size="12" fill="#333" font-family="Consolas, monospace">kUnderlayReadyMsg = WM_APP + 6   垫底 worker → UI（套用裁片）</text>
+<text x="36" y="492" font-size="12" fill="#333" font-family="Consolas, monospace">kMsgRebuildHud / kTimerHealth / kTimerWallpaperRefresh   UI 内部</text>
+
+<rect x="16" y="514" width="988" height="112" rx="8" fill="#f7f7f7" stroke="#c8c8c8"/>
+<text x="36" y="540" font-size="13" fill="#1a1a1a" font-weight="600">源码模块划分（9 个目录，约 7 600 行 C++，另有 13 个 Python 验证脚本）</text>
+<text x="36" y="566" font-size="11" fill="#555" font-family="Consolas, monospace">src/main.cpp   app/   core/   config/   desktop/   hud/   monitor/   system/   settings/   tray/</text>
+<text x="36" y="590" font-size="11" fill="#555">入口与 manifest 激活 · 生命周期编排 · 日志与路径 · INI 与自启 · WorkerW 挂载与壁纸 · D2D 渲染与垫底</text>
+<text x="36" y="610" font-size="11" fill="#555">采集与 Snapshot · NVML 动态绑定 · 设置窗口 · 托盘 —— 除系统 DLL 外零依赖，静态链接约 2 MB。</text>
+</svg>
