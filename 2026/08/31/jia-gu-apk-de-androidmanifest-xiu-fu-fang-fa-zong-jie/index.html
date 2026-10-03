@@ -663,7 +663,7 @@ python fix_axml.py AndroidManifest.xml a.apk b.apk
 <p>实测修复了多个加固银行类样本，还原后的清单中 Application 类为 <code>s.h.e.l.l.S</code>（X加密壳特征）——manifest 是壳外真实配置，可直接用于组件面分析，运行时逻辑仍需先脱壳。</p>
 <p>局限：字符串池为 UTF-8 编码（flags &amp; 0x100）时 AXMLPrinter2 不支持，改用 <code>apktool</code> / <code>androguard</code> / <code>jadx</code>；<code>@7F110215</code> 这类资源引用只显示原始 ID，需还原值时用 apktool / jadx；少数厂商对 manifest 做结构性破坏时字节修补失效，回退方案一/二。</p>
 <h3 id="4-8-jadx-插件：把修复搬进日常工具"><a href="#4-8-jadx-插件：把修复搬进日常工具" class="headerlink" title="4.8 jadx 插件：把修复搬进日常工具"></a>4.8 jadx 插件：把修复搬进日常工具</h3><p>上面反复提到”需要还原资源引用 / 处理 UTF-8 字符串池时换用 jadx”，但 jadx（实测 1.5.5）同样是严格解析器：遇到坑①的新格式 manifest，它会把二进制当文本输出乱码，或静默输出空 XML（<code>isBinaryXml()</code> 只认 8 字节根块头）。也就是说日常逆向中用 jadx 打开这类加固包，manifest 依然是废的——1. 节截图里那片乱码就是这么来的。</p>
-<p>为此我把坑①修补逻辑封装成了 jadx 插件 **<code>jadx-fix-axml</code>**（源码与构建方法见附件仓库 <code>jadx-fix-axml/</code> 目录，内含技术文档）：</p>
+<p>为此我把坑①修补逻辑封装成了 jadx 插件 <strong><code>jadx-fix-axml</code></strong>（源码与构建方法见附件仓库 <code>jadx-fix-axml/</code> 目录，内含技术文档）：</p>
 <ul>
 <li><strong>原理</strong>：通过 jadx 官方扩展点 <code>IResContainerFactory</code> 挂入资源解码链路，仅对 <code>AndroidManifest.xml</code> 生效——检测到根块 headerSize=0x0C 时就地修补字节流（逻辑同 4.3），再交给 jadx 自带的 <code>BinaryXMLParser</code> 解码。由于最终用的是 jadx 自己的解析器，输出质量与内置解码完全一致，资源引用直接还原为 <code>@style/...</code>、<code>@string/...</code>，优于 AXMLPrinter2 的裸 ID；</li>
 <li><strong>零干扰</strong>：正常格式的 APK 门控直接放行，不读流、不改变任何原有行为；修补发生时日志面板输出 <code>[fix-axml]</code> 前缀的 INFO 信息；</li>

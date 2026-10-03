@@ -660,7 +660,7 @@ wcscpy_s(...)             /* MSVC 安全 CRT，MinGW 默认不可编译 */
 </code></pre>
 <p>问题：</p>
 <ol>
-<li>**<code>Translation</code> 被写成了字符串 <code>L"040904B0"</code>**，而规范要求是 <code>DWORD</code>（<code>lang&lt;&lt;16 | codepage</code>）。<br>后果：<code>VerQueryValue(L"\\VarFileInfo\\Translation")</code> 取到的是乱码 → 资源管理器无法把语言 ID 映射到 StringTable → 版本信息整体不显示。</li>
+<li><strong><code>Translation</code> 被写成了字符串 <code>L"040904B0"</code></strong>，而规范要求是 <code>DWORD</code>（<code>lang&lt;&lt;16 | codepage</code>）。<br>后果：<code>VerQueryValue(L"\\VarFileInfo\\Translation")</code> 取到的是乱码 → 资源管理器无法把语言 ID 映射到 StringTable → 版本信息整体不显示。</li>
 <li><code>Var.wValueLength = wcslen(Value)*sizeof(WCHAR)</code>——混淆了「字节数」与「字符数」。</li>
 <li><code>wcscpy_s</code> 是 MSVC 的 secure CRT，MinGW 下要么编译不过，要么需要 <code>_CRT_SECURE_NO_WARNINGS</code> / <code>MINGW_HAS_SECURE_API</code>。</li>
 <li><code>#pragma pack(push,2)</code> 本身是个偏方：它能消除隐式 padding，但与其他非 pack 结构体混用时偏移会算错，且 <code>sizeof</code> 的结果依赖编译器实现，不推荐。</li>
@@ -677,8 +677,8 @@ String companyName = { sizeof(String), sizeof(companyName.Value), 1,
 </code></pre>
 <p>问题：</p>
 <ol>
-<li>**<code>OriginalFilename</code>（16 字符）、<code>LegalCopyright</code>（14 字符）放不进 <code>szKey[12]</code>**——直接截断甚至越界；</li>
-<li>**中文与长值放不进 <code>Value[12]</code>**——<code>"Copyright (C) 2024 XXXXXXX"</code> 明显超长；</li>
+<li><strong><code>OriginalFilename</code>（16 字符）、<code>LegalCopyright</code>（14 字符）放不进 <code>szKey[12]</code></strong>——直接截断甚至越界；</li>
+<li><strong>中文与长值放不进 <code>Value[12]</code></strong>——<code>"Copyright (C) 2024 XXXXXXX"</code> 明显超长；</li>
 <li><code>wValueLength = sizeof(companyName.Value)</code> 恒等于 24 字节，与实际字符串长度脱钩。填 <code>"Protect.EXE"</code>（11 字符 = 24 字节含 NUL）时恰好正确，换成 <code>"公司名称"</code>（4 字符 = 10 字节）即错，Windows 会多读 7 个 WCHAR 的垃圾；</li>
 <li><code>VS_Children Children[1]</code> 只声明了一个元素，却用 <code>{ stringFileInfo, varFileInfo }</code> 两个元素初始化 → 编译期即”excess elements”，且 <code>sizeof(VS_VERSIONINFO)</code> 不含 <code>VarFileInfo</code>，写入的 <code>wLength</code> 偏小；</li>
 <li><code>versionInfo = { ... };</code> 这种「给已声明变量赋花括号列表」的写法在标准 C 里不合法（MSVC 也会报），应使用复合字面量 <code>(VS_VERSIONINFO){...}</code> 或直接初始化。</li>
@@ -703,7 +703,7 @@ memcpy(pString-&gt;KeyPaddingValue + (lstrlenW(k)+1) + padBytes/2,
 </code></pre>
 <p>这一版仍然遗留四个工程问题（后在正式工具中逐条解决）：</p>
 <ul>
-<li>所有 <code>calloc</code> 出来的块**均未 <code>free</code>**（一次性 CLI 无影响，做成库或批量调用即为泄漏）；</li>
+<li>所有 <code>calloc</code> 出来的块<strong>均未 <code>free</code></strong>（一次性 CLI 无影响，做成库或批量调用即为泄漏）；</li>
 <li><code>stringTable-&gt;Children</code> 用 <code>WCHAR[]</code> 手工偏移拼接，8 段 <code>memcpy</code> 的偏移量是手算的，增加一个字段就要修改一串数字，容易出错；</li>
 <li>语言键写成小写 <code>L"040904b0"</code>（惯例是大写 <code>040904B0</code>），个别解析器对大小写敏感；</li>
 <li>未删除已存在的 <code>RT_VERSION</code>，若原文件是其他语言的版本资源，会出现两份共存。</li>
@@ -859,7 +859,7 @@ $ md5sum m1.patched.exe # 输出
 <h3 id="8-2-无-CRT-编译的两个坑"><a href="#8-2-无-CRT-编译的两个坑" class="headerlink" title="8.2 无 CRT 编译的两个坑"></a>8.2 无 CRT 编译的两个坑</h3><p>程序以 <code>-nostdlib</code> 编译（不链接任何 CRT）。加了 <code>-fno-builtin</code> 之后，<strong>GCC 16 在 <code>-O2</code> 下仍会为大结构体赋值生成 <code>memcpy</code> / <code>memset</code> 调用</strong>，链接直接失败：</p>
 <pre><code class="line-numbers language-text">undefined reference to `memcpy'
 </code></pre>
-<p>仅将自有函数改名为 <code>mcopy</code> 不够，还须提供同名的全局实现（**不能写 <code>static</code>**，否则不参与链接）：</p>
+<p>仅将自有函数改名为 <code>mcopy</code> 不够，还须提供同名的全局实现（<strong>不能写 <code>static</code></strong>，否则不参与链接）：</p>
 <pre><code class="line-numbers language-c">void *memcpy(void *dst, const void *src, unsigned long long n)
 {
     return mcopy(dst, src, (u32)n);
@@ -920,9 +920,9 @@ peview.exe (5): comdlg32  GDI32    KERNEL32  SHELL32  USER32
 </tbody></table>
 <h2 id="9-问题清单（24-条，按成因分类）"><a href="#9-问题清单（24-条，按成因分类）" class="headerlink" title="9 问题清单（24 条，按成因分类）"></a>9 问题清单（24 条，按成因分类）</h2><h3 id="9-1-布局类"><a href="#9-1-布局类" class="headerlink" title="9.1 布局类"></a>9.1 布局类</h3><ol>
 <li><strong>不要把 <code>VS_VERSIONINFO</code> 当成普通 C 结构体。</strong> 它是变长的，<code>sizeof</code> 一定错。文档明示它「不是真的 C 结构体」，SDK 里也没有这个定义。</li>
-<li><strong>两处 4 字节对齐</strong>：Value 之前要对齐（Key 长度奇偶决定 0 还是 2 字节），块末尾也要补齐（让下一个兄弟对齐），且**尾部 padding 要计入 <code>wLength</code>**。</li>
+<li><strong>两处 4 字节对齐</strong>：Value 之前要对齐（Key 长度奇偶决定 0 还是 2 字节），块末尾也要补齐（让下一个兄弟对齐），且<strong>尾部 padding 要计入 <code>wLength</code></strong>。</li>
 <li><strong><code>wValueLength</code> 的单位。</strong> MSDN 对 <code>String.wValueLength</code> 的描述为 “size, <strong>in words</strong>“，但 MSVC 生成的真实资源与 <code>version.dll</code> 都按<strong>字节</strong>处理（含结尾 NUL）。按字节填才能正常显示；按字数填在 Explorer 里会串位。</li>
-<li>**<code>wType</code>**：根块（Value 是 <code>VS_FIXEDFILEINFO</code>）与 <code>Var/Translation</code> 用 <strong>0</strong>；<code>String</code> / <code>StringTable</code> / <code>StringFileInfo</code> 用 <strong>1</strong>。填反多数场景不报错，但会使某些解析器拒绝。</li>
+<li><strong><code>wType</code></strong>：根块（Value 是 <code>VS_FIXEDFILEINFO</code>）与 <code>Var/Translation</code> 用 <strong>0</strong>；<code>String</code> / <code>StringTable</code> / <code>StringFileInfo</code> 用 <strong>1</strong>。填反多数场景不报错，但会使某些解析器拒绝。</li>
 <li><strong>必须是 UTF-16LE。</strong> <code>UpdateResource</code> 明确要求 “All data containing strings or text must be in Unicode format”，传 ANSI 会显示为乱码或方块。</li>
 <li><strong>代码页固定 <code>0x04B0</code>（1200 = UTF-16LE）。</strong> 换成 <code>0x03A8</code>（936/GBK）之类的代码页，非 ASCII 字符会立即乱码。</li>
 </ol>
@@ -940,11 +940,11 @@ peview.exe (5): comdlg32  GDI32    KERNEL32  SHELL32  USER32
 <li><strong>数字签名必然失效。</strong> 修改资源会改变 <code>.rsrc</code>，Authenticode 签名校验失败；文件哈希也一定变化，EDR / 白名单 / Defender 缓存会重新评估。</li>
 <li><strong>PE <code>CheckSum</code> 不会自动重算。</strong> <code>EndUpdateResource</code> 不更新 <code>OptionalHeader.CheckSum</code>。普通 EXE 无影响，但驱动与强制校验场景必须重算（<code>Imagehlp!CheckSumMappedFile</code>）或置 0（表示「不校验」）。</li>
 <li><strong>资源管理器有缓存。</strong> 修改后「属性→详细信息」可能仍显示旧值，需重命名文件、重启 explorer 或更换目录才能刷新。</li>
-<li>**<code>wLength</code> 是 <code>WORD</code>**，单个版本块不能超过 65535 字节（正常够用，但字段填超长文本时需留意）。</li>
+<li><strong><code>wLength</code> 是 <code>WORD</code></strong>，单个版本块不能超过 65535 字节（正常够用，但字段填超长文本时需留意）。</li>
 </ol>
 <h3 id="9-4-编译-可移植性类"><a href="#9-4-编译-可移植性类" class="headerlink" title="9.4 编译 / 可移植性类"></a>9.4 编译 / 可移植性类</h3><ol start="19">
 <li><strong><code>wcscpy_s</code> / <code>wcsncpy_s</code></strong> 是 MSVC 安全 CRT，MinGW 默认没有，跨编译器不要使用。</li>
-<li>**<code>wmain</code> 需要 <code>-municode</code>**（MinGW）或 <code>/SUBSYSTEM:CONSOLE</code> 配 Unicode 入口；否则 <code>argv</code> 是 ANSI 的，中文路径直接乱码。</li>
+<li><strong><code>wmain</code> 需要 <code>-municode</code></strong>（MinGW）或 <code>/SUBSYSTEM:CONSOLE</code> 配 Unicode 入口；否则 <code>argv</code> 是 ANSI 的，中文路径直接乱码。</li>
 <li><strong><code>#pragma pack(push,2)</code></strong> 能消除隐式对齐但很脆弱：与其他非 pack 结构体混用（如来自系统头文件的 <code>VS_FIXEDFILEINFO</code>）时偏移会算错。</li>
 <li><strong><code>srand(time(NULL))</code></strong> 同一秒内种子相同，批量处理会得到完全相同的「随机」版本号。</li>
 <li><strong>固定长度 <code>WCHAR szKey[12]</code></strong> 无法承载中文与长字段，应使用动态分配。</li>
@@ -1089,7 +1089,7 @@ release\peres.exe --help               :: 查看全部选项
 <h3 id="10-5-build-bat-的编码与行尾约束"><a href="#10-5-build-bat-的编码与行尾约束" class="headerlink" title="10.5 build.bat 的编码与行尾约束"></a>10.5 build.bat 的编码与行尾约束</h3><p><code>build.bat</code> 里带中文注释、又用了 <code>^</code> 续行符时，实测会撞上两个 cmd 解析问题：</p>
 <ol>
 <li><strong>编码</strong>：若以 UTF-8 保存，cmd 默认按 GBK(936) 逐行解析，中文 rem 行会把后续内容「断行」，出现 <code>'ibc锛?rem' 不是内部或外部命令</code> 一类报错。<strong>含中文注释的 .bat 必须存成 GBK/ANSI 编码</strong>。</li>
-<li><strong>行尾</strong>：LF-only 行尾时，cmd 对 <code>^</code> 续行的解析会错位（<code>peres.exe</code> 被截成 <code>es.exe</code> 之类）。**.bat 必须是 CRLF 行尾**。</li>
+<li><strong>行尾</strong>：LF-only 行尾时，cmd 对 <code>^</code> 续行的解析会错位（<code>peres.exe</code> 被截成 <code>es.exe</code> 之类）。<strong>.bat 必须是 CRLF 行尾</strong>。</li>
 </ol>
 <p>最终形态直接绕开了编码这一层：注释全部改成英文，同时去掉 <code>^</code> 续行。纯 ASCII 的 <code>.bat</code> 在 GBK 与 UTF-8 下完全等价，第一个问题自然消失；行尾则交给仓库里的 <code>.gitattributes</code> 兜底，防止别人在 Linux/macOS 上 clone 之后把 <code>.bat</code> 转成 LF：</p>
 <pre><code class="line-numbers language-text">*.bat text eol=crlf
