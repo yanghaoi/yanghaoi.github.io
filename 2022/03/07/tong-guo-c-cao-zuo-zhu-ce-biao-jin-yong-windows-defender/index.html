@@ -287,7 +287,10 @@
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
+                    
+                    
                     <h1 class="description center-align post-title">通过 C++ 操作注册表禁用 Windows Defender</h1>
+                    
                 </div>
             </div>
         </div>
@@ -464,6 +467,8 @@
         </div>
         <hr class="clearfix">
         <div class="card-content article-card-content">
+            
+            
             <div id="articleContent">
                 <h2 id="1-简介"><a href="#1-简介" class="headerlink" title="1 简介"></a>1 简介</h2><p>最近整理文件，发现自己之前禁用<code>Windows Defender</code>的文档。如果安装了其他的安全软件，<code>Defender</code>是可以完全禁用掉的(TA也会自动设置服务状态为手动)，而没安装其他安全软件时，在管理员权限下是没有权限设置<code>WinDefend</code>和<code>WdNisSvc</code>服务启动状态的。所以前提是先安装一个其他的安全软件，禁用<code>Defender</code>后重启再卸载安全软件，达到裸机的目的~。</p>
 <p>这篇文章主要是为了研究程序开发，通过<code>C++</code>操作注册表禁用<code>WinDefender</code>的服务(注：该种方法并没有绕过<code>Defender</code>安全限制）。文章将对程序的编写和操作过程进行记录，也会涉及到一些<code>C/C++</code>数据类型方面的内容，方便以后复习。</p>

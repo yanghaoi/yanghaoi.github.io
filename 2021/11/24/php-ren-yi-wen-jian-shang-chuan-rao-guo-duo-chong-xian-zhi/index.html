@@ -287,7 +287,10 @@
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
+                    
+                    
                     <h1 class="description center-align post-title">PHP任意文件上传绕过多重限制</h1>
+                    
                 </div>
             </div>
         </div>
@@ -468,6 +471,8 @@
         </div>
         <hr class="clearfix">
         <div class="card-content article-card-content">
+            
+            
             <div id="articleContent">
                 <h2 id="1-简介"><a href="#1-简介" class="headerlink" title="1 简介"></a>1 简介</h2><p>在一次对站点进行安全测试中，遇到任意文件上传的漏洞，但是目标系统存在阿里云WAF和gd库的二次渲染，通过不断尝试绕过，最终拿下目标。</p>
 <h2 id="2-文件上传点寻找"><a href="#2-文件上传点寻找" class="headerlink" title="2 文件上传点寻找"></a>2 文件上传点寻找</h2><p>注册登录到某系统后，在多个文件上传点进行测试，发现进行的大多是白名单验证，没法上传除了多媒体文件外的其他类型。最后在修改资料位置对头像上传位置抓包，可以看到还传入了图像裁剪的参数(后续的测试把x,y都设置为0，避免对图片产生额外影响):<br><img src="/images/images/2021_8/5c08fb6b3c23da8d975fe725f69a0678"><br>可以上传并返回路径，该路径可以通过拼接域名直接访问到：<br><img src="/images/images/2021_8/f77b2f45017f1822a9063a88356203b4"><br>修改filename类型为txt，发现可以上传成功，说明该处上传没有对文件类型进行限制，是一个潜在的getshell点：<br><img src="/images/2021_8/a89a2638b73acff6d612c09305ac77d1.webp"><br>尝试修改文件类型为php，不出意外被阿里云WAF拦截了：<br><img src="/images/images/2021_8/7b49f4dc62ba5424b9e9888295f3f678"></p>

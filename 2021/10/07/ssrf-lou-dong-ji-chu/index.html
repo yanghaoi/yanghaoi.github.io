@@ -287,7 +287,10 @@
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
+                    
+                    
                     <h1 class="description center-align post-title">SSRF漏洞基础</h1>
+                    
                 </div>
             </div>
         </div>
@@ -464,6 +467,8 @@
         </div>
         <hr class="clearfix">
         <div class="card-content article-card-content">
+            
+            
             <div id="articleContent">
                 <h2 id="1-简介"><a href="#1-简介" class="headerlink" title="1 简介"></a>1 简介</h2><p>SSRF(Server-side request forgery，服务端请求伪造)是一种 Web 安全漏洞，允许攻击者诱导服务器端应用程序向攻击者选择的任意域发出 HTTP 请求。攻击可强制让服务器连接到任意内部或者外部的其他主机，从而可能泄露服务器敏感信息或者对其他主机发起恶意请求。常见的利用方式可以探测内部网络部署的服务信息、端口开放情况，攻击一些内部的服务等。本文对SSRF的类型、协议支持、可能产生的漏洞代码、相关利用工具进行分析整理，完善SSRF漏洞的理解和利用。</p>
 <h2 id="2-SSRF的类型"><a href="#2-SSRF的类型" class="headerlink" title="2 SSRF的类型"></a>2 SSRF的类型</h2><p>从SSRF请求后的返回情况来看，利用SSRF可以分为三种情况：<br>1.回显SSRF<br>2.侧信息SSRF(时间延时、返回状态码等)<br>3.盲SSRF(完全没有回显或其他侧信息)</p>

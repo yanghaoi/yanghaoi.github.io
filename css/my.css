@@ -65,9 +65,27 @@
 /*
   封面自带标题的配图：用 front-matter 的 `hideTitle: true` 关掉叠加在封面上的标题。
   有些封面（比如自己排版的成品图）本身就把标题画在图里了，再叠一遍会两行字打架。
-  卡片上直接不渲染那个 <span>；文章页的 <h1> 保留但视觉隐藏——
-  页面仍然有唯一的主标题，对 SEO / 读屏软件友好。
+
+  关掉之后标题改由正文顶部显示（见下面的 .post-body-title），
+  这样页面依然有可见的 <h1>——不然读者点进来整页看不到标题。
 */
+.post-body-title {
+    margin: 0 0 1.4rem;
+    padding-bottom: .7rem;
+    font-size: 1.75rem;
+    font-weight: 500;
+    line-height: 1.4;
+    color: rgba(0, 0, 0, .87);
+    border-bottom: 1px solid rgba(0, 0, 0, .09);
+}
+
+@media only screen and (max-width: 601px) {
+    .post-body-title {
+        font-size: 1.45rem;
+    }
+}
+
+/* 视觉隐藏但保留在 DOM / 读屏里（通用工具类） */
 .sr-only {
     position: absolute !important;
     width: 1px; height: 1px;

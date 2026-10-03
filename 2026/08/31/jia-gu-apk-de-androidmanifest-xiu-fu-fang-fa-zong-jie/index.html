@@ -287,7 +287,10 @@
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
+                    
+                    
                     <h1 class="description center-align post-title">加固APK的AndroidManifest.xml修复方法总结</h1>
+                    
                 </div>
             </div>
         </div>
@@ -480,6 +483,8 @@
         </div>
         <hr class="clearfix">
         <div class="card-content article-card-content">
+            
+            
             <div id="articleContent">
                 <h1 id="加固APK的AndroidManifest-xml修复方法总结"><a href="#加固APK的AndroidManifest-xml修复方法总结" class="headerlink" title="加固APK的AndroidManifest.xml修复方法总结"></a>加固APK的AndroidManifest.xml修复方法总结</h1><p>分析加固后的 Android 应用时，解包得到的 <code>AndroidManifest.xml</code> 经常无法解码或显示为乱码，导致包名、组件声明等关键信息无法获取。本文以 X加密加固的银行类样本（<code>cn.com.x.bank</code>）为例，分析乱码的成因，整理三种修复方案的原理、操作方法和适用场景。</p>
 <h2 id="1-简介"><a href="#1-简介" class="headerlink" title="1 简介"></a>1 简介</h2><p>APK 内的 <code>AndroidManifest.xml</code> 本身就不是文本文件，而是 AXML（Android Binary XML）格式——Android 为安装时快速解析设计的二进制编码。所以直接解包后用编辑器打开看到”乱码”是正常现象，正常情况下解码工具可以还原。一般可以通过<code>jadx</code>工具解析APK查看<code>AndroidManifest.xml</code>配置文件：</p>

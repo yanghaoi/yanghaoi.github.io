@@ -287,7 +287,10 @@
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
+                    
+                    
                     <h1 class="description center-align post-title">一次HSTS警告的排查</h1>
+                    
                 </div>
             </div>
         </div>
@@ -464,6 +467,8 @@
         </div>
         <hr class="clearfix">
         <div class="card-content article-card-content">
+            
+            
             <div id="articleContent">
                 <p>最近访问博客发现页面显示不正常，F12查看网络情况后发现cloudflare加载的静态资源出了问题，具体表现为浏览器出现HSTS警告，使用socks5代理时正常(使用socks5代理时，DNS查询也是用的socks5代理)：<br><img src="/images/2021_11/8b94cbff2e08e006ece6906503dbff0c.webp"><br>查看证书发现证书是vmware.com的，安装了VM虚拟机后在本地443端口有这个服务：<br><img src="/images/2021_11/733862ea7c649072c2fed9374aa7e9ce.webp"><br>猜测是DNS出了问题，cloudflare被解析到了127.0.0.1上，使用ping和nslookup查看解析情况：</p>
 <pre><code class="line-numbers language-stylus">ping cdnjs.cloudflare.com
