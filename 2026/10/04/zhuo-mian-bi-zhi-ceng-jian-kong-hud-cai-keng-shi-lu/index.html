@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="桌面壁纸层系统监控HUD的Win32深坑排查与实现, Yang Hao&#39;s blog">
+    <meta name="keywords" content="桌面壁纸层监控HUD踩坑实录, Yang Hao&#39;s blog">
     <meta name="description" content="Yang Hao&#39;s blog">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>桌面壁纸层系统监控HUD的Win32深坑排查与实现 | Yang Hao&#39;s blog</title>
+    <title>桌面壁纸层监控HUD踩坑实录 | Yang Hao&#39;s blog</title>
     <link rel="icon" type="image/x-icon, image/vnd.microsoft.icon" href="/favicon.ico">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -282,12 +282,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/2026/10/04/zhuo-mian-bi-zhi-ceng-xi-tong-jian-kong-hud-de-win32-shen-keng-pai-cha-yu-shi-xian/AURA-IMG-COVER.webp')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/2026/10/04/zhuo-mian-bi-zhi-ceng-jian-kong-hud-cai-keng-shi-lu/AURA-IMG-COVER.webp')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">桌面壁纸层系统监控HUD的Win32深坑排查与实现</h1>
+                    <h1 class="description center-align post-title">桌面壁纸层监控HUD踩坑实录</h1>
                 </div>
             </div>
         </div>
@@ -479,7 +479,7 @@
             <div id="articleContent">
                 <p>最近在做一个 Windows 桌面小工具：一块半透明的系统监控面板（CPU / 内存 / GPU / 显存 / 磁盘 / 网络），要“沉”到<strong>桌面壁纸层之上、桌面图标之下</strong>——按 <code>Win+D</code> 不消失，鼠标点击完全穿透，不进任务栏也不进 <code>Alt+Tab</code>。产物是一个纯原生、静态链接、约 2 MB 的单 exe，除系统 DLL 外零依赖，默认完全离线。源码已开源：**<a target="_blank" rel="noopener" href="https://github.com/yanghaoi/AuraUI">yanghaoi/AuraUI</a>**（MIT 许可）。</p>
 <p>目标是它看起来的样子：</p>
-<p><img src="/2026/10/04/zhuo-mian-bi-zhi-ceng-xi-tong-jian-kong-hud-de-win32-shen-keng-pai-cha-yu-shi-xian/AURA-IMG-00.webp" alt="半透明面板嵌在桌面壁纸层上"></p>
+<p><img src="/2026/10/04/zhuo-mian-bi-zhi-ceng-jian-kong-hud-cai-keng-shi-lu/AURA-IMG-00.webp" alt="半透明面板嵌在桌面壁纸层上"></p>
 <p>这个需求听起来像是“设几个窗口样式”的事。真正动手之后才发现，Windows 并没有任何公开 API 表达“把窗口放在壁纸和图标之间”这件事，于是整条路径只能靠未文档化的消息、跨进程 <code>SetParent</code>、以及对 shell 行为的实测推断来拼。拼出来的过程中踩到一串坑，共同点是——<strong>API 全部返回成功，而结果都是错的</strong>：</p>
 <ul>
 <li><code>SendMessageTimeout(progman, 0x052C, 0, 0, …)</code> 返回成功，但 shell 什么都没做，窗口静默隐身；</li>
@@ -511,7 +511,7 @@ WorkerW  (壁纸层)     &lt;- HUD 挂这里
 Progman
 </code></pre>
 <p>壁纸层 = <strong>全屏、可见、属于 Explorer、且不含 <code>SHELLDLL_DefView</code></strong> 的 <code>WorkerW</code>。它的位置随 shell 版本变化：Windows 10 ~ 11 23H2 是顶层 <code>WorkerW</code>，而 Windows 11 24H2+（或 Win10 上发过一次 <code>0x052C</code> 之后）它会变成 <code>Progman</code> 的直接子窗口——所以两处都要找。</p>
-<p><img src="/2026/10/04/zhuo-mian-bi-zhi-ceng-xi-tong-jian-kong-hud-de-win32-shen-keng-pai-cha-yu-shi-xian/AURA-IMG-01.svg" alt="桌面窗口拓扑与宿主筛选条件"></p>
+<p><img src="/2026/10/04/zhuo-mian-bi-zhi-ceng-jian-kong-hud-cai-keng-shi-lu/AURA-IMG-01.svg" alt="桌面窗口拓扑与宿主筛选条件"></p>
 <p>图里右侧那三个条件，每一条都对应一次“窗口看不见”的实测：</p>
 <ul>
 <li><p><strong>可见</strong>：父窗口隐藏时，子窗口自己的 <code>WS_VISIBLE</code> 仍是 <code>TRUE</code>，但屏幕上什么都没有。而壁纸层是<strong>懒加载</strong>的，系统刚启动时它可能根本不存在。</p>
@@ -527,7 +527,7 @@ Progman
 </ul>
 <p>挂载本身还有个顺序要求（MSDN 明文）：**先把窗口样式从 <code>WS_POPUP</code> 改成 <code>WS_CHILD</code>，再 <code>SetParent</code>**。跳过这一步，窗口会停在“半挂载”状态，<code>GetParent()</code> 返回 <code>NULL</code>，z 序与坐标换算全乱。</p>
 <h3 id="2-2-线程模型"><a href="#2-2-线程模型" class="headerlink" title="2.2 线程模型"></a>2.2 线程模型</h3><p>采集全部在后台采样线程完成，UI 线程只做一次 <code>Snapshot</code> 拷贝与绘制；壁纸解码另起一个 worker。</p>
-<p><img src="/2026/10/04/zhuo-mian-bi-zhi-ceng-xi-tong-jian-kong-hud-de-win32-shen-keng-pai-cha-yu-shi-xian/AURA-IMG-09.svg" alt="线程模型与源码模块划分"></p>
+<p><img src="/2026/10/04/zhuo-mian-bi-zhi-ceng-jian-kong-hud-cai-keng-shi-lu/AURA-IMG-09.svg" alt="线程模型与源码模块划分"></p>
 <p>跨线程只走消息，不共享可变状态：采样线程 <code>PostMessage(kMsgSnapshot)</code> 通知 UI 重绘，垫底 worker <code>PostMessage(kUnderlayReadyMsg)</code> 通知 UI 套用新裁片。健康检查每 2 秒跑一次，负责“重挂 / z 序自愈 / 显示器变化 / 托盘补挂”。</p>
 <h2 id="3-采集：把机器状态读出来"><a href="#3-采集：把机器状态读出来" class="headerlink" title="3 采集：把机器状态读出来"></a>3 采集：把机器状态读出来</h2><p>前两节讲的是「窗口怎么摆」。但 HUD 的正事其实是另一件事——<strong>把当前环境的资源占用读出来</strong>。这一节记录五个指标的取数方式、必须处理的边界，以及两块容易被略过的东西：<strong>静态硬件身份</strong>和<strong>失联自愈</strong>。</p>
 <h3 id="3-1-一次采样产出一张-Snapshot"><a href="#3-1-一次采样产出一张-Snapshot" class="headerlink" title="3.1 一次采样产出一张 Snapshot"></a>3.1 一次采样产出一张 Snapshot</h3><p>所有指标打包进一个 <code>Snapshot</code>，由采样线程产出、UI 线程按值拷贝消费：</p>
@@ -554,7 +554,7 @@ while (!stopping_) {
 </code></pre>
 <p>写成「采样结束 + interval」的话，<strong>每一轮都会把采样耗时累积进去</strong>（NVML 调用、网卡枚举都不便宜），跑久了节拍就漂。暂停时不采样，但仍响应唤醒（改间隔 / 恢复监控），并把节拍重新锚定，避免 <code>wait_until</code> 在一个已经过去的时间点上空转。</p>
 <p>还有一个容易忽略的细节：<code>Start()</code> 里<strong>先同步采一次</strong>，再起线程。这样首帧——以及「启动时就处于暂停态、永远收不到 tick」这种情形——拿到的是真值而不是一排 0。差值类指标（CPU、网络速率）第一拍天然是 0%，从第二拍才动。</p>
-<p><img src="/2026/10/04/zhuo-mian-bi-zhi-ceng-xi-tong-jian-kong-hud-de-win32-shen-keng-pai-cha-yu-shi-xian/AURA-IMG-12.svg" alt="采集节拍数据源与失联自愈"></p>
+<p><img src="/2026/10/04/zhuo-mian-bi-zhi-ceng-jian-kong-hud-cai-keng-shi-lu/AURA-IMG-12.svg" alt="采集节拍数据源与失联自愈"></p>
 <h3 id="3-2-CPU：GetSystemTimes-的两次采样"><a href="#3-2-CPU：GetSystemTimes-的两次采样" class="headerlink" title="3.2 CPU：GetSystemTimes 的两次采样"></a>3.2 CPU：<code>GetSystemTimes</code> 的两次采样</h3><p><code>GetSystemTimes</code> 返回三个累计时间：<code>idle</code>、<code>kernel</code>、<code>user</code>。这里有个经典陷阱——**<code>kernel</code> 已经包含 idle 时间**，所以：</p>
 <pre><code class="line-numbers language-cpp">total = dKernel + dUser;                 // ✅ 不要再加 dIdle
 busy  = total - dIdle;
@@ -641,14 +641,14 @@ SendMessageTimeout(progman, 0x052C, 0x0D, 0x1, SMTO_ABORTIFHUNG, 1000, &amp;igno
 发送后:  [0x14028c visible=True, 0x2d02fe visible=True]    &lt;- 出现可见的壁纸层
 </code></pre>
 <p>发送 <code>(0, 0)</code> 时<strong>没有任何变化</strong>。此时若把窗口挂到那个隐藏的 <code>WorkerW</code> 上，窗口自身的 <code>IsWindowVisible</code> 仍是 <code>True</code>，但父窗口不可见 → 屏幕上什么都没有。网上大量示例都写成 <code>(0, 0)</code>。</p>
-<p><img src="/2026/10/04/zhuo-mian-bi-zhi-ceng-xi-tong-jian-kong-hud-de-win32-shen-keng-pai-cha-yu-shi-xian/AURA-IMG-02.svg" alt="催生壁纸层的参数实测对比"></p>
+<p><img src="/2026/10/04/zhuo-mian-bi-zhi-ceng-jian-kong-hud-cai-keng-shi-lu/AURA-IMG-02.svg" alt="催生壁纸层的参数实测对比"></p>
 <p>两个配套的工程约束也来自实测：</p>
 <ul>
 <li>用 <code>SMTO_ABORTIFHUNG</code> 而不是 <code>SMTO_NORMAL</code>——shell 半死时立刻返回，不必等满 1 秒超时。</li>
 <li><strong>催生要限流</strong>：每次调用会让 shell 多建一个 <code>WorkerW</code>。健康检查（2 秒一次）传 <code>allowSpawn=false</code>，绝不反复催生；需要催生的路径限流到 30 秒一次。</li>
 </ul>
 <h2 id="5-跨进程分层子窗口的三种故障模式"><a href="#5-跨进程分层子窗口的三种故障模式" class="headerlink" title="5 跨进程分层子窗口的三种故障模式"></a>5 跨进程分层子窗口的三种故障模式</h2><p>背景：挂载 = <code>SetParent</code> 到 Explorer 的壁纸层 <code>WorkerW</code>（跨进程 graft）。实验与现场日志证明，<strong>跨进程 reparent 之后，分层子窗口在本机不可靠</strong>，共观察到三种互相独立的表现。</p>
-<p><img src="/2026/10/04/zhuo-mian-bi-zhi-ceng-xi-tong-jian-kong-hud-de-win32-shen-keng-pai-cha-yu-shi-xian/AURA-IMG-03.svg" alt="分层子窗口的三种失效模式"></p>
+<p><img src="/2026/10/04/zhuo-mian-bi-zhi-ceng-jian-kong-hud-cai-keng-shi-lu/AURA-IMG-03.svg" alt="分层子窗口的三种失效模式"></p>
 <table>
 <thead>
 <tr>
@@ -684,7 +684,7 @@ SendMessageTimeout(progman, 0x052C, 0x0D, 0x1, SMTO_ABORTIFHUNG, 1000, &amp;igno
 <p>还有一个容易忽略的副作用：<strong>在窗口可见状态下清除子窗口的 <code>WS_EX_LAYERED</code>，会把当前帧“烤”进桌面合成</strong>，留下永久残影。任何样式位操作都必须在窗口隐藏时进行。</p>
 <h2 id="6-半透明：壁纸垫底"><a href="#6-半透明：壁纸垫底" class="headerlink" title="6 半透明：壁纸垫底"></a>6 半透明：壁纸垫底</h2><p>挂载态的窗口是普通 GDI 子窗口，它的表面是<strong>不透明</strong>的，没法直接做逐像素透明。方案是把 HUD 后面的那块<strong>真实壁纸</strong>按 shell 的摆放样式裁成<strong>面板尺寸的不透明裁片</strong>垫在面板下，再以 <code>bg @ opacity</code> 画半透明面板——合成结果与“透明面板叠在壁纸上”一致，而且表面不透明、<code>BitBlt</code> 安全。</p>
 <p>关键工程细节：裁片在<strong>后台线程</strong>生成（latest-wins 队列 + 完成后 <code>PostMessage</code> 回 UI 线程套用），大图解码（30–100 ms）不卡渲染；而且<strong>永不保留全分辨率像素</strong>——面板尺寸裁片约 400 KB，而不是全图的约 16 MB。</p>
-<p><img src="/2026/10/04/zhuo-mian-bi-zhi-ceng-xi-tong-jian-kong-hud-de-win32-shen-keng-pai-cha-yu-shi-xian/AURA-IMG-10.webp" alt="面板的圆角与右对齐数值"></p>
+<p><img src="/2026/10/04/zhuo-mian-bi-zhi-ceng-jian-kong-hud-cai-keng-shi-lu/AURA-IMG-10.webp" alt="面板的圆角与右对齐数值"></p>
 <p>图中面板的圆角、进度条、右对齐的百分比，全部绘制在一块<strong>不透明</strong>的 GDI 表面上：垫底那张裁片来自面板正后方的真实壁纸，所以圆角外面透出来的仍然是原桌面。</p>
 <h3 id="6-1-屏幕上的壁纸不是“注册表里那个文件”"><a href="#6-1-屏幕上的壁纸不是“注册表里那个文件”" class="headerlink" title="6.1 屏幕上的壁纸不是“注册表里那个文件”"></a>6.1 屏幕上的壁纸不是“注册表里那个文件”</h3><p>这是本项目最反直觉的一处。注册表 / COM 解析出的原图<strong>不是</strong>桌面显示的内容——shell 会连续重编码两层缓存。用 <code>PrintWindow</code> 捕获壁纸层合成画面、与候选文件逐像素比对（<code>mean|diff|/255</code>）得到：</p>
 <table>
@@ -711,7 +711,7 @@ SendMessageTimeout(progman, 0x052C, 0x0D, 0x1, SMTO_ABORTIFHUNG, 1000, &amp;igno
 <td><strong>0.65/255</strong> ← DWM 显示的就是它</td>
 </tr>
 </tbody></table>
-<p><img src="/2026/10/04/zhuo-mian-bi-zhi-ceng-xi-tong-jian-kong-hud-de-win32-shen-keng-pai-cha-yu-shi-xian/AURA-IMG-04.svg" alt="壁纸的三层缓存链与显示源"></p>
+<p><img src="/2026/10/04/zhuo-mian-bi-zhi-ceng-jian-kong-hud-cai-keng-shi-lu/AURA-IMG-04.svg" alt="壁纸的三层缓存链与显示源"></p>
 <p>垫底若解码第 1/2 层，约 80% 不透明的面板主体能掩盖差异；但<strong>圆角切除区让裁片直接紧贴真实桌面</strong>，差异就显形为“半透明的角”，圆角越大越明显。这个缺陷自项目诞生即存在：第一轮只修到第 2 层，仍差 ~15；第二轮修到第 3 层后，角部误差降到 0.81/255（右下角 0.04）。</p>
 <p>判定“屏幕显示的是哪一层”靠的是三个纪律，都是多轮误诊换来的：</p>
 <ol>
@@ -726,7 +726,7 @@ SendMessageTimeout(progman, 0x052C, 0x0D, 0x1, SMTO_ABORTIFHUNG, 1000, &amp;igno
 </ul>
 <h2 id="7-残影：WorkerW-从不重绘被腾出的区域"><a href="#7-残影：WorkerW-从不重绘被腾出的区域" class="headerlink" title="7 残影：WorkerW 从不重绘被腾出的区域"></a>7 残影：WorkerW 从不重绘被腾出的区域</h2><h3 id="7-1-机制"><a href="#7-1-机制" class="headerlink" title="7.1 机制"></a>7.1 机制</h3><p>DWM 下<strong>每个顶层窗口只有一张 GDI 重定向表面</strong>，子窗口树的所有 GDI 输出（包括 HUD 的 <code>BitBlt</code>）都写入 <strong>WorkerW 顶层窗口自己的表面</strong>。当子窗口被移动 / 隐藏 / 销毁后，暴露的矩形需要 WorkerW 自己重绘——但它是 Explorer 的内部窗口，对“寄宿的访客子窗口”<strong>从不重绘</strong>（跨进程 graft 树的绘制同步是坏的）。于是子窗口的最后一帧<strong>永久僵死</strong>在桌面上，也就是“分身”。</p>
 <p>实证：<code>EnumWindows</code> 始终只有 1 个活窗口（排除窗口泄漏）；重启 Explorer 重建整个场景后分身消失（表面被重建）。这也解释了“隐藏 HUD 后面板不消失、数据不更新；再显示后恢复更新”——窗口藏了，但它烤在 WorkerW 表面里的最后一帧还在。</p>
-<p><img src="/2026/10/04/zhuo-mian-bi-zhi-ceng-xi-tong-jian-kong-hud-de-win32-shen-keng-pai-cha-yu-shi-xian/AURA-IMG-05.svg" alt="残影成因与三级清除策略"></p>
+<p><img src="/2026/10/04/zhuo-mian-bi-zhi-ceng-jian-kong-hud-cai-keng-shi-lu/AURA-IMG-05.svg" alt="残影成因与三级清除策略"></p>
 <h3 id="7-2-修复：三级策略，按代价递增、命中即止"><a href="#7-2-修复：三级策略，按代价递增、命中即止" class="headerlink" title="7.2 修复：三级策略，按代价递增、命中即止"></a>7.2 修复：三级策略，按代价递增、命中即止</h3><ol>
 <li><strong>绘制覆盖（主路径）</strong>：按当前壁纸状态解码腾出区域应有的像素，经跨进程 <code>GetDC(host)</code> 直接 <code>BitBlt</code> 到壁纸 WorkerW 的表面盖掉冻结帧。<strong>不经 Shell、零缓存流转、像素级正确</strong>（实测覆盖后旧区残影 <code>mean|d| = 0.01/255</code>，缓存文件 mtime 不变）。</li>
 <li><strong>精准失效（绘制失败时伴随）</strong>：<code>RedrawWindow(host, &amp;rect, nullptr, RDW_INVALIDATE | RDW_ERASE | RDW_FRAME | RDW_NOINTERNALPAINT)</code>。<strong>单独使用不足以清残影</strong>（实测 <code>mean|d| = 35.8</code> vs 干净区 0.12）——桌面类窗口只经 <code>WM_ERASEBKGND</code> 重绘；<strong>禁止</strong> <code>RDW_UPDATENOW</code> / <code>RDW_ERASENOW</code>（同步标志对其它进程拥有的窗口无效）。</li>
@@ -744,7 +744,7 @@ SendMessageTimeout(progman, 0x052C, 0x0D, 0x1, SMTO_ABORTIFHUNG, 1000, &amp;igno
 <li><strong>完成</strong>：<code>WM_NCLBUTTONDBLCLK</code> / <code>WM_NCRBUTTONUP</code> → 记录 <code>GetWindowRect</code>，换算为“显示器序号 + 显示器相对像素”写回配置。</li>
 <li><strong>重建</strong>：回调投递 <code>kMsgRebuildHud</code>，延迟销毁旧窗口、按新位置重建（不在 HUD 自己的 <code>WndProc</code> 里同步销毁）。</li>
 </ol>
-<p><img src="/2026/10/04/zhuo-mian-bi-zhi-ceng-xi-tong-jian-kong-hud-de-win32-shen-keng-pai-cha-yu-shi-xian/AURA-IMG-08.svg" alt="移动模式的两种渲染形态"></p>
+<p><img src="/2026/10/04/zhuo-mian-bi-zhi-ceng-jian-kong-hud-cai-keng-shi-lu/AURA-IMG-08.svg" alt="移动模式的两种渲染形态"></p>
 <p>避免的坑：</p>
 <ul>
 <li>移动态弹窗<strong>不要</strong>调用 <code>SetLayeredWindowAttributes</code> 之后又切回 ULW（文档：SLWA 之后 ULW 失效，直到样式位清/置——而子窗口清了就回不来）。</li>
@@ -771,7 +771,7 @@ SendMessageTimeout(progman, 0x052C, 0x0D, 0x1, SMTO_ABORTIFHUNG, 1000, &amp;igno
 <td>鼠标消息</td>
 </tr>
 </tbody></table>
-<p><img src="/2026/10/04/zhuo-mian-bi-zhi-ceng-xi-tong-jian-kong-hud-de-win32-shen-keng-pai-cha-yu-shi-xian/AURA-IMG-06.svg" alt="托盘回调参数的两种布局"></p>
+<p><img src="/2026/10/04/zhuo-mian-bi-zhi-ceng-jian-kong-hud-cai-keng-shi-lu/AURA-IMG-06.svg" alt="托盘回调参数的两种布局"></p>
 <p>要点：</p>
 <ul>
 <li><strong><code>LOWORD(lp)</code> 在两种布局下都是事件</strong>，事件读取与布局无关；只有坐标来源依赖 <code>version4_</code>。早期版本把两者读反（以为事件在 <code>wParam</code>），导致右键/左键<strong>全部无响应</strong>。</li>
@@ -793,13 +793,13 @@ pfn(SetProcessDpiAwarenessContext, reinterpret_cast&lt;HANDLE&gt;(static_cast&lt
 VRAM 140px 固定值区: "612.4 MB / 12.0 GB"    -&gt;  ".4 MB / 12.0 GB"
 </code></pre>
 <p>魔法数追不胜追，最终方案是三层测量保护：</p>
-<p><img src="/2026/10/04/zhuo-mian-bi-zhi-ceng-xi-tong-jian-kong-hud-de-win32-shen-keng-pai-cha-yu-shi-xian/AURA-IMG-07.svg" alt="面板文字宽度三层保护"></p>
+<p><img src="/2026/10/04/zhuo-mian-bi-zhi-ceng-jian-kong-hud-cai-keng-shi-lu/AURA-IMG-07.svg" alt="面板文字宽度三层保护"></p>
 <ol>
 <li><strong>值区域实测宽</strong>（<code>RenderToTarget</code> 的 <code>valueZoneW</code>）：<code>max(行下限×s, 实测宽 + pad + 2s)</code>。区域矩形是 <code>[width-w, width-pad]</code>，因此 <code>w</code> 必须覆盖文本<strong>加</strong> pad——第一版修复漏加 pad，仍被边际裁切。</li>
 <li><strong>内容最小宽</strong>（<code>Hud::ContentMinWidth</code>）：逐行算 <code>pad + labelW + gap + valueW + pad</code>，面板宽 = <code>max(80, 配置宽, widthFloor_)</code>。<code>widthFloor_</code> <strong>增长即时、收缩需连续 5 帧保持更小</strong>——数值逐秒变长变短，无迟滞的地板会让面板呼吸并反复重裁壁纸垫底。</li>
 <li><strong>设置护栏</strong>（<code>SettingsWindow::EnsureMinWidth</code>）：用与渲染端同一套 <code>BuildItemsFor</code> + <code>ContentMinWidth</code> + 字体构造，按草稿配置、<strong>目标显示器的实际 DPI</strong>（<code>GetDpiForMonitor</code> 的 <code>MDT_EFFECTIVE</code>）计算最小宽；应用/确定时若草稿宽度不足，自动抬高（编辑框同步）并弹窗说明。</li>
 </ol>
-<p><img src="/2026/10/04/zhuo-mian-bi-zhi-ceng-xi-tong-jian-kong-hud-de-win32-shen-keng-pai-cha-yu-shi-xian/AURA-IMG-11.webp" alt="设置窗口的实时预览界面"></p>
+<p><img src="/2026/10/04/zhuo-mian-bi-zhi-ceng-jian-kong-hud-cai-keng-shi-lu/AURA-IMG-11.webp" alt="设置窗口的实时预览界面"></p>
 <p>设置窗口本身也是几轮实测的产物：控件表在 96-dpi 设计单位里描述、按当前 DPI 统一缩放（<code>WM_DPICHANGED</code> 时整表重排），窗口**不用 <code>CW_USEDEFAULT</code>**——否则首次 <code>ShowWindow</code> 会用系统缓存的创建时尺寸覆盖掉隐藏期间设好的尺寸，缩放显示器上的“确定/应用”按钮直接跑到客户区外面。</p>
 <p><strong>测量一致性陷阱</strong>：比较字符串宽度必须在<strong>同一 DPI 感知环境</strong>下进行。独立探针进程若不声明 DPI 感知，<code>LOGPIXELSX</code> / DWrite 都被虚拟化到 96，而应用进程是 Per-Monitor-V2（缩放显示器上真实 120）——测出的宽度差一个缩放系数。这不是应用的 bug，探针要加 <code>SetProcessDpiAwareness</code>。</p>
 <p><strong>跨进程 UI 自动化坑</strong>：<code>GetWindowTextW</code> 对<strong>其他进程</strong>的控件返回空串（它不发 <code>WM_GETTEXT</code>，只读本进程缓存的窗口标题）；驱动设置窗口做验证要用 <code>SendMessage(WM_GETTEXT)</code> 直取。</p>
@@ -1048,7 +1048,7 @@ if (opts.dump &amp;&amp; !opts.dumpPath.empty() &amp;&amp; !launchDir.empty() &a
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://yanghaoi.github.io/2026/10/04/zhuo-mian-bi-zhi-ceng-xi-tong-jian-kong-hud-de-win32-shen-keng-pai-cha-yu-shi-xian/">https://yanghaoi.github.io/2026/10/04/zhuo-mian-bi-zhi-ceng-xi-tong-jian-kong-hud-de-win32-shen-keng-pai-cha-yu-shi-xian/</a>
+                    <a href="https://yanghaoi.github.io/2026/10/04/zhuo-mian-bi-zhi-ceng-jian-kong-hud-cai-keng-shi-lu/">https://yanghaoi.github.io/2026/10/04/zhuo-mian-bi-zhi-ceng-jian-kong-hud-cai-keng-shi-lu/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -1409,12 +1409,12 @@ if (opts.dump &amp;&amp; !opts.dumpPath.empty() &amp;&amp; !launchDir.empty() &a
                 <i class="far fa-dot-circle"></i>&nbsp;本篇
             </div>
             <div class="card">
-                <a href="/2026/10/04/zhuo-mian-bi-zhi-ceng-xi-tong-jian-kong-hud-de-win32-shen-keng-pai-cha-yu-shi-xian/">
+                <a href="/2026/10/04/zhuo-mian-bi-zhi-ceng-jian-kong-hud-cai-keng-shi-lu/">
                     <div class="card-image">
                         
-                        <img src="/2026/10/04/zhuo-mian-bi-zhi-ceng-xi-tong-jian-kong-hud-de-win32-shen-keng-pai-cha-yu-shi-xian/AURA-IMG-COVER.webp" class="responsive-img" loading="lazy" decoding="async" alt="桌面壁纸层系统监控HUD的Win32深坑排查与实现">
+                        <img src="/2026/10/04/zhuo-mian-bi-zhi-ceng-jian-kong-hud-cai-keng-shi-lu/AURA-IMG-COVER.webp" class="responsive-img" loading="lazy" decoding="async" alt="桌面壁纸层监控HUD踩坑实录">
                         
-                        <span class="card-title">桌面壁纸层系统监控HUD的Win32深坑排查与实现</span>
+                        <span class="card-title">桌面壁纸层监控HUD踩坑实录</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -1698,7 +1698,7 @@ if (opts.dump &amp;&amp; !opts.dumpPath.empty() &amp;&amp; !launchDir.empty() &a
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">99.5k</span>&nbsp;字
+                class="white-color">99.6k</span>&nbsp;字
             
             
             
