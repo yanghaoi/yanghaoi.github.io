@@ -455,14 +455,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    12.3k
+                    12.5k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    46 分
+                    47 分
                 </div>
                 
 
@@ -488,7 +488,7 @@
 <li>子窗口隐藏后，它的最后一帧永久僵死在桌面上；</li>
 <li>托盘的左键、右键“全部无响应”，原因是把回调参数读反了。</li>
 </ul>
-<p>下文先把可直接取用的结论列出来，再逐条展开现象、定位过程和最终方案，最后附上代码级问题清单与调试方法论。所有结论都在 Windows 10 19045（部分场景经 RDP 会话）上实测验证；第 13 节那四处修改另在 MinGW-w64 下<strong>实际构建过</strong>（零警告），其中 13.3 做了修改前后 <code>--dump</code> 逐像素对比，并跑过端到端验证脚本。</p>
+<p>下文先把可直接取用的结论列出来，再逐条展开现象、定位过程和最终方案，最后附上代码级问题清单与调试方法论。所有结论都在 Windows 10 19045（部分场景经 RDP 会话）上实测验证；第 13 节那五处修改另在 MinGW-w64 下<strong>实际构建过</strong>（零警告），其中 13.3 做了修改前后 <code>--dump</code> 逐像素对比，13.2 用独立测试程序验证了契约告警，并跑过端到端验证脚本。</p>
 <h2 id="1-结论"><a href="#1-结论" class="headerlink" title="1 结论"></a>1 结论</h2><p>如果也在做类似的事，以下几条可以直接取用：</p>
 <ol>
 <li><code>0x052C</code> 的 <strong>wParam 必须是 <code>0xD</code></strong>。写 <code>(0, 0)</code> 时 shell 静默无操作，壁纸层保持隐藏，挂上去的窗口属性全对但不可见——这是本项目最大的坑。</li>
@@ -827,7 +827,7 @@ VRAM 140px 固定值区: "612.4 MB / 12.0 GB"    -&gt;  ".4 MB / 12.0 GB"
 <li><strong>被后台线程 <code>PostMessage</code> 的 HWND 要在销毁路径上提前解绑</strong>（窗口句柄可能被复用）；共享状态用同一把互斥量保护读写。</li>
 </ul>
 <h2 id="13-代码级隐患"><a href="#13-代码级隐患" class="headerlink" title="13 代码级隐患"></a>13 代码级隐患</h2><p>上面各节是已经踩过并修好的坑。在通读代码的过程中，还有几处<strong>今天不炸、但结构上迟早会炸</strong>的地方，一并记下来。</p>
-<p>这一节分两类：<strong>已修</strong>的四处（附补丁与验证方式），以及<strong>仍然留着</strong>的两处结构性设计债——它们不是 bug，今天由调用顺序和析构兜底保障正确，改了没有直接收益，所以只记录不动手。</p>
+<p>这一节的五处<strong>全部已修</strong>（附补丁与验证方式）。其中 13.1 / 13.4 / 13.6 是写文章时顺手的定点补丁；13.2 / 13.3 / 13.5 涉及结构性改动，放到编译环境就位后完成——13.3 靠修改前后 <code>--dump</code> 逐像素对比证明行为不变，13.2 靠独立测试程序证明契约破坏会被大声报错。</p>
 <h3 id="13-1（已修）两份镜像的校验"><a href="#13-1（已修）两份镜像的校验" class="headerlink" title="13.1（已修）两份镜像的校验"></a>13.1（已修）两份镜像的校验</h3><p><code>Hud::DecodeUnderlayCrop</code>（垫底裁片）与 <code>desktop::DecodeRegionToBGRA</code>（残影覆盖）是两段几乎逐行相同的摆放数学：<code>center / tile / stretch / fit / fill / span</code> 六种样式、信箱钳制、WIC 裁剪 + 缩放、以及 <code>CopyPixels</code> 步长的绕法。源码注释自己写着：</p>
 <pre><code class="line-numbers language-cpp">// Placement math mirrors Hud::DecodeUnderlayCrop - keep the two in sync.
 </code></pre>
@@ -844,12 +844,21 @@ if (iw == 0 || ih == 0) hr = E_INVALIDARG;
     hr = E_INVALIDARG;
 </code></pre>
 <p>但<strong>根因没有解决</strong>：摆放数学仍然是两份副本。同一份逻辑写两遍，改一处忘另一处只是时间问题；更稳的形态是把它抽成一个纯函数，两处都调用它，校验只写一遍。</p>
-<h3 id="13-2（未修）RamDesc-的静态缓存"><a href="#13-2（未修）RamDesc-的静态缓存" class="headerlink" title="13.2（未修）RamDesc 的静态缓存"></a>13.2（未修）RamDesc 的静态缓存</h3><pre><code class="line-numbers language-cpp">const std::wstring&amp; RamDesc(unsigned long long totalPhysBytes) {
+<h3 id="13-2（已修）RamDesc-的静态缓存"><a href="#13-2（已修）RamDesc-的静态缓存" class="headerlink" title="13.2（已修）RamDesc 的静态缓存"></a>13.2（已修）RamDesc 的静态缓存</h3><pre><code class="line-numbers language-cpp">const std::wstring&amp; RamDesc(unsigned long long totalPhysBytes) {
     static const std::wstring desc = BuildRamDesc(totalPhysBytes);  // 参数被忽略
     return desc;
 }
 </code></pre>
-<p>今天安全——唯一调用点在 <code>memory_.Sample()</code> 填充 <code>total</code> 之后。但它把“调用顺序”变成了<strong>隐式契约</strong>：任何一处提前用 0 调用，就会永久显示空描述。这类“参数只用于首次求值的函数内 static”是典型的潜伏陷阱，改成显式的 <code>std::once_flag</code> + 参数一致性断言，语义才站得住。</p>
+<p>今天安全——唯一调用点在 <code>memory_.Sample()</code> 填充 <code>total</code> 之后。但它把“调用顺序”变成了<strong>隐式契约</strong>：任何一处提前用 0 调用，就会永久显示空描述。</p>
+<p><strong>修法</strong>：首调记住入参，之后再调时校验容量一致，不一致则打 <code>ERR</code> 日志（硬件容量运行期不会变，出现不同值必然是新调用点违反了顺序）：</p>
+<pre><code class="line-numbers language-cpp">static unsigned long long seenBytes = 0;
+static bool               primed    = false;
+static const std::wstring desc      = BuildRamDesc(totalPhysBytes);
+if (!primed) { seenBytes = totalPhysBytes; primed = true; }
+else if (totalPhysBytes != seenBytes)
+    log::Error(L"RamDesc called with a different capacity than the first call ...");
+</code></pre>
+<p><strong>验证</strong>：独立测试程序先以 64GB 调用、再以 32GB 调用——日志出现 <code>[ERR ] RamDesc called with a different capacity than the first call (34359738368 != 68719476736)</code>，返回值保持首值。契约被破坏时<strong>大声失败</strong>，而不是静默显示错误数据。</p>
 <h3 id="13-3（已修）测宽与绘制"><a href="#13-3（已修）测宽与绘制" class="headerlink" title="13.3（已修）测宽与绘制"></a>13.3（已修）测宽与绘制</h3><p><code>ContentMinWidth</code>（测宽）和 <code>RenderToTarget</code> 里的 <code>valueZoneW</code> lambda（绘制）是同一套公式的两个副本，靠注释互相提醒。第 11 节那三个坑（漏 pad、地板呼吸、跨 DPI 测量）本质上都是“两份实现漂移”的症状。</p>
 <p><strong>修法</strong>：抽出 <code>Hud::ValueZoneWidth</code> 静态函数，作为 zone 公式的唯一实现：</p>
 <pre><code class="line-numbers language-cpp">float Hud::ValueZoneWidth(IDWriteFactory* dw, IDWriteTextFormat* fmtValueR,
@@ -883,7 +892,14 @@ if (iw == 0 || ih == 0) hr = E_INVALIDARG;
 }
 </code></pre>
 <p><code>GpuMonitor::Shutdown()</code> 本身是幂等的（内部就是卸载 NVML + 重置重试节流），而 <code>Start()</code> 开头会先调一次 <code>Stop()</code>——所以这条路径重复调用是安全的。<strong>改之前要把这两点确认清楚</strong>，否则「顺手补一行」可能变成「每次启动都多卸载一次驱动句柄」。</p>
-<h3 id="13-5（未修）设计上界两处硬编码"><a href="#13-5（未修）设计上界两处硬编码" class="headerlink" title="13.5（未修）设计上界两处硬编码"></a>13.5（未修）设计上界两处硬编码</h3><p><code>cornerRadius</code> 的设计上界 32 同时出现在 <code>Config::Sanitize</code> 和 <code>SettingsWindow::WriteControls</code> 的 <code>TBM_SETRANGE(0, 32)</code> 里；同类还有刷新间隔的预设表、宽高上下限。改一处忘另一处，就会出现“滑块能拖到 40 但存下去被夹回 32”这类不一致。抽成一个共享常量（甚至直接把上界暴露成 <code>Config::kMaxCornerRadius</code>）是低成本的做法。</p>
+<h3 id="13-5（已修）设计上界两处硬编码"><a href="#13-5（已修）设计上界两处硬编码" class="headerlink" title="13.5（已修）设计上界两处硬编码"></a>13.5（已修）设计上界两处硬编码</h3><p><code>cornerRadius</code> 的设计上界 32 同时出现在 <code>Config::Sanitize</code> 和 <code>SettingsWindow::WriteControls</code> 的 <code>TBM_SETRANGE(0, 32)</code> 里。改一处忘另一处，就会出现“滑块能拖到 40 但存下去被夹回 32”这类不一致。</p>
+<p><strong>修法</strong>：上界提升为 <code>Config</code> 的常量，两侧都引用它——</p>
+<pre><code class="line-numbers language-cpp">// config.h
+static constexpr int kCornerRadiusMax = 32;  // arc must stay clear of the text column
+static constexpr int kPaddingMax      = 64;
+static constexpr int kOpacityMax      = 255;
+</code></pre>
+<p><code>Sanitize</code> 的 clamp 与设置窗口的 <code>TBM_SETRANGE(0, Config::kCornerRadiusMax)</code> 现在指向同一个名字，界限改动只碰一处。<strong>验证</strong>：增量构建 0 警告，<code>--dump</code> 渲染无变化（界限值本身没动，只是收敛了来源）。</p>
 <h3 id="13-6（已修）–dump-的相对路径"><a href="#13-6（已修）–dump-的相对路径" class="headerlink" title="13.6（已修）–dump 的相对路径"></a>13.6（已修）–dump 的相对路径</h3><p>这一处是<strong>发布前实测撞出来的</strong>，不在最初通读代码的清单里。<code>--dump</code> 是 README 里公开的诊断入口：</p>
 <pre><code class="line-numbers language-bat">D:\...\AuraUI&gt; build\AuraUI.exe --dump rel_test.bmp
 D:\...\AuraUI&gt; echo %ERRORLEVEL%
@@ -1707,7 +1723,7 @@ if (opts.dump &amp;&amp; !opts.dumpPath.empty() &amp;&amp; !launchDir.empty() &a
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">99.5k</span>&nbsp;字
+                class="white-color">99.7k</span>&nbsp;字
             
             
             
