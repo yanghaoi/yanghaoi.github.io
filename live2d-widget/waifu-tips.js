@@ -274,7 +274,10 @@ function loadWidget(config) {
 		} else {
 			text = `欢迎阅读<span>「${document.title.split(" - ")[0]}」</span>`;
 		}
-		showMessage(text, 7000, 8);
+		// 第一句先交代「我会吃 GPU」这件事，用本人的口吻说，别让访客一头雾水
+		showMessage("人家是 WebGL 画出来的小家伙，会一直悄悄占用一点 GPU 哦～电脑要是烫起来了，就点我头上的 × 让我下去休息吧！", 8000, 8);
+		// GPU 提示说完，再上原本的欢迎语
+		setTimeout(() => showMessage(text, 7000, 8), 8000);
 	})();
 
 	function showHitokoto() {
