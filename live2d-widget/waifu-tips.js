@@ -251,6 +251,9 @@ function loadWidget(config) {
 		});
 	})();
 
+	// 欢迎语不立刻说：等模型渲染完成（waifu-loading 摘除）后再由 applyModel 触发，
+	// 否则对话框先出来、人物还是空白，两者不同步
+	let l2dWelcomePending = null;
 	(function welcomeMessage() {
 		let text;
 		if (location.pathname === "/") { // 如果是主页
@@ -275,9 +278,19 @@ function loadWidget(config) {
 			text = `欢迎阅读<span>「${document.title.split(" - ")[0]}」</span>`;
 		}
 		// 第一句先交代「我会吃 GPU」这件事，用本人的口吻说，别让访客一头雾水
-		showMessage("人家是 WebGL 画出来的小家伙，会一直悄悄占用一点 GPU 哦～电脑要是烫起来了，就点我头上的 × 让我下去休息吧！", 8000, 8);
-		// GPU 提示说完，再上原本的欢迎语
-		setTimeout(() => showMessage(text, 7000, 8), 8000);
+		l2dWelcomePending = () => {
+			showMessage("人家是 WebGL 画出来的小家伙，会一直悄悄占用一点 GPU 哦～电脑要是烫起来了，就点我头上的 × 让我下去休息吧！", 8000, 8);
+			// GPU 提示说完，再上原本的欢迎语
+			setTimeout(() => showMessage(text, 7000, 8), 8000);
+		};
+		// 兜底：模型 20 秒还没就绪（网络差/加载失败），不管了直接说，别让对话框永远沉默
+		setTimeout(() => {
+			if (l2dWelcomePending) {
+				const welcome = l2dWelcomePending;
+				l2dWelcomePending = null;
+				welcome();
+			}
+		}, 20000);
 	})();
 
 	function showHitokoto() {
@@ -396,6 +409,12 @@ function loadWidget(config) {
 				setTimeout(() => {
 					const w = document.getElementById("waifu");
 					if (w) w.classList.remove("waifu-loading");
+					// 人物真正现身了，才说开场白（GPU 提示 + 欢迎语），保证对话框与人物同步
+					if (l2dWelcomePending) {
+						const welcome = l2dWelcomePending;
+						l2dWelcomePending = null;
+						welcome();
+					}
 				}, 400);
 				return true;
 			} catch (e) {
