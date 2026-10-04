@@ -48,13 +48,14 @@
 	/* 字号与行高保持不变以保证可读性，只让气泡的占位跟着缩放比走 */
 	font-size: 14px;
 	line-height: 24px;
-	margin: calc(-30px * var(--waifu-zoom)) calc(20px * var(--waifu-zoom));
+	/* 底边锚定在人物头顶附近：文字变多时气泡向上扩展，而不是向下盖住人物
+	   （255 = 画布高 300 - 原本压在头顶的约 45） */
+	bottom: calc(255px * var(--waifu-zoom));
+	margin: 0 calc(20px * var(--waifu-zoom));
 	min-height: calc(70px * var(--waifu-zoom));
 	opacity: 0;
-	overflow: hidden;
 	padding: calc(5px * var(--waifu-zoom)) calc(10px * var(--waifu-zoom));
 	position: absolute;
-	text-overflow: ellipsis;
 	transition: opacity 1s;
 	width: calc(250px * var(--waifu-zoom));
 	word-break: break-all;
