@@ -95,6 +95,118 @@ function loadWidget(config) {
 		}
 	}, 1000);
 
+	// ============ GPU 省电：阅读 / 空闲 / 页面不可见时休眠 Live2D 渲染 ============
+	// live2d.min.js 内部用 requestAnimationFrame 递归重绘 WebGL canvas，待机动画
+	//（呼吸/眨眼）让 GPU 常驻 10%~30%。它没暴露暂停接口，所以在页面层面给 rAF
+	// 加一道闸门：休眠期间回调只挂起不入队（渲染循环整体停转，GPU 归零），
+	// 恢复时把挂起的回调重新交给原生 rAF，循环自己会继续转起来。
+	// 休眠条件：前台连续 3 分钟无输入，或页面不在前台（切标签页/最小化）。
+	// 唤醒条件：鼠标移到看板娘上并停留（防抖 300ms），或直接点她——
+	// 阅读文章时的滚动、页面里的鼠标移动都算「阅读」，不会吵醒她。
+	let l2dPageHidden = false,      // 页面是否不在前台（切标签页/最小化）
+		l2dPaused = false,          // 是否处于休眠
+		l2dIdleTimer = null,
+		l2dIdleMs = 180000,         // 连续无操作 3 分钟后休眠
+		l2dWakeTimer = null,
+		l2dWakeDelay = 300,         // 悬停防抖：停留 300ms 才唤醒
+		l2dPendingRaf = new Map(),  // 休眠期间挂起的 rAF 回调
+		l2dRafSeq = 0;
+	const l2dNativeRaf = window.requestAnimationFrame.bind(window);
+	const l2dNativeCancel = window.cancelAnimationFrame.bind(window);
+
+	// 休眠期间接管 rAF：回调挂起不执行，GPU 零消耗；唤醒时统一放行
+	window.requestAnimationFrame = function (cb) {
+		if (l2dPageHidden || l2dPaused) {
+			const id = --l2dRafSeq; // 负数 id，与原生句柄空间隔离
+			l2dPendingRaf.set(id, cb);
+			return id;
+		}
+		return l2dNativeRaf(cb);
+	};
+	window.cancelAnimationFrame = function (id) {
+		if (l2dPendingRaf.delete(id)) return;
+		l2dNativeCancel(id);
+	};
+
+	function l2dResume() {
+		if (!l2dPendingRaf.size) return;
+		const pending = Array.from(l2dPendingRaf.values());
+		l2dPendingRaf.clear();
+		pending.forEach(cb => l2dNativeRaf(cb));
+	}
+
+	function l2dSetPaused(next) {
+		if (l2dPaused === next) return;
+		l2dPaused = next;
+		if (next) {
+			// 切后台时用户看不到，不必弹这句话
+			if (!l2dPageHidden) showMessage("我去眯一会儿，把鼠标放到我身上就能叫醒我哦～", 4000, 9);
+		} else {
+			l2dResume();
+		}
+	}
+
+	// 记录一次用户活动：只在醒着时续空闲计时；休眠中的阅读动作不构成唤醒
+	function l2dNoteActivity() {
+		if (l2dPageHidden || l2dPaused) return;
+		if (l2dIdleTimer) clearTimeout(l2dIdleTimer);
+		l2dIdleTimer = setTimeout(() => {
+			l2dIdleTimer = null;
+			l2dSetPaused(true);
+		}, l2dIdleMs);
+	}
+
+	function l2dWake() {
+		if (l2dWakeTimer) {
+			clearTimeout(l2dWakeTimer);
+			l2dWakeTimer = null;
+		}
+		if (l2dPageHidden) return;
+		l2dSetPaused(false);
+		l2dNoteActivity();
+	}
+
+	// 悬停防抖：移上看板娘后停留 l2dWakeDelay 才真正唤醒，扫过不误触
+	function l2dArmWake() {
+		if (!l2dPaused || l2dPageHidden || l2dWakeTimer) return;
+		l2dWakeTimer = setTimeout(() => {
+			l2dWakeTimer = null;
+			l2dWake();
+		}, l2dWakeDelay);
+	}
+
+	// 切标签页 / 最小化浏览器 / 切到其他窗口 → 立即休眠；
+	// 回到前台不自动唤醒（多半是切回来继续阅读），动了看板娘才会醒
+	document.addEventListener("visibilitychange", () => {
+		l2dPageHidden = document.hidden;
+		if (l2dPageHidden) {
+			if (l2dWakeTimer) { clearTimeout(l2dWakeTimer); l2dWakeTimer = null; }
+			if (l2dIdleTimer) { clearTimeout(l2dIdleTimer); l2dIdleTimer = null; }
+			l2dSetPaused(true);
+		} else {
+			l2dNoteActivity();
+		}
+	});
+
+	// 唤醒入口：悬停在看板娘上（防抖），或直接点她（工具条按钮需要渲染）
+	const waifuBox = document.getElementById("waifu");
+	if (waifuBox) {
+		waifuBox.addEventListener("mouseenter", l2dArmWake);
+		// 光标可能一直停在她身上时进入休眠（比如鼠标搁着没动 3 分钟），
+		// 此时不会再触发 mouseenter，靠 mousemove 补一条唤醒路径
+		waifuBox.addEventListener("mousemove", l2dArmWake);
+		waifuBox.addEventListener("mouseleave", () => {
+			if (l2dWakeTimer) { clearTimeout(l2dWakeTimer); l2dWakeTimer = null; }
+		});
+		waifuBox.addEventListener("pointerdown", () => l2dWake());
+	}
+
+	// 任何输入都算「用户在用页面」：醒着时续空闲计时（休眠时忽略）
+	["mousemove", "keydown", "mousedown", "touchstart", "wheel", "scroll"].forEach(evt =>
+		window.addEventListener(evt, l2dNoteActivity, { passive: true })
+	);
+	l2dNoteActivity();
+
 	(function registerEventListener() {
 		document.querySelector("#waifu-tool .fa-comment").addEventListener("click", showHitokoto);
 		document.querySelector("#waifu-tool .fa-paper-plane").addEventListener("click", () => {
